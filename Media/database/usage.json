@@ -1,0 +1,12 @@
+{
+  "keys": {
+    "primaryKey": {
+      "usage": 2,
+      "lastReset": "2024-09-07T04:45:16.602Z"
+    },
+    "secondaryKey": {
+      "usage": 0,
+      "lastReset": "2024-09-07T04:45:16.602Z"
+    }
+  }
+}
