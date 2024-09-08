@@ -577,12 +577,11 @@ return build_server + data.image
 //bug loading
 async function loading () {
 var NyanOnLoad = [
-"《 █▒▒▒▒▒▒▒▒▒▒▒》10%",
-"《 ████▒▒▒▒▒▒▒▒》30%",
-"《 ███████▒▒▒▒▒》50%",
-"《 ██████████▒▒》80%",
-"《 ████████████》100%",
-"𝙻𝙾𝙰𝙳𝙸𝙽𝙶 𝙲𝙾𝙼𝙿𝙻𝙴𝚃𝙴𝙳 🦄..."
+"🟠",
+"⚫",
+"🟠",
+"⚫",
+"🟢"
 ]
 let { key } = await nyanBot2.sendMessage(from, {text: 'ʟᴏᴀᴅɪɴɢ...'})
 
@@ -1248,6 +1247,7 @@ const buttons = [{
                 if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
             
                 try {
+			await loading()
                     const r = await yts(text);
             
                     if (!r || !r.videos || r.videos.length === 0) {
@@ -1323,7 +1323,7 @@ if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
 reply('*ESPERE UN MOMENTO... EL BOT ESTA SIENDO ACTUALIZADO CON LAS ÚLTIMAS MODIFICACIONES*')
 exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
-if (stdout) reply(`*El bot se ah actualizado de forma satisfactoria*\n Informe de la actualización:\n\n${stdout}\n\n> *NyanBot-V2*`)
+if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\n`${stdout}`\n\n> *NyanBot-V2*`)
 })
 break
 
