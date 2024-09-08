@@ -1184,8 +1184,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 }
 
         switch (isCommand) {
-			
-// Comando para mostrar el menú
+
 case 'menu': {
     const categories = {
         "Descarga": ['play', 'song'],
@@ -1203,36 +1202,48 @@ case 'menu': {
         menuMessage += '\n';
     }
 
-    // Enviar el mensaje usando botones
-    const buttons = [{
-        name: "quick_reply",
-        buttonParamsJson: JSON.stringify({
-            display_text: 'Ver Comandos',
-            id: '%menu'
-        }),
-    }];
-    const message = generateWAMessageFromContent(m.chat, {
-        viewOnceMessage: {
-            message: {
-                interactiveMessage: proto.Message.InteractiveMessage.create({
-                    body: proto.Message.InteractiveMessage.Body.create({
-                        text: menuMessage
-                    }),
-                    footer: proto.Message.InteractiveMessage.Footer.create({
-                        text: "Selecciona una categoría"
-                    }),
-                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        buttons: buttons,
+    try {
+        const imagePath = './Media/theme/nyancat.jpg'; // Cambia esta ruta por la correcta
+        const msgs = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    "messageContextInfo": {
+                        "deviceListMetadata": {},
+                        "deviceListMetadataVersion": 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.create({
+                        body: proto.Message.InteractiveMessage.Body.create({
+                            text: menuMessage
+                        }),
+                        footer: proto.Message.InteractiveMessage.Footer.create({
+                            text: botname
+                        }),
+                        header: proto.Message.InteractiveMessage.Header.create({
+                            hasMediaAttachment: true,
+                            ...await prepareWAMessageMedia({ image: fs.readFileSync(imagePath) }, { upload: nyanBot2.waUploadToServer })
+                        }),
+                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                            buttons: [{
+                                "name": "quick_reply",
+                                "buttonParamsJson": `{\"display_text\":\"Ver Comandos\",\"id\":\"%menu\"}`
+                            }],
+                        }),
+                        contextInfo: {
+                            mentionedJid: [m.sender],
+                            forwardingScore: 999,
+                            isForwarded: true,
+                        }
                     })
-                })
+                }
             }
-        }
-    }, { quoted: m });
+        }, { quoted: m });
 
-    await nyanBot2.relayMessage(m.chat, message.message, {});
+        await nyanBot2.relayMessage(m.chat, msgs.message, {});
+    } catch (e) {
+        return m.reply("`*Error*`");
+    }
 }
 break;
-
             case 'test':
 let x = async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
     var prepare = {}
