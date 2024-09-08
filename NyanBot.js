@@ -1182,9 +1182,49 @@ click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] 
 verifieduser.push(sender)
 fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
 }
-        
-        switch (isCommand) {
 
+
+
+        switch (isCommand) {
+			
+// Función para calcular la similitud entre cadenas
+function calculateSimilarity(s1, s2) {
+    let longer = s1;
+    let shorter = s2;
+    if (s1.length < s2.length) {
+        longer = s2;
+        shorter = s1;
+    }
+    const longerLength = longer.length;
+    if (longerLength === 0) {
+        return 1.0;
+    }
+    return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
+function editDistance(s1, s2) {
+    const costs = [];
+    for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+            if (i === 0) costs[j] = j;
+            else {
+                if (j > 0) {
+                    let newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    }
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+        }
+        if (i > 0) costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
+}
+
+// Comando para mostrar el menú
 case 'menu': {
     const categories = {
         "Descarga": ['play', 'song'],
@@ -1207,7 +1247,7 @@ case 'menu': {
         name: "quick_reply",
         buttonParamsJson: JSON.stringify({
             display_text: 'Ver Comandos',
-            id: 'menu'
+            id: '%menu'
         }),
     }];
     const message = generateWAMessageFromContent(m.chat, {
@@ -1232,6 +1272,22 @@ case 'menu': {
 }
 break;
 
+// Corrección de comandos
+const typedCommand = isCommand; // El comando que el usuario escribió
+let bestMatch = '';
+let highestSimilarity = 0;
+
+for (const command of allCommands) { // allCommands es un array con todos los comandos posibles
+    const similarity = calculateSimilarity(typedCommand, command);
+    if (similarity > highestSimilarity) {
+        highestSimilarity = similarity;
+        bestMatch = command;
+    }
+}
+
+if (highestSimilarity > 0.8) { // Umbral de similitud
+    reply(`¿Quisiste decir: ${bestMatch}?`);
+}
             case 'test':
 let x = async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
     var prepare = {}
