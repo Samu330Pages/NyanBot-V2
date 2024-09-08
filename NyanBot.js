@@ -1185,8 +1185,52 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
         
         switch (isCommand) {
 
+case 'menu': {
+    const categories = {
+        "Descarga": ['play', 'song'],
+        "Administración": ['actualizar', 'update'],
+        "Stickers": ['addsticker', 'liststicker', 'delsticker']
+        // Añadir más categorías según sea necesario
+    };
 
+    let menuMessage = '*Menú de Comandos*\n\n';
+    for (const [category, commands] of Object.entries(categories)) {
+        menuMessage += `*${category}:*\n`;
+        commands.forEach(cmd => {
+            menuMessage += `- ${cmd}\n`;
+        });
+        menuMessage += '\n';
+    }
 
+    // Enviar el mensaje usando botones
+    const buttons = [{
+        name: "quick_reply",
+        buttonParamsJson: JSON.stringify({
+            display_text: 'Ver Comandos',
+            id: 'menu'
+        }),
+    }];
+    const message = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+            message: {
+                interactiveMessage: proto.Message.InteractiveMessage.create({
+                    body: proto.Message.InteractiveMessage.Body.create({
+                        text: menuMessage
+                    }),
+                    footer: proto.Message.InteractiveMessage.Footer.create({
+                        text: "Selecciona una categoría"
+                    }),
+                    nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                        buttons: buttons,
+                    })
+                })
+            }
+        }
+    }, { quoted: m });
+
+    await nyanBot2.relayMessage(m.chat, message.message, {});
+}
+break;
 
             case 'test':
 let x = async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
