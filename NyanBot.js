@@ -583,7 +583,7 @@ var NyanOnLoad = [
 "⚫",
 "🟢"
 ]
-let { key } = await nyanBot2.sendMessage(from, {text: 'ʟᴏᴀᴅɪɴɢ...'})
+let { key } = await nyanBot2.sendMessage(from, {text: 'ʟᴏᴀᴅɪɴɢ...'}, m)
 
 for (let i = 0; i < NyanOnLoad.length; i++) {
 await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
