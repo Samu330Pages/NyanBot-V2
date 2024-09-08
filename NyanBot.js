@@ -1184,9 +1184,6 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 }
 
 
-
-        switch (isCommand) {
-			
 // Función para calcular la similitud entre cadenas
 function calculateSimilarity(s1, s2) {
     let longer = s1;
@@ -1224,6 +1221,25 @@ function editDistance(s1, s2) {
     return costs[s2.length];
 }
 
+// Corrección de comandos
+const typedCommand = isCommand; // El comando que el usuario escribió
+let bestMatch = '';
+let highestSimilarity = 0;
+
+for (const command of allCommands) { // allCommands es un array con todos los comandos posibles
+    const similarity = calculateSimilarity(typedCommand, command);
+    if (similarity > highestSimilarity) {
+        highestSimilarity = similarity;
+        bestMatch = command;
+    }
+}
+
+if (highestSimilarity > 0.8) { // Umbral de similitud
+    reply(`¿Quisiste decir: ${bestMatch}?`);
+}
+
+        switch (isCommand) {
+			
 // Comando para mostrar el menú
 case 'menu': {
     const categories = {
@@ -1272,22 +1288,6 @@ case 'menu': {
 }
 break;
 
-// Corrección de comandos
-const typedCommand = isCommand; // El comando que el usuario escribió
-let bestMatch = '';
-let highestSimilarity = 0;
-
-for (const command of allCommands) { // allCommands es un array con todos los comandos posibles
-    const similarity = calculateSimilarity(typedCommand, command);
-    if (similarity > highestSimilarity) {
-        highestSimilarity = similarity;
-        bestMatch = command;
-    }
-}
-
-if (highestSimilarity > 0.8) { // Umbral de similitud
-    reply(`¿Quisiste decir: ${bestMatch}?`);
-}
             case 'test':
 let x = async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
     var prepare = {}
