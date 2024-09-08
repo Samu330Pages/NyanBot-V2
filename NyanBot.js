@@ -1323,7 +1323,7 @@ if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
 reply('*ESPERE UN MOMENTO... EL BOT ESTA SIENDO ACTUALIZADO CON LAS ÚLTIMAS MODIFICACIONES*')
 exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
-if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\n`${stdout}`\n\n> *NyanBot-V2*`)
+if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\n${stdout}\n\n> *NyanBot-V2*`)
 })
 break
 
