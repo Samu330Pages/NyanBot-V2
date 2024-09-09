@@ -990,7 +990,7 @@ if (isSamu) return reply(bvl)
         
 //total features
 const xeonfeature = () =>{
-            var mytext = fs.readFileSync("./XeonCheems11.js").toString()
+            var mytext = fs.readFileSync("./NyanBot.js").toString()
             var numUpper = (mytext.match(/case '/g) || []).length
             return numUpper
         }
@@ -1235,7 +1235,8 @@ case 'menu': {
     const categories = {
         "Descarga": ['play', 'song'],
         "Administración": ['actualizar', 'update'],
-        "Stickers": ['addsticker', 'liststicker', 'delsticker']
+        "Stickers": ['addsticker', 'liststicker', 'delsticker'],
+	"Grupos": ['anti']
         // Añadir más categorías según sea necesario
     };
 
@@ -1382,7 +1383,6 @@ await nyanBot2.sendMessage(m.chat,{
     },
 },{quoted:m})
 await fs.unlinkSync(audioPlay.path)
-		}
                 } catch (e) {
                     reply(`Error: ${e.message}`);
                 }
