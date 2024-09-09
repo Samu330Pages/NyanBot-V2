@@ -1356,6 +1356,12 @@ const buttons = [{
             display_text: 'Go to My Page! 🪅',
             url: 'wa.me/samu330'
           }),
+        },
+	{name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Menu',
+            id: '%menu'
+          }),
         }]
         return await x(m.from, buttons, m, {
           content: 'hola'
