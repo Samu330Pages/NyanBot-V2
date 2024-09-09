@@ -1362,7 +1362,8 @@ const buttons = [{
 *Tamaño:* ${size} bytes
 *Vistas:* ${views.toLocaleString()} vistas
 *Fecha de Publicación:* ${formattedDate}
-*Categoría:* ${category}}`;
+*Categoría:* ${category}
+${url}`;
             
 reply(formattedResponse); // Enviar la respuesta formateada
 let audioYt = await fetchBuffer(url)
