@@ -1463,19 +1463,28 @@ if (!m.isGroup) return
 if (!isBotAdmins) return
 if (!isAdmins && !isSamu) return
 if (db.data.chats[from].badword = false) {
-body = '*AntiBadWords esta desactivado, Si deseas activar toca el botón.*';
-buttonNames = ['Activar'];
-buttonIds = ['%bdon'];
-
-await sendReplyButton(m.from, body, buttonNames, buttonIds, null);	
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Activar',
+            id: '%bdon'
+          }),
+        }]
+return await sendReplyButton(m.from, buttons, m, {
+	content: '> *AntiBadWords esta desactivado, Si deseas activar toca el botón.*'
+})	
 } else {
-body = '*AntiBadWords esta activado, Si deseas desactivar toca el botón.*';
-buttonNames = ['Desactivar'];
-buttonIds = ['%bdoff'];
-
-await sendReplyButton(m.from, body, buttonNames, buttonIds, null);
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desactivar',
+            id: '%bdoff'
+          }),
+        }]
+return await sendReplyButton(m.from, buttons, m, {
+	content: '> *AntiBadWords esta activado, Si deseas desactivar toca el botón.*'
+})
 }
-
 }
 break
 
