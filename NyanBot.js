@@ -1382,7 +1382,6 @@ await nyanBot2.sendMessage(m.chat,{
 
     },
 },{quoted:m})
-await fs.unlinkSync(audioYt)
                 } catch (e) {
                     reply(`Error: ${e.message}`);
                 }
