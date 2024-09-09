@@ -1385,7 +1385,7 @@ await nyanBot2.sendMessage(m.chat,{
 },{quoted:m})
 await fs.unlinkSync(audioBuffer)
                 } catch (e) {
-                    reply(`Error: ${e.message}\nbuffer: ${audioBuffer}`);
+                    reply(`Error: ${e.message}`);
                 }
             }
             break
