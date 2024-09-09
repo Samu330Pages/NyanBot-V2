@@ -634,7 +634,6 @@ async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, option
       })
       return message
    }
-}
 	    
 
 async function obfus(query) {
