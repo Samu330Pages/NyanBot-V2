@@ -637,7 +637,7 @@ async function sendReplyButton(chatId, body, buttonNames, buttonIds, imgPath = n
         const msg = generateWAMessageFromContent(chatId, messageContent, { quoted: {} });
         await nyanBot2.relayMessage(chatId, msg.message, {});
     } catch (e) {
-        console.error("Error al enviar el mensaje con botones:", e);
+        reply(`Error al enviar el mensaje con botones: ${e}`);
     }
 }
 	    
@@ -1503,7 +1503,7 @@ const body = '*Selecciona una opción:';
 const buttonNames = ['Activar', 'Desactivar'];
 const buttonIds = ['menu', 'help'];
 
-await sendReplyButton(m.chat, body, buttonNames, buttonIds, null);
+await sendReplyButton(from, body, buttonNames, buttonIds, null);
 }
 break
 			
