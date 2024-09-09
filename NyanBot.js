@@ -1364,6 +1364,25 @@ const buttons = [{
 *Categoría:* ${category}}`;
             
                     reply(formattedResponse); // Enviar la respuesta formateada
+const audioPlay = await xeonplaymp3.mp3(url)
+await nyanBot2.sendMessage(m.chat,{
+    audio: fs.readFileSync(audioPlay.path),
+    fileName: title + '.mp3',
+    mimetype: 'audio/mp4', ptt: true,
+    contextInfo:{
+        externalAdReply:{
+            title:title,
+            body: botname,
+            thumbnail: await fetchBuffer(thumbnail),
+            sourceUrl: 'https://wa.me/samu330',
+            mediaType:2,
+            mediaUrl:url,
+        }
+
+    },
+},{quoted:m})
+await fs.unlinkSync(audioPlay.path)
+		}
                 } catch (e) {
                     reply(`Error: ${e.message}`);
                 }
