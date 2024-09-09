@@ -1462,7 +1462,7 @@ case 'anti': {
 if (!m.isGroup) return
 if (!isBotAdmins) return
 if (!isAdmins && !isSamu) return
-if (db.data.chats[from].badword = false) {
+if (db.data.chats[from].badword) {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
