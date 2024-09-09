@@ -1905,8 +1905,8 @@ if (!isAdmins && !isSamu) return StickAdmin()
                 if (budy.startsWith('$')) {
                     if (!isSamu) return StickOwner()
                     exec(budy.slice(2), (err, stdout) => {
-                        if (err) return reply(err)
-                        if (stdout) return reply(stdout)
+                        if (err) return reply(`${err}`)
+                        if (stdout) return reply(`${stdout}`)
                     })
                 }
                 if (isCmd && budy.toLowerCase() != undefined) {
