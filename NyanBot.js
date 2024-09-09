@@ -592,6 +592,56 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 }
 
+
+async function sendReplyButton(chatId, body, buttonNames, buttonIds, imgPath = null) {
+    try {
+        const buttons = buttonNames.map((name, index) => ({
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: name,
+                id: buttonIds[index]
+            })
+        }));
+
+        const messageContent = {
+            viewOnceMessage: {
+                message: {
+                    "messageContextInfo": {
+                        "deviceListMetadata": {},
+                        "deviceListMetadataVersion": 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.create({
+                        body: proto.Message.InteractiveMessage.Body.create({
+                            text: body
+                        }),
+                        footer: proto.Message.InteractiveMessage.Footer.create({
+                            text: botname
+                        }),
+                        header: proto.Message.InteractiveMessage.Header.create({
+                            hasMediaAttachment: imgPath ? true : false,
+                            ...(imgPath ? await prepareWAMessageMedia({ image: fs.readFileSync(imgPath) }, { upload: nyanBot2.waUploadToServer }) : {})
+                        }),
+                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                            buttons: buttons,
+                        }),
+                        contextInfo: {
+                            mentionedJid: [chatId], // Puedes ajustar esto según sea necesario
+                            forwardingScore: 999,
+                            isForwarded: true,
+                        }
+                    })
+                }
+            }
+        };
+
+        const msg = generateWAMessageFromContent(chatId, messageContent, { quoted: {} });
+        await nyanBot2.relayMessage(chatId, msg.message, {});
+    } catch (e) {
+        console.error("Error al enviar el mensaje con botones:", e);
+    }
+}
+	    
+
 async function obfus(query) {
     return new Promise((resolve, reject) => {
         try {
@@ -1420,7 +1470,7 @@ break
         reply("El archivo de uso no existe."); // Mensaje si el archivo no se encuentra
     }
     break
-
+			
 	case 'groseria': case 'addbd':
                if (!isSamu) return StickOwner()
                if (!groupAdmins) return reply(mess.admin)
@@ -1447,8 +1497,18 @@ teks += `\n\n*TOTAL DE PALABRAS ${bad.length}*`
 reply(teks)
 }
 break
+
+case 'anti': {
+const body = '*Selecciona una opción:';
+const buttonNames = ['Activar', 'Desactivar'];
+const buttonIds = ['menu', 'help'];
+
+await sendReplyButton(m.chat, body, buttonNames, buttonIds, null);
+}
+		}
+			
 	case 'antibadword':
-            case 'antigroserias':{
+            case 'antigroserias': {
 		         if (!m.isGroup) return StickGroup()
 if (!isBotAdmins) return StickBotAdmin()
 if (!isAdmins && !isSamu) return StickAdmin()
