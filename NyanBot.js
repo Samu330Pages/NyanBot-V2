@@ -1494,7 +1494,7 @@ reply(`${command} ${forma1}ACTIVATED${forma1}`)
 }
 case 'bdoff': {
 db.data.chats[from].badword = false
-reply(`${commad} ${forma1}DISABLED${forma1}`)
+reply(`${command} ${forma1}DISABLED${forma1}`)
 }
 			
 	case 'antibadword':
