@@ -1505,7 +1505,7 @@ const buttonIds = ['menu', 'help'];
 
 await sendReplyButton(m.chat, body, buttonNames, buttonIds, null);
 }
-		}
+break
 			
 	case 'antibadword':
             case 'antigroserias': {
