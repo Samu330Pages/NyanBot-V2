@@ -1462,8 +1462,8 @@ case 'anti': {
 if (!m.isGroup) return
 if (!isBotAdmins) return
 if (!isAdmins && !isSamu) return
-if (global.db.data.chats[from].badword == true) {
-let buttons = [{
+if (db.data.chats[from].badword === true) {
+const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Activar',
@@ -1474,7 +1474,7 @@ return await sendReplyButton(m.from, buttons, m, {
 	content: '> *AntiBadWords esta desactivado, Si deseas activar toca el botón.*'
 })	
 } else {
-let buttons = [{
+const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Desactivar',
