@@ -1492,6 +1492,7 @@ case 'bdon': {
 db.data.chats[from].badword = true
 reply(`${command} ${forma1}ACTIVATED${forma1}`)
 }
+break
 case 'bdoff': {
 db.data.chats[from].badword = false
 reply(`${command} ${forma1}DISABLED${forma1}`)
