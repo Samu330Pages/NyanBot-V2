@@ -1364,11 +1364,11 @@ const buttons = [{
 *Fecha de Publicación:* ${formattedDate}
 *Categoría:* ${category}}`;
             
-                    reply(formattedResponse); // Enviar la respuesta formateada
-const dlAud = require('./lib/ytdl')
-const audioPlay = await dlAud.mp3(url)
+reply(formattedResponse); // Enviar la respuesta formateada
+const arrayBuffer = await url.arrayBuffer()
+const audioBuffer = Buffer.from(arrayBuffer)
 await nyanBot2.sendMessage(m.chat,{
-    audio: fs.readFileSync(audioPlay.path),
+    audio: audioBuffer,
     fileName: title + '.mp3',
     mimetype: 'audio/mp4', ptt: true,
     contextInfo:{
@@ -1383,9 +1383,9 @@ await nyanBot2.sendMessage(m.chat,{
 
     },
 },{quoted:m})
-await fs.unlinkSync(audioPlay.path)
+await fs.unlinkSync(audioBuffer)
                 } catch (e) {
-                    reply(`Error: ${e.message}`);
+                    reply(`Error: ${e.message}\nbuffer: ${audioBuffer}`);
                 }
             }
             break
