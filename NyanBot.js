@@ -32,7 +32,7 @@ const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
 const scp2 = require('./lib/scraper2') 
-const { Rapi } = require('./lib/rapi.js');
+const { Rapi } = require('./lib/rapi.js')
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
 const client = new ImgurClient({ clientId: "a0113354926015a" })*/
@@ -97,6 +97,8 @@ const {
     checkPremiumUser,
     getAllPremiumUser,
 } = require('./lib/premiun')
+
+const forma1 = '`'
 
 const dbPath = path.join(__dirname, 'Media', 'database', 'userPoints.json');
 
@@ -1419,8 +1421,49 @@ break
         reply("El archivo de uso no existe."); // Mensaje si el archivo no se encuentra
     }
     break
-    break
 
+	case 'groseria': case 'addbd':
+               if (!isSamu) return StickOwner()
+               if (!groupAdmins) return reply(mess.admin)
+               if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)
+               bad.push(q)
+               fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
+               reply(`> *${forma1}${q}${forma1} Se añadio a la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
+            break
+            case 'deldb':
+               if (!isSamu) return StickOwner()
+               if (!groupAdmins) return reply(mess.admin)
+               if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)                 
+               bad.splice(q)
+               fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
+               reply(`> *${forma1}${q}${forma1} Se ha eliminado de la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
+            break
+			
+case 'listbadword':{
+let teks = '> _LISTA DE MALAS PALABRAS_\n│\n'
+for (let x of bad) {
+teks += `- ${x}\n`
+}
+teks += `\n\n*TOTAL DE PALABRAS ${forma1}${bad.length}${forma1}*`
+reply(teks)
+}
+break
+	case 'antibadword':
+            case 'antigroserias':{
+		         if (!m.isGroup) return StickGroup()
+if (!isBotAdmins) return StickBotAdmin()
+if (!isAdmins && !isSamu) return StickAdmin()
+               if (args.length < 1) return reply(`*Porfavor asegurate de determinar el estado: ${forma1}ON/OFF${forma1}`)
+               if (args[0] === 'on') {
+                  db.data.chats[from].badword = true
+                  reply(`${command} ${forma1}ACTIVATED${forma1}`)
+               } else if (args[0] === 'off') {
+                  db.data.chats[from].badword = false
+                  reply(`${commad} ${forma1}DISABLED${forma1}`)
+               }
+               }
+            break
+			
             case 'addsticker':{
                 if (!isSamu) return StickOwner()
                 if (args.length < 1) return reply('Whats the sticker name?')
