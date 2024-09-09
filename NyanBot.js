@@ -1443,7 +1443,7 @@ let teks = '> _LISTA DE MALAS PALABRAS_\n\n'
 for (let x of bad) {
 teks += `- ${x}\n`
 }
-teks += `\n\n*TOTAL DE PALABRAS ${forma1 + bad.length + forma1}*`
+teks += `\n\n*TOTAL DE PALABRAS ${bad.length}*`
 reply(teks)
 }
 break
