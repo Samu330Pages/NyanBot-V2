@@ -1462,7 +1462,7 @@ case 'anti': {
 if (!m.isGroup) return
 if (!isBotAdmins) return
 if (!isAdmins && !isSamu) return
-if (db.data.chats[from].badword) {
+if (db.data.chats[m.chat].badword) {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
@@ -1497,7 +1497,7 @@ db.data.chats[from].badword = false
 reply(`${command} ${forma1}DISABLED${forma1}`)
 }
 			
-	case 'antibadword':
+	/*case 'antibadword':
             case 'antigroserias': {
 		         if (!m.isGroup) return StickGroup()
 if (!isBotAdmins) return StickBotAdmin()
@@ -1511,7 +1511,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                   reply(`${commad} ${forma1}DISABLED${forma1}`)
                }
                }
-            break
+            break*/
 			
             case 'addsticker':{
                 if (!isSamu) return StickOwner()
