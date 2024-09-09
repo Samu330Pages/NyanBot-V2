@@ -625,7 +625,7 @@ async function sendReplyButton(chatId, body, buttonNames, buttonIds, imgPath = n
                             buttons: buttons,
                         }),
                         contextInfo: {
-                            mentionedJid: [chatId], // Puedes ajustar esto según sea necesario
+                            mentionedJid: '', // Puedes ajustar esto según sea necesario
                             forwardingScore: 999,
                             isForwarded: true,
                         }
@@ -1295,7 +1295,18 @@ case 'menu': {
         return m.reply("`*Error*`");
     }
 }
-break;
+break
+
+case 'anti': {
+const body = '*Selecciona una opción:';
+const buttonNames = ['Activar', 'Desactivar'];
+const buttonIds = ['menu', 'help'];
+
+await sendReplyButton(m.from, body, buttonNames, buttonIds, null);
+}
+break
+			
+			
             case 'test':
 let x = async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
     var prepare = {}
@@ -1495,15 +1506,6 @@ teks += `- ${x}\n`
 }
 teks += `\n\n*TOTAL DE PALABRAS ${bad.length}*`
 reply(teks)
-}
-break
-
-case 'anti': {
-const body = '*Selecciona una opción:';
-const buttonNames = ['Activar', 'Desactivar'];
-const buttonIds = ['menu', 'help'];
-
-await sendReplyButton(m.from, body, buttonNames, buttonIds, null);
 }
 break
 			
