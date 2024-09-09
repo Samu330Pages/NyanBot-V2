@@ -1290,15 +1290,6 @@ case 'menu': {
     }
 }
 break
-
-case 'anti': {
-const body = '*Selecciona una opción:';
-const buttonNames = ['Activar', 'Desactivar'];
-const buttonIds = ['menu', 'help'];
-
-await sendReplyButton(m.from, body, buttonNames, buttonIds, null);
-}
-break
 			
 			
             case 'test':
@@ -1466,6 +1457,36 @@ teks += `\n\n*TOTAL DE PALABRAS ${bad.length}*`
 reply(teks)
 }
 break
+
+case 'anti': {
+if (!m.isGroup) return
+if (!isBotAdmins) return
+if (!isAdmins && !isSamu) return
+if (db.data.chats[from].badword = false) {
+const body = '*AntiBadWords esta desactivado, Si deseas activar toca el botón.*';
+const buttonNames = ['Activar'];
+const buttonIds = ['%bdon'];
+
+await sendReplyButton(m.from, body, buttonNames, buttonIds, null);	
+} else {
+const body = '*AntiBadWords esta activado, Si deseas desactivar toca el botón.*';
+const buttonNames = ['Desactivar'];
+const buttonIds = ['%bdoff'];
+
+await sendReplyButton(m.from, body, buttonNames, buttonIds, null);
+}
+
+}
+break
+
+case 'bdon': {
+db.data.chats[from].badword = true
+reply(`${command} ${forma1}ACTIVATED${forma1}`)
+}
+case 'bdoff': {
+db.data.chats[from].badword = false
+reply(`${commad} ${forma1}DISABLED${forma1}`)
+}
 			
 	case 'antibadword':
             case 'antigroserias': {
