@@ -1365,10 +1365,9 @@ const buttons = [{
 *Categoría:* ${category}}`;
             
 reply(formattedResponse); // Enviar la respuesta formateada
-const arrayBuffer = await url.arrayBuffer()
-const audioBuffer = Buffer.from(arrayBuffer)
+const audioYt = await fetchBuffer(url)
 await nyanBot2.sendMessage(m.chat,{
-    audio: audioBuffer,
+    audio: audioYt,
     fileName: title + '.mp3',
     mimetype: 'audio/mp4', ptt: true,
     contextInfo:{
@@ -1383,7 +1382,7 @@ await nyanBot2.sendMessage(m.chat,{
 
     },
 },{quoted:m})
-await fs.unlinkSync(audioBuffer)
+await fs.unlinkSync(audioYt)
                 } catch (e) {
                     reply(`Error: ${e.message}`);
                 }
