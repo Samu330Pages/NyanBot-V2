@@ -1390,6 +1390,104 @@ await nyanBot2.sendMessage(m.chat,{
             }
             break
 
+case 'play2': {
+    if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
+    
+    try {
+        await loading();
+        const r = await yts(text);
+
+        if (!r || !r.videos || r.videos.length === 0) {
+            return reply("No se encontraron videos para esa búsqueda.");
+        }
+
+        const video = r.videos[0];
+        const videoId = video.videoId;
+
+        const rapiInstance = new Rapi();
+        const videoData = await rapiInstance.fetchVideoData(videoId);
+
+        const title = videoData.title;
+        const channel = videoData.channelTitle;
+        const lengthSeconds = videoData.lengthSeconds;
+        const views = videoData.viewCount ? videoData.viewCount : "No disponible";
+        const publishDate = new Date(videoData.publishDate);
+        const category = videoData.category;
+        const thumbnail = videoData.thumbnail[1].url;
+
+        const formatData = videoData.formats[0];
+        const quality = formatData.qualityLabel;
+        const size = formatData.contentLength;
+        const url = formatData.url;
+
+        const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
+        const formattedDate = publishDate.toLocaleDateString("es-ES", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const formattedResponse = `*Título:* ${title}
+*Canal:* ${channel}
+*Duración:* ${formattedDuration}
+*Calidad:* ${quality}
+*Tamaño:* ${size} bytes
+*Vistas:* ${views.toLocaleString()} vistas
+*Fecha de Publicación:* ${formattedDate}
+*Categoría:* ${category}
+${url}`;
+
+        reply(formattedResponse);
+
+        // Descargar el video
+        const videoBuffer = await fetchBuffer(url);
+        const videoPath = 'video.mp4';
+        const audioPath = 'audio.mp3';
+
+        // Guardar el video en un archivo temporal
+        fs.writeFileSync(videoPath, videoBuffer);
+
+        // Convertir el video a audio
+        ffmpeg(videoPath)
+            .toFormat('mp3')
+            .on('end', async () => {
+                console.log('Conversión completada');
+                
+                // Leer el archivo de audio y enviar
+                const audioBuffer = fs.readFileSync(audioPath);
+
+                await nyanBot2.sendMessage(m.chat, {
+                    audio: audioBuffer,
+                    fileName: title + '.mp3',
+                    mimetype: 'audio/mp4',
+                    ptt: true,
+                    contextInfo: {
+                        externalAdReply: {
+                            title: title,
+                            body: botname,
+                            thumbnail: await fetchBuffer(thumbnail),
+                            sourceUrl: 'https://wa.me/samu330',
+                            mediaType: 2,
+                            mediaUrl: url,
+                        }
+                    }
+                }, { quoted: m });
+
+                // Eliminar archivos temporales
+                fs.unlinkSync(videoPath);
+                fs.unlinkSync(audioPath);
+            })
+            .on('error', (error) => {
+                console.error(`Error al convertir video a audio: ${error}`);
+                reply(`Error al convertir video a audio: ${error.message}`);
+            })
+            .save(audioPath);
+    } catch (e) {
+        reply(`Error: ${e.message}`);
+    }
+}
+break;
+
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
                 if (/image/.test(mime)) {
