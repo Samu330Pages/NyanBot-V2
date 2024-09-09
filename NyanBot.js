@@ -1365,7 +1365,8 @@ const buttons = [{
 *Categoría:* ${category}}`;
             
                     reply(formattedResponse); // Enviar la respuesta formateada
-const audioPlay = await xeonplaymp3.mp3(url)
+const dlAud = require('./lib/ytdl')
+const audioPlay = await dlAud.mp3(url)
 await nyanBot2.sendMessage(m.chat,{
     audio: fs.readFileSync(audioPlay.path),
     fileName: title + '.mp3',
