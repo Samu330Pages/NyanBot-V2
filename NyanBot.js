@@ -28,6 +28,7 @@ const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
 const fg = require('api-dylux')
+const ffmpeg = require('fluent-ffmpeg')
 const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
@@ -1390,7 +1391,7 @@ await nyanBot2.sendMessage(m.chat,{
             }
             break
 
-case 'play2': {
+case 'play': case 'song': {
     if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
     
     try {
@@ -1449,7 +1450,7 @@ ${url}`;
 
         // Convertir el video a audio
         ffmpeg(videoPath)
-            .toFormat('mp3')
+            .audioCodec('libmp3lame')
             .on('end', async () => {
                 console.log('Conversión completada');
                 
@@ -1486,8 +1487,7 @@ ${url}`;
         reply(`Error: ${e.message}`);
     }
 }
-break;
-
+break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
                 if (/image/.test(mime)) {
