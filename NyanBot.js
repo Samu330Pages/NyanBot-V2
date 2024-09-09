@@ -1378,7 +1378,6 @@ const buttons = [{
 case 'actualizar':
 case 'update':
 if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
-reply('*ESPERE UN MOMENTO... EL BOT ESTA SIENDO ACTUALIZADO CON LAS ÚLTIMAS MODIFICACIONES*')
 exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
 if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\n${stdout}\n\n> *NyanBot-V2*`)
@@ -1428,7 +1427,7 @@ break
                if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)
                bad.push(q)
                fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
-               reply(`> *${forma1}${q}${forma1} Se añadio a la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
+               reply(`> *${forma1 + q + forma1} Se añadio a la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
             break
             case 'deldb':
                if (!isSamu) return StickOwner()
@@ -1436,15 +1435,15 @@ break
                if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)                 
                bad.splice(q)
                fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
-               reply(`> *${forma1}${q}${forma1} Se ha eliminado de la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
+               reply(`> *${forma1 + q + forma1} Se ha eliminado de la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
             break
 			
 case 'listbadword':{
-let teks = '> _LISTA DE MALAS PALABRAS_\n│\n'
+let teks = '> _LISTA DE MALAS PALABRAS_\n\n'
 for (let x of bad) {
 teks += `- ${x}\n`
 }
-teks += `\n\n*TOTAL DE PALABRAS ${forma1}${bad.length}${forma1}*`
+teks += `\n\n*TOTAL DE PALABRAS ${forma1 + bad.length + forma1}*`
 reply(teks)
 }
 break
