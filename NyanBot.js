@@ -1422,7 +1422,7 @@ break
             break
 
             case 'llaves': // Comando para ver el uso de claves
-    const usageDataFilePath = path.join(__dirname, './Media/database/usage.json'); // Ruta del archivo de uso
+    const usageDataFilePath = path.join(__dirname, './lib/Media/database/usage.json'); // Ruta del archivo de uso
 
     if (fs.existsSync(usageDataFilePath)) {
         const usageData = JSON.parse(fs.readFileSync(usageDataFilePath)); // Cargar datos de uso
