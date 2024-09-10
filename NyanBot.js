@@ -1408,28 +1408,54 @@ case 'play2': {
         const rapiInstance = new Rapi();
         const videoData = await rapiInstance.fetchVideoData(videoId);
 
-        const title = videoData.title;
+        // Filtrar los formatos de audio
+        const audioFormats = videoData.adaptiveFormats.filter(format => format.mimeType.includes('audio/'));
+        
+        // Elegir el mejor formato de audio (priorizando calidad y bitrate)
+        const bestAudioFormat = audioFormats.reduce((prev, curr) => {
+            return (prev.bitrate > curr.bitrate) ? prev : curr;
+        });
 
-        // Verifica si hay formatos disponibles
-        if (!videoData.formats || videoData.formats.length === 0) {
-            return reply("No se encontraron formatos de video disponibles.");
+        if (!bestAudioFormat) {
+            return reply("No se encontró un formato de audio adecuado.");
         }
 
-        const url = videoData.formats[0].url; // Toma el primer formato
+        const title = videoData.title;
+        const channel = videoData.channelTitle;
+        const lengthSeconds = videoData.lengthSeconds;
+        const views = videoData.viewCount ? videoData.viewCount : "No disponible";
+        const publishDate = new Date(videoData.publishDate);
         const thumbnail = videoData.thumbnail[1].url;
+        
+        // Obtener datos del formato de audio
+        const quality = bestAudioFormat.qualityLabel;
+        const size = bestAudioFormat.contentLength;
+        const url = bestAudioFormat.url;
 
-        // Descargar el video como buffer
-        let videoBuffer = await fetchBuffer(url);
+        const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
+        const formattedDate = publishDate.toLocaleDateString("es-ES", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
 
-        // Convertir el video a audio
-        let audioBuffer = await toAudio(videoBuffer, 'mp4');
+        const formattedResponse = `*Título:* ${title}
+*Canal:* ${channel}
+*Duración:* ${formattedDuration}
+*Calidad:* ${quality}
+*Tamaño:* ${size} bytes
+*Vistas:* ${views.toLocaleString()} vistas
+*Fecha de Publicación:* ${formattedDate}`;
+
+        reply(formattedResponse);
 
         // Enviar el audio
+        let audioYt = await fetchBuffer(url);
+        let audio = await toAudio(audioYt, 'mp4');
         await nyanBot2.sendMessage(m.chat, {
-            audio: audioBuffer,
+            audio: audio,
             fileName: title + '.mp3',
-            mimetype: 'audio/mp4',
-            ptt: true,
+            mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
@@ -1439,8 +1465,9 @@ case 'play2': {
                     mediaType: 2,
                     mediaUrl: url,
                 }
-            }
+            },
         }, { quoted: m });
+
     } catch (e) {
         reply(`Error: ${e.message}`);
     }
