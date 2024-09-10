@@ -25,7 +25,7 @@ const ms = toMs = require('ms')
 const axios = require('axios')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const { ytmp3v3 } = require('ruhend-scraper');
+const { ttdl, ytmp3v3 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -1517,8 +1517,7 @@ await sendReplyButton(m.from, buttons, m, {
 break
 
 case 'play3': {
-if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`);
-await loading();
+if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)	
 const r = await yts(text);
 
 if (!r || !r.videos || r.videos.length === 0) {
@@ -1539,7 +1538,7 @@ await sendReplyButton(m.from, buttons, m, {
 }
 break
 
-case 'ytmp3': case 'ytaudio':
+case 'ytmp3': case 'ytaudio': {
 if (args.length < 1 || !isUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
 let audioYt = await fetchBuffer(audio);
@@ -1558,6 +1557,38 @@ let audioYt = await fetchBuffer(audio);
                 }
             },
         }, { quoted: m });
+}
+break
+
+case 'tt': {
+if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tiktok.com/...')
+      let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
+      let caption = `${forma1}Tiktok Download${forma1} \n`
+      caption += `⭔ Author: ${author}\n`
+      caption += `⭔ Username: ${username}\n`
+      caption += `⭔ Description : ${title}\n`
+      caption += `⭔ Published: ${published}\n`
+      caption += `⭔ Like: ${like}\n`
+      caption += `⭔ Comment: ${comment}\n`
+      caption += `⭔ Views: ${views}\n`
+      caption += `⭔ Bookmark: ${bookmark}\n`
+      caption += `⭔ Duration: ${duration}`
+let videoTt = await fetchBuffer(video);
+        await nyanBot2.sendMessage(m.chat, {
+            audio: videoTt,
+            fileName: title + '.mp4',
+            mimetype: 'video/mp4',
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: '',
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            }, { quoted: m });
+}
 break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
