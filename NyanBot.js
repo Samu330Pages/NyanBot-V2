@@ -1513,6 +1513,7 @@ await sendReplyButton(m.from, buttons, m, {
 	content: `> *⚠️ Video con restricción!.*\n\n_*No se puede descargar el audio por restricciones, para poder descargar el audio por favor oprime el botón.*`
 }, { quoted: m })
 }
+}
 break
 
 case 'ytmp3': case 'ytaudio':
