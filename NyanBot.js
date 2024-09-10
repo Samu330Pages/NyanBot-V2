@@ -112,6 +112,13 @@ function formatBytes(bytes) {
     return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
+function formatNumber(num) {
+    if (num < 1e3) return num;
+    const suffixes = ["", "K", "M", "B", "T"];
+    const index = Math.floor(Math.log(num) / Math.log(1e3));
+    return parseFloat((num / Math.pow(1e3, index)).toFixed(2)) + ' ' + suffixes[index];
+}
+
 // Función para leer la base de datos
 function readDatabase() {
     if (fs.existsSync(dbPath)) {
@@ -1538,7 +1545,7 @@ await sendReplyButton(m.from, buttons, m, {
  
 - *Título:* ${video.title}
 - *Duración:* ${video.timestamp}
-- *Vistas:* ${video.views}
+- *Vistas:* ${formatNumber(video.views)}
 
 > ${botname} by ${ownername}`
 })
