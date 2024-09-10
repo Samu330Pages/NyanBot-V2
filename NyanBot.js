@@ -1363,7 +1363,7 @@ const buttons = [{
                     });
             
                     // Crear la respuesta formateada
-                    const formattedResponse = `*Título:* ${title}
+const formattedResponse = `*Título:* ${title}
 *Canal:* ${channel}
 *Duración:* ${formattedDuration}
 *Calidad:* ${quality}
@@ -1448,6 +1448,7 @@ case 'play2': {
         
         // Obtener datos del formato de audio
         const quality = bestAudioFormat.quality;
+	const mimetype = bestAudioFormat.mimeType;
         const size = formatBytes(bestAudioFormat.contentLength);
         const url = bestAudioFormat.url || "URL no disponible"; // Manejar caso de URL no disponible
 
@@ -1465,6 +1466,19 @@ case 'play2': {
 *Tamaño:* ${size}
 *Vistas:* ${views} vistas
 *Fecha de Publicación:* ${formattedDate}`;
+await nyanBot2.sendMessage(m.chat, {
+            text: formattedResponse,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: url,
+                }
+            },
+        }, { quoted: m });
 
         reply(formattedResponse);
 
@@ -1473,7 +1487,7 @@ case 'play2': {
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
-            mimetype: 'audio/mp4', ptt: true,
+            mimetype: mimetype, ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
