@@ -1435,8 +1435,7 @@ case 'play2': {
 *Tamaño:* ${size} bytes
 *Vistas:* ${views.toLocaleString()} vistas
 *Fecha de Publicación:* ${formattedDate}
-*Categoría:* ${category}
-${url}`;
+*Categoría:* ${category}`;
 
         reply(formattedResponse);
 
@@ -1449,16 +1448,14 @@ ${url}`;
         fs.writeFileSync(videoPath, videoBuffer);
 
         // Convertir el video a audio
-        ffmpeg(videoPath)
-            .audioCodec('libmp3lame')
-            .on('end', async () => {
-                console.log('Conversión completada');
+        
                 
                 // Leer el archivo de audio y enviar
-                const audioBuffer = fs.readFileSync(audioPath);
+                const audioBuffer = fs.readFileSync(videoPath);
+	    	const audioYt = await toAudio(audioBuffer, 'mp4')
 
                 await nyanBot2.sendMessage(m.chat, {
-                    audio: audioBuffer,
+                    audio: audioYt,
                     fileName: title + '.mp3',
                     mimetype: 'audio/mp4',
                     ptt: true,
