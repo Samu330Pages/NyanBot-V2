@@ -1510,7 +1510,22 @@ break
 case 'ytmp3': case 'ytaudio':
 if (args.length < 1 || !isUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
-reply(`${audio}`)
+let audioYt = await fetchBuffer(audio);
+        await nyanBot2.sendMessage(m.chat, {
+            audio: audioYt,
+            fileName: title + '.mp3',
+            mimetype: 'audio/mp4', ptt: true,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: '',
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: url,
+                }
+            },
+        }, { quoted: m });
 break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
