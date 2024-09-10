@@ -1391,7 +1391,7 @@ await nyanBot2.sendMessage(m.chat,{
             }
             break
 
-case 'play': case 'song': {
+case 'play2': {
     if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
     
     try {
