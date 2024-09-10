@@ -1445,7 +1445,8 @@ case 'play2': {
 *Calidad:* ${quality}
 *Tamaño:* ${size} bytes
 *Vistas:* ${views.toLocaleString()} vistas
-*Fecha de Publicación:* ${formattedDate}`;
+*Fecha de Publicación:* ${formattedDate}
+*URL de Audio:* ${url}`;
 
         reply(formattedResponse);
 
