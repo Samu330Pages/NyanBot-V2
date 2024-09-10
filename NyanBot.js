@@ -1518,7 +1518,7 @@ break
 
 case 'play3': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
-if (isUrl) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
+if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
 const r = await yts(text);
 
 if (!r || !r.videos || r.videos.length === 0) {
