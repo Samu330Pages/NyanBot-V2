@@ -1393,7 +1393,7 @@ await nyanBot2.sendMessage(m.chat,{
 
 case 'play2': {
     if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
-    
+
     try {
         await loading();
         const r = await yts(text);
@@ -1409,67 +1409,32 @@ case 'play2': {
         const videoData = await rapiInstance.fetchVideoData(videoId);
 
         const title = videoData.title;
-        const channel = videoData.channelTitle;
-        const lengthSeconds = videoData.lengthSeconds;
-        const views = videoData.viewCount ? videoData.viewCount : "No disponible";
-        const publishDate = new Date(videoData.publishDate);
-        const category = videoData.category;
+        const url = videoData.formats[0].url;
         const thumbnail = videoData.thumbnail[1].url;
 
-        const formatData = videoData.formats[0];
-        const quality = formatData.qualityLabel;
-        const size = formatData.contentLength;
-        const url = formatData.url;
+        // Descargar el video como buffer
+        let videoBuffer = await fetchBuffer(url);
 
-        const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
-        const formattedDate = publishDate.toLocaleDateString("es-ES", {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        // Convertir el video a audio
+        let audioBuffer = await toAudio(videoBuffer, 'mp4');
 
-        const formattedResponse = `*Título:* ${title}
-*Canal:* ${channel}
-*Duración:* ${formattedDuration}
-*Calidad:* ${quality}
-*Tamaño:* ${size} bytes
-*Vistas:* ${views.toLocaleString()} vistas
-*Fecha de Publicación:* ${formattedDate}
-*Categoría:* ${category}`;
-
-        reply(formattedResponse);
-
-        // Descargar el video
-        const videoBuffer = await fetchBuffer(url);
-        const videoPath = 'video.mp4';
-        const audioPath = 'audio.mp3';
-
-        // Guardar el video en un archivo temporal
-        fs.writeFileSync(videoPath, videoBuffer);
-// Leer el archivo de audio y enviar
-                const audioBuffer = fs.readFileSync(videoPath);
-	    	const audioYt = await toAudio(audioBuffer, 'mp4')
-
-                await nyanBot2.sendMessage(m.chat, {
-                    audio: audioYt,
-                    fileName: title + '.mp3',
-                    mimetype: 'audio/mp4',
-                    ptt: true,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: title,
-                            body: botname,
-                            thumbnail: await fetchBuffer(thumbnail),
-                            sourceUrl: 'https://wa.me/samu330',
-                            mediaType: 2,
-                            mediaUrl: url,
-                        }
-                    }
-                }, { quoted: m });
-
-                // Eliminar archivos temporales
-                fs.unlinkSync(videoPath);
-                fs.unlinkSync(audioPath);
+        // Enviar el audio
+        await nyanBot2.sendMessage(m.chat, {
+            audio: audioBuffer,
+            fileName: title + '.mp3',
+            mimetype: 'audio/mp4',
+            ptt: true,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: url,
+                }
+            }
+        }, { quoted: m });
     } catch (e) {
         reply(`Error: ${e.message}`);
     }
