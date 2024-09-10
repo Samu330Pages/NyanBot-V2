@@ -1413,6 +1413,7 @@ case 'play2': {
 
         const video = r.videos[0];
         const videoId = video.videoId;
+	    reply(`${video.videUrl}`)
 
         const rapiInstance = new Rapi();
         const videoData = await rapiInstance.fetchVideoData(videoId);
@@ -1433,7 +1434,16 @@ case 'play2': {
         
         // Verificar que se encontraron formatos de audio
         if (audioFormats.length === 0) {
-            return reply("No se encontró un formato de audio adecuado.");
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Forzar descarga! 🪄',
+            id: `%ytmp3 ${video.videoUrl}`
+          }),
+        }]
+return await sendReplyButton(m.from, buttons, m, {
+	content: '> *⚠️ Video con restricción!.*'
+})
         }
 
         // Elegir el mejor formato de audio (priorizando calidad y bitrate)
