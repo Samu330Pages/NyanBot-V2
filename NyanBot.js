@@ -1535,7 +1535,11 @@ const buttons = [{
           }),
         }]
 await sendReplyButton(m.from, buttons, m, {
-	content: `> *YT Play 🍟.*\n\n`
+	content: `> *YT Play 🍟.*
+ 
+- *Título:* ${video.title}
+- *Duración:* ${video.timestamp}
+- *Vistas:* ${video.views}`
 }, { quoted: m })
 }
 break
