@@ -1243,7 +1243,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 case 'menu': {
     const categories = {
-        "Descarga": ['play', 'song'],
+        "Descarga": ['play', 'tt'],
         "Administración": ['actualizar', 'update'],
         "Stickers": ['addsticker', 'liststicker', 'delsticker'],
 	"Grupos": ['anti']
@@ -1517,7 +1517,8 @@ await sendReplyButton(m.from, buttons, m, {
 break
 
 case 'play3': {
-if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)	
+if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
+if (isUrl) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
 const r = await yts(text);
 
 if (!r || !r.videos || r.videos.length === 0) {
@@ -1525,6 +1526,7 @@ return reply("No se encontraron videos para esa búsqueda.");
 }
 
 const video = r.videos[0];
+reply(JSON.stringify(videoData, null, 2))
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
@@ -1564,15 +1566,15 @@ case 'tt': {
 if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tiktok.com/...')
       let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
       let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`
-      caption += `- Autor: ${author}\n`
-      caption += `- Nombre de usuario: ${username}\n`
-      caption += `- Descripción: ${title}\n`
-      caption += `- Publicado: ${published}\n`
-      caption += `- Likes: ${like}\n`
-      caption += `- Comentarios: ${comment}\n`
-      caption += `- Vistas: ${views}\n`
-      caption += `- Bookmark: ${bookmark}\n`
-      caption += `- Duración: ${duration}\n\n`
+      caption += `- *Autor:* ${author}\n`
+      caption += `- *Nombre de usuario:* ${username}\n`
+      caption += `- *Descripción:* ${title}\n`
+      caption += `- *Publicado:* ${published}\n`
+      caption += `- *Likes:* ${like}\n`
+      caption += `- *Comentarios:* ${comment}\n`
+      caption += `- *Vistas:* ${views}\n`
+      caption += `- *Bookmark:* ${bookmark}\n`
+      caption += `- *Duración:* ${duration}\n\n`
       caption += `> ${botname} by ${ownername}`
 let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
