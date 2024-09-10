@@ -57,7 +57,7 @@ const {
     toAudio,
     toPTT,
     toVideo,
-    ffmpeg,
+    //ffmpeg,
     addExifAvatar
 } = require('./lib/converter')
 const {
