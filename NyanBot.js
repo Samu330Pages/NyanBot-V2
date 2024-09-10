@@ -1413,7 +1413,6 @@ case 'play2': {
 
         const video = r.videos[0];
         const videoId = video.videoId;
-	    reply(JSON.stringify(video, null, 2))
 
         const rapiInstance = new Rapi();
         const videoData = await rapiInstance.fetchVideoData(videoId);
@@ -1438,11 +1437,11 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Forzar descarga! 🪄',
-            id: `%ytmp3 ${video.videoUrl}`
+            id: `%ytmp3 ${video.url}`
           }),
         }]
 return await sendReplyButton(m.from, buttons, m, {
-	content: '> *⚠️ Video con restricción!.*'
+	content: `> *⚠️ Video con restricción!.*\n\n_*No se puede descargar el audio por restricciones, para poder descargar el audio por favor oprime el botón.*`
 })
         }
 
