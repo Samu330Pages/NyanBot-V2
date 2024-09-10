@@ -1409,7 +1409,13 @@ case 'play2': {
         const videoData = await rapiInstance.fetchVideoData(videoId);
 
         const title = videoData.title;
-        const url = videoData.formats[0].url;
+
+        // Verifica si hay formatos disponibles
+        if (!videoData.formats || videoData.formats.length === 0) {
+            return reply("No se encontraron formatos de video disponibles.");
+        }
+
+        const url = videoData.formats[0].url; // Toma el primer formato
         const thumbnail = videoData.thumbnail[1].url;
 
         // Descargar el video como buffer
@@ -1454,6 +1460,19 @@ break
                 }
                 }
                 break
+case 'bienvenida': {
+               if (!m.isGroup) return StickGroup()
+if (!isAdmins && !isSamu) return StickAdmin()
+               if (args.length < 1) return reply('on/off?')
+               if (args[0] === 'on') {
+                  welcome = true
+                  reply(`${command} ${forma1}ON${forma1}`)
+               } else if (args[0] === 'off') {
+                  welcome = false
+                  reply(`${command} ${forma1}OFF${forma1}`)
+               }
+            }
+            break
 
 case 'actualizar':
 case 'update':
