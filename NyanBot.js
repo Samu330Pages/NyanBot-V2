@@ -1526,7 +1526,6 @@ return reply("No se encontraron videos para esa búsqueda.");
 }
 
 const video = r.videos[0];
-reply(JSON.stringify(video, null, 2))
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
