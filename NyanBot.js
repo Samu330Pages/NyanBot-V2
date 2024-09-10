@@ -1513,6 +1513,7 @@ reply('*Espere un momento...*')
 resyt = await y2mateA(text).catch(e => {
 reply('_[ ! ] Error del servidor_')
 })
+reply(`${resyt}`)
 result = `「  𝗦𝗮𝗺 𝘆 𝗣𝗲𝗿𝗿𝘆🍒  」
 *°Titulo :* ${resyt[0].judul}
 *°Tamaño :* ${resyt[0].size}
