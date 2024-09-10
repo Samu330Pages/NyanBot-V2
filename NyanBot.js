@@ -1506,36 +1506,25 @@ await nyanBot2.sendMessage(m.chat, {
 }
 break
 
-case 'ytmp3':
-if (args.length < 1) return reply('Y el link?')
-if(!isUrl(args[0]) && !args[0].includes('youtu')) return reply('Link de YouTube we, *De YouTube!!*')
-reply('*Espere un momento...*')
-resyt = await y2mateA(text).catch(e => {
-reply('_[ ! ] Error del servidor_')
-})
-reply(`${resyt}`)
-result = `「  𝗦𝗮𝗺 𝘆 𝗣𝗲𝗿𝗿𝘆🍒  」
-*°Titulo :* ${resyt[0].judul}
-*°Tamaño :* ${resyt[0].size}
-*°Calidad :* ${resyt[0].quality}kbps
-*°Nombre del archivo :* ${resyt[0].output}
-*°Salida :* ${resyt[0].tipe}
-_*El archivo se esta enviando.....*_
-`
+case 'ytmp3': case 'ytaudio':
+let audFc = require('./lib/ytdl')
+if (args.length < 1 || !isUrl(text) || !audFc.isYTUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/shorts/YQf-vMjDuKY?feature=share`)
+let audio = await audFc.mp3(text)
 await nyanBot2.sendMessage(m.chat,{
-    audio: await fetchBuffer(resyt[0].link),
+    audio: fs.readFileSync(audio.path),
     mimetype: 'audio/mp4', ptt: true,
     contextInfo:{
         externalAdReply:{
-            title:'yt',
+            title:audio.meta.title,
             body: botname,
-            thumbnail: await fetchBuffer(resyt[0].thumb),
+            thumbnail: await fetchBuffer(audio.meta.image),
             mediaType:2,
             mediaUrl:text,
         }
 
     },
 },{quoted:m})
+await fs.unlinkSync(audio.path)
 break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
