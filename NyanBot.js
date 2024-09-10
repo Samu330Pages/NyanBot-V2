@@ -1510,7 +1510,7 @@ case 'ytmp3':
 if (args.length < 1) return reply('Y el link?')
 if(!isUrl(args[0]) && !args[0].includes('youtu')) return reply('Link de YouTube we, *De YouTube!!*')
 reply('*Espere un momento...*')
-resyt = await y2mateA(teks).catch(e => {
+resyt = await y2mateA(text).catch(e => {
 reply('_[ ! ] Error del servidor_')
 })
 result = `「  𝗦𝗮𝗺 𝘆 𝗣𝗲𝗿𝗿𝘆🍒  」
