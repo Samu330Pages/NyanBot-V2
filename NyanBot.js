@@ -1427,7 +1427,7 @@ case 'play2': {
         const allFormats = [...(videoData.formats || []), ...(videoData.adaptiveFormats || [])];
 
         // Filtrar los formatos de audio
-        const audioFormats = allFormats.filter(format => format.mimeType.includes('aaudio/mp4'));
+        const audioFormats = allFormats.filter(format => format.mimeType.includes('audio/mp4'));
         
         // Verificar que se encontraron formatos de audio
         if (audioFormats.length === 0) {
