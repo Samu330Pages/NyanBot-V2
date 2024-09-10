@@ -1522,7 +1522,7 @@ let audioYt = await fetchBuffer(audio);
                     thumbnail: '',
                     sourceUrl: 'https://wa.me/samu330',
                     mediaType: 2,
-                    mediaUrl: url,
+                    mediaUrl: audio,
                 }
             },
         }, { quoted: m });
