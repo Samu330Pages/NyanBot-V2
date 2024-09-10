@@ -1563,16 +1563,17 @@ break
 case 'tt': {
 if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tiktok.com/...')
       let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
-      let caption = `${forma1}Tiktok Download${forma1} \n`
-      caption += `⭔ Author: ${author}\n`
-      caption += `⭔ Username: ${username}\n`
-      caption += `⭔ Description : ${title}\n`
-      caption += `⭔ Published: ${published}\n`
-      caption += `⭔ Like: ${like}\n`
-      caption += `⭔ Comment: ${comment}\n`
-      caption += `⭔ Views: ${views}\n`
-      caption += `⭔ Bookmark: ${bookmark}\n`
-      caption += `⭔ Duration: ${duration}`
+      let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`
+      caption += `- Autor: ${author}\n`
+      caption += `- Nombre de usuario: ${username}\n`
+      caption += `- Descripción: ${title}\n`
+      caption += `- Publicado: ${published}\n`
+      caption += `- Likes: ${like}\n`
+      caption += `- Comentarios: ${comment}\n`
+      caption += `- Vistas: ${views}\n`
+      caption += `- Bookmark: ${bookmark}\n`
+      caption += `- Duración: ${duration}\n\n`
+      caption += `> ${botname} by ${ownername}`
 let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
@@ -1583,7 +1584,7 @@ let videoTt = await fetchBuffer(video);
                 externalAdReply: {
                     title: title,
                     body: botname,
-                    thumbnail: '',
+                    thumbnail: await fetchBuffer(profilePicture),
                     sourceUrl: 'https://wa.me/samu330',
                     mediaType: 2,
                     mediaUrl: video,
