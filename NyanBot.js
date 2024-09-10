@@ -1446,11 +1446,7 @@ case 'play2': {
 
         // Guardar el video en un archivo temporal
         fs.writeFileSync(videoPath, videoBuffer);
-
-        // Convertir el video a audio
-        
-                
-                // Leer el archivo de audio y enviar
+// Leer el archivo de audio y enviar
                 const audioBuffer = fs.readFileSync(videoPath);
 	    	const audioYt = await toAudio(audioBuffer, 'mp4')
 
@@ -1474,12 +1470,6 @@ case 'play2': {
                 // Eliminar archivos temporales
                 fs.unlinkSync(videoPath);
                 fs.unlinkSync(audioPath);
-            })
-            .on('error', (error) => {
-                console.error(`Error al convertir video a audio: ${error}`);
-                reply(`Error al convertir video a audio: ${error.message}`);
-            })
-            .save(audioPath);
     } catch (e) {
         reply(`Error: ${e.message}`);
     }
