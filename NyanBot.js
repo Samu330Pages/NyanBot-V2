@@ -1504,6 +1504,27 @@ await nyanBot2.sendMessage(m.chat, {
     }
 }
 break
+
+case 'ytmp3': case 'ytaudio':
+let audFc = require('./lib/ytdl')
+if (args.length < 1 || !isUrl(text) || !audFc.isYTUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/shorts/YQf-vMjDuKY?feature=share`)
+let audio = await audFc.mp3(text)
+await nyanBot2.sendMessage(m.chat,{
+    audio: fs.readFileSync(audio.path),
+    mimetype: 'audio/mp4', ptt: true,
+    contextInfo:{
+        externalAdReply:{
+            title:audio.meta.title,
+            body: botname,
+            thumbnail: await fetchBuffer(audio.meta.image),
+            mediaType:2,
+            mediaUrl:text,
+        }
+
+    },
+},{quoted:m})
+await fs.unlinkSync(audio.path)
+break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
                 if (/image/.test(mime)) {
