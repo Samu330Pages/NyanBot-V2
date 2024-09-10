@@ -1408,17 +1408,29 @@ case 'play2': {
         const rapiInstance = new Rapi();
         const videoData = await rapiInstance.fetchVideoData(videoId);
 
+        // Agregar registro para depuración
+        console.log('videoData:', JSON.stringify(videoData, null, 2));
+
+        // Verificar que videoData exista
+        if (!videoData) {
+            return reply("No se encontró información del video.");
+        }
+
+        // Combinar formatos y formatos adaptativos
+        const allFormats = [...(videoData.formats || []), ...(videoData.adaptiveFormats || [])];
+
         // Filtrar los formatos de audio
-        const audioFormats = videoData.adaptiveFormats.filter(format => format.mimeType.includes('audio/'));
+        const audioFormats = allFormats.filter(format => format.mimeType.includes('audio/'));
         
+        // Verificar que se encontraron formatos de audio
+        if (audioFormats.length === 0) {
+            return reply("No se encontró un formato de audio adecuado.");
+        }
+
         // Elegir el mejor formato de audio (priorizando calidad y bitrate)
         const bestAudioFormat = audioFormats.reduce((prev, curr) => {
             return (prev.bitrate > curr.bitrate) ? prev : curr;
         });
-
-        if (!bestAudioFormat) {
-            return reply("No se encontró un formato de audio adecuado.");
-        }
 
         const title = videoData.title;
         const channel = videoData.channelTitle;
@@ -1430,7 +1442,7 @@ case 'play2': {
         // Obtener datos del formato de audio
         const quality = bestAudioFormat.qualityLabel;
         const size = bestAudioFormat.contentLength;
-        const url = bestAudioFormat.url;
+        const url = bestAudioFormat.url || "URL no disponible"; // Manejar caso de URL no disponible
 
         const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
         const formattedDate = publishDate.toLocaleDateString("es-ES", {
