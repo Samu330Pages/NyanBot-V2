@@ -1543,8 +1543,8 @@ const buttons = [{
 await sendReplyButton(m.from, buttons, m, {
 	content: `> *YT Play 🍟.*
  
-- *Título:* ${video.title}
-- *Duración:* ${video.timestamp}
+- *Título:* ${video.title}\n
+- *Duración:* ${video.timestamp}\n
 - *Vistas:* ${formatNumber(video.views)}
 
 > ${botname} by ${ownername}`
@@ -1555,8 +1555,7 @@ break
 case 'ytmp3': case 'ytaudio': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
-reply(`${audio}`)
-/*let audioYt = await fetchBuffer(audio);
+let audioYt = await fetchBuffer(audio);
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
@@ -1571,7 +1570,7 @@ reply(`${audio}`)
                     mediaUrl: audio,
                 }
             },
-        }, { quoted: m });*/
+        }, { quoted: m });
 }
 break
 
