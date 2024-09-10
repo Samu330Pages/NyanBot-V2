@@ -1511,8 +1511,8 @@ case 'ytmp3': case 'ytaudio':
 let audFc = require('./lib/ytdl')
 if (args.length < 1 || !isUrl(text) || !audFc.isYTUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/shorts/YQf-vMjDuKY?feature=share`)
 teks = args.join(' ')
-let audio = await audFc.mp3(teks)
 reply(`${teks}`)
+let audio = await audFc.mp3(teks)
 await nyanBot2.sendMessage(m.chat,{
     audio: fs.readFileSync(audio.path),
     mimetype: 'audio/mp4', ptt: true,
