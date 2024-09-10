@@ -1502,7 +1502,6 @@ await nyanBot2.sendMessage(m.chat, {
         }, { quoted: m });
 
     } catch (e) {
-	    if (e.message === 'Todas las claves han alcanzado el límite de uso.') {
 	const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
@@ -1510,12 +1509,9 @@ await nyanBot2.sendMessage(m.chat, {
             id: `%ytmp3 ${video.url}`
           }),
         }]
-return await sendReplyButton(m.from, buttons, m, {
+await sendReplyButton(m.from, buttons, m, {
 	content: `> *⚠️ Video con restricción!.*\n\n_*No se puede descargar el audio por restricciones, para poder descargar el audio por favor oprime el botón.*`
 }, { quoted: m })
-	    } else {
-        reply(`Error: ${e.message}`);
-    }
 }
 break
 
