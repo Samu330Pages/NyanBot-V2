@@ -1516,6 +1516,29 @@ await sendReplyButton(m.from, buttons, m, {
 }
 break
 
+case 'play3': {
+if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`);
+await loading();
+const r = await yts(text);
+
+if (!r || !r.videos || r.videos.length === 0) {
+return reply("No se encontraron videos para esa búsqueda.");
+}
+
+const video = r.videos[0];
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Forzar descarga! 🪄',
+            id: `%ytmp3 ${video.url}`
+          }),
+        }]
+await sendReplyButton(m.from, buttons, m, {
+	content: `> *YT Play 🍟.*\n\n`
+}, { quoted: m })
+}
+break
+
 case 'ytmp3': case 'ytaudio':
 if (args.length < 1 || !isUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
