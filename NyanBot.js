@@ -1576,8 +1576,8 @@ if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tikto
 let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
             audio: videoTt,
-            fileName: title + '.mp4',
-            mimetype: 'video/mp4',
+            fileName: title + '.mp3',
+            mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
@@ -1587,7 +1587,8 @@ let videoTt = await fetchBuffer(video);
                     mediaType: 2,
                     mediaUrl: video,
                 }
-            }, { quoted: m });
+            },
+        }, { quoted: m });
 }
 break
             case 's': case 'sticker': case 'stiker': {
