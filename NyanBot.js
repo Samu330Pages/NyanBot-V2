@@ -1508,7 +1508,7 @@ await nyanBot2.sendMessage(m.chat, {
 break
 
 case 'ytmp3': case 'ytaudio':
-if (args.length < 1 || !isUrl(text) || !audFc.isYTUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
 reply(`${audio}`)
 break
