@@ -1463,7 +1463,7 @@ case 'play2': {
 *Duración:* ${formattedDuration}
 *Calidad:* ${quality}
 *Tamaño:* ${size}
-*Vistas:* ${views.toLocaleString()} vistas
+*Vistas:* ${views} vistas
 *Fecha de Publicación:* ${formattedDate}`;
 
         reply(formattedResponse);
