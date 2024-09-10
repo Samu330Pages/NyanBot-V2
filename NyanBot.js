@@ -1575,9 +1575,10 @@ if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tikto
       caption += `⭔ Duration: ${duration}`
 let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
-            audio: videoTt,
+            video: videoTt,
             fileName: title + '.mp3',
-            mimetype: 'audio/mp4', ptt: true,
+	    caption: caption,
+            mimetype: 'video/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
