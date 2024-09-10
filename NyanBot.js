@@ -1463,6 +1463,7 @@ case 'play2': {
 *Canal:* ${channel}
 *Duración:* ${formattedDuration}
 *Calidad:* ${quality}
+*MimeType:* ${mimetype}
 *Tamaño:* ${size}
 *Vistas:* ${views} vistas
 *Fecha de Publicación:* ${formattedDate}`;
@@ -1480,14 +1481,12 @@ await nyanBot2.sendMessage(m.chat, {
             },
         }, { quoted: m });
 
-        reply(formattedResponse);
-
         // Enviar el audio
         let audioYt = await fetchBuffer(url);
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
-            mimetype: mimetype, ptt: true,
+            mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
