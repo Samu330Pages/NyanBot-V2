@@ -1413,7 +1413,7 @@ case 'play2': {
 
         const video = r.videos[0];
         const videoId = video.videoId;
-	    reply(`${video}`)
+	    reply(JSON.stringify(video, null, 2)})
 
         const rapiInstance = new Rapi();
         const videoData = await rapiInstance.fetchVideoData(videoId);
