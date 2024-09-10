@@ -1538,13 +1538,15 @@ await sendReplyButton(m.from, buttons, m, {
  
 - *Título:* ${video.title}
 - *Duración:* ${video.timestamp}
-- *Vistas:* ${video.views}`
-}, { quoted: m })
+- *Vistas:* ${video.views}
+
+> ${botname} by ${ownername}`
+})
 }
 break
 
 case 'ytmp3': case 'ytaudio': {
-if (args.length < 1 || !isUrl(text)) return reply(`Where's the yt link?\nExample: ${prefix + command} https://youtube.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
 let audioYt = await fetchBuffer(audio);
         await nyanBot2.sendMessage(m.chat, {
@@ -1566,7 +1568,7 @@ let audioYt = await fetchBuffer(audio);
 break
 
 case 'tt': {
-if (!text) return reply(`Ejemplo de uso\n${prefix+command}` + ' https://vt.tiktok.com/...')
+if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n${prefix+command}` + ' https://vt.tiktok.com/...')
       let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
       let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`
       caption += `- *Autor:* ${author}\n`
