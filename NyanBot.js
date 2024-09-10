@@ -103,6 +103,13 @@ const forma1 = '`'
 
 const dbPath = path.join(__dirname, 'Media', 'database', 'userPoints.json');
 
+function formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
 // Función para leer la base de datos
 function readDatabase() {
     if (fs.existsSync(dbPath)) {
@@ -1435,13 +1442,13 @@ case 'play2': {
         const title = videoData.title;
         const channel = videoData.channelTitle;
         const lengthSeconds = videoData.lengthSeconds;
-        const views = videoData.viewCount ? videoData.viewCount : "No disponible";
+        const views = videoData.viewCount;
         const publishDate = new Date(videoData.publishDate);
         const thumbnail = videoData.thumbnail[1].url;
         
         // Obtener datos del formato de audio
-        const quality = bestAudioFormat.qualityLabel;
-        const size = bestAudioFormat.contentLength;
+        const quality = bestAudioFormat.quality;
+        const size = formatBytes(bestAudioFormat.contentLength);
         const url = bestAudioFormat.url || "URL no disponible"; // Manejar caso de URL no disponible
 
         const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
@@ -1455,18 +1462,16 @@ case 'play2': {
 *Canal:* ${channel}
 *Duración:* ${formattedDuration}
 *Calidad:* ${quality}
-*Tamaño:* ${size} bytes
+*Tamaño:* ${size}
 *Vistas:* ${views.toLocaleString()} vistas
-*Fecha de Publicación:* ${formattedDate}
-*URL de Audio:* ${url}`;
+*Fecha de Publicación:* ${formattedDate}`;
 
         reply(formattedResponse);
 
         // Enviar el audio
         let audioYt = await fetchBuffer(url);
-        let audio = await toAudio(audioYt, 'mp4');
         await nyanBot2.sendMessage(m.chat, {
-            audio: audio,
+            audio: audioYt,
             fileName: title + '.mp3',
             mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
