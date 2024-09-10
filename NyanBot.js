@@ -28,7 +28,7 @@ const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
 const fg = require('api-dylux')
-const ffmpeg = require('fluent-ffmpeg')
+//const ffmpeg = require('fluent-ffmpeg')
 const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
@@ -57,7 +57,7 @@ const {
     toAudio,
     toPTT,
     toVideo,
-    //ffmpeg,
+    ffmpeg,
     addExifAvatar
 } = require('./lib/converter')
 const {
