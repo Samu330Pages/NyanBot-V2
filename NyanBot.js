@@ -1571,8 +1571,12 @@ await sendReplyButton(m.from, buttons, m, {
 break
 case 'args': {
 let count = args.length;
-let arg2 = args[2];
-reply(`${count}\n${arg2}`)
+if (args.join('') === 2) {
+reply(`2`)
+}
+if (args.join('') === 1) {
+reply(`🪅`)
+}
 }
 break
 case 'ytmp3': case 'yta': {
