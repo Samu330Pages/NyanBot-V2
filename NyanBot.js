@@ -1577,6 +1577,7 @@ reply(`${count}\n${arg2}`)
 break
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
+reply(args[1])
 let { title, audio, thumbnail } = await ytmp3v3(text);
 let audioYt = await fetchBuffer(audio);
         await nyanBot2.sendMessage(m.chat, {
