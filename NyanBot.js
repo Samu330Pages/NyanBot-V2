@@ -1569,6 +1569,9 @@ await sendReplyButton(m.from, buttons, m, {
 })
 }
 break
+case 'args': {
+reply(`${args.lenght}`)
+}
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
 let { title, audio, thumbnail } = await ytmp3v3(text);
