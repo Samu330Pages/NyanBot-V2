@@ -25,7 +25,7 @@ const ms = toMs = require('ms')
 const axios = require('axios')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const { ttdl, ytmp3v3 } = require('ruhend-scraper');
+const { ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
