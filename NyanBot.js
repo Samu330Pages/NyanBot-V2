@@ -1596,14 +1596,18 @@ case 'args': {
 }
 break
 case 'ytmp3': case 'yta': {
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
+const primerArg = parseInt(args[0], 10);
+if (isNaN(primerArg)) {
+        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
+}
 let { title, audio, thumbnail } = await ytmp3v3(args[1]);
 let audioYt = await fetchBuffer(audio);
-if (args.join('') === 2) {
+if (primerArg === 1) {
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
-            mimetype: 'audio/mp4', ptt: true,
+            mimetype: 'audio/mp3',
             contextInfo: {
                 externalAdReply: {
                     title: title,
@@ -1617,7 +1621,7 @@ if (args.join('') === 2) {
         }, { quoted: m });
 
 }//
-if (args.join('') === 1) {
+if (primerArg === 2) {
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
