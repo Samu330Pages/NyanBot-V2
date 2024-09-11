@@ -1554,12 +1554,11 @@ break
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
 let { title, audio, thumbnail } = await ytmp3v3(args[3]);
-if (args[0] === '1') {
 let audioYt = await fetchBuffer(audio);
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
-            mimetype: 'audio/mp4',
+            mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
                     title: title,
@@ -1571,25 +1570,6 @@ let audioYt = await fetchBuffer(audio);
                 }
             },
         }, { quoted: m });
-}
-if (args[0] === '2') {
-let audioYt = await fetchBuffer(audio);
-        await nyanBot2.sendMessage(m.chat, {
-            document: audioYt,
-            fileName: title + '.mp3',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: thumbnail,
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: audio,
-                }
-            },
-        }, { quoted: m });
-}
-
 }
 break
 case 'ytmp4': case 'ytv': {
