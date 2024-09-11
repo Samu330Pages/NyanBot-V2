@@ -1573,8 +1573,7 @@ case 'args': {
 let count = args.length;
 if (args[0] === 2) {
 reply(`2`)
-}
-if (args[0] === 1) {
+} else if (args[0] === 1) {
 reply(`🪅`)
 }
 }
