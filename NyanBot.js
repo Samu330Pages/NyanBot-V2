@@ -1551,46 +1551,51 @@ await sendReplyButton(m.from, buttons, m, {
 })
 }
 break
-
 case 'ytmp3': case 'yta': {
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
-let { title, audio, thumbnail } = await ytmp3v3(args[3]);
-if (args[0] === '1') {
-let audioYt = await fetchBuffer(audio);
+    // Verificamos que haya al menos dos argumentos
+    if (args.length < 2 || !isUrl(args[1])) {
+        return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/...`);
+    }
+
+    // Extraemos la URL y la opción
+    const url = args[1]; // La URL de YouTube
+    const opcion = args[2]; // Opción (1 o 2)
+
+    // Obtenemos los datos de audio
+    let { title, audio, thumbnail } = await ytmp3v3(url);
+
+    // Verificamos la opción y enviamos el audio en el formato correspondiente
+    let audioYt = await fetchBuffer(audio);
+    const contextInfo = {
+        externalAdReply: {
+            title: title,
+            body: botname,
+            thumbnail: thumbnail,
+            sourceUrl: 'https://wa.me/samu330',
+            mediaType: 2,
+            mediaUrl: audio,
+        }
+    };
+
+    if (opcion === '1') {
+        // Enviar como audio
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
             mimetype: 'audio/mp4',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: thumbnail,
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: audio,
-                }
-            },
+            contextInfo: contextInfo,
         }, { quoted: m });
-}
-if (args[0] === '2') {
-let audioYt = await fetchBuffer(audio);
+    } else if (opcion === '2') {
+        // Enviar como documento
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: thumbnail,
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: audio,
-                }
-            },
+            contextInfo: contextInfo,
         }, { quoted: m });
-}
-
+    } else {
+        // Opción no válida
+        return reply(`*Opción no válida.*\n_*Ejemplo de uso*_\n${prefix + command} 1 https://youtube.com/...`);
+    }
 }
 break
 case 'ytmp4': case 'ytv': {
