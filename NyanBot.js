@@ -1609,35 +1609,14 @@ if (primerArg === 1) {
             audio: audioYt,
             fileName: title + '.mp3',
             mimetype: 'audio/mpeg',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: await fetchBuffer(thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: audio,
-                }
-            },
         }, { quoted: m });
 
-}//
-if (primerArg === 2) {
+} else if (primerArg === 2) {
 	reply('> *Esperé un momento, se esta enviando su documento de audio*')
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
-	    mimetype: 'aidio/mpeg',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: thumbnail,
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: audio,
-                }
-            },
+	    mimetype: 'aidio/mpeg'
         }, { quoted: m });
 
 } else {
