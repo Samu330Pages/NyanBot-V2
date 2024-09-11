@@ -1576,6 +1576,8 @@ reply(`${count}\n${args.join(', ')}`)
 break
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
+let test = 1;
+if (args[2] === 2) {test = 2;}
 let { title, audio, thumbnail } = await ytmp3v3(text);
 let audioYt = await fetchBuffer(audio);
         await nyanBot2.sendMessage(m.chat, {
@@ -1584,7 +1586,7 @@ let audioYt = await fetchBuffer(audio);
             mimetype: 'audio/mp4', ptt: true,
             contextInfo: {
                 externalAdReply: {
-                    title: title,
+                    title: test,
                     body: botname,
                     thumbnail: thumbnail,
                     sourceUrl: 'https://wa.me/samu330',
