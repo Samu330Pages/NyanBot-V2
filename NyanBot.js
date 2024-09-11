@@ -1575,7 +1575,7 @@ let audioYt = await fetchBuffer(audio);
 break
 case 'ytmp4': case 'ytv': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
-let { title, size, video, quality, thumbnail } = await ytmp4(text):
+let { title, size, video, quality, thumbnail } = await ytmp4(text);
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
       caption += `- *Calidad:* ${quality}\n`
