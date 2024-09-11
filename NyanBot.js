@@ -1570,12 +1570,29 @@ await sendReplyButton(m.from, buttons, m, {
 }
 break
 case 'args': {
-let count = args.length;
-if (count[0] === 2) {
-reply(`2`)
-} else if (count[0] === 1) {
-reply(`🪅`)
-}
+    // Verificamos si hay al menos un argumento
+    if (args.length < 1) {
+        reply(`*Nadafaffa*`);
+        break;
+    }
+
+    // Convertimos el primer argumento a un número
+    const primerArg = parseInt(args[0], 10);
+
+    // Verificamos si el valor es un número válido
+    if (isNaN(primerArg)) {
+        reply(`*opción 1 o 2*`);
+        break;
+    }
+
+    // Comparamos el primer argumento con 1 y 2
+    if (primerArg === 1) {
+        reply(`🪅`); // Si el primer argumento es 1
+    } else if (primerArg === 2) {
+        reply(`2`); // Si el primer argumento es 2
+    } else {
+        reply(`*Opción no reconocia: ${primerArg}.*`); // Para otros números
+    }
 }
 break
 case 'ytmp3': case 'yta': {
