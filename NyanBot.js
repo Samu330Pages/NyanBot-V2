@@ -1579,7 +1579,8 @@ let { title, size, video, quality, thumbnail } = await ytmp4(text);
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
       caption += `- *Calidad:* ${quality}\n`
-      caption += `- *Peso:* ${size}`
+      caption += `- *Peso:* ${size}\n\n`
+      caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
@@ -1617,9 +1618,9 @@ if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n
 let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
-            fileName: title + '.mp3',
+            fileName: title + '.mp4',
 	    caption: caption,
-            mimetype: 'video/mp4', ptt: true,
+            mimetype: 'video/mp4',
             contextInfo: {
                 externalAdReply: {
                     title: title,
@@ -2131,7 +2132,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                         }
                     } })
                 }
-                if (budy.startsWith('=>')) {
+                if (budy.startsWith('==>')) {
                     if (!isSamu) return
                     function Return(sul) {
                         sat = JSON.stringify(sul, null, 2)
@@ -2148,7 +2149,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     }
                 }
 
-                if (budy.startsWith('>')) {
+                if (budy.startsWith('=>')) {
                     if (!isSamu) return
                     try {
                         let evaled = await eval(budy.slice(2))
