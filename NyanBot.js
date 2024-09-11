@@ -1584,6 +1584,7 @@ let videoYt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
+	    caption: caption,
             mimetype: 'video/mp4',
             contextInfo: {
                 externalAdReply: {
