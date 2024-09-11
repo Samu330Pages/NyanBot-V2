@@ -1571,9 +1571,9 @@ await sendReplyButton(m.from, buttons, m, {
 break
 case 'args': {
 let count = args.length;
-if (args[0] === 2) {
+if (args.join('') === 2) {
 reply(`2`)
-} else if (args[0] === 1) {
+} else if (args.join('') === 1) {
 reply(`🪅`)
 }
 }
