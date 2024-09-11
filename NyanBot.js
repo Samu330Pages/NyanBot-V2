@@ -1250,10 +1250,10 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 case 'menu': {
     const categories = {
-        "Descarga": ['play', 'tt'],
-        "Administración": ['actualizar', 'update'],
-        "Stickers": ['addsticker', 'liststicker', 'delsticker'],
-	"Grupos": ['anti']
+        "> Descarga": ['play `SEARCH`', 'yta `LINK`', 'ytv `LINK`', 'tt `LINK`'],
+        "> Administración": ['actualizar', 'update'],
+        "> Stickers": ['addsticker', 'liststicker', 'delsticker'],
+	"> Grupos": ['anti']
         // Añadir más categorías según sea necesario
     };
 
@@ -1329,7 +1329,7 @@ const buttons = [{
         })
             break
 
-            case 'play': case 'song': {
+            case 'play3': case 'song': {
                 if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
             
                 try {
@@ -1523,7 +1523,7 @@ await sendReplyButton(m.from, buttons, m, {
 }
 break
 
-case 'play3': {
+case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
 const r = await yts(text);
@@ -1552,7 +1552,7 @@ await sendReplyButton(m.from, buttons, m, {
 }
 break
 
-case 'ytmp3': case 'ytaudio': {
+case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
 let { title, audio } = await ytmp3v3(text);
 let audioYt = await fetchBuffer(audio);
@@ -1573,8 +1573,33 @@ let audioYt = await fetchBuffer(audio);
         }, { quoted: m });
 }
 break
+case 'ytmp4': case 'ytv': {
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
+let { title, size, video, quality, thumbnail } = await ytmp4(text)     
+      let caption = `> Yt MP4 📽\n`
+      caption += `- *Titulo:* ${title}\n`
+      caption += `- *Calidad:* ${quality}\n`
+      caption += `- *Peso:* ${size}`
+let videoYt = await fetchBuffer(video);
+        await nyanBot2.sendMessage(m.chat, {
+            video: videoYt,
+            fileName: title + '.mp4',
+            mimetype: 'video/mp4',
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            },
+        }, { quoted: m });
+}
+break
 
-case 'tt': {
+case 'tt': case 'tiktok': {
 if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n${prefix+command}` + ' https://vt.tiktok.com/...')
       let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
       let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`
