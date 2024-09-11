@@ -1536,10 +1536,28 @@ const video = r.videos[0];
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
-            display_text: 'Forzar descarga! 🪄',
+            display_text: 'Descargar audio 🌮',
             id: `%ytmp3 ${video.url}`
           }),
-        }]
+        }, {
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Descargar nota de voz 🧌',
+            id: `%ytmp3 ${video.url}`
+          }),
+}, {
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Descargar documento',
+            id: `%ytmp3 ${video.url}`
+          }),
+}, {
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Descargar video 🐡',
+            id: `%ytv ${video.url}`
+          }),
+}]
 await sendReplyButton(m.from, buttons, m, {
 	content: `> *YT Play 🍟.*
  
