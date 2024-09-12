@@ -1263,21 +1263,9 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         }),
                         action: {
 				name: "flow",
-				parameters: proto.Message.InteractiveMessage.Parameters.create({
-					flow_message_version: "3",
-					flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
-					flow_id: "1",
-					flow_cta: "Book!",
-					flow_action: "navigate",
-					flow_action_payload: {
-						screen: "test",
-						data: { 
-							product_name: "name",
-							product_description: "description",
-							product_price: 100
-						}
-					}
-				})},
+				parameters: {
+					flow_cta: "Book!"
+				}},
                         contextInfo: {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
