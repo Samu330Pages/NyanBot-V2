@@ -1267,6 +1267,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
       "name": "flow",
 
       "buttonParamsJson": {
+	"display_text": "test",
 
         "flow_message_version": "3",
 
@@ -1280,7 +1281,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
 
         "flow_action_payload": {
 
-          "screen": "WELCOME_SCREEN",
+          "screen": "SETTINGS",
 
           "data": {
 
