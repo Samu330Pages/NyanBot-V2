@@ -1262,7 +1262,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
 			     text: "test"
                         }),
                         action: {
-			flow_cta: "Book!"
+			      text: "Book!"
 				},
                         contextInfo: {
                             mentionedJid: [m.sender],
@@ -1313,6 +1313,7 @@ case 'menu': {
                             text: botname
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
+			    text: 'test header',
                             hasMediaAttachment: true,
                             ...await prepareWAMessageMedia({ image: fs.readFileSync(imagePath) }, { upload: nyanBot2.waUploadToServer })
                         }),
