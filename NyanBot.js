@@ -1264,7 +1264,10 @@ const msgs = generateWAMessageFromContent(m.chat, {
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                         action: [{
 			      name: "flow",
-			      text: "Book!"
+				parameters: {
+			      flow_cta: "Book!",
+			      flow_action: "navigate"
+				}
 			}]
 				}),
                         contextInfo: {
