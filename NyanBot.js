@@ -1395,7 +1395,7 @@ case 'login': {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-        reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
+        return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
     }
 
     const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
@@ -1428,7 +1428,8 @@ case 'login': {
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
-                    content: `> *El correo ingresado no está registrado!* 🥲\n\nPor favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙`
+                    content: `> *El correo ingresado no está registrado!* 🥲\n\nPor favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙`,
+	            media: './Media/theme/login.jpg'
                 });
             }
         })
