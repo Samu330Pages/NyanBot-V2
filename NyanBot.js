@@ -1307,7 +1307,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         buttons: [{
 				"name": "send_location",
 				"buttonParamsJson": {
-					"display_text": "send_location"
+					"display_text": "test"
 				}
 			}]
 				}),
@@ -1388,6 +1388,16 @@ case 'menu': {
 break
 case 'login': {
     const email = text;
+
+    if (!email) {
+        return reply('Por favor, proporciona un correo electrónico para verificar si está registrado.');
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
+    }
+
     const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
 
     fetch(url)
@@ -1403,25 +1413,23 @@ case 'login': {
                 const replyMessage = `Email: ${data.Result}\nUID: ${data.UID}\nUser: ${data.User}`;
                 reply(replyMessage); // Envía los datos del usuario
             } else {
-const buttons = [{
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Registro desde WhatsApp 🧩',
-            id: `%reg`
-          }),
-}, {
-          name: "cta_url",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Registro en la página 📝',
-            url: `https://samu330.com/login`,
-	    merchant_url: `https://samu330.com/login`
-          }),
-}]
-sendReplyButton(m.chat, buttons, m, {
-	content: `> *El correo ingresado no esta registrado!* 🥲
-
-Porfavor accede a la página para un registro mas cómodo, o si gustas puedes registrarte directamente por Whatsapp, solo sige los pasos y lee cuidadosamente las instruccione! 😙`
-})
+                const buttons = [{
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Registro desde WhatsApp 🧩',
+                        id: `%reg`
+                    }),
+                }, {
+                    name: "cta_url",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Registro en la página 📝',
+                        url: `https://samu330.com/login`,
+                        merchant_url: `https://samu330.com/login`
+                    }),
+                }];
+                sendReplyButton(m.chat, buttons, m, {
+                    content: `> *El correo ingresado no está registrado!* 🥲\n\nPor favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙`
+                });
             }
         })
         .catch(error => {
@@ -1429,7 +1437,7 @@ Porfavor accede a la página para un registro mas cómodo, o si gustas puedes re
             reply('Ocurrió un error al verificar el correo.'); // Mensaje de error
         });
 }
-    break
+break
 case 'reg': {
 reply(`*Porfavor ingresa los datos correctamente para poder registrarte!*
 
