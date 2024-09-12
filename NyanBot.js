@@ -1308,6 +1308,25 @@ case 'menu': {
     }
 }
 break
+case 'login': {
+    const email = text;
+    const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?${email}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.IsEmailRegistered) {
+                const replyMessage = `Email: ${data.Result}\nID de usuario: ${data.UID}\nNombre de usuario: ${data.User}`;
+                reply(replyMessage);
+            } else {
+                reply('El correo no está registrado.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            reply('Ocurrió un error al verificar el correo.');
+        });
+    break
 			
 			
             case 'test':
@@ -1558,7 +1577,7 @@ const buttons = [{
             id: `%ytv 2 ${video.url}`
           }),
 }, {
-          name: "quick_url",
+          name: "target_url",
           buttonParamsJson: JSON.stringify({
             display_text: 'Ver en la app ❤️',
             url: `${video.url}`
