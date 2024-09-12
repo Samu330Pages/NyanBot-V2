@@ -610,8 +610,53 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 
 
-async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, options = {}) {
-    var prepare = {}
+async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
+      if (opts.media) {
+         var file = await functions.getFile(opts.media)
+         if (/image/.test(file.mime)) {
+            var parse = await prepareWAMessageMedia({
+               image: {
+                  url: file.file
+               }
+            }, {
+               upload: nyanBot2.waUploadToServer
+            })
+            var prepare = {
+               imageMessage: parse.imageMessage
+            }
+         } else if (/video/.test(file.mime)) {
+            var parse = await prepareWAMessageMedia({
+               video: {
+                  url: file.file
+               },
+               ...(opts.gif && { gifPlayback: true })
+            }, {
+               upload: nyanBot2.waUploadToServer
+            })
+            var prepare = {
+               videoMessage: parse.videoMessage
+            }
+         } else if (/document/.test(file.mime)) {
+            var parse = await prepareWAMessageMedia({
+               document: {
+                  url: file.file
+               },
+               mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+               pageCount: (opts && opts.pages) ? Number(opts.pages): 25,
+               jpegThumbnail: (opts && opts.thumbnail) ? await functions.createThumb(opts.thumbnail): null,
+               fileName: (opts && opts.fname) ? opts.fname: 'suki',
+               fileLength: (opts && opts.fsize) ? Number(opts.fsize): 100000000000
+            }, {
+               upload: nyanBot2.waUploadToServer
+            })
+            var prepare = {
+               documentMessage: parse.documentMessage
+            }
+         } else {
+            var prepare = {}
+         }
+      }
+
       const message = generateWAMessageFromContent(jid, {
          viewOnceMessage: {
             message: {
@@ -629,13 +674,13 @@ async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, option
                      messageParamsJson: ''
                   },
                   contextInfo: {
-                     mentionedJid: opts.mention,
-                     remoteJid: opts.from || null,
+                     mentionedJid: opts.mention || functions.mention(opts.content),
+                     remoteJid: opts.jid || null,
                      forwardingScore: opts && opts.forScore ? opts.forScore : 0,
                      isForwarded: opts && opts.forward ? opts.forward : false,
                      ...(opts.business ? {
                         businessMessageForwardInfo: {
-                           businessOwnerJid: nyanBot2.user.from
+                           businessOwnerJid: nyanBot2.user.jid
                         }
                      } : {})
                   }
@@ -643,10 +688,10 @@ async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, option
             }
          }
       }, {
-         userJid: nyanBot2.user.from,
+         userJid: nyanBot2.user.jid,
          quoted
       })
-      nyanBot2.relayMessage(from, message['message'], {
+      sock.relayMessage(jid, message['message'], {
          messageId: message.key.id
       })
       return message
