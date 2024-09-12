@@ -1263,33 +1263,21 @@ const msgs = generateWAMessageFromContent(m.chat, {
                             text: botname
                         }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        action: [{
-      "name": "flow",
-
-      "buttonParamsJson": {
-	"display_text": "test",
-
-        "flow_message_version": "3",
-
-        "flow_token": "any_string_for_this_example",
-
-        "flow_id": "10323711744212514",
-
-        "flow_cta": "Open Flow",
-
-     "flow_action": "navigate",
-
-        "flow_action_payload": {
-
-          "screen": "SETTINGS",
-
-          "data": {
-
-                    "type": "dynamic_object"
-
-                  }
-
-        }}
+                        buttons: [{
+				"name": "flow",
+				"buttonParamsJson": {
+					"display_text": "test",
+					"flow_message_version": "3",
+					"flow_token": "EAAN4MDQ4XCMBO6WEGgmSeuvmP3NTncLg1yTssFe94MXsETpNV4JwCZB8mcF3BLw5XmV7SLybvONZBo9ZC5afuYPezQmoYibAxVwpcxuOBZCZC7KFYZBueNiL4hyp3Eyz5PP6BFPNrhSCjk3qzYdVW80G9ccdITyrICp31D3ZBUmAvbM60jmZBkcjA7NAOBNwOGB0sVGaEPZBR3JP65OZAUYuzUYUEc3ZBcrs7cBLEQ9",
+					"flow_id": "10323711744212514",
+					"flow_cta": "Open Flow",
+					"flow_action": "navigate",
+					"flow_action_payload": {
+						"screen": "SETTINGS",
+						"data": {
+							"type": "dynamic_object"
+						}
+					}}
 			}]
 				}),
                         contextInfo: {
