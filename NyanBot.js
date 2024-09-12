@@ -1261,7 +1261,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         header: proto.Message.InteractiveMessage.Header.create({
 			     text: "test"
                         }),
-                        action: proto.Message.InteractiveMessage.Action.create({
+                        action: {
 				name: "flow",
 				parameters: {
 					flow_message_version: "3",
@@ -1277,8 +1277,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
 							product_price: 100
 						}
 					}
-				}
-				}),
+				}},
                         contextInfo: {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
