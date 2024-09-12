@@ -1344,7 +1344,7 @@ case 'menu': {
                         }
                     })
                 }
-            }, {quoted:m}
+            }, quoted:m
         });
 
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
