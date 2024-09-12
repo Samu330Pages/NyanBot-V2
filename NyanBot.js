@@ -1262,11 +1262,11 @@ const msgs = generateWAMessageFromContent(m.chat, {
 			     text: "test"
                         }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        action: [{
-			      name: "flow",
-				parameters: {
-			      flow_cta: "Book!",
-			      flow_action: "navigate"
+                        buttons: [{
+			      "name": "flow",
+			      "parameters": {
+			      "flow_cta": "Book!",
+			      "flow_action": "navigate"
 				}
 			}]
 				}),
