@@ -1341,14 +1341,13 @@ case 'menu': {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
                             isForwarded: true,
-			    quoted: m,
                         }
                     })
                 }
             }
         });
 
-        await nyanBot2.relayMessage(m.chat, msgs.message, {});
+        await nyanBot2.relayMessage(m.chat, msgs.message, {quoted:m});
     } catch (e) {
         return m.reply("`*Error*`");
     }
