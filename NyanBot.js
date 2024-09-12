@@ -1673,7 +1673,7 @@ const buttons = [{
 	    merchant_url: `${video.url}`
           }),
 }]
-await sendReplyButton(m.from, buttons, m, {
+await sendReplyButton(m.chat, buttons, m, {
 	content: `> *YT Play 🍟.*
  
 - *Título:* ${video.title}\n
