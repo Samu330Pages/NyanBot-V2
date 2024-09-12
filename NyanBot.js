@@ -1299,7 +1299,6 @@ case 'menu': {
         "> Administración": ['actualizar', 'update'],
         "> Stickers": ['addsticker', 'liststicker', 'delsticker'],
 	"> Grupos": ['anti']
-        // Añadir más categorías según sea necesario
     };
 
     let menuMessage = '*Menú de Comandos*\n\n';
@@ -1312,7 +1311,7 @@ case 'menu': {
     }
 
     try {
-        const imagePath = './Media/theme/nyancat.jpg'; // Cambia esta ruta por la correcta
+        const imagePath = './Media/theme/nyancat.jpg';
         const msgs = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
                 message: {
@@ -1345,7 +1344,7 @@ case 'menu': {
                     })
                 }
             }
-        });
+        }, { quoted: m });
 
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
     } catch (e) {
