@@ -1326,6 +1326,7 @@ case 'login': {
             console.error('Error:', error);
             reply('Ocurrió un error al verificar el correo.');
         });
+}
     break
 			
 			
