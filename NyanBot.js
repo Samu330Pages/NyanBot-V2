@@ -610,92 +610,40 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 
 
-async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, options = {}) {
-      if (opts.media) {
-         var file = await getBuffer(opts.media)
-         if (/image/.test(file.mime)) {
-            var parse = await prepareWAMessageMedia({
-               image: {
-                  url: file.file
-               }
-            }, {
-               upload: nyanBot2.waUploadToServer
-            })
-            var prepare = {
-               imageMessage: parse.imageMessage
-            }
-         } else if (/video/.test(file.mime)) {
-            var parse = await prepareWAMessageMedia({
-               video: {
-                  url: file.file
-               },
-               ...(opts.gif && { gifPlayback: true })
-            }, {
-               upload: nyanBot2.waUploadToServer
-            })
-            var prepare = {
-               videoMessage: parse.videoMessage
-            }
-         } else if (/document/.test(file.mime)) {
-            var parse = await prepareWAMessageMedia({
-               document: {
-                  url: file.file
-               },
-               mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-               pageCount: (opts && opts.pages) ? Number(opts.pages): 25,
-               jpegThumbnail: (opts && opts.thumbnail) ? await generateProfilePicture(opts.thumbnail): null,
-               fileName: (opts && opts.fname) ? opts.fname: 'suki',
-               fileLength: (opts && opts.fsize) ? Number(opts.fsize): 100000000000
-            }, {
-               upload: nyanBot2.waUploadToServer
-            })
-            var prepare = {
-               documentMessage: parse.documentMessage
-            }
-         } else {
-            var prepare = {}
-         }
-      }
+async function sendReplyButton(chatId, buttons, message, options) {
+    const { content, media } = options;
 
-      const message = generateWAMessageFromContent(jid, {
-         viewOnceMessage: {
+    const interactiveMessage = proto.Message.InteractiveMessage.create({
+        body: proto.Message.InteractiveMessage.Body.create({
+            text: content,
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.create({
+            text: botname,
+        }),
+        header: proto.Message.InteractiveMessage.Header.create({
+            hasMediaAttachment: media ? true : false,
+            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media) }, { upload: nyanBot2.waUploadToServer }) : {})
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+            buttons: buttons,
+        }),
+        contextInfo: {
+            mentionedJid: [m.sender],
+            forwardingScore: 999,
+            isForwarded: true,
+        }
+    });
+
+    const msgs = generateWAMessageFromContent(chatId, {
+        viewOnceMessage: {
             message: {
-               interactiveMessage: {
-                  header: {
-                     ...(opts.header ? { title: opts.header } : {}),
-                     hasMediaAttachment: opts.media ? true : false,
-                     ...prepare
-                  },
-                  body: {
-                     text: opts.content ? opts.content: ''
-                  },
-                  nativeFlowMessage: {
-                     buttons,
-                     messageParamsJson: ''
-                  },
-                  contextInfo: {
-                     mentionedJid: opts.mention,
-                     remoteJid: opts.jid || null,
-                     forwardingScore: opts && opts.forScore ? opts.forScore : 0,
-                     isForwarded: opts && opts.forward ? opts.forward : false,
-                     ...(opts.business ? {
-                        businessMessageForwardInfo: {
-                           businessOwnerJid: nyanBot2.user.jid
-                        }
-                     } : {})
-                  }
-               }
+                interactiveMessage: interactiveMessage
             }
-         }
-      }, {
-         userJid: nyanBot2.user.jid,
-         quoted
-      })
-      nyanBot2.relayMessage(jid, message['message'], {
-         messageId: message.key.id
-      })
-      return message
-   }
+        }
+    }, { quoted: m });
+
+    await nyanBot2.relayMessage(chatId, msgs.message, {});
+}
 	    
 
 async function obfus(query) {
@@ -1411,32 +1359,38 @@ _*Si aun te quedan dudas de como realizar el registro, mira este ejemplo:*_
 *Sige ese orden específico para que tu registro sea un éxito! no incluyas carácteres entre cada parámetro, y evita usar carácteres especiales*.`)
 }
 break
-			
-            case 'test':
-const buttons = [{
-          name: "send_location",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Hubicación',
-            id: ''
-          }),
+
+case 'test':
+    const buttons = [
+        {
+            name: "send_location",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Ubicación',
+                id: ''
+            }),
         },
-	{name: "cta_web",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Menu',
-            url: 'https://wa.me/samu330'
-          }),
+        {
+            name: "cta_web",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Menu',
+                url: 'https://wa.me/samu330'
+            }),
         },
-	{name: "cta_call",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Menu',
-            number: '5219984907794'
-          }),
-	}]
-        return await sendReplyButton(m.from, buttons, m, {
-          content: 'Selecciona una opción:',
-	  media: ''
-        })
-            break
+        {
+            name: "cta_call",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Menu',
+                number: '5219984907794'
+            }),
+        }
+    ];
+
+    const mediaPath = ''; // Aquí coloca la ruta de la imagen si la tienes, si no, deja como string vacío
+
+    return await sendReplyButton(m.from, buttons, m, {
+        content: 'Selecciona una opción:'
+    });
+    break
 
             case 'play3': case 'song': {
                 if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
