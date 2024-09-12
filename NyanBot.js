@@ -614,10 +614,6 @@ async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
     const interactiveMessage = proto.Message.InteractiveMessage.create({
-	header: proto.Message.InteractiveMessage.Header.create({
-      type: "text",
-      text: "Flow message header"
-    }),
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
         }),
@@ -1263,7 +1259,6 @@ const msgs = generateWAMessageFromContent(m.chat, {
                             text: botname
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
-                            type: "text",
 			     text: "test"
                         }),
                         action: proto.Message.InteractiveMessage.Action.create({
