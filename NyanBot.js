@@ -1355,7 +1355,7 @@ Porfavor accede a la página para un registro mas cómodo, o si gustas puedes re
 case 'reg': {
 reply(`*Porfavor ingresa los datos correctamente para poder registrarte!*
 
-- _Para tu registro es indispensable tener un correo vigente, no se te pedirá verificación al registro, pero es necesario para futuros cambios de contraseña que requieas!_
+- _Para tu registro es indispensable tener un correo vigente, no se te pedirá verificación al registro, pero es necesario para futuros cambios de contraseña que requieras!_
 - _Como cualquier registro es necesario una contraseña que se te aga facil recordar, pero que cumpla con los estándares de seguridad!_
 - _Finalmente necesitarás un nombre de usuario, en el cual no podras utilizar carácteres especiales!_
 
