@@ -610,7 +610,7 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 
 
-async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
+async sendReplyButton = (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
       if (opts.media) {
          var file = await functions.getFile(opts.media)
          if (/image/.test(file.mime)) {
@@ -691,7 +691,7 @@ async (jid, buttons = [], quoted = {}, opts = {}, options = {}) => {
          userJid: nyanBot2.user.jid,
          quoted
       })
-      sock.relayMessage(jid, message['message'], {
+      nyanBot2.relayMessage(jid, message['message'], {
          messageId: message.key.id
       })
       return message
