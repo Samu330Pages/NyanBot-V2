@@ -1640,11 +1640,10 @@ const primerArg = parseInt(args[0], 10);
 if (isNaN(primerArg)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
 }
-reply(args[1])
 let { title, audio, thumbnail } = await ytmp3v3(args[1]);
 let audioYt = await fetchBuffer(audio);
 if (primerArg === 1) {
-	reply('> *Esperé un momento, se esta enviando su audio MP3*')
+	await reply('> *Esperé un momento, se esta enviando su audio MP3*')
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
@@ -1652,7 +1651,7 @@ if (primerArg === 1) {
         }, { quoted: m });
 
 } else if (primerArg === 2) {
-	reply('> *Esperé un momento, se esta enviando su documento de audio*')
+	await reply('> *Esperé un momento, se esta enviando su documento de audio*')
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
