@@ -1309,21 +1309,28 @@ case 'menu': {
 }
 break
 case 'login': {
-    const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?${text}`;
+    const email = text;
+    const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
 
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log(data); // Para depuración
             if (data.IsEmailRegistered) {
-                const replyMessage = `Email: ${data.Result}\nID de usuario: ${data.UID}\nNombre de usuario: ${data.User}`;
-                reply(replyMessage);
+                const replyMessage = `Email: ${data.Result}\nUID: ${data.UID}\nUser: ${data.User}`;
+                reply(replyMessage); // Envía los datos del usuario
             } else {
-                reply('El correo no está registrado.');
+                reply('El correo no está registrado.'); // Mensaje si no está registrado
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            reply('Ocurrió un error al verificar el correo.');
+            reply('Ocurrió un error al verificar el correo.'); // Mensaje de error
         });
 }
     break
@@ -1337,10 +1344,10 @@ const buttons = [{
             id: ''
           }),
         },
-	{name: "quick_reply",
+	{name: "url",
           buttonParamsJson: JSON.stringify({
             display_text: 'Menu',
-            id: '%menu'
+            url: ''
           }),
         }]
         return await sendReplyButton(m.from, buttons, m, {
