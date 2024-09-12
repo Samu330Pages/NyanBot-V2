@@ -612,7 +612,7 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 
 async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, options = {}) {
       if (opts.media) {
-         var file = await functions.getFile(opts.media)
+         var file = await getBuffer(opts.media)
          if (/image/.test(file.mime)) {
             var parse = await prepareWAMessageMedia({
                image: {
