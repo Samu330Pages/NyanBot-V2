@@ -1344,12 +1344,18 @@ const buttons = [{
             id: ''
           }),
         },
-	{name: "url",
+	{name: "cta_web",
           buttonParamsJson: JSON.stringify({
             display_text: 'Menu',
-            url: ''
+            url: 'https://wa.me/samu330'
           }),
-        }]
+        },
+	{name: "cta_call",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Menu',
+            number: '5219984907794'
+          }),
+	}]
         return await sendReplyButton(m.from, buttons, m, {
           content: 'Selecciona una opción:'
         })
