@@ -1261,8 +1261,11 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         header: proto.Message.InteractiveMessage.Header.create({
 			     text: "test"
                         }),
-                        action: proto.Message.InteractiveMessage.Action.create({
+			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                        action: [{
+			      name: "flow",
 			      text: "Book!"
+			}]
 				}),
                         contextInfo: {
                             mentionedJid: [m.sender],
