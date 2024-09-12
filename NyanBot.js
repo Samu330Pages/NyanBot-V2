@@ -1590,10 +1590,11 @@ const buttons = [{
             id: `%ytv 2 ${video.url}`
           }),
 }, {
-          name: "cta_web",
+          name: "cta_url",
           buttonParamsJson: JSON.stringify({
             display_text: 'Ver en la app ❤️',
-            url: `${video.url}`
+            url: `${video.url}`,
+	    merchant_url: `${video.url}`
           }),
 }]
 await sendReplyButton(m.from, buttons, m, {
