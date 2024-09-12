@@ -1584,7 +1584,7 @@ const buttons = [{
             id: `%ytv 2 ${video.url}`
           }),
 }, {
-          name: "button_url",
+          name: "cta_web",
           buttonParamsJson: JSON.stringify({
             display_text: 'Ver en la app ❤️',
             url: `${video.url}`
