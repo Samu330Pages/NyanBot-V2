@@ -1266,8 +1266,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         buttons: [{
 			      "name": "flow",
 			      "buttonParamsJson": JSON.stringify({
-			      "flow_cta": "Book!",
-			      "flow_action": "navigate"
+			      "display_text": "Book!"
 			      })
 			}]
 				}),
