@@ -1263,7 +1263,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         }),
                         action: {
 				name: "flow",
-				parameters: {
+				parameters: proto.Message.InteractiveMessage.Parameters.create({
 					flow_message_version: "3",
 					flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
 					flow_id: "1",
@@ -1277,7 +1277,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
 							product_price: 100
 						}
 					}
-				}},
+				})},
                         contextInfo: {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
@@ -1290,7 +1290,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
 
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
-
+break
 			
 
 case 'menu': {
