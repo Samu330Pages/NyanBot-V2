@@ -1309,8 +1309,7 @@ case 'menu': {
 }
 break
 case 'login': {
-    const email = text;
-    const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?${email}`;
+    const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?${text}`;
 
     fetch(url)
         .then(response => response.json())
@@ -1332,10 +1331,10 @@ case 'login': {
 			
             case 'test':
 const buttons = [{
-          name: "quick_reply",
+          name: "send_location",
           buttonParamsJson: JSON.stringify({
-            display_text: 'Activar',
-            id: '%antibd'
+            display_text: 'Hubicación',
+            id: ''
           }),
         },
 	{name: "quick_reply",
@@ -1578,7 +1577,7 @@ const buttons = [{
             id: `%ytv 2 ${video.url}`
           }),
 }, {
-          name: "target_url",
+          name: "button_url",
           buttonParamsJson: JSON.stringify({
             display_text: 'Ver en la app ❤️',
             url: `${video.url}`
