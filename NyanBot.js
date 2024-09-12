@@ -614,6 +614,10 @@ async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
     const interactiveMessage = proto.Message.InteractiveMessage.create({
+	header: proto.Message.InteractiveMessage.Header.create({
+      type: "text",
+      text: "Flow message header"
+    }),
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
         }),
@@ -1240,6 +1244,60 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 }
 
         switch (isCommand) {
+
+
+case 'flow': {
+const msgs = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    "messageContextInfo": {
+                        "deviceListMetadata": {},
+                        "deviceListMetadataVersion": 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.create({
+                        type: "flow",
+			body: proto.Message.InteractiveMessage.Body.create({
+                            text: 'test'
+                        }),
+                        footer: proto.Message.InteractiveMessage.Footer.create({
+                            text: botname
+                        }),
+                        header: proto.Message.InteractiveMessage.Header.create({
+                            type: "text",
+			     text: "test"
+                        }),
+                        action: proto.Message.InteractiveMessage.Action.create({
+				name: "flow",
+				parameters: {
+					flow_message_version: "3",
+					flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
+					flow_id: "1",
+					flow_cta: "Book!",
+					flow_action: "navigate",
+					flow_action_payload: {
+						screen: "test",
+						data: { 
+							product_name: "name",
+							product_description: "description",
+							product_price: 100
+						}
+					}
+				}
+				}),
+                        contextInfo: {
+                            mentionedJid: [m.sender],
+                            forwardingScore: 999,
+                            isForwarded: true,
+                        }
+                    })
+                }
+            }
+        }, { quoted: m });
+
+        await nyanBot2.relayMessage(m.chat, msgs.message, {});
+}
+
+			
 
 case 'menu': {
     const categories = {
