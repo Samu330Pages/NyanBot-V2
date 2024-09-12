@@ -643,7 +643,7 @@ async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, option
                },
                mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                pageCount: (opts && opts.pages) ? Number(opts.pages): 25,
-               jpegThumbnail: (opts && opts.thumbnail) ? await functions.createThumb(opts.thumbnail): null,
+               jpegThumbnail: (opts && opts.thumbnail) ? await generateProfilePicture(opts.thumbnail): null,
                fileName: (opts && opts.fname) ? opts.fname: 'suki',
                fileLength: (opts && opts.fsize) ? Number(opts.fsize): 100000000000
             }, {
@@ -674,7 +674,7 @@ async function sendReplyButton(jid, buttons = [], quoted = {}, opts = {}, option
                      messageParamsJson: ''
                   },
                   contextInfo: {
-                     mentionedJid: opts.mention || functions.mention(opts.content),
+                     mentionedJid: opts.mention,
                      remoteJid: opts.jid || null,
                      forwardingScore: opts && opts.forScore ? opts.forScore : 0,
                      isForwarded: opts && opts.forward ? opts.forward : false,
