@@ -1263,7 +1263,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                             text: botname
                         }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        buttons: [{
+                        action: [{
 				"name": "flow",
 				"buttonParamsJson": {
 					"display_text": "test"
