@@ -1341,7 +1341,8 @@ case 'menu': {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
                             isForwarded: true,
-                        }, { quoted: m }
+			    quoted: m,
+                        }
                     })
                 }
             }
