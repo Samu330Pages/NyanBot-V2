@@ -1339,7 +1339,7 @@ const buttons = [{
 	    merchant_url: `https://samu330.com/login`
           }),
 }]
-await sendReplyButton(m.from, buttons, m, {
+sendReplyButton(m.from, buttons, m, {
 	content: `> *El correo ingresado no esta registrado!* 🥲
  Porfavor accede a la página para un registro mas cómodo, o si gustas puedes registrarte directamente por Whatsapp, solo sige los pasos y lee cuidadosamente las instruccione! 😙`
 })
