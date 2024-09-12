@@ -1262,10 +1262,8 @@ const msgs = generateWAMessageFromContent(m.chat, {
 			     text: "test"
                         }),
                         action: {
-				name: "flow",
-				parameters: {
-					flow_cta: "Book!"
-				}},
+			flow_cta: "Book!"
+				},
                         contextInfo: {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
