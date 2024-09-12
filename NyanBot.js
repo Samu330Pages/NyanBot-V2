@@ -1387,7 +1387,7 @@ case 'test':
 
     const mediaPath = ''; // Aquí coloca la ruta de la imagen si la tienes, si no, deja como string vacío
 
-    return await sendReplyButton(m.from, buttons, m, {
+    return await sendReplyButton(m.chat, buttons, m, {
         content: 'Selecciona una opción:'
     });
     break
