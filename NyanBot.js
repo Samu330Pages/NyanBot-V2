@@ -1341,7 +1341,8 @@ const buttons = [{
 }]
 sendReplyButton(m.from, buttons, m, {
 	content: `> *El correo ingresado no esta registrado!* 🥲
- Porfavor accede a la página para un registro mas cómodo, o si gustas puedes registrarte directamente por Whatsapp, solo sige los pasos y lee cuidadosamente las instruccione! 😙`
+
+Porfavor accede a la página para un registro mas cómodo, o si gustas puedes registrarte directamente por Whatsapp, solo sige los pasos y lee cuidadosamente las instruccione! 😙`
 })
             }
         })
@@ -1361,7 +1362,7 @@ reply(`*Porfavor ingresa los datos correctamente para poder registrarte!*
 *Finalizando tu registro seras dado de alta tanto como en el bot, y asi también en la página, se te otorgará un número de identificación para tu cuenta el cual deberas guardar para futuras actualizaciones en tu usuario*
 _*Si aun te quedan dudas de como realizar el registro, mira este ejemplo:*_
 
-> ${prexix + command} correo@gmail.com contraseña usuario
+> ${prefix + command} correo@gmail.com contraseña usuario
 
 *Sige ese orden específico para que tu registro sea un éxito! no incluyas carácteres entre cada parámetro, y evita usar carácteres especiales*.`)
 }
