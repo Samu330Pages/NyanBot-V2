@@ -1261,9 +1261,9 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         header: proto.Message.InteractiveMessage.Header.create({
 			     text: "test"
                         }),
-                        action: {
+                        action: proto.Message.InteractiveMessage.Action.create({
 			      text: "Book!"
-				},
+				}),
                         contextInfo: {
                             mentionedJid: [m.sender],
                             forwardingScore: 999,
