@@ -1283,6 +1283,47 @@ const msgs = generateWAMessageFromContent(m.chat, {
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
+
+case 'header': {
+const msgs = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    "messageContextInfo": {
+                        "deviceListMetadata": {},
+                        "deviceListMetadataVersion": 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.create({
+			header: proto.Message.InteractiveMessage.Header.create({
+			     type: "text",
+			     text: "Header"
+                        }),
+			body: proto.Message.InteractiveMessage.Body.create({
+                            text: 'Body'
+                        }),
+                        footer: proto.Message.InteractiveMessage.Footer.create({
+                            text: 'Footer'
+                        }),
+			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                        buttons: [{
+				"name": "send_location",
+				"buttonParamsJson": {
+					"display_text": "send_location"
+				}
+			}]
+				}),
+                        contextInfo: {
+                            mentionedJid: [m.sender],
+                            forwardingScore: 999,
+                            isForwarded: true,
+                        }
+                    })
+                }
+            }
+        }, { quoted: m });
+
+        await nyanBot2.relayMessage(m.chat, msgs.message, {});
+}
+break
 			
 
 case 'menu': {
