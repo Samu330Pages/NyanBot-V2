@@ -1434,7 +1434,8 @@ const buttons = [{
           }),
 	}]
         return await sendReplyButton(m.from, buttons, m, {
-          content: 'Selecciona una opción:'
+          content: 'Selecciona una opción:',
+	  media: ''
         })
             break
 
