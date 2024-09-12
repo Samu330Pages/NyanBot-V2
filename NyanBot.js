@@ -1252,19 +1252,19 @@ const msgs = generateWAMessageFromContent(m.chat, {
                     },
                     interactiveMessage: proto.Message.InteractiveMessage.create({
                         type: "flow",
+			header: proto.Message.InteractiveMessage.Header.create({
+			     type: "text",
+			     text: "test"
+                        }),
 			body: proto.Message.InteractiveMessage.Body.create({
                             text: 'test'
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.create({
                             text: botname
                         }),
-                        header: proto.Message.InteractiveMessage.Header.create({
-			     type: "text",
-			     text: "test"
-                        }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                         buttons: [{
-			      "name": "flow",
+			      "name": "cta_flow",
 			      "buttonParamsJson": JSON.stringify({
 			      "display_text": "Book!"
 			      })
