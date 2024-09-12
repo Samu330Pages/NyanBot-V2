@@ -1263,11 +1263,32 @@ const msgs = generateWAMessageFromContent(m.chat, {
                             text: botname
                         }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        buttons: [{
-			      "name": "cta_flow",
-			      "buttonParamsJson": JSON.stringify({
-			      "display_text": "Book!"
-			      })
+                        action: [{
+      "name": "flow",
+
+      "parameters": {
+
+        "flow_message_version": "3",
+
+        "flow_token": "any_string_for_this_example",
+
+        "flow_id": "10323711744212514",
+
+        "flow_cta": "Open Flow",
+
+     "flow_action": "navigate",
+
+        "flow_action_payload": {
+
+          "screen": "WELCOME_SCREEN",
+
+          "data": {
+
+                    "type": "dynamic_object"
+
+                  }
+
+        }}
 			}]
 				}),
                         contextInfo: {
