@@ -1266,7 +1266,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                         action: [{
       "name": "flow",
 
-      "parameters": {
+      "buttonParamsJson": {
 
         "flow_message_version": "3",
 
