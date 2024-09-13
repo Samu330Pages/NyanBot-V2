@@ -17,7 +17,6 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
-//const { firebase } = require('./lib/firebaseConfig.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -101,20 +100,6 @@ const {
     checkPremiumUser,
     getAllPremiumUser,
 } = require('./lib/premiun')
-
-const firebase = require('firebase/app');
-require('firebase/auth');
-
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
-    authDomain: "number-ac729.firebaseapp.com",
-    projectId: "number-ac729",
-    storageBucket: "number-ac729.appspot.com",
-    messagingSenderId: "36610055964",
-    appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
-    measurementId: "G-0BTNK7VNM3"
-};
 
 const forma1 = '`'
 
@@ -1455,6 +1440,29 @@ case 'login': {
 }
 break
 case 'reg': {
+    // Importar Firebase directamente en el case
+    const firebase = require('firebase/app'); // Importar Firebase
+    require('firebase/auth'); // Importar módulo de autenticación
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
+        authDomain: "number-ac729.firebaseapp.com",
+        projectId: "number-ac729",
+        storageBucket: "number-ac729.appspot.com",
+        messagingSenderId: "36610055964",
+        appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
+        measurementId: "G-0BTNK7VNM3"
+    };
+
+    // Inicializar Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    // Obtener la referencia de autenticación
+    const auth = firebase.auth();
+
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
@@ -1503,9 +1511,8 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
                 const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
                 reply(replyMessage);
             } else {
-		    firebase.initializeApp(firebaseConfig);
                 // Si el correo no está registrado, proceder a crear el usuario en Firebase
-                    firebase.auth().createUserWithEmailAndPassword(email, password) // Usa auth en lugar de firebase.auth()
+                return auth.createUserWithEmailAndPassword(email, password) // Usa auth para crear el usuario
                     .then(userCredential => {
                         // El usuario ha sido creado exitosamente en Firebase
                         const user = userCredential.user;
