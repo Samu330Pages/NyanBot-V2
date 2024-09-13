@@ -1829,6 +1829,42 @@ case 'args': {
         reply(`*Opción no reconocia: ${primerArg}.*`); // Para otros números
     }
 }
+
+case 'testdl': {
+    try {// Función asíncrona para manejar la solicitud
+        const obtenerMediaData = async () => {
+            const { data: mediaData } = await axios.post("https://api.cobalt.tools/api/json", {
+                url: 'https://www.youtube.com/watch?v=_I9tUzuC0Ns',
+                filenamePattern: "basic",
+                resolution: "480",
+            }, {
+                headers: {
+                    Accept: "application/json",
+                    origin: "https://cobalt.tools",
+                    referer: "https://cobalt.tools/",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, seperti Gecko) Chrome/128.0.0.0 Safari/537.36",
+                }
+            });
+
+            return mediaData;
+        };
+
+        // Llamar a la función y manejar la respuesta
+        obtenerMediaData().then(mediaData => {
+            reply(`Resultado: ${JSON.stringify(mediaData)}`);
+        }).catch(error => {
+            reply(`Error al obtener los datos: ${error.message}`);
+        });
+    } catch (error) {
+        reply(`Error: ${error.message}`);
+    }
+}
+    break
+			
+
+			
+
+			
 break
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
