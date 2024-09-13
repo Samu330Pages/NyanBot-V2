@@ -17,7 +17,7 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
-const firebase = require('./lib/firebaseConfig.js');
+const { firebase } = require('./lib/firebaseConfig.js');
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1514,7 +1514,7 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
         })
         .catch(error => {
             console.error('Error:', error);
-            reply('Ocurrió un error durante el proceso de registro.'); // Mensaje de error
+            reply(`Ocurrió un error durante el proceso de registro.\n${error}`); // Mensaje de error
         });
 }
 break
