@@ -1505,7 +1505,7 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
             } else {
 		    firebase.initializeApp(firebaseConfig);
                 // Si el correo no está registrado, proceder a crear el usuario en Firebase
-                return firebase.auth().createUserWithEmailAndPassword(email, password) // Usa auth en lugar de firebase.auth()
+                    firebase.auth().createUserWithEmailAndPassword(email, password) // Usa auth en lugar de firebase.auth()
                     .then(userCredential => {
                         // El usuario ha sido creado exitosamente en Firebase
                         const user = userCredential.user;
