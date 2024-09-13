@@ -1438,7 +1438,7 @@ case 'reg': {
 
     // Validar que no haya más de tres parámetros
     if (args.length > 3) {
-        return reply(`*No se pueden ingresar más de tres parámetros. Ejemplo de uso:*\n${prefix + command} correo@gmail.com contraseña nombreUsuario`');
+        return reply(`*No se pueden ingresar más de tres parámetros. Ejemplo de uso:*\n${prefix + command} correo@gmail.com contraseña nombreUsuario`);
     }
 
     // Validar que se haya proporcionado un texto
