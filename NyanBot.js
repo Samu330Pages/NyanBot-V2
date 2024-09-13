@@ -312,16 +312,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
     return await nyanBot2.relayMessage(chatId, generate.message, { messageId: generate.key.id })
 }
         //reply
-async function isValidPassword(password) {
-    const minLength = 8; // Longitud mínima
-    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
-    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
-    const hasNumbers = /\d/.test(password); // Al menos un número
-    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
-
-    // Verifica si cumple con todos los requisitos
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
-	}
         async function reply(teks) {
                 nyanBot2.sendMessage(m.chat, {
                     contextInfo: {
