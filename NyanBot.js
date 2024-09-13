@@ -1441,13 +1441,13 @@ case 'login': {
 }
 break
 case 'reg': {
-    const args = text.split(' '); // Suponiendo que los datos se ingresan separados por espacio
+    const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
     const name = args[2]; // Nombre de usuario
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    // Validar que se haya proporcionado un correo
+
+    // Validar que se haya proporcionado un texto
     if (!text) {
         return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*
 
@@ -1462,11 +1462,13 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
 
 *Sigue ese orden específico para que tu registro sea un éxito! No incluyas caracteres entre cada parámetro, y evita usar caracteres especiales*.`);
     }
-    
+
+    // Validar que se hayan proporcionado todos los argumentos necesarios
     if (!email || !password || !name) {
-        return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios*')
+        return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*');
     }
 
+    // Validar el formato del correo
     if (!emailPattern.test(email)) {
         return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
     }
