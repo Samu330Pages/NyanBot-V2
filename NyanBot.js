@@ -2497,7 +2497,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
             if (sat == undefined){
             bang = util.format(sul)
             }
-            return reply(bang)
+            reply(bang)
             }
             try {
             reply(`${util.format(eval(`;(async () => { ${konsol} })()`))}`)
