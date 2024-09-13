@@ -584,17 +584,6 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 }
 
-async function isValidPassword(password) {
-    const minLength = 8; // Longitud mínima
-    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
-    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
-    const hasNumbers = /\d/.test(password); // Al menos un número
-    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
-
-    // Verifica si cumple con todos los requisitos
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
-}
-
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
@@ -1430,6 +1419,16 @@ case 'reg': {
     const password = args[1]; // Contraseña
     const name = args[2]; // Nombre de usuario
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isValidPassword(password) {
+    const minLength = 8; // Longitud mínima
+    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
+    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
+    const hasNumbers = /\d/.test(password); // Al menos un número
+    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
+
+    // Verifica si cumple con todos los requisitos
+    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+}
 
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
