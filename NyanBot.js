@@ -17,6 +17,7 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
+const firebase = require('./lib/firebaseConfig.js');
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1440,21 +1441,79 @@ case 'login': {
 }
 break
 case 'reg': {
-reply(`*Porfavor ingresa los datos correctamente para poder registrarte!*
+    const args = text.split(' '); // Suponiendo que los datos se ingresan separados por espacio
+    const email = args[0]; // Correo
+    const password = args[1]; // Contraseña
+    const name = args[2]; // Nombre de usuario
+
+    // Validar que se haya proporcionado un correo
+    if (!email || !password || !name) {
+        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*
 
 - _Para tu registro es indispensable tener un correo vigente, no se te pedirá verificación al registro, pero es necesario para futuros cambios de contraseña que requieras!_
-- _Como cualquier registro es necesario una contraseña que se te aga facil recordar, pero que cumpla con los estándares de seguridad!_
-- _Finalmente necesitarás un nombre de usuario, en el cual no podras utilizar carácteres especiales!_
+- _Como cualquier registro es necesario una contraseña que se te haga fácil recordar, pero que cumpla con los estándares de seguridad!_
+- _Finalmente necesitarás un nombre de usuario, en el cual no podrás utilizar caracteres especiales!_
 
-*Finalizando tu registro seras dado de alta tanto como en el bot, y asi también en la página, se te otorgará un número de identificación para tu cuenta el cual deberas guardar para futuras actualizaciones en tu usuario*
-_*Si aun te quedan dudas de como realizar el registro, mira este ejemplo:*_
+*Finalizando tu registro serás dado de alta tanto como en el bot, y así también en la página, se te otorgará un número de identificación para tu cuenta el cual deberás guardar para futuras actualizaciones en tu usuario.*
+_*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
 
 > ${prefix + command} correo@gmail.com contraseña usuario
 
-*Sige ese orden específico para que tu registro sea un éxito! no incluyas carácteres entre cada parámetro, y evita usar carácteres especiales*.`)
+*Sigue ese orden específico para que tu registro sea un éxito! No incluyas caracteres entre cada parámetro, y evita usar caracteres especiales*.`);
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
+    }
+
+    // Verificar si el correo ya está registrado
+    const verificationUrl = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
+
+    fetch(verificationUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.IsEmailRegistered) {
+                // Si el correo ya está registrado
+                const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
+                reply(replyMessage);
+            } else {
+                // Si el correo no está registrado, proceder a crear el usuario en Firebase
+                return firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        // El usuario ha sido creado exitosamente en Firebase
+                        const user = userCredential.user;
+                        const uid = user.uid; // UID de Firebase
+
+                        // Ahora puedes registrar el usuario en tu base de datos
+                        const registrationUrl = `https://us-central1-number-ac729.cloudfunctions.net/createUser?email=${encodeURIComponent(email)}&user=${encodeURIComponent(name)}`;
+
+                        return fetch(registrationUrl);
+                    });
+            }
+        })
+        .then(response => {
+            if (response) {
+                return response.json(); // Procesar la respuesta de la creación de usuario
+            }
+        })
+        .then(data => {
+            if (data) {
+                const replyMessage = `Usuario registrado con éxito!\nEmail: ${data.Result}\nUID: ${data.UID}`;
+                reply(replyMessage); // Confirmación de registro
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            reply('Ocurrió un error durante el proceso de registro.'); // Mensaje de error
+        });
 }
 break
-
 case 'test':
     const buttons = [
         {
