@@ -16,6 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
+const { auth } = require('./lib/firebaseConfig.js')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -312,40 +313,14 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 }
         //reply
         async function reply(teks) {
-            if (typereply === 'v1') {
-                m.reply(teks)
-            } else if (typereply === 'v2') {
                 nyanBot2.sendMessage(m.chat, {
                     contextInfo: {
-                        externalAdReply: {
-                            showAdAttribution: true,
-                            title: botname,
-                            body: ownername,
-                            previewType: "PHOTO",
-                            thumbnail: fs.readFileSync('./Media/theme/nyancat.jpg'),
-                            sourceUrl: wagc
-                        }
+                        "forwardingScore":999,"isForwarded":true
                     },
                     text: teks
                 }, {
                     quoted: m
                 });
-            } else if (typereply === 'v3') {
-               nyanBot2.sendMessage(m.chat, {
-                  text: teks,
-                  contextInfo: {
-                     externalAdReply: {
-                        showAdAttribution: true,
-                        title: botname,
-                        body: ownername,
-                        thumbnail: fs.readFileSync('./Media/theme/nyancat.jpg'),
-                        sourceUrl: websitex,
-                        mediaType: 1,
-                        renderLargerThumbnail: true
-                     }
-                  }
-               }, { quoted: m })
-            }
         }
             
         let fstatus = { 
@@ -609,6 +584,16 @@ await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
 }
 }
 
+async function isValidPassword(password) {
+    const minLength = 8; // Longitud mínima
+    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
+    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
+    const hasNumbers = /\d/.test(password); // Al menos un número
+    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
+
+    // Verifica si cumple con todos los requisitos
+    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+}
 
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
@@ -632,7 +617,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             forwardingScore: 999,
             isForwarded: true,
         }
-    });
+    })
 
     const msgs = generateWAMessageFromContent(chatId, {
         viewOnceMessage: {
@@ -1440,45 +1425,25 @@ case 'login': {
 }
 break
 case 'reg': {
-    // Importar Firebase directamente en el case
-    const { initializeApp } = require('firebase/app'); // Importar la función para inicializar Firebase
-    const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth'); // Importar autenticación
-
-    // Configuración de Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
-        authDomain: "number-ac729.firebaseapp.com",
-        projectId: "number-ac729",
-        storageBucket: "number-ac729.appspot.com",
-        messagingSenderId: "36610055964",
-        appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
-        measurementId: "G-0BTNK7VNM3"
-    };
-
-    // Inicializa Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app); // Obtiene la instancia de autenticación
-
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
     const name = args[2]; // Nombre de usuario
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    // Verificar que el comando no tenga espacios entre el prefijo y el comando
+    if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
+        return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com contraseña nombreUsuario*`);
+    }
+
+    // Validar que no haya más de tres parámetros
+    if (args.length > 3) {
+        return reply(`*No se pueden ingresar más de tres parámetros. Ejemplo de uso:*\n${prefix + command} correo@gmail.com contraseña nombreUsuario`');
+    }
+
     // Validar que se haya proporcionado un texto
-    if (!text) {
-        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*
-
-- _Para tu registro es indispensable tener un correo vigente, no se te pedirá verificación al registro, pero es necesario para futuros cambios de contraseña que requieras!_
-- _Como cualquier registro es necesario una contraseña que se te haga fácil recordar, pero que cumpla con los estándares de seguridad!_
-- _Finalmente necesitarás un nombre de usuario, en el cual no podrás utilizar caracteres especiales!_
-
-*Finalizando tu registro serás dado de alta tanto como en el bot, y así también en la página, se te otorgará un número de identificación para tu cuenta el cual deberás guardar para futuras actualizaciones en tu usuario.*
-_*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
-
-> ${prefix + command} correo@gmail.com contraseña usuario
-
-*Sigue ese orden específico para que tu registro sea un éxito! No incluyas caracteres entre cada parámetro, y evita usar caracteres especiales*.`);
+    if (!text.trim()) {
+        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*`);
     }
 
     // Validar que se hayan proporcionado todos los argumentos necesarios
@@ -1486,9 +1451,19 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
         return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*');
     }
 
+    // Validar que ninguno de los parámetros contenga espacios
+    if (email.includes(' ') || password.includes(' ') || name.includes(' ')) {
+        return reply('*Los datos no deben contener espacios. Asegúrate de que tu correo, contraseña y nombre de usuario sean correctos.*');
+    }
+
     // Validar el formato del correo
     if (!emailPattern.test(email)) {
-        return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
+        return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
+    }
+
+    // Validar la contraseña
+    if (!isValidPassword(password)) {
+        return reply('*La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula, un número y un carácter especial.*');
     }
 
     // Verificar si el correo ya está registrado
@@ -1503,18 +1478,14 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
         })
         .then(data => {
             if (data.IsEmailRegistered) {
-                // Si el correo ya está registrado
                 const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
                 reply(replyMessage);
             } else {
-                // Si el correo no está registrado, proceder a crear el usuario en Firebase
-                return createUserWithEmailAndPassword(auth, email, password) // Usa la función de autenticación
+                return createUserWithEmailAndPassword(auth, email, password)
                     .then(userCredential => {
-                        // El usuario ha sido creado exitosamente en Firebase
                         const user = userCredential.user;
-                        const uid = user.uid; // UID de Firebase
+                        const uid = user.uid;
 
-                        // Ahora puedes registrar el usuario en tu base de datos
                         const registrationUrl = `https://us-central1-number-ac729.cloudfunctions.net/createUser?email=${encodeURIComponent(email)}&user=${encodeURIComponent(name)}`;
 
                         return fetch(registrationUrl);
@@ -1523,18 +1494,18 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
         })
         .then(response => {
             if (response) {
-                return response.json(); // Procesar la respuesta de la creación de usuario
+                return response.json();
             }
         })
         .then(data => {
             if (data) {
                 const replyMessage = `Usuario registrado con éxito!\nEmail: ${data.Result}\nUID: ${data.UID}`;
-                reply(replyMessage); // Confirmación de registro
+                reply(replyMessage);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            reply('Ocurrió un error durante el proceso de registro.'); // Mensaje de error
+            reply('Ocurrió un error durante el proceso de registro.');
         });
 }
 break
