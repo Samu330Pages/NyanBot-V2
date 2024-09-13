@@ -1441,8 +1441,8 @@ case 'login': {
 break
 case 'reg': {
     // Importar Firebase directamente en el case
-    const firebase = require('firebase/app'); // Importar Firebase
-    require('firebase/auth'); // Importar módulo de autenticación
+    const { initializeApp } = require('firebase/app'); // Importar la función para inicializar Firebase
+    const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth'); // Importar autenticación
 
     // Configuración de Firebase
     const firebaseConfig = {
@@ -1455,9 +1455,9 @@ case 'reg': {
         measurementId: "G-0BTNK7VNM3"
     };
 
-        firebase.initializeApp(firebaseConfig);
-    // Obtener la referencia de autenticación
-    const auth = firebase.auth();
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app); // Obtiene la instancia de autenticación
 
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
@@ -1508,7 +1508,7 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
                 reply(replyMessage);
             } else {
                 // Si el correo no está registrado, proceder a crear el usuario en Firebase
-                return auth.createUserWithEmailAndPassword(email, password) // Usa auth para crear el usuario
+                return createUserWithEmailAndPassword(auth, email, password) // Usa la función de autenticación
                     .then(userCredential => {
                         // El usuario ha sido creado exitosamente en Firebase
                         const user = userCredential.user;
