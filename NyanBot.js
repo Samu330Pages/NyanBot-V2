@@ -2488,6 +2488,25 @@ if (!isAdmins && !isSamu) return StickAdmin()
                         if (stdout) return reply(`${stdout}`)
                     })
                 }
+	        if (body.startsWith('>')){
+            const util = require("util");
+            konsol = budy.slice(1)
+            Return = (sul) => {
+            sat = JSON.stringify(sul, null, 2)
+            bang = util.format(sat)
+            if (sat == undefined){
+            bang = util.format(sul)
+            }
+            return reply(bang)
+            }
+            try {
+            reply(`${util.format(eval(`;(async () => { ${konsol} })()`))}`)
+            } catch(e){
+            reply(`${String(e)}`)
+            }}
+if (body.startsWith("=")) {
+return await reply(JSON.stringify(eval(args.join(" ")), null, 2))
+}
                 if (isCmd && budy.toLowerCase() != undefined) {
 if (m.chat.endsWith('broadcast')) return
 if (m.isBaileys) return
