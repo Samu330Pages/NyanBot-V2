@@ -17,7 +17,7 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
-const { firebase, auth } = require('./lib/firebaseConfig.js')
+const { firebase } = require('./lib/firebaseConfig.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1490,7 +1490,7 @@ _*Si aún te quedan dudas de como realizar el registro, mira este ejemplo:*_
                 reply(replyMessage);
             } else {
                 // Si el correo no está registrado, proceder a crear el usuario en Firebase
-                return auth.createUserWithEmailAndPassword(email, password) // Usa auth en lugar de firebase.auth()
+                return firebase.auth.createUserWithEmailAndPassword(email, password) // Usa auth en lugar de firebase.auth()
                     .then(userCredential => {
                         // El usuario ha sido creado exitosamente en Firebase
                         const user = userCredential.user;
