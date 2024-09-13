@@ -1455,11 +1455,7 @@ case 'reg': {
         measurementId: "G-0BTNK7VNM3"
     };
 
-    // Inicializar Firebase
-    if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-    }
-
     // Obtener la referencia de autenticación
     const auth = firebase.auth();
 
