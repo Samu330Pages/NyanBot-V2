@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
-const { auth } = require('./lib/firebaseConfig.js')
+//const { auth } = require('./lib/firebaseConfig.js')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -1419,7 +1419,34 @@ case 'reg': {
     const password = args[1]; // Contraseña
     const name = args[2]; // Nombre de usuario
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isValidPassword(password) {
+    const minLength = 8; // Longitud mínima
+    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
+    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
+    const hasNumbers = /\d/.test(password); // Al menos un número
+    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
 
+    // Verifica si cumple con todos los requisitos
+    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+}
+    // firebaseConfig.js
+const { initializeApp } = require('firebase/app');
+const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
+
+// Configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
+    authDomain: "number-ac729.firebaseapp.com",
+    projectId: "number-ac729",
+    storageBucket: "number-ac729.appspot.com",
+    messagingSenderId: "36610055964",
+    appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
+    measurementId: "G-0BTNK7VNM3"
+};
+
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
         return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com contraseña nombreUsuario*`);
