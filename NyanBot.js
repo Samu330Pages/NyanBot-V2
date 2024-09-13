@@ -1441,7 +1441,6 @@ case 'login': {
 }
 break
 case 'reg': {
-    const args = text.split(' '); // Suponiendo que los datos se ingresan separados por espacio
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
     const name = args[2]; // Nombre de usuario
