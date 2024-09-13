@@ -1746,7 +1746,7 @@ case 'args': {
 
     // Verificamos si el valor es un número válido
     if (isNaN(primerArg)) {
-        reply(`*opción 1 o 2*`);
+        reply(`${args[0]}\n${args[1]}\n${args[2]}`);
         break;
     }
 
