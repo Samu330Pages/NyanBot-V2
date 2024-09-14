@@ -24,6 +24,7 @@ const cron = require('node-cron')
 const speed = require('performance-now')
 const ms = toMs = require('ms')
 const axios = require('axios')
+const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
 const { ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
