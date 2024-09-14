@@ -1271,8 +1271,9 @@ case 'flow': {
         contextInfo: {
             mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
             forwardingScore: 999,
-            isForwarded: true,
-        }
+            isForwarded: true
+        },
+        timestamp: Date.now() // Añadir un timestamp actual
     };
 
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
@@ -1280,10 +1281,9 @@ case 'flow': {
     // Generar el mensaje
     const msgs = generateWAMessageFromContent(m.chat, flowMessage);
 
-    // Verifica que msgs tenga el formato correcto antes de enviar
-    console.log("Mensaje generado:", JSON.stringify(msgs, null, 2));
+    console.log("Mensaje generado:", JSON.stringify(msgs, null, 2)); // Verifica la estructura del mensaje generado
 
-    await nyanBot2.relayMessage(m.chat, msgs.message);
+    await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
 case 'menu': {
