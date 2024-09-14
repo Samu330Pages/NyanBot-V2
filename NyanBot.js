@@ -1238,7 +1238,7 @@ case 'flow': {
             },
 		nativeFlowMessage: {
                             buttons: [{
-                                "name": "flow_cta",
+                                "name": "cta_call",
                                 "buttonParamsJson": `{\"display_text\":\"hola\",\"id\":\"%menu\"}`
                             }],
 			}
