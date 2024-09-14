@@ -1248,26 +1248,36 @@ case 'flow': {
                         }
                     }
                 }
-            }
+            },
+            components: [
+                {
+                    type: "body",
+                    text: "This is a flows as template demo"
+                },
+                {
+                    type: "BUTTONS",
+                    buttons: [
+                        {
+                            type: "FLOW",
+                            text: "Open flow!",
+                            flow_id: "1", // Cambia esto según tu flow_id
+                            navigate_screen: "<SCREEN_NAME>", // Cambia esto según el nombre de la pantalla
+                            flow_action: "navigate"
+                        }
+                    ]
+                }
+            ]
+        },
+        contextInfo: {
+            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
+            forwardingScore: 999,
+            isForwarded: true,
         }
     };
 
-    // Asegúrate de que m y m.sender estén definidos
-    const context = {
-        mentionedJid: [m.sender], // Verifica que m.sender esté definido
-        forwardingScore: 999,
-        isForwarded: true,
-    };
+    console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
 
-    // Consola para ver el contenido del mensaje
-    const messageToSend = {
-        ...flowMessage,
-        contextInfo: context // Agrega contextInfo aquí
-    };
-    
-    console.log("Mensaje a enviar:", JSON.stringify(messageToSend, null, 2)); // Verifica la estructura del mensaje
-
-    const msgs = generateWAMessageFromContent(m.chat, messageToSend, { quoted: m });
+    const msgs = generateWAMessageFromContent(m.chat, flowMessage, { quoted: m });
 
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
