@@ -1228,7 +1228,6 @@ case 'flow': {
         interactiveMessage: {
             type: "flow",
             header: {
-                type: "text",
                 text: "Flow message header" // Cambia esto según tus necesidades
             },
             body: {
@@ -1239,7 +1238,7 @@ case 'flow': {
             },
 		nativeFlowMessage: {
                             buttons: [{
-                                "name": "cta_flow",
+                                "name": "flow_cta",
                                 "buttonParamsJson": `{\"display_text\":\"hola\",\"id\":\"%menu\"}`
                             }],
 			}
