@@ -1237,12 +1237,12 @@ case 'flow': {
             footer: {
                 text: "Flow message footer" // Cambia esto según tus necesidades
             },
-		buttons: [
-                        {
-                            type: "FLOW",
-                            text: "Open flow!"
-                        }
-                    ]
+		nativeFlowMessage: ({
+                            buttons: [{
+                                "name": "cta_flow",
+                                "buttonParamsJson": `{\"display_text\":\"hola\",\"id\":\"%menu\"}`
+                            }]
+			)}
 	}
 		}
 	}
