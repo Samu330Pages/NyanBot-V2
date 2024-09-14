@@ -1231,32 +1231,7 @@ case 'flow': {
             footer: {
                 text: "Flow message footer" // Cambia esto según tus necesidades
             },
-            action: {
-                name: "flow",
-                parameters: {
-                    flow_message_version: "3",
-                    flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
-                    flow_id: "1",
-                    flow_cta: "Book!",
-                    flow_action: "navigate",
-                    flow_action_payload: {
-                        screen: "<SCREEN_NAME>",
-                        data: {
-                            product_name: "name",
-                            product_description: "description",
-                            product_price: 100
-                        }
-                    }
-                }
-            },
-            components: [
-                {
-                    type: "body",
-                    text: "This is a flows as template demo"
-                },
-                {
-                    type: "BUTTONS",
-                    buttons: [
+		buttons: [
                         {
                             type: "FLOW",
                             text: "Open flow!",
@@ -1265,8 +1240,6 @@ case 'flow': {
                             flow_action: "navigate"
                         }
                     ]
-                }
-            ]
         }
     };
 
