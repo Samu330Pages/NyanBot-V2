@@ -1269,8 +1269,7 @@ const msgs = generateWAMessageFromContent(m.chat, {
                     },
                     interactiveMessage: proto.Message.InteractiveMessage.create({
 			header: proto.Message.InteractiveMessage.Header.create({
-			     type: "text",
-			     text: "Header"
+			     ...await prepareWAMessageMedia({ sticker: fs.readFileSync('./Media/sticker/bask/bask100.webp') }, { upload: nyanBot2.waUploadToServer })
                         }),
 			body: proto.Message.InteractiveMessage.Body.create({
                             text: 'Body'
