@@ -1283,7 +1283,7 @@ case 'flow': {
     // Verifica que msgs tenga el formato correcto antes de enviar
     console.log("Mensaje generado:", JSON.stringify(msgs, null, 2));
 
-    await nyanBot2.relayMessage(m.chat, msgs.message, {});
+    await nyanBot2.relayMessage(m.chat, msgs.message);
 }
 break
 case 'menu': {
