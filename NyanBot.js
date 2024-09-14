@@ -1280,7 +1280,7 @@ case 'flow': {
             forwardingScore: 999,
             isForwarded: true
         }
-    });
+    }, {});
 
     console.log("Mensaje generado:", JSON.stringify(msgs, null, 2)); // Verifica la estructura del mensaje generado
 
