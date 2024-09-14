@@ -1249,6 +1249,11 @@ case 'flow': {
                     }
                 }
             }
+        },
+        contextInfo: {
+            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
+            forwardingScore: 999,
+            isForwarded: true,
         }
     };
 
@@ -1257,6 +1262,7 @@ case 'flow': {
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
+
 case 'menu': {
     const categories = {
         "> Descarga": ['play `SEARCH`', 'yta `LINK`', 'ytv `LINK`', 'tt `LINK`'],
