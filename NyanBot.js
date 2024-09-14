@@ -1267,13 +1267,20 @@ case 'flow': {
                     ]
                 }
             ]
-        },
+        }
     };
 
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
 
     // Generar el mensaje
-    const msgs = generateWAMessageFromContent(m.chat, flowMessage, {});
+    const msgs = generateWAMessageFromContent(m.chat, { 
+        ...flowMessage,
+        contextInfo: {
+            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
+            forwardingScore: 999,
+            isForwarded: true
+        }
+    });
 
     console.log("Mensaje generado:", JSON.stringify(msgs, null, 2)); // Verifica la estructura del mensaje generado
 
