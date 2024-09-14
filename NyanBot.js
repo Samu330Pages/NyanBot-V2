@@ -2515,6 +2515,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
             reply(`${_syntax + util.format(_return)}`)
 
 	  }
+			}
                 if (isCmd && budy.toLowerCase() != undefined) {
 if (m.chat.endsWith('broadcast')) return
 if (m.isBaileys) return
