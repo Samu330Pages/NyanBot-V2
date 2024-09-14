@@ -1259,10 +1259,15 @@ case 'flow': {
         isForwarded: true,
     };
 
-    const msgs = generateWAMessageFromContent(m.chat, {
+    // Consola para ver el contenido del mensaje
+    const messageToSend = {
         ...flowMessage,
         contextInfo: context // Agrega contextInfo aquí
-    }, { quoted: m });
+    };
+    
+    console.log("Mensaje a enviar:", JSON.stringify(messageToSend, null, 2)); // Verifica la estructura del mensaje
+
+    const msgs = generateWAMessageFromContent(m.chat, messageToSend, { quoted: m });
 
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
