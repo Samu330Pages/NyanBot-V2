@@ -1273,7 +1273,7 @@ case 'flow': {
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
 
     // Generar el mensaje
-    const msgs = generateWAMessageFromContent(m.chat, flowMessage);
+    const msgs = generateWAMessageFromContent(m.chat, flowMessage, {});
 
     console.log("Mensaje generado:", JSON.stringify(msgs, null, 2)); // Verifica la estructura del mensaje generado
 
