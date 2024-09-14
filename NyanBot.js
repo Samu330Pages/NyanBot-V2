@@ -1260,8 +1260,8 @@ case 'flow': {
                         {
                             type: "FLOW",
                             text: "Open flow!",
-                            flow_id: "1", // Cambia esto según tu flow_id
-                            navigate_screen: "<SCREEN_NAME>", // Cambia esto según el nombre de la pantalla
+                            flow_id: "1", // Asegúrate de que este ID sea correcto
+                            navigate_screen: "<SCREEN_NAME>", // Asegúrate de que este sea un nombre de pantalla válido
                             flow_action: "navigate"
                         }
                     ]
@@ -1277,7 +1277,11 @@ case 'flow': {
 
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
 
+    // Generar el mensaje
     const msgs = generateWAMessageFromContent(m.chat, flowMessage, { quoted: m });
+
+    // Verifica que msgs tenga el formato correcto antes de enviar
+    console.log("Mensaje generado:", JSON.stringify(msgs, null, 2));
 
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
