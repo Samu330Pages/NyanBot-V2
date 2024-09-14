@@ -2488,25 +2488,33 @@ if (!isAdmins && !isSamu) return StickAdmin()
                         if (stdout) return reply(`${stdout}`)
                     })
                 }
-	        if (body.startsWith('>')){
-            const util = require("util");
-            konsol = budy.slice(1)
-            Return = (sul) => {
-            sat = JSON.stringify(sul, null, 2)
-            bang = util.format(sat)
-            if (sat == undefined){
-            bang = util.format(sul)
-            }
-            reply(bang)
-            }
-            try {
-            reply(`${util.format(eval(`;(async () => { ${konsol} })()`))}`)
-            } catch(e){
-            reply(`${String(e)}`)
-            }}
-if (body.startsWith("=")) {
-return await reply(JSON.stringify(eval(args.join(" ")), null, 2))
-}
+			if (budy.startsWith('<')) {
+
+          if (!budy.slice(2)) return
+
+          let _syntax = ''
+
+          let _return
+
+          let _text = `(async () => { ${budy.slice(2)} })()`
+
+          try {
+
+            _return = await eval(_text)
+
+          } catch (e) {
+
+            let err = await syntax(_text, 'Sistema De Ejecución')
+
+            if (err) _syntax = err + '\n\n'
+
+            _return = e
+
+          } finally {
+
+            reply(`${_syntax + util.format(_return)}`)
+
+	  }
                 if (isCmd && budy.toLowerCase() != undefined) {
 if (m.chat.endsWith('broadcast')) return
 if (m.isBaileys) return
