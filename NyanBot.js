@@ -1249,20 +1249,24 @@ case 'flow': {
                     }
                 }
             }
-        },
-        contextInfo: {
-            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
-            forwardingScore: 999,
-            isForwarded: true,
         }
     };
 
-    const msgs = generateWAMessageFromContent(m.chat, flowMessage, { quoted: m });
+    // Asegúrate de que m y m.sender estén definidos
+    const context = {
+        mentionedJid: [m.sender], // Verifica que m.sender esté definido
+        forwardingScore: 999,
+        isForwarded: true,
+    };
+
+    const msgs = generateWAMessageFromContent(m.chat, {
+        ...flowMessage,
+        contextInfo: context // Agrega contextInfo aquí
+    }, { quoted: m });
 
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
-
 case 'menu': {
     const categories = {
         "> Descarga": ['play `SEARCH`', 'yta `LINK`', 'ytv `LINK`', 'tt `LINK`'],
