@@ -1219,7 +1219,13 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		
 case 'flow': {
     const flowMessage = {
-        interactive: {
+	viewOnceMessage: {
+                message: {
+                    "messageContextInfo": {
+                        "deviceListMetadata": {},
+                        "deviceListMetadataVersion": 2
+                    },
+        interactiveMessage: {
             type: "flow",
             header: {
                 type: "text",
@@ -1234,26 +1240,18 @@ case 'flow': {
 		buttons: [
                         {
                             type: "FLOW",
-                            text: "Open flow!",
-                            flow_id: "1", // Asegúrate de que este ID sea correcto
-                            navigate_screen: "<SCREEN_NAME>", // Asegúrate de que este sea un nombre de pantalla válido
-                            flow_action: "navigate"
+                            text: "Open flow!"
                         }
                     ]
-        }
+	}
+		}
+	}
     };
 
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
 
     // Generar el mensaje
-    const msgs = generateWAMessageFromContent(m.chat, { 
-        ...flowMessage,
-        contextInfo: {
-            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
-            forwardingScore: 999,
-            isForwarded: true
-        }
-    }, {});
+    const msgs = generateWAMessageFromContent(m.chat, flowMessage, {});
 
     console.log("Mensaje generado:", JSON.stringify(msgs, null, 2)); // Verifica la estructura del mensaje generado
 
