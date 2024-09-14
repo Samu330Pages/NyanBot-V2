@@ -1268,12 +1268,6 @@ case 'flow': {
                 }
             ]
         },
-        contextInfo: {
-            mentionedJid: [m.sender], // Asegúrate de que m.sender esté definido
-            forwardingScore: 999,
-            isForwarded: true
-        },
-        timestamp: Date.now() // Añadir un timestamp actual
     };
 
     console.log("Mensaje a enviar:", JSON.stringify(flowMessage, null, 2)); // Verifica la estructura del mensaje
