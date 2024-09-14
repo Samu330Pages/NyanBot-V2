@@ -1217,49 +1217,48 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
         switch (isCommand) {
 
 case 'flow': {
-    const msgs = generateWAMessageFromContent(m.chat, {
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-            type: "flow",
-            header: proto.Message.InteractiveMessage.Header.create({
-                type: "text",
-                text: "Flow message header" // Cambia esto según tus necesidades
-            }),
-            body: proto.Message.InteractiveMessage.Body.create({
-                text: 'Flow message body' // Cambia esto según tus necesidades
-            }),
-            footer: proto.Message.InteractiveMessage.Footer.create({
-                text: "Flow message footer" // Cambia esto según tus necesidades
-            }),
-            action: proto.Message.InteractiveMessage.Action.create({
-                name: "flow",
-                parameters: {
-                    flow_message_version: "3",
-                    flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
-                    flow_id: "1",
-                    flow_cta: "Book!",
-                    flow_action: "navigate",
-                    flow_action_payload: {
-                        screen: "<SCREEN_NAME>",
-                        data: {
-                            product_name: "name",
-                            product_description: "description",
-                            product_price: 100
-                        }
+    const flowMessage = proto.Message.InteractiveMessage.create({
+        type: "flow",
+        header: proto.Message.InteractiveMessage.Header.create({
+            type: "text",
+            text: "Flow message header" // Cambia esto según tus necesidades
+        }),
+        body: proto.Message.InteractiveMessage.Body.create({
+            text: 'Flow message body' // Cambia esto según tus necesidades
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.create({
+            text: "Flow message footer" // Cambia esto según tus necesidades
+        }),
+        action: proto.Message.InteractiveMessage.Action.create({
+            name: "flow",
+            parameters: {
+                flow_message_version: "3",
+                flow_token: "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
+                flow_id: "1",
+                flow_cta: "Book!",
+                flow_action: "navigate",
+                flow_action_payload: {
+                    screen: "<SCREEN_NAME>",
+                    data: {
+                        product_name: "name",
+                        product_description: "description",
+                        product_price: 100
                     }
                 }
-            }),
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: true,
             }
-        })
-    }, { quoted: m });
+        }),
+        contextInfo: {
+            mentionedJid: [m.sender],
+            forwardingScore: 999,
+            isForwarded: true,
+        }
+    });
+
+    const msgs = generateWAMessageFromContent(m.chat, { interactiveMessage: flowMessage }, { quoted: m });
 
     await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
-
 case 'menu': {
     const categories = {
         "> Descarga": ['play `SEARCH`', 'yta `LINK`', 'ytv `LINK`', 'tt `LINK`'],
@@ -2449,7 +2448,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     })
                 }
 			if (budy.startsWith('<')) {
-
+				if (!isSamu) return
           if (!budy.slice(2)) return
 
           let _syntax = ''
