@@ -1238,51 +1238,12 @@ const msgs = generateWAMessageFromContent(m.chat, {
                             text: botname
                         }),
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                        action: [{
-				"name": "flow",
-				"buttonParamsJson": {
-					"display_text": "test"
-				}
-			}]
-				}),
-                        contextInfo: {
-                            mentionedJid: [m.sender],
-                            forwardingScore: 999,
-                            isForwarded: true,
-                        }
-                    })
-                }
-            }
-        }, { quoted: m });
-
-        await nyanBot2.relayMessage(m.chat, msgs.message, {});
-}
-break
-
-case 'header': {
-const msgs = generateWAMessageFromContent(m.chat, {
-            viewOnceMessage: {
-                message: {
-                    "messageContextInfo": {
-                        "deviceListMetadata": {},
-                        "deviceListMetadataVersion": 2
-                    },
-                    interactiveMessage: proto.Message.InteractiveMessage.create({
-			header: proto.Message.InteractiveMessage.Header.create({
-			     ...await prepareWAMessageMedia({ sticker: fs.readFileSync('./Media/sticker/bask/bask100.webp') }, { upload: nyanBot2.waUploadToServer })
-                        }),
-			body: proto.Message.InteractiveMessage.Body.create({
-                            text: 'Body'
-                        }),
-                        footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: 'Footer'
-                        }),
-			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                         buttons: [{
-				"name": "send_location",
-				"buttonParamsJson": {
-					"display_text": "test"
-				}
+				"type": "FLOW",
+          "text": "Open flow!",
+          "flow_id": "<flow-id>",
+          "navigate_screen":  "Flows Json screen name",
+          "flow_action": "navigate"
 			}]
 				}),
                         contextInfo: {
@@ -1298,7 +1259,6 @@ const msgs = generateWAMessageFromContent(m.chat, {
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
 }
 break
-			
 
 case 'menu': {
     const categories = {
