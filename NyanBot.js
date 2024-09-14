@@ -1240,11 +1240,12 @@ const msgs = generateWAMessageFromContent(m.chat, {
 			nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                         buttons: [{
 				"type": "FLOW",
+				"buttonParamsJson": {
           "text": "Open flow!",
           "flow_id": "<flow-id>",
           "navigate_screen":  "Flows Json screen name",
           "flow_action": "navigate"
-			}]
+				}}]
 				}),
                         contextInfo: {
                             mentionedJid: [m.sender],
