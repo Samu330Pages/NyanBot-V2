@@ -1724,7 +1724,7 @@ case 'args': {
 					
 break
 case 'ytmp3': case 'yta': {
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
 const primerArg = parseInt(args[0], 10);
 if (isNaN(primerArg)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
@@ -1755,12 +1755,12 @@ break
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
 const primerArg = parseInt(args[0], 10);
 if (isNaN(primerArg)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el video en formato MP4, la opción 2 descarga el video en documento.*`);
 }
-let { title, size, video, quality, thumbnail } = await ytmp4(text);
+let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
       caption += `- *Calidad:* ${quality}\n`
