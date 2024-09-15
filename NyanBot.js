@@ -1769,7 +1769,7 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
 let videoYt = await fetchBuffer(video);
 if (primerArg === 1) {
 	reply('> *Esperé un momento, se esta enviando su video MP4...*')
-	nyanBot2.sendMessage(m.chat, {react: {text: 🕒, key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
         await nyanBot2.sendMessage(m.from, {
             video: videoYt,
             fileName: title + '.mp4',
