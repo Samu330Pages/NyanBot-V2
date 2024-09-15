@@ -1365,7 +1365,7 @@ function isValidPassword(password) {
                 const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
                 reply(replyMessage);
             } else {
-                return auth.createUserWithEmailAndPassword(email, password)
+                return createUserWithEmailAndPassword(auth, email, password)
                     .then(userCredential => {
                         const user = userCredential.user;
                         const uid = user.uid;
@@ -1453,7 +1453,7 @@ case 'reset': {
         .then(data => {
             if (data.IsEmailRegistered) {
                 // Enviar el correo de restablecimiento de contraseña
-                return auth.sendPasswordResetEmail(email)
+                return sendPasswordResetEmail(auth, email)
                     .then(() => {
                         reply(`*Se ha enviado un correo de restablecimiento de contraseña a ${email}. Por favor, revisa tu bandeja de entrada.*`);
                     });
