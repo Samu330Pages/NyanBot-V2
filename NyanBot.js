@@ -339,6 +339,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                 if (!('totalLimit' in user)) user.totalLimit = 0
                 if (!isNumber(user.limit)) user.limit = limitUser
             } else global.db.data.users[sender] = {
+	       register: false,
                serialNumber: randomBytes(16).toString('hex'),
                title: `${isPremium ? 'Premium' : 'User'}`,
                afkTime: -1,
@@ -358,7 +359,6 @@ return arr[Math.floor(Math.random() * arr.length)]
                   if (!('antibot' in chats)) chats.antibot = false
                   if (!('antiviewonce' in chats)) chats.antiviewonce = false
                   if (!('antimedia' in chats)) chats.media = false
-                  if (!('antivirtex' in chats)) chats.antivirtex = false
                   if (!('antiimage' in chats)) chats.antiimage = false
                   if (!('antivideo' in chats)) chats.video = false
                   if (!('antiaudio' in chats)) chats.antiaudio = false
@@ -374,7 +374,6 @@ return arr[Math.floor(Math.random() * arr.length)]
                   antiforeignnum: false,
                   antibot: false,
                   antiviewonce: false,
-                  antivirtex: false,
                   antimedia: false,
                   antiimage: false,
                   antivideo: false,
@@ -1272,8 +1271,12 @@ case 'login': {
         .then(data => {
             console.log(data); // Para depuración
             if (data.IsEmailRegistered) {
-                const replyMessage = `Email: ${data.Result}\nUID: ${data.UID}\nUser: ${data.User}`;
-                reply(replyMessage); // Envía los datos del usuario
+		db.data.users[sender].register = true
+                const replyMessage = `*Has iniciado sesión correctamente, tus datos son los siguientes:*
+
+Número de identificación de usuario: *${data.UID}*
+Nombre de usuario: *${data.User}*`;
+                reply(replyMessage);
             } else {
                 const buttons = [{
                     name: "quick_reply",
