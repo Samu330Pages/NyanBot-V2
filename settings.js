@@ -48,7 +48,7 @@ error: 'Intentalo de nuevo mas tarde',
 success: 'OK va ᶻ 𝗓 𐰁'
 }
 //thumbnail
-global.thumb = fs.readFileSync('./Media/theme/nyancat.jpg')
+global.thumb = fs.readFileSync('./Media/theme/NyanBot.jpg')
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
