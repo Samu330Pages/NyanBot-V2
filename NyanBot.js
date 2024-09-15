@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
-const { auth, createUserWithEmailAndPassword, sendPasswordResetEmail } = require('./lib/firebaseConfig.js')
+const { firebaseConfig } = require('./lib/firebaseConfig.js')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -1311,6 +1311,12 @@ function isValidPassword(password) {
     const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
     const hasNumbers = /\d/.test(password); // Al menos un número
     const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
+// firebaseConfig.js
+const { initializeApp } = require('firebase/app');
+const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app); // Obtiene la instancia de autenticación
 
     // Verifica si cumple con todos los requisitos
     return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
@@ -1419,6 +1425,12 @@ case 'reset': {
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// firebaseConfig.js
+const { initializeApp } = require('firebase/app');
+const { getAuth, sendPasswordResetEmail } = require('firebase/auth');
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app); // Obtiene la instancia de autenticación
 
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
