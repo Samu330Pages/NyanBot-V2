@@ -1424,7 +1424,7 @@ _*Felicidades, has ganado 200 puntos! 🎁*_
 _Para completar tu registro en el bot, solo da clic en el primer botón, y tu sesión se guardará en la base de datos._`
                 });
 		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
-		db.data.users[sender].limit += puntos
+		db.data.users[sender].limit += 200
             }
         })
         .catch(error => {
