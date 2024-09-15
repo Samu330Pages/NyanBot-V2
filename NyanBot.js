@@ -1732,7 +1732,7 @@ if (isNaN(primerArg)) {
 let { title, audio, thumbnail } = await ytmp3v3(args[1]);
 let audioYt = await fetchBuffer(audio);
 if (primerArg === 1) {
-	await reply('> *Esperé un momento, se esta enviando su audio MP3*')
+	reply('> *Esperé un momento, se esta enviando su audio MP3...*')
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
@@ -1740,7 +1740,7 @@ if (primerArg === 1) {
         }, { quoted: m });
 
 } else if (primerArg === 2) {
-	await reply('> *Esperé un momento, se esta enviando su documento de audio*')
+	reply('> *Esperé un momento, se esta enviando su documento de audio...*')
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
@@ -1768,8 +1768,9 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
 if (primerArg === 1) {
-	reply('> *Esperé un momento, se esta enviando su video MP4*')
-        await nyanBot2.sendMessage(m.chat, {
+	reply('> *Esperé un momento, se esta enviando su video MP4...*')
+	nyanBot2.sendMessage(m.chat, {react: {text: 🕒, key: m}})
+        await nyanBot2.sendMessage(m.from, {
             video: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
@@ -1786,8 +1787,8 @@ if (primerArg === 1) {
             },
         }, { quoted: m });
 } else if (primerArg === 2) {
-	reply('> *Esperé un momento, se esta enviando su documento de video*')
-	await nyanBot2.sendMessage(m.chat, {
+	reply('> *Esperé un momento, se esta enviando su documento de video...*')
+	await nyanBot2.sendMessage(m.from, {
             document: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
