@@ -121,25 +121,6 @@ function formatNumber(num) {
     return parseFloat((num / Math.pow(1e3, index)).toFixed(2)) + ' ' + suffixes[index];
 }
 
-// Función para leer la base de datos
-function readDatabase() {
-    if (fs.existsSync(dbPath)) {
-        const data = fs.readFileSync(dbPath);
-        return JSON.parse(data);
-    }
-    return {};
-}
-
-function getUserPoints(sender) {
-    const userPointsDB = readDatabase();
-    return userPointsDB[sender] || 0;
-}
-
-// Función para guardar la base de datos
-function saveDatabase(data) {
-    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
-}
-
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
@@ -1903,8 +1884,7 @@ break
 
 
             case 'puntos':
-                const puntos = getUserPoints(sender);
-                reply(`Total de puntos: ${puntos}`);
+                reply(`Total de puntos: ${db.data.users[sender].limit}`);
             break
 
             case 'llaves': // Comando para ver el uso de claves
@@ -1968,7 +1948,7 @@ case 'anti': {
 if (!m.isGroup) return
 if (!isBotAdmins) return
 if (!isAdmins && !isSamu) return
-if (db.data.chats[from].badword === true) {
+if (!db.data.chats[from].badword === true) {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
@@ -1976,7 +1956,7 @@ const buttons = [{
             id: '%bdon'
           }),
         }]
-return await sendReplyButton(m.from, buttons, m, {
+return await sendReplyButton(m.chat, buttons, m, {
 	content: '> *AntiBadWords esta desactivado, Si deseas activar toca el botón.*'
 })	
 } else {
@@ -1987,7 +1967,7 @@ const buttons = [{
             id: '%bdoff'
           }),
         }]
-return await sendReplyButton(m.from, buttons, m, {
+return await sendReplyButton(m.chat, buttons, m, {
 	content: '> *AntiBadWords esta activado, Si deseas desactivar toca el botón.*'
 })
 }
@@ -2058,14 +2038,10 @@ if (!isAdmins && !isSamu) return StickAdmin()
 
             default:
                 if (budy == '🎯') {
-                    let userPointsDB = readDatabase();
                     totalTiro = ["failTiro","tiro10p","tiro30p","tiro50p","tiro70p","tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
                     let puntos = 0;
                     let msgTiro = 'Puntos Ganados:'
-                    if (!userPointsDB[sender]) {
-                        userPointsDB[sender] = 0;
-                    }
                     switch (totalTiro[tiroStickers]){
                         case 'tiro10p':
                             puntos = 10;
@@ -2087,8 +2063,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             puntos = 0;
                             msgTiro = 'Has fallado el tiro! 😞'
                     }
-                    userPointsDB[sender] += puntos;
-                    saveDatabase(userPointsDB);
+		    db.data.users[sender].limit += puntos
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/tiro/${totalTiro[tiroStickers]}.webp`)}, { quoted: {
                         key: {
@@ -2118,14 +2093,10 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     } })
                 }
                 if (budy == '🎳') {
-                    let userPointsDB = readDatabase();
                     totalBolo = ["boloFail","bolo10","bolo20","bolo60","bolo80","boloWin"]
                     boloStickers = Math.floor(Math.random() * totalBolo.length)
                     let puntos = 0;
                     let msgBolo = 'Puntos Ganados:'
-                    if (!userPointsDB[sender]) {
-                        userPointsDB[sender] = 0;
-                    }
                     switch (totalBolo[boloStickers]){
                         case 'bolo10':
                             puntos = 10;
@@ -2147,8 +2118,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             puntos = 0;
                             msgBolo = 'Has fallado el tiro! 😞'
                     }
-                    userPointsDB[sender] += puntos;
-                    saveDatabase(userPointsDB);
+		    db.data.users[sender].limit += puntos
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/bolo/${totalBolo[boloStickers]}.webp`)}, { quoted: {
                         key: {
@@ -2178,7 +2148,6 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     } })
                 }
                 if (budy == '⚽') {
-                    let userPointsDB = readDatabase();
                     footTiro = ["footFail", "footPoste", "foot50", "foot75", "foot100"]
                     footStickers = Math.floor(Math.random() * footTiro.length)
                     let puntos = 0;
@@ -2205,8 +2174,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             puntos = 0;
                             msgFoot = 'Uff! te la volaste pai 😞 0 puntos!'
                     }
-                    userPointsDB[sender] += puntos;
-                    saveDatabase(userPointsDB);
+		    db.data.users[sender].limit += puntos
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/foot/${footTiro[footStickers]}.webp`)}, { quoted: {
                         key: {
@@ -2236,14 +2204,10 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     } })
                 }
                 if (budy == '🏀') {
-                    let userPointsDB = readDatabase();
                     baskTiro = ["baskFail", "baskFail2", "baskFail3", "bask50", "bask100"]
                     baskStickers = Math.floor(Math.random() * baskTiro.length)
-                    let puntos = 0;
+		    let puntos = 0;
                     let msgbask = 'Puntos Ganados:'
-                    if (!userPointsDB[sender]) {
-                        userPointsDB[sender] = 0;
-                    }
                     switch (baskTiro[baskStickers]){
                         case 'baskFail':
                             puntos = 0;
@@ -2266,9 +2230,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             msgbask = '🎉¡Excelente tiro! 🏀 Puntos:'
                             break
                     }
-                    userPointsDB[sender] += puntos;
                     db.data.users[sender].limit += puntos
-                    saveDatabase(userPointsDB);
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/bask/${baskTiro[baskStickers]}.webp`)}, { quoted: {
                         key: {
@@ -2298,14 +2260,10 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     } })
                 }
                 if (budy == '🎲') {
-                    let userPointsDB = readDatabase();
                     dadoTiro = ["dado1", "dado2", "dado3", "dado4", "dado5", "dado6"]
                     dadoStickers = Math.floor(Math.random() * dadoTiro.length)
                     let puntos = 0;
                     let msgDado = 'Puntos Ganados:'
-                    if (!userPointsDB[sender]) {
-                        userPointsDB[sender] = 0;
-                    }
                     switch (dadoTiro[dadoStickers]){
                         case 'dado1':
                             puntos = 10;
@@ -2332,8 +2290,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             msgDado = 'Dado #6! Ganaste:'
                             break
                     }
-                    userPointsDB[sender] += puntos;
-                    saveDatabase(userPointsDB);
+		    db.data.users[sender].limit += puntos
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/dado/${dadoTiro[dadoStickers]}.webp`)}, { quoted: {
                         key: {
