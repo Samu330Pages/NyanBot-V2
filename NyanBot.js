@@ -1175,7 +1175,7 @@ case 'flow': {
 break
 case 'menu': {
     const categories = {
-	"📝 Registro": ['login `CORREO`', 'reg `CORREO PASS USER` *+200 PUNTOS*', 'reset `CORREO`',
+	"📝 Registro": ['login `CORREO`', 'reg `CORREO PASS USER` *+200 PUNTOS*', 'reset `CORREO`'],
         "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta `LINK` *-30 PUNTOS*', 'ytv `LINK` *-30 PUNTOS*', 'tt `LINK` *-10 PUNTOS*'],
 	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
