@@ -1801,7 +1801,7 @@ if (primerArg === 1) {
                 }
             },
         }, { quoted: m });
-else {
+} else {
 	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
 }
 db.data.users[sender].limit -= 30
