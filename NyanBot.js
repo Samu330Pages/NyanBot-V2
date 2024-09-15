@@ -1733,19 +1733,23 @@ let { title, audio, thumbnail } = await ytmp3v3(args[1]);
 let audioYt = await fetchBuffer(audio);
 if (primerArg === 1) {
 	reply('> *Esperé un momento, se esta enviando su audio MP3...*')
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
         await nyanBot2.sendMessage(m.chat, {
             audio: audioYt,
             fileName: title + '.mp3',
             mimetype: 'audio/mpeg',
         }, { quoted: m });
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
 
 } else if (primerArg === 2) {
 	reply('> *Esperé un momento, se esta enviando su documento de audio...*')
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
         await nyanBot2.sendMessage(m.chat, {
             document: audioYt,
             fileName: title + '.mp3',
 	    mimetype: 'aidio/mpeg'
         }, { quoted: m });
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
 
 } else {
 	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
@@ -1756,8 +1760,8 @@ case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
-const primerArg = parseInt(args[0], 10);
-if (isNaN(primerArg)) {
+const optionVid = parseInt(args[0], 10);
+if (isNaN(optionVid)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el video en formato MP4, la opción 2 descarga el video en documento.*`);
 }
 let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
@@ -1767,10 +1771,10 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       caption += `- *Peso:* ${size}\n\n`
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
-if (primerArg === 1) {
+if (optionVid === 1) {
 	reply('> *Esperé un momento, se esta enviando su video MP4...*')
 	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
-        await nyanBot2.sendMessage(m.from, {
+        await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
@@ -1786,9 +1790,11 @@ if (primerArg === 1) {
                 }
             },
         }, { quoted: m });
-} else if (primerArg === 2) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+} else if (optionVid === 2) {
 	reply('> *Esperé un momento, se esta enviando su documento de video...*')
-	await nyanBot2.sendMessage(m.from, {
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
+	await nyanBot2.sendMessage(m.chat, {
             document: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
@@ -1804,6 +1810,7 @@ if (primerArg === 1) {
                 }
             },
         }, { quoted: m });
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
 } else {
 	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
 }
@@ -1828,6 +1835,7 @@ if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n
       caption += `- *Duración:* ${duration}\n\n`
       caption += `> ${botname} by ${ownername}`
 let videoTt = await fetchBuffer(video);
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
             fileName: title + '.mp4',
@@ -1844,11 +1852,13 @@ let videoTt = await fetchBuffer(video);
                 }
             },
         }, { quoted: m });
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
 db.data.users[sender].limit -= 10
 }
 break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos.`)
+		nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
                 if (/image/.test(mime)) {
                 let media = await quoted.download()
                 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
