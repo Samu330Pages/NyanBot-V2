@@ -1884,7 +1884,7 @@ if (optionVid === 1) {
 	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
 } else if (optionVid === 2) {
 	await nyanBot2.sendMessage(m.chat, {
-            document: videoYt,
+	    document: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
             mimetype: 'video/mp4',
