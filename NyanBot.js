@@ -1768,6 +1768,7 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
 if (primerArg === 1) {
+	reply('> *Esperé un momento, se esta enviando su video MP4*')
         await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
@@ -1785,6 +1786,7 @@ if (primerArg === 1) {
             },
         }, { quoted: m });
 } else if (primerArg === 2) {
+	reply('> *Esperé un momento, se esta enviando su documento de video*')
 	await nyanBot2.sendMessage(m.chat, {
             document: videoYt,
             fileName: title + '.mp4',
