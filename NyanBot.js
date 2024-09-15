@@ -1721,41 +1721,7 @@ case 'args': {
     }
 }
 
-case 'testdl': {
-    try {// Función asíncrona para manejar la solicitud
-        const obtenerMediaData = async () => {
-            const { data: mediaData } = await axios.post("https://api.cobalt.tools/api/json", {
-                url: 'https://www.youtube.com/watch?v=_I9tUzuC0Ns',
-                filenamePattern: "basic",
-                resolution: "480",
-            }, {
-                headers: {
-                    Accept: "application/json",
-                    origin: "https://cobalt.tools",
-                    referer: "https://cobalt.tools/",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, seperti Gecko) Chrome/128.0.0.0 Safari/537.36",
-                }
-            });
-
-            return mediaData;
-        };
-
-        // Llamar a la función y manejar la respuesta
-        obtenerMediaData().then(mediaData => {
-            reply(`Resultado: ${JSON.stringify(mediaData)}`);
-        }).catch(error => {
-            reply(`Error al obtener los datos: ${error.message}`);
-        });
-    } catch (error) {
-        reply(`Error: ${error.message}`);
-    }
-}
-    break
-			
-
-			
-
-			
+					
 break
 case 'ytmp3': case 'yta': {
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
@@ -1787,7 +1753,13 @@ if (primerArg === 1) {
 }
 break
 case 'ytmp4': case 'ytv': {
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} https://youtube.com/....`)
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n${prefix + command} [opcion: 1/2] https://youtube.com/....`)
+const primerArg = parseInt(args[0], 10);
+if (isNaN(primerArg)) {
+        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el video en formato MP4, la opción 2 descarga el video en documento.*`);
+}
 let { title, size, video, quality, thumbnail } = await ytmp4(text);
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
@@ -1795,6 +1767,7 @@ let { title, size, video, quality, thumbnail } = await ytmp4(text);
       caption += `- *Peso:* ${size}\n\n`
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
+if (primerArg === 1) {
         await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
@@ -1811,6 +1784,27 @@ let videoYt = await fetchBuffer(video);
                 }
             },
         }, { quoted: m });
+} else if (primerArg === 2) {
+	await nyanBot2.sendMessage(m.chat, {
+            document: videoYt,
+            fileName: title + '.mp4',
+	    caption: caption,
+            mimetype: 'video/mp4',
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            },
+        }, { quoted: m });
+else {
+	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
+}
+db.data.users[sender].limit -= 30
 }
 break
 
@@ -1881,11 +1875,9 @@ break
 		
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
 *Usa el comando ${forma1}${prefix}juegos${forma1} para ver los juegos disponibles! O bien, puedes simplemente enviar uno de estos emojis:*
-[⚽]
-[🏀]
-[🎳]
-[🎯]
-[🎲]
+
+${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲${forma1}
+
 _*Y ganarás puntos de manera más rápida!*_`);
             break
 
