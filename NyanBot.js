@@ -1767,7 +1767,9 @@ if (isNaN(optionVid)) {
 }
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
 reply('> *Esperé un momento, se esta enviando su video...*')
+	reply(args[1])
 let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
+	reply(video)
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
       caption += `- *Calidad:* ${quality}\n`
