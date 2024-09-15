@@ -1266,7 +1266,8 @@ case 'login': {
 Número de identificación de usuario: *${data.UID}*
 Nombre de usuario: *${data.User}*
 
-_*Ya puedes usar las funciones del bot que requieran registro!*_`;
+_*Ya puedes usar las funciones del bot que requieran registro!*_
+> En dado caso que requieras restablecer tu contraseña, puedes usar el comando ${prefix}reset, o bien, restablecer tu contraseña desde la página.`;
 		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
                 reply(replyMessage);
             } else {
@@ -1311,9 +1312,15 @@ function isValidPassword(password) {
     const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
     const hasNumbers = /\d/.test(password); // Al menos un número
     const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
-// firebaseConfig.js
+
+    // Verifica si cumple con todos los requisitos
+    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+}
+    // firebaseConfig.js
 const { initializeApp } = require('firebase/app');
 const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
+
+// Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
     authDomain: "number-ac729.firebaseapp.com",
@@ -1323,13 +1330,10 @@ const firebaseConfig = {
     appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
     measurementId: "G-0BTNK7VNM3"
 };
+
 // Inicializa Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); // Obtiene la instancia de autenticación
-
-    // Verifica si cumple con todos los requisitos
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
-}
+const auth = getAuth(app);
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
         return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com contraseña nombreUsuario*`);
