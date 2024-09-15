@@ -1175,15 +1175,16 @@ case 'flow': {
 break
 case 'menu': {
     const categories = {
-	"📝 Registro": ['login `CORREO`', 'reg `CORREO PASS USER` *+200 PUNTOS*', 'reset `CORREO`'],
-        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta `LINK` *-30 PUNTOS*', 'ytv `LINK` *-30 PUNTOS*', 'tt `LINK` *-10 PUNTOS*'],
+	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`'],
+        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta `LINK` *-30 PUNTOS*', 'ytv `LINK` *-30 PUNTOS*', 'tiktok `LINK` *-10 PUNTOS*'],
 	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
     };
 
+    let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠'
     let nickName = nyanBot2.getName(sender);
-    let menuMessage = `${timeNow + nickName}\n_Hora actual: ${time}_\n_Fecha actual: ${date}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n*Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${date}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmd => {
