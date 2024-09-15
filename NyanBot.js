@@ -1780,7 +1780,7 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Duración:* ${video.timestamp}\n
 - *Vistas:* ${formatNumber(video.views)}
 
-> ${botname} by ${ownername}`
+`
 })
 db.data.users[sender].limit -= 30
 }
@@ -1865,7 +1865,7 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
 if (optionVid === 1) {
-	await nyanbot2.sendMessage(m.chat, {
+	await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
