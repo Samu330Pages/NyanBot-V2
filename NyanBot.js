@@ -32,7 +32,6 @@ const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
 const fg = require('api-dylux')
-//const ffmpeg = require('fluent-ffmpeg')
 const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
@@ -1816,6 +1815,8 @@ let videoYt = await fetchBuffer(video);
 break
 
 case 'tt': case 'tiktok': {
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
 if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n${prefix+command}` + ' https://vt.tiktok.com/...')
       let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
       let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`
@@ -1846,35 +1847,23 @@ let videoTt = await fetchBuffer(video);
                 }
             },
         }, { quoted: m });
+db.data.users[sender].limit -= 10
 }
 break
             case 's': case 'sticker': case 'stiker': {
-                if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVDuración del video de 1-9 Segundos.`)
+                if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos.`)
                 if (/image/.test(mime)) {
                 let media = await quoted.download()
                 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 } else if (/video/.test(mime)) {
-                if ((quoted.msg || quoted).seconds > 11) return reply('Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVideo Duration 1-9 Seconds')
+                if ((quoted.msg || quoted).seconds > 11) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos`)
                 let media = await quoted.download()
                 let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 } else {
-                reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nVideo Duration 1-9 Seconds`)
+                reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos`)
                 }
                 }
                 break
-case 'bienvenida': {
-               if (!m.isGroup) return StickGroup()
-if (!isAdmins && !isSamu) return StickAdmin()
-               if (args.length < 1) return reply('on/off?')
-               if (args[0] === 'on') {
-                  welcome = true
-                  reply(`${command} ${forma1}ON${forma1}`)
-               } else if (args[0] === 'off') {
-                  welcome = false
-                  reply(`${command} ${forma1}OFF${forma1}`)
-               }
-            }
-            break
 
 case 'actualizar':
 case 'update':
@@ -1888,7 +1877,16 @@ break
 
 
             case 'puntos':
-                reply(`Total de puntos: ${db.data.users[sender].limit}`);
+                reply(`*Total de puntos: ${db.data.users[sender].limit}*
+		
+_Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
+*Usa el comando ${forma1}${prefix}juegos${forma1} para ver los juegos disponibles! O bien, puedes simplemente enviar uno de estos emojis:*
+[⚽]
+[🏀]
+[🎳]
+[🎯]
+[🎲]
+_*Y ganarás puntos de manera más rápida!*_`);
             break
 
             case 'llaves': // Comando para ver el uso de claves
@@ -1922,7 +1920,7 @@ break
     break
 			
 	case 'groseria': case 'addbd':
-               if (!isSamu) return StickOwner()
+               if (!isSamu) return reply(mess.bot)
                if (!groupAdmins) return reply(mess.admin)
                if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)
                bad.push(q)
@@ -1930,13 +1928,63 @@ break
                reply(`> *${q} Se añadio a la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
             break
             case 'deldb':
-               if (!isSamu) return StickOwner()
+               if (!isSamu) return reply(mess.bot)
                if (!groupAdmins) return reply(mess.admin)
                if (args.length < 1) return reply( `*USO CORRECTO DEL COMANDO*\n\n${prefix + command} [mala palabra].\n*Ejemplo:* ${prefix + command} puchaina`)                 
                bad.splice(q)
                fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
                reply(`> *${q} Se ha eliminado de la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
             break
+
+
+case 'bienvenida': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (!welcome === true) {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Activar ✔',
+            id: '%welon'
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*La bienvenida en este grupo está desactivada, presiona el botón para poder activar esta opción*'
+})	
+} else {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desactivar ❌',
+            id: '%weloff'
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*La bienvenida en este grupo está activada, presiona el botón para poder desactivar esta opción*'
+})
+}
+}
+break
+
+case 'welon': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (welcome === true) return reply('¡la opción de bienvenida está ya activa!')
+welcome = true
+reply(`La opción de badwords sé ha activado en este chat.`)
+}
+break
+case 'weloff': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (welcome === false) return reply('¡la opción de bienvenida está ya desactivada!')
+welcome = false
+reply(`La opción de badwords sé ha desactivado en este chat.`)
+}
+break
 			
 case 'listbadword':{
 let teks = '> _LISTA DE MALAS PALABRAS_\n\n'
@@ -1949,72 +1997,64 @@ reply(teks)
 break
 
 case 'anti': {
-if (!m.isGroup) return
-if (!isBotAdmins) return
-if (!isAdmins && !isSamu) return
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
 if (!db.data.chats[from].badword === true) {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
-            display_text: 'Activar',
+            display_text: 'Activar ✔',
             id: '%bdon'
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
-	content: '> *AntiBadWords esta desactivado, Si deseas activar toca el botón.*'
+	content: '*AntiBadWords esta desactivado, Si deseas activar esta opción toca el botón.*'
 })	
 } else {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
-            display_text: 'Desactivar',
+            display_text: 'Desactivar ❌',
             id: '%bdoff'
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
-	content: '> *AntiBadWords esta activado, Si deseas desactivar toca el botón.*'
+	content: '*AntiBadWords esta activado, Si deseas desactivar esta opción toca el botón.*'
 })
 }
 }
 break
 
 case 'bdon': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (db.data.chats[from].badword === true) return reply('¡la opción de badwords está ya activa!')
 db.data.chats[from].badword = true
-reply(`${command} ${forma1}ACTIVATED${forma1}`)
+reply(`La opción de badwords sé ha activado en este chat.`)
 }
 break
 case 'bdoff': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (db.data.chats[from].badword === false) return reply('¡la opción de badwords está ya desactivada!')
 db.data.chats[from].badword = false
-reply(`${command} ${forma1}DISABLED${forma1}`)
+reply(`La opción de badwords sé ha desactivado en este chat.`)
 }
 break
 			
-	/*case 'antibadword':
-            case 'antigroserias': {
-		         if (!m.isGroup) return StickGroup()
-if (!isBotAdmins) return StickBotAdmin()
-if (!isAdmins && !isSamu) return StickAdmin()
-               if (args.length < 1) return reply(`*Porfavor asegurate de determinar el estado: ${forma1}ON/OFF${forma1}`)
-               if (args[0] === 'on') {
-                  db.data.chats[from].badword = true
-                  reply(`${command} ${forma1}ACTIVATED${forma1}`)
-               } else if (args[0] === 'off') {
-                  db.data.chats[from].badword = false
-                  reply(`${commad} ${forma1}DISABLED${forma1}`)
-               }
-               }
-            break*/
-			
             case 'addsticker':{
-                if (!isSamu) return StickOwner()
-                if (args.length < 1) return reply('Whats the sticker name?')
-                if (Stickers.includes(q)) return reply("The name is already in use")
+                if (!isSamu) return reply(mess.bot)
+                if (args.length < 1) return reply('cuál sería el nombre del sticker a guardar? Porfavor introduce el nombre junto al comando.')
+                if (Stickers.includes(q)) return reply("No se puede guardar, ya que el nombre del sticker ya está en la base de datos.")
                 let delb = await nyanBot2.downloadAndSaveMediaMessage(quoted)
                 Stickers.push(q)
                 await fsx.copy(delb, `./Media/sticker/${q}.webp`)
                 fs.writeFileSync('./Media/database/stickers.json', JSON.stringify(Stickers))
                 fs.unlinkSync(delb)
-                reply(`Se añadio el Sticker.\nPara ver lo Stickers añadidos usa: *${prefix}liststicker*`)
+                reply(`Se añadio el Sticker.\nPara ver los Stickers añadidos usa: *${prefix}liststicker*`)
                 }
                 break
 
@@ -2029,14 +2069,14 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     break
 
                     case 'delsticker':{
-                        if (!isSamu) return StickOwner()
-                        if (args.length < 1) return reply('Enter the sticker name')
-                        if (!Stickers.includes(q)) return reply("The name does not exist in the database")
+                        if (!isSamu) return reply(mess.bot)
+                        if (args.length < 1) return reply('Por favor ingresa el nombre del sticker junto al comando para eliminar!')
+                        if (!Stickers.includes(q)) return reply("No se puede eliminar el sticker, ya que no está en la base de datos.")
                         let wanu = Stickers.indexOf(q)
                         Stickers.splice(wanu, 1)
                         fs.writeFileSync('./Media/database/stickers.json', JSON.stringify(Stickers))
                         fs.unlinkSync(`./Media/sticker/${q}.webp`)
-                        reply(`Success deleting sticker ${q}`)
+                        reply(`Sé ha eliminado el sticker ${q}`)
                         }
                         break
 
@@ -2320,23 +2360,6 @@ if (!isAdmins && !isSamu) return StickAdmin()
                         }
                     } })
                 }
-                if (budy.startsWith('==>')) {
-                    if (!isSamu) return
-                    function Return(sul) {
-                        sat = JSON.stringify(sul, null, 2)
-                        bang = util.format(sat)
-                        if (sat == undefined) {
-                            bang = util.format(sul)
-                        }
-                        reply(bang)
-                    }
-                    try {
-                        reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
-                    } catch (e) {
-                        reply(String(e))
-                    }
-                }
-
                 if (budy.startsWith('=>')) {
                     if (!isSamu) return
                     try {
@@ -2354,32 +2377,20 @@ if (!isAdmins && !isSamu) return StickAdmin()
                         if (stdout) return reply(`${stdout}`)
                     })
                 }
-			if (budy.startsWith('<')) {
-				if (!isSamu) return
-          if (!budy.slice(2)) return
-
-          let _syntax = ''
-
-          let _return
-
-          let _text = `(async () => { ${budy.slice(2)} })()`
-
-          try {
-
-            _return = await eval(_text)
-
-          } catch (e) {
-
-            let err = await syntax(_text, 'Sistema De Ejecución')
-
-            if (err) _syntax = err + '\n\n'
-
-            _return = e
-
-          } finally {
-
-            reply(`${_syntax + util.format(_return)}`)
-
+		if (budy.startsWith('<')) {
+		if (!isSamu) return
+		if (!budy.slice(2)) return
+		  let _syntax = ''
+		  let _return
+		  let _text = `(async () => { ${budy.slice(2)} })()`
+		  try {
+		  _return = await eval(_text)
+	  } catch (e) {
+		  let err = await syntax(_text, 'Sistema De Ejecución')
+		    if (err) _syntax = err + '\n\n'
+		    _return = e
+	  } finally {
+		  reply(`${_syntax + util.format(_return)}`)
 	  }
 			}
                 if (isCmd && budy.toLowerCase() != undefined) {
