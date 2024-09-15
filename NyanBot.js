@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
-//const { auth } = require('./lib/firebaseConfig.js')
+const { auth } = require('./lib/firebaseConfig.js')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -714,19 +714,6 @@ list.push({
         val.message = msg
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
     }
-        //ANTI VIRUS
-if (isGroup && db.data.chats[m.chat].antivirtex) {
-if (budy.includes('๒๒๒๒') || budy.includes('ดุ') || budy.includes('ผิดุท้เึางืผิดุท้เึางื') || budy.includes('๑๑๑๑๑๑๑๑') || budy.includes('৭৭৭৭৭৭৭৭') || budy.includes('   ⃢   ⃢   ⃢  ') || budy.includes('*⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃟ᡃ⃟ᡃ⃟ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃟ᡃ⃟ᡃ⃟ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃢ᡃ⃟⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢ᡃ⃢⃟⃟ᡃ⃟ᡃ⃟ᡃ⃢ᡃ⃢ᡃ⃢⃟⃢⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟ᡃ⃟') || budy.includes('ผดิทุเ้ึางผืดิทุเ้') || budy.includes('.*࡞ࣰࣰࣰࣲࣲࣲࣲࣩࣩࣩࣩࣶࣶ࣯࣯࣮࣮ࣦ࣯ࣨࣨࣨࣻࣻࣻࣼࣼࣼࣽࣽࣾࣷࣵࣴ࣬࣬࣬ࣤࣤࣧࣧ*') || budy.includes('᥋') || budy.includes('؁') || budy.includes('ٯٯٯٯٯ') ) {
-if (isGroupAdmins) return reply('*VIRTEX DETECTED*')
-console.log(color('[KICK]', 'red'), color('Received a virus text!', 'yellow'))
-nyanBot2.sendText(m.chat, `*MARK AS READ*\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n *Virus sender here👇:* \nwa.me/${sender.split("@")[0]}`)   
-if (!isBotAdmins) return
-if(isSamu) return
-nyanBot2.groupParticipantsUpdate(from, [sender], 'remove')
-await nyanBot2.sendMessage(from, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-nyanBot2.sendMessage(`${ownernumber}@s.whatsapp.net`,{text: `Hi Owner! wa.me/${sender.split("@")[0]} Detected Having Sent Virtex ${isGroup?`in ${groupName}`:''}`})
- }
- }
  
  if (db.data.chats[m.chat].antibot) {
     if (m.isBaileys && m.fromMe == false){
@@ -1251,11 +1238,13 @@ case 'login': {
     const email = text;
 
     if (!email) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '📝', key: m}})
         return reply('Por favor, proporciona un correo electrónico para verificar si está registrado.');
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m}})
         return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
     }
 
@@ -1275,7 +1264,10 @@ case 'login': {
                 const replyMessage = `*Has iniciado sesión correctamente, tus datos son los siguientes:*
 
 Número de identificación de usuario: *${data.UID}*
-Nombre de usuario: *${data.User}*`;
+Nombre de usuario: *${data.User}*
+
+_*Ya puedes usar las funciones del bot que requieran registro!*_`;
+		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
                 reply(replyMessage);
             } else {
                 const buttons = [{
@@ -1293,7 +1285,10 @@ Nombre de usuario: *${data.User}*`;
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
-                    content: `> *El correo ingresado no está registrado!* 🥲\n\nPor favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙`,
+                    content: `> *El correo ingresado no está registrado!* 🥲
+		    
+      Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
+      - *Si te registras mediante WhatsApp ganaras 200 puntos!*`,
 	            media: './Media/theme/login.jpg'
                 });
             }
@@ -1320,24 +1315,6 @@ function isValidPassword(password) {
     // Verifica si cumple con todos los requisitos
     return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
 }
-    // firebaseConfig.js
-const { initializeApp } = require('firebase/app');
-const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
-
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
-    authDomain: "number-ac729.firebaseapp.com",
-    projectId: "number-ac729",
-    storageBucket: "number-ac729.appspot.com",
-    messagingSenderId: "36610055964",
-    appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
-    measurementId: "G-0BTNK7VNM3"
-};
-
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
         return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com contraseña nombreUsuario*`);
@@ -1388,7 +1365,7 @@ const auth = getAuth(app);
                 const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
                 reply(replyMessage);
             } else {
-                return createUserWithEmailAndPassword(auth, email, password)
+                return auth.createUserWithEmailAndPassword(email, password)
                     .then(userCredential => {
                         const user = userCredential.user;
                         const uid = user.uid;
@@ -1406,13 +1383,87 @@ const auth = getAuth(app);
         })
         .then(data => {
             if (data) {
-                const replyMessage = `Usuario registrado con éxito!\nEmail: ${data.Result}\nUID: ${data.UID}`;
-                reply(replyMessage);
+		const buttons = [{
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Iniciar sesión! 🔐',
+                        id: `%login ${data.Result}`
+                    }),
+                }, {
+                    name: "cta_url",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Ya puedes iniciar sesión en la página! 🏷',
+                        url: `https://samu330.com/login`,
+                        merchant_url: `https://samu330.com/login`
+                    }),
+                }];
+                sendReplyButton(m.chat, buttons, m, {
+                    content: `Usuario registrado con éxito!\n*Email: ${data.Result}*\n*UID: ${data.UID}*
+		    
+_*Felicidades, has ganado 200 puntos! 🎁*_
+
+_Para completar tu registro en el bot, solo da clic en el primer botón, y tu sesión se guardará en la base de datos._`
+                });
+		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
+		db.data.users[sender].limit += puntos
             }
         })
         .catch(error => {
             console.error('Error:', error);
             reply('Ocurrió un error durante el proceso de registro.');
+        });
+}
+break
+
+case 'reset': {
+    const args = text.split(' '); // Separar los argumentos por espacios
+    const email = args[0]; // Correo
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Verificar que el comando no tenga espacios entre el prefijo y el comando
+    if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
+        return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com*`);
+    }
+
+    // Validar que se haya proporcionado un texto
+    if (!text.trim()) {
+        return reply(`*Por favor ingresa el correo para restablecer la contraseña!*`);
+    }
+
+    // Validar que se haya proporcionado el correo electrónico
+    if (!email) {
+        return reply('*Por favor, introduce el correo electrónico registrado.*');
+    }
+
+    // Validar el formato del correo
+    if (!emailPattern.test(email)) {
+        return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
+    }
+
+    // Verificar si el correo está registrado
+    const verificationUrl = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
+
+    fetch(verificationUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.IsEmailRegistered) {
+                // Enviar el correo de restablecimiento de contraseña
+                return auth.sendPasswordResetEmail(email)
+                    .then(() => {
+                        reply(`*Se ha enviado un correo de restablecimiento de contraseña a ${email}. Por favor, revisa tu bandeja de entrada.*`);
+                    });
+            } else {
+                reply(`*El correo ${email} no está registrado.*`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            reply('Ocurrió un error durante el proceso de restablecimiento de contraseña.');
         });
 }
 break
@@ -1767,9 +1818,7 @@ if (isNaN(optionVid)) {
 }
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
 reply('> *Esperé un momento, se esta enviando su video...*')
-	reply(args[1])
 let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
-	reply(video)
       let caption = `> Yt MP4 📽\n`
       caption += `- *Titulo:* ${title}\n`
       caption += `- *Calidad:* ${quality}\n`
@@ -1777,7 +1826,7 @@ let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       caption += `> ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
 if (optionVid === 1) {
-        await nyanBot2.sendMessage(m.chat, {
+	await nyanbot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
