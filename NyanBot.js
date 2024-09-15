@@ -2152,9 +2152,6 @@ if (!isAdmins && !isSamu) return StickAdmin()
                     footStickers = Math.floor(Math.random() * footTiro.length)
                     let puntos = 0;
                     let msgFoot = 'Puntos Ganados:'
-                    if (!userPointsDB[sender]) {
-                        userPointsDB[sender] = 0;
-                    }
                     switch (footTiro[footStickers]){
                         case 'footPoste':
                             puntos = 0;
