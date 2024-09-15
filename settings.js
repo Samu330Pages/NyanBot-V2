@@ -37,11 +37,15 @@ global.adminevent = false //show promote/demote message
 global.groupevent = false //show update messages in group chat
 //msg
 global.mess = {
-	limit: '*Lo siento!* _pero al parecer ya no cuentas con puntos, porfavor verifica tus puntos con el comando:_ `[puntos]`',
-	nsfw: '𝗟𝗼 𝘀𝗶𝗲𝗻𝘁𝗼 𝗽𝗲𝗿𝗼 𝗻𝗼 𝗽𝘂𝗲𝗱𝗼 𝗲𝗷𝗲𝗰𝘂𝘁𝗮𝗿 𝗲𝘀𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼, 𝗲𝘀𝘁𝗲 𝗴𝗿𝘂𝗽𝗼 𝗻𝗼 𝗽𝗲𝗿𝗺𝗶𝘁𝗲 𝗰𝗼𝗻𝘁𝗲𝗻𝗶𝗱𝗼 +𝟭𝟴',
-    done: '✔️ 𝙎𝙐𝙎𝙎𝙀𝙎 ✔️',
-    error: 'Intentalo de nuevo mas tarde',
-    success: 'OK va ᶻ 𝗓 𐰁'
+group: '*Este comando solo puede usarse en grupos!*',
+adminBot: '*Este comando solo puede usarse si el bot es administrador del grupo!*',
+admin: '*Este comando solo puede usarse por algún administrador de grupo!*',
+bot: 'Este comando solo puede usarlo el bot',
+limit: '*Lo siento!* _pero al parecer ya no cuentas con puntos, porfavor verifica tus puntos con el comando:_ `[puntos]`',
+nsfw: '𝗟𝗼 𝘀𝗶𝗲𝗻𝘁𝗼 𝗽𝗲𝗿𝗼 𝗻𝗼 𝗽𝘂𝗲𝗱𝗼 𝗲𝗷𝗲𝗰𝘂𝘁𝗮𝗿 𝗲𝘀𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼, 𝗲𝘀𝘁𝗲 𝗴𝗿𝘂𝗽𝗼 𝗻𝗼 𝗽𝗲𝗿𝗺𝗶𝘁𝗲 𝗰𝗼𝗻𝘁𝗲𝗻𝗶𝗱𝗼 +𝟭𝟴',
+done: '✔️ 𝙎𝙐𝙎𝙎𝙀𝙎 ✔️',
+error: 'Intentalo de nuevo mas tarde',
+success: 'OK va ᶻ 𝗓 𐰁'
 }
 //thumbnail
 global.thumb = fs.readFileSync('./Media/theme/nyancat.jpg')
