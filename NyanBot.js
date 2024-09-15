@@ -169,29 +169,29 @@ settings: {},
 }
 
 let vote = db.data.others.vote = []
-let kuismath = db.data.game.math = []
+let quizmath = db.data.game.math = []
 
 //time
-const xtime = moment.tz('Asia/Kolkata').format('HH:mm:ss')
-const xdate = moment.tz('Asia/Kolkata').format('DD/MM/YYYY')
-const time2 = moment().tz('Asia/Kolkata').format('HH:mm:ss')  
+const time = moment.tz('America/Cancun').format('HH:mm:ss')
+const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
+const time2 = moment().tz('America/Cancun').format('HH:mm:ss')  
 if(time2 < "23:59:00"){
-var timeNow = `Good Night 🌌`
+var timeNow = `Buenas noches 🌌`
  }
  if(time2 < "19:00:00"){
-var timeNow = `Good Evening 🌃`
+var timeNow = `Buenas tardes 🌃`
  }
  if(time2 < "18:00:00"){
-var timeNow = `Good Evening 🌃`
+var timeNow = `Buenas tardes 🌃`
  }
  if(time2 < "15:00:00"){
-var timeNow = `Good Afternoon 🌅`
+var timeNow = `Buenas tardes 🌅`
  }
  if(time2 < "11:00:00"){
-var timeNow = `Good Morning 🌄`
+var timeNow = `Buenos dias 🌄`
  }
  if(time2 < "05:00:00"){
-var timeNow = `Good Morning 🌄`
+var timeNow = `Buenos dias 🌄`
  } 
 //function
 const reSize = async(buffer, ukur1, ukur2) => {
@@ -272,34 +272,9 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         //user status
         const isUser = verifieduser.includes(sender)
         const isSamu = [botNumber, ...owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-        const isPremium= isSamu || checkPremiumUser(m.sender, premium)
+        const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
-        
-        //theme sticker reply
-        const StickWait = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/wait.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
-        const StickAdmin = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/admin.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
-        const StickBotAdmin = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/botadmin.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
-        const StickOwner = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/owner.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
-        const StickGroup = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/group.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
-        const StickPrivate = () => {
-        let StikRep = fs.readFileSync('./Media/theme/sticker_reply/private.webp')
-        nyanBot2.sendMessage(from, { sticker: StikRep }, { quoted: m })
-        }
+
         //premium
         async function replyprem(teks) {
     reply(`This feature is for premium user, contact the owner to become premium user`)
@@ -323,31 +298,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                     quoted: m
                 });
         }
-            
-        let fstatus = { 
-            key: { 
-               fromMe: false, 
-               participant: `0@s.whatsapp.net`,  
-               ...(m.chat ? {  remoteJid: "status@broadcast"  } : {}) 
-            }, 
-               message: {  
-                  "imageMessage": { 
-                     "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", 
-                     "mimetype": "image/jpeg", 
-                     "caption": botname,
-                     "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", 
-                     "fileLength": "28777",
-                     "height": 1080,
-                     "width": 1079,
-                     "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=",
-                     "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=",
-                     "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69",
-                     "mediaKeyTimestamp": "1610993486",
-                     "jpegThumbnail": await reSize(thumb, 100, 100),
-                     "scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="
-                  }
-               }
-            }
             
             //Fake quoted 
         const fpay = { key: { remoteJid: '0@s.whatsapp.net', fromMe: false, id:global.botname, participant: '0@s.whatsapp.net'}, message: { requestPaymentMessage: { currencyCodeIso4217: "USD", amount1000: 999999999, requestFrom: '0@s.whatsapp.net', noteMessage: { extendedTextMessage: { text: global.botname}}, expiryTimestamp: 999999999, amount: { value: 91929291929, offset: 1000, currencyCode: "USD"}}}}
@@ -673,7 +623,7 @@ async function styletext(teks) {
             data2 = await axios(`https://api.telegram.org/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/getFile?file_id=${fileId}`)
             result = {
             status: 200,
-            author: 'DGXeon',
+            author: 'Samu330',
             url: "https://api.telegram.org/file/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/" + data2.data.result.file_path
             }
             NyanOnResult.push(result)
@@ -690,11 +640,11 @@ async function styletext(teks) {
         }
         async function resetLimit() {
             let users = Object.keys(global.db.data.users)
-            let Limitxeon = isPremium ? limit.prem : limit.free
+            let limite = isPremium ? limit.prem : limit.free
             for (let i of users) {
-               db.data.users[i].limit = Limitxeon
+               db.data.users[i].limit = limite
             }
-            nyanBot2.sendText('120363167338947238@g.us', { text: `Reset Limit`})
+            nyanBot2.sendText(m.chat, { text: `Reset Limit`})
         }
         // Grup Only
         if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygrub ) {
@@ -1056,13 +1006,13 @@ nyanBot2.ev.emit('messages.upsert', msg)
 }
 
 //math
-if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
+if (quizmath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
 	if (m.key.fromMe) return
             kuis = true
-            jawaban = kuismath[m.sender.split('@')[0]]
+            jawaban = quizmath[m.sender.split('@')[0]]
             if (budy.toLowerCase() == jawaban) {
                 await reply(`🎮 Math Quiz 🎮\n\nCorrect Answer 🎉\n\nWant To Play Again? Send ${prefix}math mode`)
-                delete kuismath[m.sender.split('@')[0]]
+                delete quizmath[m.sender.split('@')[0]]
             } else reply('*Wrong Answer!*')
         }
         
@@ -2317,6 +2267,7 @@ if (!isAdmins && !isSamu) return StickAdmin()
                             break
                     }
                     userPointsDB[sender] += puntos;
+                    db.data.users[sender].limit += puntos
                     saveDatabase(userPointsDB);
                     let amount1000 = puntos * 1000;
                     nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/bask/${baskTiro[baskStickers]}.webp`)}, { quoted: {
