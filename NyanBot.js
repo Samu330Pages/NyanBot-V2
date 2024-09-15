@@ -331,6 +331,7 @@ return arr[Math.floor(Math.random() * arr.length)]
             if (user) {
                 if (!isNumber(user.afkTime)) user.afkTime = -1
                 if (!('badword' in user)) user.badword = 0
+		if (!('register' in user)) user.register = false
                 if (!('title' in user)) user.title = ''
                 if (!('serialNumber' in user)) user.serialNumber = randomBytes(16).toString('hex') 
                 if (!('afkReason' in user)) user.afkReason = ''
