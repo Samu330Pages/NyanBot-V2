@@ -16,7 +16,6 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
-const { firebaseConfig } = require('./lib/firebaseConfig.js')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -1176,13 +1175,15 @@ case 'flow': {
 break
 case 'menu': {
     const categories = {
-        "> Descarga": ['play `SEARCH`', 'yta `LINK`', 'ytv `LINK`', 'tt `LINK`'],
-        "> Administración": ['actualizar', 'update'],
-        "> Stickers": ['addsticker', 'liststicker', 'delsticker'],
-	"> Grupos": ['anti']
+	"📝 Registro": ['login `CORREO`', 'reg `CORREO PASS USER` *+200 PUNTOS*', 'reset `CORREO`',
+        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta `LINK` *-30 PUNTOS*', 'ytv `LINK` *-30 PUNTOS*', 'tt `LINK` *-10 PUNTOS*'],
+	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
+	"🛠 Herramientas": ['sticker', 's', 'puntos'],
+        "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
     };
 
-    let menuMessage = '*Menú de Comandos*\n\n';
+    let nickName = nyanBot2.getName(sender);
+    let menuMessage = `${timeNow + nickName}\n_Hora actual: ${time}_\n_Fecha actual: ${date}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n*Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmd => {
@@ -1236,7 +1237,7 @@ case 'menu': {
 break
 case 'login': {
     const email = text;
-
+    if (db.data.users[sender].register === true) return reply('Tus datos de sesión ya están guardados, no es necesario volver a iniciar sesión. 😊')
     if (!email) {
 	nyanBot2.sendMessage(m.chat, {react: {text: '📝', key: m}})
         return reply('Por favor, proporciona un correo electrónico para verificar si está registrado.');
@@ -1288,8 +1289,8 @@ _*Ya puedes usar las funciones del bot que requieran registro!*_
                 sendReplyButton(m.chat, buttons, m, {
                     content: `> *El correo ingresado no está registrado!* 🥲
 		    
-      Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
-      - *Si te registras mediante WhatsApp ganaras 200 puntos!*`,
+Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
+- *Si te registras mediante WhatsApp ganaras 200 puntos!*`,
 	            media: './Media/theme/login.jpg'
                 });
             }
@@ -1417,7 +1418,7 @@ const auth = getAuth(app);
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
-                    content: `Usuario registrado con éxito!\n*Email: ${data.Result}*\n*UID: ${data.UID}*
+                    content: `Usuario registrado con éxito!\n\n*Email: ${data.Result}*\n*UID: ${data.UID}*
 		    
 _*Felicidades, has ganado 200 puntos! 🎁*_
 
@@ -1730,6 +1731,8 @@ break
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
 const r = await yts(text);
 
 if (!r || !r.videos || r.videos.length === 0) {
@@ -1778,6 +1781,7 @@ await sendReplyButton(m.chat, buttons, m, {
 
 > ${botname} by ${ownername}`
 })
+db.data.users[sender].limit -= 30
 }
 break
 case 'args': {
