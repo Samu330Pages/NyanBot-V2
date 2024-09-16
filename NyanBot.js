@@ -26,7 +26,7 @@ const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const { fbdl, ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
+const { igdl, fbdl, ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -1728,7 +1728,7 @@ break
 case 'facebook': case'fb': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de FaceBook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link del video de FaceBook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`)
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 let res = await fbdl(text);
 let result = res.data;
@@ -1759,6 +1759,42 @@ await nyanBot2.sendMessage(m.chat, {
             },
         }, { quoted: m });
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+db.data.users[sender].limit -= 20	
+}
+break
+
+case 'instagram': case'ig': {
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link del video de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/....`)
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+try {
+let res = await igdl(text);
+let data = await res.data;
+for (let i = 0; i < 20; i++) {
+let media = data[i];
+let videoIg = await fetchBuffer(meida.url);
+await nyanBot2.sendMessage(m.chat, {
+            video: videoIg,
+            fileName: nyanBot2.getName(sender) + '.mp4',
+	    caption: '> *Instagram Dl*',
+            mimetype: 'video/mp4',
+            contextInfo: {
+                externalAdReply: {
+                    title: nyanBot2.getName(sender),
+                    body: botname,
+                    thumbnail: '',
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: media,
+                }
+            },
+        }, { quoted: m });
+nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+         }
+} catch {
+         return reply('Ah ocurrido un error inesperado, por favor reportalo para darle solución!')
+      }
 db.data.users[sender].limit -= 20	
 }
 break
