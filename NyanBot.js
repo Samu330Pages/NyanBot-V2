@@ -628,13 +628,13 @@ async function styletext(teks) {
         // Grup Only
         if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygrub ) {
         	if (isCommand){
-            return reply(`Hello buddy! Because We Want to Reduce Spam, Please Use Bot in the Group Chat !\n\nIf you have issue please chat owner wa.me/${ownernumber}`)
+            return reply(`No está permitido el uso del bot en privado!!`)
             }
         }
         // Private Only
         if (!isSamu && db.data.settings[botNumber].onlypc && m.isGroup) {
         	if (isCommand){
-	         return reply("Hello buddy! if you want to use this bot, please chat the bot in private chat")
+	         return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!")
 	     }
 	}
 	     
@@ -651,46 +651,30 @@ async function styletext(teks) {
         }
         //auto set bio\\
 	if (db.data.settings[botNumber].autobio) {
-            nyanBot2.updateProfileStatus(`${botname} Have Been Running For ${runtime(process.uptime())}`).catch(_ => _)
+            nyanBot2.updateProfileStatus(`*${botname} Activo hace ${runtime(process.uptime())}*`).catch(_ => _)
         }
      //auto type record
         if (db.data.settings[botNumber].autorecordtype){
         if (isCommand) {
-            let xeonmix = ['composing', 'recording']
-            xeonmix2 = xeonmix[Math.floor(xeonmix.length * Math.random())]
-            nyanBot2.sendPresenceUpdate(xeonmix2, from)
+            let presenceMix = ['composing', 'recording']
+            nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+            nyanBot2.sendPresenceUpdate(nyanMix, from)
         }
         }
         if (db.data.settings[botNumber].autorecord){
         if (isCommand) {
-        	let xeonmix = ['recording']
-            xeonmix2 = xeonmix[Math.floor(xeonmix.length * Math.random())]
-            nyanBot2.sendPresenceUpdate(xeonmix2, from)
+        	let presenceMix = ['recording']
+            nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+            nyanBot2.sendPresenceUpdate(nyanMix, from)
         }
         }
         if (db.data.settings[botNumber].autotype){
         if (isCommand) {
-        	let xeonpos = ['composing']
-            nyanBot2.sendPresenceUpdate(xeonpos, from)
+        	let nyanComposing = ['composing']
+            nyanBot2.sendPresenceUpdate(nyanComposing, from)
         }
         }
         
-        //auto block number
-        if (m.sender.startsWith(`${autoblocknumber}`) && db.data.settings[botNumber].autoblocknum === true) {
-            return nyanBot2.updateBlockStatus(m.sender, 'block')
-        }
-        if (!m.sender.startsWith('91') && db.data.settings[botNumber].onlyindia === true) {
-            return nyanBot2.updateBlockStatus(m.sender, 'block')
-        }
-        if (!m.sender.startsWith('62') && db.data.settings[botNumber].onlyindo === true) {
-            return nyanBot2.updateBlockStatus(m.sender, 'block')
-        } 
-        if (!m.sender.startsWith(`${antiforeignnumber}`) && db.data.chats[m.chat].antiforeignnum === true){ 
-        	if (isSamu || isAdmins || !isBotAdmins) return
-            nyanBot2.sendMessage(m.chat, { text: `Sorry buddy! you will be removed because the group admin/owner has enabled anti foreign number, only +${antiforeignnumber} country code is allowed to join the group` }, {quoted: m})
-            await sleep(2000)
-            await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
-        }
         let list = []
 for (let i of owner) {
 list.push({
@@ -718,92 +702,12 @@ list.push({
     if (m.isBaileys && m.fromMe == false){
         if (isAdmin || !isBotAdmin){		  
         } else {
-          reply(`*Another Bot Detected*\n\nHusshhh Get away from this group!!!`)
+          reply(`*Epaaa! como es que hay otro bot aquí??*\n\nAdios! aqui no se permiten más bots!!`)
     return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
         }
     }
    }
  
-        //anti media
-        if (db.data.chats[m.chat].antimedia && isMedia) {
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Media Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-media for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-  }
-        if (db.data.chats[m.chat].image && isAntiMedia) {
-    if(isAntiMedia === "imageMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Image Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-image for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-        if (db.data.chats[m.chat].antivideo && isAntiMedia) {
-    if(isAntiMedia === "videoMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Video Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-video for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-        if (db.data.chats[m.chat].antisticker && isAntiMedia) {
-    if(isAntiMedia === "stickerMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Sticker Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-sticker for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-        if (db.data.chats[m.chat].antiaudio && isAntiMedia) {
-    if(isAntiMedia === "audioMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Audio Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-audio for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-       if (db.data.chats[m.chat].antipoll && isAntiMedia) {
-    if(isAntiMedia === "pollCreationMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Poll Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-poll for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-       if (db.data.chats[m.chat].antilocation && isAntiMedia) {
-    if(isAntiMedia === "locationMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Location Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-location for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-       if (db.data.chats[m.chat].antidocument && isAntiMedia) {
-    if(isAntiMedia === "documentMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Document Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-document for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
-      if (db.data.chats[m.chat].anticontact && isAntiMedia) {
-    if(isAntiMedia === "contactMessage"){
-        if (isSamu || isAdmins || !isBotAdmins){		  
-        } else {
-          reply(`\`\`\`「 Contact Detected 」\`\`\`\n\nSorry, but I have to delete it, because the admin/owner has activated anti-contact for this group`)
-    return nyanBot2.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-        }
-    }
-  }
         //respond
         if (db.data.chats[m.chat].badword) {
             for (let bak of bad) {
@@ -818,7 +722,7 @@ list.push({
 			            participant: m.key.participant
 			        }
 			    })
-			nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} was using harsh words and his chat has been deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
+			nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
                }
             }
         }
@@ -836,30 +740,12 @@ list.push({
             }
         }
         
-        if (db.data.chats[m.chat].antilinkgc) {
-            if (budy.match(`chat.whatsapp.com`)) {
-               bvl = `\`\`\`「 GC Link Detected 」\`\`\`\n\nAdmin has sent a gc link, admin is free to send any link😇`
-if (isAdmins) return reply(bvl)
-if (m.key.fromMe) return reply(bvl)
-if (isSamu) return reply(bvl)
-               await nyanBot2.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			nyanBot2.sendMessage(from, {text:`\`\`\`「 GC Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-            }
-        }
+
         if (db.data.chats[m.chat].antilink) {
-            if (budy.match('http') && budy.match('https')) {
-               bvl = `\`\`\`「 Link Detected 」\`\`\`\n\nAdmin has sent a link, admin is free to send any link😇`
-if (isAdmins) return reply(bvl)
-if (m.key.fromMe) return reply(bvl)
-if (isSamu) return reply(bvl)
+            if (budy.match('http') && budy.match('https') && budy.match(`chat.whatsapp.com`) {
+if (isAdmins) return
+if (m.key.fromMe) return
+if (isSamu) return
                await nyanBot2.sendMessage(m.chat,
 			    {
 			        delete: {
@@ -869,7 +755,7 @@ if (isSamu) return reply(bvl)
 			            participant: m.key.participant
 			        }
 			    })
-			nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} has sent a link and successfully deleted`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
+			nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
             }
         }
         //afk
@@ -895,31 +781,6 @@ const xeonfeature = () =>{
             var numUpper = (mytext.match(/case '/g) || []).length
             return numUpper
         }
-        //autoreply
-for (let BhosdikaXeon of VoiceNoteNyan) {
-if (budy === BhosdikaXeon) {
-let audiobuffy = fs.readFileSync(`./Media/audio/${BhosdikaXeon}.mp3`)
-nyanBot2.sendMessage(m.chat, { audio: audiobuffy, mimetype: 'audio/mp4', ptt: true }, { quoted: m })     
-}
-}
-for (let BhosdikaXeon of Stickers){
-if (budy === BhosdikaXeon){
-let stickerbuffy = fs.readFileSync(`./Media/sticker/${BhosdikaXeon}.webp`)
-nyanBot2.sendMessage(m.chat, { sticker: stickerbuffy }, { quoted: m })
-}
-}
-for (let BhosdikaXeon of ImageNyan){
-if (budy === BhosdikaXeon){
-let imagebuffy = fs.readFileSync(`./Media/image/${BhosdikaXeon}.jpg`)
-nyanBot2.sendMessage(m.chat, { image: imagebuffy }, { quoted: m })
-}
-}
-for (let BhosdikaXeon of VideoNyan){
-if (budy === BhosdikaXeon){
-let videobuffy = fs.readFileSync(`./Media/video/${BhosdikaXeon}.mp4`)
-nyanBot2.sendMessage(m.chat, { video: videobuffy }, { quoted: m })
-}
-}
 
 const sendapk = (teks) => {
 nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/vnd.android.package-archive'}, {quoted:m})
@@ -1177,7 +1038,7 @@ case 'menu': {
 	nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`'],
-        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*'],
+        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
 	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
@@ -1773,7 +1634,7 @@ let res = await igdl(text);
 let data = await res.data;
 for (let i = 0; i < 20; i++) {
 let media = data[i];
-let videoIg = await fetchBuffer(meida.url);
+let videoIg = await fetchBuffer(media.url);
 await nyanBot2.sendMessage(m.chat, {
             video: videoIg,
             fileName: nyanBot2.getName(sender) + '.mp4',
@@ -1783,7 +1644,7 @@ await nyanBot2.sendMessage(m.chat, {
                 externalAdReply: {
                     title: nyanBot2.getName(sender),
                     body: botname,
-                    thumbnail: '',
+                    thumbnail: await fetchBuffer(data.thumbnail),
                     sourceUrl: 'https://wa.me/samu330',
                     mediaType: 2,
                     mediaUrl: media,
@@ -2065,6 +1926,66 @@ break
                         reply(`Sé ha eliminado el sticker ${q}`)
                         }
                         break
+
+case 'ping': case 'botstatus': case 'statusbot': case 'p': {
+	const used = process.memoryUsage()
+                const cpus = os.cpus().map(cpu => {
+                    cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
+			        return cpu
+                })
+                const cpu = cpus.reduce((last, cpu, _, { length }) => {
+                    last.total += cpu.total
+                    last.speed += cpu.speed / length
+                    last.times.user += cpu.times.user
+                    last.times.nice += cpu.times.nice
+                    last.times.sys += cpu.times.sys
+                    last.times.idle += cpu.times.idle
+                    last.times.irq += cpu.times.irq
+                    return last
+                }, {
+                    speed: 0,
+                    total: 0,
+                    times: {
+			            user: 0,
+			            nice: 0,
+			            sys: 0,
+			            idle: 0,
+			            irq: 0
+                }
+                })
+                let timestamp = speed()
+                let latensi = speed() - timestamp
+                neww = performance.now()
+                oldd = performance.now()
+                respon = `
+Velocidad de respuesta ${latensi.toFixed(4)} _Segundos_ \n ${oldd - neww} _Milisegundos_\n\nRuntime : ${runtime(process.uptime())}
+
+💻 Info Server
+RAM: ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
+
+_NodeJS Memory Usaage_
+${Object.keys(used).map((key, _, arr) => `${key.padEnd(Math.max(...arr.map(v=>v.length)),' ')}: ${formatp(used[key])}`).join('\n')}
+
+${cpus[0] ? `_Total CPU Usage_
+${cpus[0].model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}
+_CPU Core(s) Usage (${cpus.length} Core CPU)_
+${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}` : ''}
+                `.trim()
+	nyanBot2.relayMessage(m.chat,  {
+        requestPaymentMessage: {
+          currencyCodeIso4217: 'INR',
+          amount1000: 999999999,
+          requestFrom: m.sender,
+          noteMessage: {
+          extendedTextMessage: {
+          text: respon,
+          contextInfo: {
+          externalAdReply: {
+          showAdAttribution: true
+          }}}}}}, {})
+    }
+	
+	break
 
             default:
                 if (budy == '🎯') {
