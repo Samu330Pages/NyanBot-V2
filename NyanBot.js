@@ -413,8 +413,6 @@ return arr[Math.floor(Math.random() * arr.length)]
                autobio: false,
                autoread: false,
                autoblocknum: false,
-               onlyindia: false,
-               onlyindo: false,
                onlygrub: false,
                onlypc: false,
                autorecordtype: false,
@@ -1098,12 +1096,26 @@ case 'menu': {
     }
 }
 break
+case 'lg': {
+if (!text === sender) return reply('*¡Esta opción no te corresponde!*')
+db.data.users[sender].register = false)
+reply('*Tu sesión sé ha cerrado!*')
+nyanBot2.sendMessage(m.chat, {react: {text: '💔', key: m.key}})
+}
+break
 case 'logout': {
 if (db.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
-if (!sender) return
-db.data.users[sender].register = false
-nyanBot2.sendMessage(m.chat, {react: {text: '⚙', key: m.key}})
-reply('*Tu sesión sé ha cerrado!*')
+nyanBot2.sendMessage(m.chat, {react: {text: '😫', key: m.key}})
+const buttons = [{
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Si',
+                        id: `%lg ${senser}`
+                    }),
+                }];
+                sendReplyButton(m.chat, buttons, m, {
+                    content: `*Estás seguro que deseas cerrar tu sesión en el bot?* ⚠`
+                });
 }
 break
 case 'login': {
@@ -1632,8 +1644,8 @@ await nyanBot2.sendMessage(m.chat, {
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 db.data.users[sender].limit -= 20
 } catch {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
          return reply('Ah ocurrido un error inesperado, por favor reportalo para darle solución!')
-	 nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
       }
 }
 break
@@ -1648,16 +1660,16 @@ let res = await igdl(text);
 let data = await res.data;
 let videoIg = await fetchBuffer(data.url);
 	await nyanBot2.sendMessage(m.chat, {
-            video: videoIg,
-            fileName: nyanBot2.getName(sender) + '.mp4',
-	    caption: '> *Instagram Dl*',
-            mimetype: 'video/mp4'
+		video: videoIg,
+		fileName: nyanBot2.getName(sender) + '.mp4',
+		caption: '> *Instagram Dl*',
+		mimetype: 'video/mp4'
         }, { quoted: m });
 db.data.users[sender].limit -= 20
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 } catch (err) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
          return reply(`Ah ocurrido un error inesperado, por favor reportalo para darle solución!\n${err}`)
-	 nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
       }
 }
 break
@@ -1700,8 +1712,8 @@ let videoTt = await fetchBuffer(video);
 	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 db.data.users[sender].limit -= 10
 } catch {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
          return reply('Ah ocurrido un error inesperado, por favor reportalo para darle solución!')
-	 nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
       }
 }
 break
