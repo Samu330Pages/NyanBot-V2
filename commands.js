@@ -1,4 +1,199 @@
-            case 'addbadword': case 'addbd':
+            case 'play3': case 'song': {
+                if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
+            
+                try {
+			await loading()
+                    const r = await yts(text);
+            
+                    if (!r || !r.videos || r.videos.length === 0) {
+                        return reply("No se encontraron videos para esa búsqueda.");
+                    }
+            
+                    const video = r.videos[0];
+                    const videoId = video.videoId;
+            
+                    const rapiInstance = new Rapi();
+                    const videoData = await rapiInstance.fetchVideoData(videoId); // Obtener datos de la API
+            
+                    // Obtener los datos necesarios
+                    const title = videoData.title; // Título del video
+                    const channel = videoData.channelTitle; // Canal del video
+                    const lengthSeconds = videoData.lengthSeconds; // Duración en segundos
+                    const views = videoData.viewCount ? videoData.viewCount : "No disponible"; // Cantidad de vistas
+                    const publishDate = new Date(videoData.publishDate); // Fecha de publicación
+                    const category = videoData.category; // Categoría del video
+                    const thumbnail = videoData.thumbnail[1].url; // Obtener la segunda imagen del thumbnail
+            
+                    // Obtener la calidad, tamaño y URL directamente de la respuesta de la API
+                    const formatData = videoData.formats[0]; // Tomar el primer formato como ejemplo
+                    const quality = formatData.qualityLabel; // Calidad
+                    const size = formatData.contentLength; // Tamaño
+                    const url = formatData.url; // URL de descarga
+            
+                    // Formatear la duración a minutos y segundos
+                    const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`; // Duración formateada
+            
+                    // Formatear la fecha a una cadena legible
+                    const formattedDate = publishDate.toLocaleDateString("es-ES", {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+            
+                    // Crear la respuesta formateada
+const formattedResponse = `*Título:* ${title}
+*Canal:* ${channel}
+*Duración:* ${formattedDuration}
+*Calidad:* ${quality}
+*Tamaño:* ${size} bytes
+*Vistas:* ${views.toLocaleString()} vistas
+*Fecha de Publicación:* ${formattedDate}
+*Categoría:* ${category}
+${url}`;
+            
+reply(formattedResponse); // Enviar la respuesta formateada
+let audioYt = await fetchBuffer(url)
+let audio = await toAudio(audioYt, 'mp4')
+await nyanBot2.sendMessage(m.chat,{
+    audio: audio,
+    fileName: title + '.mp3',
+    mimetype: 'audio/mp4', ptt: true,
+    contextInfo:{
+        externalAdReply:{
+            title:title,
+            body: botname,
+            thumbnail: await fetchBuffer(thumbnail),
+            sourceUrl: 'https://wa.me/samu330',
+            mediaType:2,
+            mediaUrl:url,
+        }
+
+    },
+},{quoted:m})
+                } catch (e) {
+                    reply(`Error: ${e.message}`);
+                }
+            }
+            break
+
+case 'play2': {
+    if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
+
+    try {
+        await loading();
+        const r = await yts(text);
+
+        if (!r || !r.videos || r.videos.length === 0) {
+            return reply("No se encontraron videos para esa búsqueda.");
+        }
+
+        const video = r.videos[0];
+        const videoId = video.videoId;
+
+        const rapiInstance = new Rapi();
+        const videoData = await rapiInstance.fetchVideoData(videoId);
+
+        // Agregar registro para depuración
+        console.log('videoData:', JSON.stringify(videoData, null, 2));
+
+        // Verificar que videoData exista
+        if (!videoData) {
+            return reply("No se encontró información del video.");
+        }
+
+        // Combinar formatos y formatos adaptativos
+        const allFormats = [...(videoData.formats || []), ...(videoData.adaptiveFormats || [])];
+
+        // Filtrar los formatos de audio
+        const audioFormats = allFormats.filter(format => format.mimeType.includes('audio/mp4'));
+        
+        // Verificar que se encontraron formatos de audio
+        if (audioFormats.length === 0) {
+		return reply('No se encontraron formatos!')
+        }
+
+        // Elegir el mejor formato de audio (priorizando calidad y bitrate)
+        const bestAudioFormat = audioFormats.reduce((prev, curr) => {
+            return (prev.bitrate > curr.bitrate) ? prev : curr;
+        });
+
+        const title = videoData.title;
+        const channel = videoData.channelTitle;
+        const lengthSeconds = videoData.lengthSeconds;
+        const views = videoData.viewCount;
+        const publishDate = new Date(videoData.publishDate);
+        const thumbnail = videoData.thumbnail[1].url;
+        
+        // Obtener datos del formato de audio
+        const quality = bestAudioFormat.quality;
+	const mimetype = bestAudioFormat.mimeType;
+        const size = formatBytes(bestAudioFormat.contentLength);
+        const url = bestAudioFormat.url || "URL no disponible"; // Manejar caso de URL no disponible
+
+        const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
+        const formattedDate = publishDate.toLocaleDateString("es-ES", {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        const formattedResponse = `*Título:* ${title}
+*Canal:* ${channel}
+*Duración:* ${formattedDuration}
+*Calidad:* ${quality}
+*MimeType:* ${mimetype}
+*Tamaño:* ${size}
+*Vistas:* ${views} vistas
+*Fecha de Publicación:* ${formattedDate}`;
+await nyanBot2.sendMessage(m.chat, {
+            text: formattedResponse,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: url,
+                }
+            },
+        }, { quoted: m });
+
+        // Enviar el audio
+        let audioYt = await fetchBuffer(url);
+        await nyanBot2.sendMessage(m.chat, {
+            audio: audioYt,
+            fileName: title + '.mp3',
+            mimetype: 'audio/mp4', ptt: true,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: url,
+                }
+            },
+        }, { quoted: m });
+
+    } catch (e) {
+	const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Forzar descarga! 🪄',
+            id: `%ytmp3 ${video.url}`
+          }),
+        }]
+await sendReplyButton(m.from, buttons, m, {
+	content: `> *⚠️ Video con restricción!.*\n\n_*No se puede descargar el audio por restricciones, para poder descargar el audio por favor oprime el botón.*`
+}, { quoted: m })
+}
+}
+break
+
+
+case 'addbadword': case 'addbd':
                if (!isSamu) return StickOwner()
                if (!groupAdmins) return reply(mess.admin)
                if (args.length < 1) return reply( `Send command ${prefix}addbadword [harsh word]. Example ${prefix}addbadword asshole`)
