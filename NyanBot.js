@@ -26,7 +26,7 @@ const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const { ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
+const { fbdl, ttdl, ytmp3v3, ytmp4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -1174,9 +1174,10 @@ case 'flow': {
 }
 break
 case 'menu': {
+	nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`'],
-        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta `LINK` *-30 PUNTOS*', 'ytv `LINK` *-30 PUNTOS*', 'tiktok `LINK` *-10 PUNTOS*'],
+        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*'],
 	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
@@ -1217,7 +1218,7 @@ case 'menu': {
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
                                 "name": "cta_url",
-                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2🌮\",\"url\":\"https://samu330.com/login\"}`
+                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
                             }],
                         }),
                         contextInfo: {
@@ -1240,13 +1241,13 @@ case 'login': {
     const email = text;
     if (db.data.users[sender].register === true) return reply('Tus datos de sesión ya están guardados, no es necesario volver a iniciar sesión. 😊')
     if (!email) {
-	nyanBot2.sendMessage(m.chat, {react: {text: '📝', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '📝', key: m.key}})
         return reply('Por favor, proporciona un correo electrónico para verificar si está registrado.');
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
         return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
     }
 
@@ -1270,7 +1271,7 @@ Nombre de usuario: *${data.User}*
 
 _*Ya puedes usar las funciones del bot que requieran registro!*_
 > En dado caso que requieras restablecer tu contraseña, puedes usar el comando ${prefix}reset, o bien, restablecer tu contraseña desde la página.`;
-		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
+		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m.key}})
                 reply(replyMessage);
             } else {
                 const buttons = [{
@@ -1310,13 +1311,12 @@ case 'reg': {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function isValidPassword(password) {
     const minLength = 8; // Longitud mínima
-    const hasUpperCase = /[A-Z]/.test(password); // Al menos una letra mayúscula
     const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
     const hasNumbers = /\d/.test(password); // Al menos un número
     const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
 
     // Verifica si cumple con todos los requisitos
-    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+    return password.length >= minLength && && hasLowerCase && hasNumbers && hasSpecialChars;
 }
     // firebaseConfig.js
 const { initializeApp } = require('firebase/app');
@@ -1348,7 +1348,7 @@ const auth = getAuth(app);
 
     // Validar que se haya proporcionado un texto
     if (!text.trim()) {
-        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*`);
+        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*\n*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*`);
     }
 
     // Validar que se hayan proporcionado todos los argumentos necesarios
@@ -1368,7 +1368,7 @@ const auth = getAuth(app);
 
     // Validar la contraseña
     if (!isValidPassword(password)) {
-        return reply('*La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una letra minúscula, un número y un carácter especial.*');
+        return reply('*La contraseña debe tener al menos 8 caracteres, incluir un número y un carácter especial.*');
     }
 
     // Verificar si el correo ya está registrado
@@ -1383,8 +1383,19 @@ const auth = getAuth(app);
         })
         .then(data => {
             if (data.IsEmailRegistered) {
-                const replyMessage = `El correo ya está registrado.\nNombre de usuario: ${data.User}\nUID: ${data.UID}`;
-                reply(replyMessage);
+		const buttons = [{
+                    name: "quick_reply",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Iniciar sesión! 🔐',
+                        id: `%login ${data.Result}`
+                    }),
+                }];
+                sendReplyButton(m.chat, buttons, m, {
+                    content: `*El correo ingresado ya está registrado.*\n\n_Nombre de usuario:_ ${data.User}\n_UID:_ ${data.UID}
+		    
+*Si deseas puedes iniciar sesión con el correo que proporcionaste, solo toca el botón de abajo!*`
+                });
+		nyanBot2.sendMessage(m.chat, {react: {text: '⚠', key: m.key}})
             } else {
                 return createUserWithEmailAndPassword(auth, email, password)
                     .then(userCredential => {
@@ -1425,7 +1436,7 @@ _*Felicidades, has ganado 200 puntos! 🎁*_
 
 _Para completar tu registro en el bot, solo da clic en el primer botón, y tu sesión se guardará en la base de datos._`
                 });
-		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m}})
+		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m.key}})
 		db.data.users[sender].limit += 200
             }
         })
@@ -1492,6 +1503,7 @@ const auth = getAuth(app); // Obtiene la instancia de autenticación
                 return sendPasswordResetEmail(auth, email)
                     .then(() => {
                         reply(`*Se ha enviado un correo de restablecimiento de contraseña a ${email}. Por favor, revisa tu bandeja de entrada.*`);
+			nyanBot2.sendMessage(m.chat, {react: {text: '💌', key: m.key}})
                     });
             } else {
                 reply(`*El correo ${email} no está registrado.*`);
@@ -1513,7 +1525,7 @@ case 'test':
             }),
         },
         {
-            name: "cta_web",
+            name: "cta_url",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Menu',
                 url: 'https://wa.me/samu330'
@@ -1535,200 +1547,6 @@ case 'test':
     });
     break
 
-            case 'play3': case 'song': {
-                if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
-            
-                try {
-			await loading()
-                    const r = await yts(text);
-            
-                    if (!r || !r.videos || r.videos.length === 0) {
-                        return reply("No se encontraron videos para esa búsqueda.");
-                    }
-            
-                    const video = r.videos[0];
-                    const videoId = video.videoId;
-            
-                    const rapiInstance = new Rapi();
-                    const videoData = await rapiInstance.fetchVideoData(videoId); // Obtener datos de la API
-            
-                    // Obtener los datos necesarios
-                    const title = videoData.title; // Título del video
-                    const channel = videoData.channelTitle; // Canal del video
-                    const lengthSeconds = videoData.lengthSeconds; // Duración en segundos
-                    const views = videoData.viewCount ? videoData.viewCount : "No disponible"; // Cantidad de vistas
-                    const publishDate = new Date(videoData.publishDate); // Fecha de publicación
-                    const category = videoData.category; // Categoría del video
-                    const thumbnail = videoData.thumbnail[1].url; // Obtener la segunda imagen del thumbnail
-            
-                    // Obtener la calidad, tamaño y URL directamente de la respuesta de la API
-                    const formatData = videoData.formats[0]; // Tomar el primer formato como ejemplo
-                    const quality = formatData.qualityLabel; // Calidad
-                    const size = formatData.contentLength; // Tamaño
-                    const url = formatData.url; // URL de descarga
-            
-                    // Formatear la duración a minutos y segundos
-                    const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`; // Duración formateada
-            
-                    // Formatear la fecha a una cadena legible
-                    const formattedDate = publishDate.toLocaleDateString("es-ES", {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-            
-                    // Crear la respuesta formateada
-const formattedResponse = `*Título:* ${title}
-*Canal:* ${channel}
-*Duración:* ${formattedDuration}
-*Calidad:* ${quality}
-*Tamaño:* ${size} bytes
-*Vistas:* ${views.toLocaleString()} vistas
-*Fecha de Publicación:* ${formattedDate}
-*Categoría:* ${category}
-${url}`;
-            
-reply(formattedResponse); // Enviar la respuesta formateada
-let audioYt = await fetchBuffer(url)
-let audio = await toAudio(audioYt, 'mp4')
-await nyanBot2.sendMessage(m.chat,{
-    audio: audio,
-    fileName: title + '.mp3',
-    mimetype: 'audio/mp4', ptt: true,
-    contextInfo:{
-        externalAdReply:{
-            title:title,
-            body: botname,
-            thumbnail: await fetchBuffer(thumbnail),
-            sourceUrl: 'https://wa.me/samu330',
-            mediaType:2,
-            mediaUrl:url,
-        }
-
-    },
-},{quoted:m})
-                } catch (e) {
-                    reply(`Error: ${e.message}`);
-                }
-            }
-            break
-
-case 'play2': {
-    if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
-
-    try {
-        await loading();
-        const r = await yts(text);
-
-        if (!r || !r.videos || r.videos.length === 0) {
-            return reply("No se encontraron videos para esa búsqueda.");
-        }
-
-        const video = r.videos[0];
-        const videoId = video.videoId;
-
-        const rapiInstance = new Rapi();
-        const videoData = await rapiInstance.fetchVideoData(videoId);
-
-        // Agregar registro para depuración
-        console.log('videoData:', JSON.stringify(videoData, null, 2));
-
-        // Verificar que videoData exista
-        if (!videoData) {
-            return reply("No se encontró información del video.");
-        }
-
-        // Combinar formatos y formatos adaptativos
-        const allFormats = [...(videoData.formats || []), ...(videoData.adaptiveFormats || [])];
-
-        // Filtrar los formatos de audio
-        const audioFormats = allFormats.filter(format => format.mimeType.includes('audio/mp4'));
-        
-        // Verificar que se encontraron formatos de audio
-        if (audioFormats.length === 0) {
-		return reply('No se encontraron formatos!')
-        }
-
-        // Elegir el mejor formato de audio (priorizando calidad y bitrate)
-        const bestAudioFormat = audioFormats.reduce((prev, curr) => {
-            return (prev.bitrate > curr.bitrate) ? prev : curr;
-        });
-
-        const title = videoData.title;
-        const channel = videoData.channelTitle;
-        const lengthSeconds = videoData.lengthSeconds;
-        const views = videoData.viewCount;
-        const publishDate = new Date(videoData.publishDate);
-        const thumbnail = videoData.thumbnail[1].url;
-        
-        // Obtener datos del formato de audio
-        const quality = bestAudioFormat.quality;
-	const mimetype = bestAudioFormat.mimeType;
-        const size = formatBytes(bestAudioFormat.contentLength);
-        const url = bestAudioFormat.url || "URL no disponible"; // Manejar caso de URL no disponible
-
-        const formattedDuration = `${Math.floor(lengthSeconds / 60)}:${(lengthSeconds % 60).toString().padStart(2, '0')}`;
-        const formattedDate = publishDate.toLocaleDateString("es-ES", {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-        const formattedResponse = `*Título:* ${title}
-*Canal:* ${channel}
-*Duración:* ${formattedDuration}
-*Calidad:* ${quality}
-*MimeType:* ${mimetype}
-*Tamaño:* ${size}
-*Vistas:* ${views} vistas
-*Fecha de Publicación:* ${formattedDate}`;
-await nyanBot2.sendMessage(m.chat, {
-            text: formattedResponse,
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: await fetchBuffer(thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: url,
-                }
-            },
-        }, { quoted: m });
-
-        // Enviar el audio
-        let audioYt = await fetchBuffer(url);
-        await nyanBot2.sendMessage(m.chat, {
-            audio: audioYt,
-            fileName: title + '.mp3',
-            mimetype: 'audio/mp4', ptt: true,
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: await fetchBuffer(thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: url,
-                }
-            },
-        }, { quoted: m });
-
-    } catch (e) {
-	const buttons = [{
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Forzar descarga! 🪄',
-            id: `%ytmp3 ${video.url}`
-          }),
-        }]
-await sendReplyButton(m.from, buttons, m, {
-	content: `> *⚠️ Video con restricción!.*\n\n_*No se puede descargar el audio por restricciones, para poder descargar el audio por favor oprime el botón.*`
-}, { quoted: m })
-}
-}
-break
-
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
@@ -1739,7 +1557,7 @@ const r = await yts(text);
 if (!r || !r.videos || r.videos.length === 0) {
 return reply("No se encontraron videos para esa búsqueda.");
 }
-
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 const video = r.videos[0];
 const buttons = [{
           name: "quick_reply",
@@ -1821,7 +1639,7 @@ const primerArg = parseInt(args[0], 10);
 if (isNaN(primerArg)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
 }
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 reply('> *Esperé un momento, se esta enviando su audio...*')
 let { title, audio, thumbnail } = await ytmp3v3(args[1]);
 let audioYt = await fetchBuffer(audio);
@@ -1831,7 +1649,7 @@ if (primerArg === 1) {
             fileName: title + '.mp3',
             mimetype: 'audio/mpeg',
         }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 
 } else if (primerArg === 2) {
         await nyanBot2.sendMessage(m.chat, {
@@ -1839,7 +1657,7 @@ if (primerArg === 1) {
             fileName: title + '.mp3',
 	    mimetype: 'aidio/mpeg'
         }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 
 } else {
 	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
@@ -1855,7 +1673,7 @@ const optionVid = parseInt(args[0], 10);
 if (isNaN(optionVid)) {
         return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el video en formato MP4, la opción 2 descarga el video en documento.*`);
 }
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 reply('> *Esperé un momento, se esta enviando su video...*')
 let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
       let caption = `> Yt MP4 📽\n`
@@ -1881,7 +1699,7 @@ if (optionVid === 1) {
                 }
             },
         }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 } else if (optionVid === 2) {
 	await nyanBot2.sendMessage(m.chat, {
 	    document: videoYt,
@@ -1899,11 +1717,49 @@ if (optionVid === 1) {
                 }
             },
         }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 } else {
 	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
 }
 db.data.users[sender].limit -= 30
+}
+break
+
+case 'facebook': case'fb': {
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de FaceBook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`)
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+let res = await fbdl(text);
+let result = res.data;
+let data;
+try {
+         data = result.find(i => i.resolution === "720p (HD)");
+         reply('Se está enviando el video en resolución HD, espera un momento...')
+} catch {
+         reply('No se pudo obtener resolución HD, se está enviando el video en SD...')
+         data = result.find(i => i.resolution === "360p (SD)")
+}
+let video = data.url
+let videoFb = await fetchBuffer(video);
+await nyanBot2.sendMessage(m.chat, {
+            video: videoFb,
+            fileName: nyanBot2.getName(sender) + '.mp4',
+	    caption: '> *FaceBook Dl*',
+            mimetype: 'video/mp4',
+            contextInfo: {
+                externalAdReply: {
+                    title: nyanBot2.getName(sender),
+                    body: botname,
+                    thumbnail: await fetchBuffer(profilePicture),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            },
+        }, { quoted: m });
+nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+db.data.users[sender].limit -= 20	
 }
 break
 
@@ -1924,7 +1780,7 @@ if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n
       caption += `- *Duración:* ${duration}\n\n`
       caption += `> ${botname} by ${ownername}`
 let videoTt = await fetchBuffer(video);
-	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
             fileName: title + '.mp4',
@@ -1941,13 +1797,13 @@ let videoTt = await fetchBuffer(video);
                 }
             },
         }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m}})
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 db.data.users[sender].limit -= 10
 }
 break
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos.`)
-		nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m}})
+		nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
                 if (/image/.test(mime)) {
                 let media = await quoted.download()
                 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
