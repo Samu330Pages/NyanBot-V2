@@ -1098,7 +1098,7 @@ case 'menu': {
     }
 }
 break
-case 'logout' {
+case 'logout': {
 if (db.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
 if (!sender) return
 db.data.users[sender].register = false
