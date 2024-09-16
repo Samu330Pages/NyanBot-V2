@@ -1751,7 +1751,7 @@ await nyanBot2.sendMessage(m.chat, {
                 externalAdReply: {
                     title: nyanBot2.getName(sender),
                     body: botname,
-                    thumbnail: await fetchBuffer(profilePicture),
+                    thumbnail: '',
                     sourceUrl: 'https://wa.me/samu330',
                     mediaType: 2,
                     mediaUrl: video,
