@@ -742,7 +742,7 @@ list.push({
         
 
         if (db.data.chats[m.chat].antilink) {
-            if (budy.match('http') && budy.match('https') && budy.match(`chat.whatsapp.com`) {
+            if (budy.match('http') && budy.match('https') && budy.match(`chat.whatsapp.com`)) {
 if (isAdmins) return
 if (m.key.fromMe) return
 if (isSamu) return
