@@ -1316,7 +1316,7 @@ function isValidPassword(password) {
     const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
 
     // Verifica si cumple con todos los requisitos
-    return password.length >= minLength && && hasLowerCase && hasNumbers && hasSpecialChars;
+    return password.length >= minLength && hasLowerCase && hasNumbers && hasSpecialChars;
 }
     // firebaseConfig.js
 const { initializeApp } = require('firebase/app');
