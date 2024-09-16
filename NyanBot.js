@@ -533,6 +533,9 @@ async function sendReplyButton(chatId, buttons, message, options) {
             mentionedJid: [m.sender],
             forwardingScore: 999,
             isForwarded: true,
+	    businessMessageForwardInfo: {
+			businessOwnerJid: nyanBot2.user.jid
+		}
         }
     })
 
@@ -1189,7 +1192,7 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
 break
 case 'reg': {
 if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
-if (!m.isGroup) return reply('*Para continuar con tu registro, por favor ve a chat privado con el bot, ya que se te pedirá la creación de una contraseña privada!*')
+if (!isGroup) return reply('*Para continuar con tu registro, por favor ve a chat privado con el bot, ya que se te pedirá la creación de una contraseña privada!*')
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
