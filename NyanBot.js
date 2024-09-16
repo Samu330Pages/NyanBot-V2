@@ -1188,7 +1188,7 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
 }
 break
 case 'reg': {
-if (db.data.users[sender].register = true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
+if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
 if (!m.isGroup) return reply('*Para continuar con tu registro, por favor ve a chat privado con el bot, ya que se te pedirá la creación de una contraseña privada!*')
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
@@ -1663,11 +1663,11 @@ let res = await igdl(text);
 let data = await res.data;
 let videoIg = await fetchBuffer(data.url);
 await nyanBot2.sendMessage(m.chat, {
-		video: videoIg,
-		fileName: nyanBot2.getName(sender) + '.mp4',
-		caption: '> *Instagram Dl*',
-		mimetype: 'video/mp4'
-        }, { quoted: m });
+	video: videoIg,
+	fileName: nyanBot2.getName(sender) + '.mp4',
+	caption: '> *Instagram Dl*',
+	mimetype: 'video/mp4'
+}, { quoted: m });
 db.data.users[sender].limit -= 20
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 } catch (err) {
