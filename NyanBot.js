@@ -1110,7 +1110,7 @@ const buttons = [{
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Si',
-                        id: `%lg ${senser}`
+                        id: `%lg ${sender}`
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
@@ -1659,7 +1659,7 @@ try {
 let res = await igdl(text);
 let data = await res.data;
 let videoIg = await fetchBuffer(data.url);
-	await nyanBot2.sendMessage(m.chat, {
+await nyanBot2.sendMessage(m.chat, {
 		video: videoIg,
 		fileName: nyanBot2.getName(sender) + '.mp4',
 		caption: '> *Instagram Dl*',
