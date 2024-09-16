@@ -270,7 +270,11 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         async function reply(teks) {
                 nyanBot2.sendMessage(m.chat, {
                     contextInfo: {
-                        "forwardingScore":999,"isForwarded":true
+                        "forwardingScore":999,"isForwarded":true,
+                    businessMessageForwardInfo: {
+                           "businessOwnerJid": nyanBot2.user.jid
+                        }
+                     }
                     },
                     text: teks
                 }, {
@@ -533,9 +537,9 @@ async function sendReplyButton(chatId, buttons, message, options) {
             mentionedJid: [m.sender],
             forwardingScore: 999,
             isForwarded: true,
-	    businessMessageForwardInfo: {
-			businessOwnerJid: nyanBot2.user.jid
-		}
+	businessMessageForwardInfo: {
+		businessOwnerJid: nyanBot2.user.jid
+	}
         }
     })
 
