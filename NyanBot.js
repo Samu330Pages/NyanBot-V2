@@ -536,8 +536,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
             mentionedJid: [m.sender],
             forwardingScore: 999,
             isForwarded: true,
-	businessMessageForwardInfo: {
-		businessOwnerJid: nyanBot2.user.jid
+	    businessMessageForwardInfo: {
+		"businessOwnerJid": '5219984907794@s.whatsapp.net'
 	}
         }
     })
