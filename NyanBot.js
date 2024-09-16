@@ -1082,9 +1082,9 @@ case 'menu': {
                         }),
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
-                                "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"id\":\"%login\"}`
-                            }],
+                                "name": "cta_url",
+                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
+                            },],
                         }),
                         contextInfo: {
                             mentionedJid: [m.sender],
