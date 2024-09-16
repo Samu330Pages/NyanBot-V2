@@ -1644,7 +1644,7 @@ await nyanBot2.sendMessage(m.chat, {
                 externalAdReply: {
                     title: nyanBot2.getName(sender),
                     body: botname,
-                    thumbnail: await fetchBuffer(data.thumbnail),
+                    thumbnail: await fetchBuffer(media.thumbnail),
                     sourceUrl: 'https://wa.me/samu330',
                     mediaType: 2,
                     mediaUrl: media,
@@ -1958,12 +1958,12 @@ case 'ping': case 'botstatus': case 'statusbot': case 'p': {
                 neww = performance.now()
                 oldd = performance.now()
                 respon = `
-Velocidad de respuesta ${latensi.toFixed(4)} _Segundos_ \n ${oldd - neww} _Milisegundos_\n\nRuntime : ${runtime(process.uptime())}
+*elocidad de respuesta* ${latensi.toFixed(4)} _Segundos_\n\n*Runtime* : ${runtime(process.uptime())}
 
-💻 Info Server
+💻 Info Server\n
 RAM: ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
 
-_NodeJS Memory Usaage_
+_NodeJS Memory Usaage_\n
 ${Object.keys(used).map((key, _, arr) => `${key.padEnd(Math.max(...arr.map(v=>v.length)),' ')}: ${formatp(used[key])}`).join('\n')}
 
 ${cpus[0] ? `_Total CPU Usage_
@@ -1971,18 +1971,7 @@ ${cpus[0].model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type =>
 _CPU Core(s) Usage (${cpus.length} Core CPU)_
 ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}` : ''}
                 `.trim()
-	nyanBot2.relayMessage(m.chat,  {
-        requestPaymentMessage: {
-          currencyCodeIso4217: 'INR',
-          amount1000: 999999999,
-          requestFrom: m.sender,
-          noteMessage: {
-          extendedTextMessage: {
-          text: respon,
-          contextInfo: {
-          externalAdReply: {
-          showAdAttribution: true
-          }}}}}}, {})
+	reply(`${respon}`)
     }
 	
 	break
