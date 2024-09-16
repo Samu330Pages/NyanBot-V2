@@ -1098,7 +1098,7 @@ case 'menu': {
 break
 case 'lg': {
 if (!text === sender) return reply('*¡Esta opción no te corresponde!*')
-db.data.users[sender].register = false)
+db.data.users[sender].register = false
 reply('*Tu sesión sé ha cerrado!*')
 nyanBot2.sendMessage(m.chat, {react: {text: '💔', key: m.key}})
 }
