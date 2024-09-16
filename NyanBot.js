@@ -1098,6 +1098,14 @@ case 'menu': {
     }
 }
 break
+case 'logout' {
+if (db.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
+if (!sender) return
+db.data.users[sender].register = false
+nyanBot2.sendMessage(m.chat, {react: {text: '⚙', key: m.key}})
+reply('*Tu sesión sé ha cerrado!*')
+}
+break
 case 'login': {
     const email = text;
     if (db.data.users[sender].register === true) return reply('Tus datos de sesión ya están guardados, no es necesario volver a iniciar sesión. 😊')
@@ -1165,6 +1173,8 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
 }
 break
 case 'reg': {
+if (db.data.users[sender].register = true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
+if (!m.isGroup) return reply('*Para continuar con tu registro, por favor ve a chat privado con el bot, ya que se te pedirá la creación de una contraseña privada!*')
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
@@ -1641,12 +1651,12 @@ let videoIg = await fetchBuffer(data.url);
             video: videoIg,
             fileName: nyanBot2.getName(sender) + '.mp4',
 	    caption: '> *Instagram Dl*',
-            mimetype: 'video/mp4',
+            mimetype: 'video/mp4'
         }, { quoted: m });
 db.data.users[sender].limit -= 20
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
-} catch {
-         return reply('Ah ocurrido un error inesperado, por favor reportalo para darle solución!')
+} catch (err) {
+         return reply(`Ah ocurrido un error inesperado, por favor reportalo para darle solución!\n${err}`)
 	 nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
       }
 }
