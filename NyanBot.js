@@ -1649,7 +1649,7 @@ case 'ytmp5': case 'yta': {
     };
 
     // Enviar el mensaje
-    await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
+    await nyanBot2.relayMessage(m.chat, message.message, {});
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 
     db.data.users[sender].limit -= 30;
