@@ -1633,31 +1633,28 @@ case 'ytmp5': case 'yta': {
     
     let { title, audio, thumbnail } = await ytmp3v3(args[1]);
     let audioYt = await fetchBuffer(audio);
-
-    let messageOptions = {
-        quoted: m,
+    
+    // Preparar el mensaje media
+    const mediaMessage = await prepareMessageMedia({
+        audio: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
-	caption: title
+    }, { upload: nyanBot2.waUploadToServer });
+
+    // Crear el mensaje completo
+    const message = {
+        ...mediaMessage,
+        caption: title, // Este es el caption que aparecerá debajo del audio
+        quoted: m
     };
 
-    if (primerArg === 1) {
-        messageOptions.audio = audioYt;
-        messageOptions.caption = title;
-    } else if (primerArg === 2) {
-        messageOptions.document = audioYt;
-        messageOptions.caption = title;
-    } else {
-        return reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`);
-    }
-    
-    await nyanBot2.sendMessage(m.chat, messageOptions);
+    // Enviar el mensaje
+    await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-    
+
     db.data.users[sender].limit -= 30;
 }
 break
-
 
 			
 
