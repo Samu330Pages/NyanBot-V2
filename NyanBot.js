@@ -1588,17 +1588,7 @@ let videoYt = await fetchBuffer(video);
             video: videoYt,
             fileName: title + '.mp4',
 	    caption: caption,
-            mimetype: 'video/mp4',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: await fetchBuffer(thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: video,
-                }
-            },
+            mimetype: 'video/mp4',,
         }, { quoted: m });
 	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 db.data.users[sender].limit -= 30
