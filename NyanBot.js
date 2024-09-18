@@ -1651,7 +1651,7 @@ case 'instagram': case 'ig': {
     try {
         let res = await igdl(text);
         let data = await res.data;
-        let videoIg = await fetchBuffer(data.url);
+        let videoIg = await fetchBuffer(url);
         
         await nyanBot2.sendMessage(m.chat, {
             video: videoIg,
