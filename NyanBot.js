@@ -1617,6 +1617,55 @@ db.data.users[sender].limit -= 30
 }
 break
 
+
+case 'ytmp5': case 'yta': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
+    
+    const primerArg = parseInt(args[0], 10);
+    if (isNaN(primerArg)) {
+        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
+    }
+    
+    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    reply('> *Esperé un momento, se esta enviando su audio...*');
+    
+    let { title, audio, thumbnail } = await ytmp3v3(args[1]);
+    let audioYt = await fetchBuffer(audio);
+    
+    let messageContent;
+    
+    if (primerArg === 1) {
+        messageContent = {
+            audio: audioYt,
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3',
+            caption: title
+        };
+    } else if (primerArg === 2) {
+        messageContent = {
+            document: audioYt,
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3',
+            caption: title
+        };
+    } else {
+        return reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`);
+    }
+    
+    const preparedMessage = await nyanBot2.prepareMessageMedia(messageContent, { upload: nyanBot2.waUploadToServer });
+    await nyanBot2.relayMessage(m.chat, preparedMessage.message, { messageId: preparedMessage.key.id });
+    
+    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+    
+    db.data.users[sender].limit -= 30;
+}
+break
+
+
+			
+
 case 'facebook': case'fb': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
