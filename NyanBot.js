@@ -1618,14 +1618,7 @@ db.data.users[sender].limit -= 30
 break
 
 
-Para asegurarte de que el título del audio se envíe como caption y no se muestre un identificador como "AUD-17839393", debes asegurarte de que el objeto del mensaje esté configurado correctamente para incluir la propiedad `caption`.
-
-### Ajustes en el Código
-
-Aquí tienes el código modificado para asegurarte de que el título se envíe como caption:
-
-```javascript
-case 'ytmp3': case 'yta': {
+case 'ytmp5': case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
