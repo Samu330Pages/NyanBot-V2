@@ -1630,7 +1630,7 @@ case 'ytmp5': case 'yta': {
     let audioYt = await fetchBuffer(audio);
     
     // Preparar el mensaje media
-    const mediaMessage = prepareWAMessageMedia({
+    const mediaMessage = await prepareWAMessageMedia({
         audio: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
