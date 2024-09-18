@@ -1631,7 +1631,7 @@ case 'ytmp5': case 'yta': {
     
     // Preparar el mensaje media como documento
     const mediaMessage = await prepareWAMessageMedia({
-        audio: audioYt,
+        document: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
 	caption: title,
