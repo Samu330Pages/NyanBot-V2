@@ -1618,34 +1618,62 @@ db.data.users[sender].limit -= 30
 break
 
 
-case 'ytmp5': case 'yta': {
+case 'ytmp5': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
-    
+
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se esta enviando su audio...*');
-    
+
     let { title, audio, thumbnail } = await ytmp3v3(text);
     let audioYt = await fetchBuffer(audio);
     
-    // Preparar el mensaje media como documento
-    const mediaMessage = await prepareWAMessageMedia({
-        document: audioYt,
-        mimetype: 'audio/mpeg',
-        fileName: title + '.mp3',
-	caption: title,
-	jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
-    }, { upload: nyanBot2.waUploadToServer });
+    // Guardar el audio original
+    const originalAudioPath = './temp/original.mp3';
+    fs.writeFileSync(originalAudioPath, audioYt);
 
-    // Crear el mensaje completo
-    const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
+    // Definir el archivo de salida con metadatos
+    const outputAudioPath = './temp/output.mp3';
 
-    // Enviar el mensaje
-    await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
-    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+    // Comando ffmpeg para agregar metadatos
+    const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -metadata title="${title}" -metadata artist="Samu330" -metadata album="NyanBot" -metadata genre="Bot de WhatsApp" -codec copy ${outputAudioPath}`;
 
-    db.data.users[sender].limit -= 30;
+    // Ejecutar el comando ffmpeg
+    exec(ffmpegCommand, async (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al procesar el audio: ${error.message}`);
+            return reply('Ocurrió un error al procesar el audio.');
+        }
+
+        // Enviar el audio como documento
+        const mediaMessage = await prepareWAMessageMedia({
+            document: fs.readFileSync(originalAudioPath),
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3',
+            jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
+        }, { upload: nyanBot2.waUploadToServer });
+
+        const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
+        await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
+
+        // Enviar el audio con metadatos
+        const processedAudioMessage = await prepareWAMessageMedia({
+            audio: fs.readFileSync(outputAudioPath),
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3'
+        }, { upload: nyanBot2.waUploadToServer });
+
+        const processedMessage = generateWAMessageFromContent(m.chat, processedAudioMessage, { quoted: m });
+        await nyanBot2.relayMessage(m.chat, processedMessage.message, { messageId: processedMessage.key.id });
+
+        // Limpiar archivos temporales
+        fs.unlinkSync(originalAudioPath);
+        fs.unlinkSync(outputAudioPath);
+
+        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        db.data.users[sender].limit -= 30;
+    });
 }
 break
 
