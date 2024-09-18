@@ -1635,7 +1635,7 @@ case 'ytmp5': case 'yta': {
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
 	caption: title,
-	thumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
+	jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
     }, { upload: nyanBot2.waUploadToServer });
 
     // Crear el mensaje completo
