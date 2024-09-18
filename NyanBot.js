@@ -1455,27 +1455,15 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Descargar audio 🎙️',
-            id: `%ytmp3 1 ${video.url}`
+            id: `%ytmp3 ${video.url}`
           }),
         }, {
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
-            display_text: 'Descargar audio en documento 📂',
-            id: `%ytmp3 2 ${video.url}`
-          }),
-}, {
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
             display_text: 'Descargar video 🎬',
-            id: `%ytv 1 ${video.url}`
+            id: `%ytv ${video.url}`
           }),
-}, {
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Descargar video en documento 📂',
-            id: `%ytv 2 ${video.url}`
-          }),
-}, {
+	}, {
           name: "cta_url",
           buttonParamsJson: JSON.stringify({
             display_text: 'Ver en la app ❤️',
@@ -1522,22 +1510,17 @@ case 'args': {
 }
 break
 					
-case 'ytmp3': case 'yta': {
+case 'ytmp3': case'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(args[1])) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
-    
-    const primerArg = parseInt(args[0], 10);
-    if (isNaN(primerArg)) {
-        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
-    }
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se está enviando su audio...*');
+    reply('> Esperé un momento, se esta enviando su audio...');
 
-    let { title, audio, thumbnail } = await ytmp3v3(args[1]);
+    let { title, audio, thumbnail } = await ytmp3v3(text);
     let audioYt = await fetchBuffer(audio);
-
+    
     // Guardar el audio original
     const originalAudioPath = './src/original.mp3';
     fs.writeFileSync(originalAudioPath, audioYt);
@@ -1550,67 +1533,62 @@ case 'ytmp3': case 'yta': {
     const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -i ${coverImagePath} -metadata title="${title}" -metadata artist="${ownername}" -metadata album="${botname}" -metadata genre="Bot de WhatsApp" -map 0:a -map 1 -c:v mjpeg -c:a copy -shortest ${outputAudioPath}`;
 
     // Ejecutar el comando ffmpeg
-    exec(ffmpegCommand, async (error) => {
+    exec(ffmpegCommand, async (error, stdout, stderr) => {
         if (error) {
             console.error(`Error al procesar el audio: ${error.message}`);
-            nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
             return reply('Ocurrió un error al procesar el audio.');
         }
 
-        if (primerArg === 1) {
-            await nyanBot2.sendMessage(m.chat, {
-                audio: fs.readFileSync(outputAudioPath),
-                fileName: title + '.mp3',
-                mimetype: 'audio/mpeg',
-            }, { quoted: m });
-        } else if (primerArg === 2) {
-            await nyanBot2.sendMessage(m.chat, {
-                document: fs.readFileSync(outputAudioPath),
-                fileName: title + '.mp3',
-                mimetype: 'audio/mpeg',
-            }, { quoted: m });
-        } else {
-            reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`);
-        }
+        // Enviar el audio como documento
+        const mediaMessage = await prepareWAMessageMedia({
+            document: fs.readFileSync(originalAudioPath),
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3',
+            jpegThumbnail: await fs.readFileSync(coverImagePath) // Incluye la imagen de portada aquí si deseas
+        }, { upload: nyanBot2.waUploadToServer });
 
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-        db.data.users[sender].limit -= 30;
+        const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
+        await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
+
+        // Enviar el audio con metadatos y portada
+        const processedAudioMessage = await prepareWAMessageMedia({
+            audio: fs.readFileSync(outputAudioPath),
+            mimetype: 'audio/mpeg',
+            fileName: title + '.mp3'
+        }, { upload: nyanBot2.waUploadToServer });
+
+        const processedMessage = generateWAMessageFromContent(m.chat, processedAudioMessage, { quoted: m });
+        await nyanBot2.relayMessage(m.chat, processedMessage.message, { messageId: processedMessage.key.id });
 
         // Limpiar archivos temporales
         fs.unlinkSync(originalAudioPath);
         fs.unlinkSync(outputAudioPath);
+
+        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        db.data.users[sender].limit -= 30;
     });
 }
 break
 
-// Case para YTMP4
 case 'ytmp4': case 'ytv': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(args[1])) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
+if (db.data.users[sender].limit < 1) return reply(mess.limit)
+if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
+if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(args[1])) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
-    const optionVid = parseInt(args[0], 10);
-    if (isNaN(optionVid)) {
-        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el video en formato MP4, la opción 2 descarga el video en documento.*`);
-    }
-
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se está enviando su video...*');
-
-    let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
-    let caption = `> Yt MP4 📽\n`
-    caption += `- *Titulo:* ${title}\n`
-    caption += `- *Calidad:* ${quality}\n`
-    caption += `- *Peso:* ${size}\n\n`
-    caption += `> ${botname} by ${ownername}`;
-
-    let videoYt = await fetchBuffer(video);
-
-    if (optionVid === 1) {
-        await nyanBot2.sendMessage(m.chat, {
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+reply('> Esperé un momento, se esta enviando su video...')
+let { title, size, video, quality, thumbnail } = await ytmp4(text);
+      let caption = `> Yt MP4 📽\n
+      caption += - *Titulo:* ${title}\n
+      caption += - *Calidad:* ${quality}\n
+      caption += - *Peso:* ${size}\n\n
+      caption += > ${botname} by ${ownername}`
+let videoYt = await fetchBuffer(video);
+try {
+	await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
-            caption: caption,
+	    caption: caption,
             mimetype: 'video/mp4',
             contextInfo: {
                 externalAdReply: {
@@ -1623,29 +1601,11 @@ case 'ytmp4': case 'ytv': {
                 }
             },
         }, { quoted: m });
-    } else if (optionVid === 2) {
-        await nyanBot2.sendMessage(m.chat, {
-            document: videoYt,
-            fileName: title + '.mp4',
-            caption: caption,
-            mimetype: 'video/mp4',
-            contextInfo: {
-                externalAdReply: {
-                    title: title,
-                    body: botname,
-                    thumbnail: await fetchBuffer(thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: video,
-                }
-            },
-        }, { quoted: m });
-    } else {
-        reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`);
-    }
-
-    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-    db.data.users[sender].limit -= 30;
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+} catch {
+	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
+}
+db.data.users[sender].limit -= 30
 }
 break
 
