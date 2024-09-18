@@ -1533,35 +1533,55 @@ case 'ytmp3': case 'yta': {
     }
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se esta enviando su audio...*');
+    reply('> *Esperé un momento, se está enviando su audio...*');
 
     let { title, audio, thumbnail } = await ytmp3v3(args[1]);
     let audioYt = await fetchBuffer(audio);
+    
+    // Guardar el audio original
+    const originalAudioPath = './src/original.mp3';
+    fs.writeFileSync(originalAudioPath, audioYt);
 
-    if (primerArg === 1) {
+    // Definir la imagen de portada
+    const coverImagePath = './Media/theme/NyanBot.jpg'; // Cambia esto a la ruta de tu imagen de portada
+    const outputAudioPath = './src/output.mp3';
+
+    // Comando ffmpeg para agregar metadatos y portada
+    const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -i ${coverImagePath} -metadata title="${title}" -metadata artist="${ownername}" -metadata album="${botname}" -metadata genre="Bot de WhatsApp" -map 0:a -map 1 -c:v mjpeg -c:a copy -shortest ${outputAudioPath}`;
+
+    // Ejecutar el comando ffmpeg
+    exec(ffmpegCommand, async (error) => {
+        if (error) {
+            console.error(`Error al procesar el audio: ${error.message}`);
+            return reply('Ocurrió un error al procesar el audio.');
+        }
+
+        // Enviar el audio como documento
         const mediaMessage = await prepareWAMessageMedia({
-            audio: audioYt,
+            document: fs.readFileSync(originalAudioPath),
             mimetype: 'audio/mpeg',
             fileName: title + '.mp3',
+            jpegThumbnail: await fs.readFileSync(coverImagePath) // Incluye la imagen de portada aquí si deseas
         }, { upload: nyanBot2.waUploadToServer });
 
         await nyanBot2.relayMessage(m.chat, mediaMessage.message, { quoted: m });
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-    } else if (primerArg === 2) {
-        const mediaMessage = await prepareWAMessageMedia({
-            document: audioYt,
+
+        // Enviar el audio con metadatos y portada
+        const processedAudioMessage = await prepareWAMessageMedia({
+            audio: fs.readFileSync(outputAudioPath),
             mimetype: 'audio/mpeg',
-            fileName: title + '.mp3',
-	    jpegThumbnail: fs.readFileSync("./Media/theme/NyanBot.jpg"),
+            fileName: title + '.mp3'
         }, { upload: nyanBot2.waUploadToServer });
 
-        await nyanBot2.relayMessage(m.chat, mediaMessage.message, { quoted: m });
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-    } else {
-        reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`);
-    }
+        await nyanBot2.relayMessage(m.chat, processedAudioMessage.message, { quoted: m });
 
-    db.data.users[sender].limit -= 30;
+        // Limpiar archivos temporales
+        fs.unlinkSync(originalAudioPath);
+        fs.unlinkSync(outputAudioPath);
+
+        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        db.data.users[sender].limit -= 30;
+    });
 }
 break
 
@@ -1577,7 +1597,7 @@ case 'ytmp4': case 'ytv': {
     }
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se esta enviando su video...*');
+    reply('> *Esperé un momento, se está enviando su video...*');
 
     let { title, size, video, quality, thumbnail } = await ytmp4(args[1]);
     let caption = `> Yt MP4 📽\n`;
@@ -1594,6 +1614,16 @@ case 'ytmp4': case 'ytv': {
             mimetype: 'video/mp4',
             fileName: title + '.mp4',
             caption: caption,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            },
         }, { upload: nyanBot2.waUploadToServer });
 
         await nyanBot2.relayMessage(m.chat, mediaMessage.message, { quoted: m });
@@ -1602,9 +1632,18 @@ case 'ytmp4': case 'ytv': {
         const mediaMessage = await prepareWAMessageMedia({
             document: videoYt,
             mimetype: 'video/mp4',
-	    caption: caption,
             fileName: title + '.mp4',
-	    jpegThumbnail: fs.readFileSync("./Media/theme/NyanBot.jpg"),
+            caption: caption,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: botname,
+                    thumbnail: await fetchBuffer(thumbnail),
+                    sourceUrl: 'https://wa.me/samu330',
+                    mediaType: 2,
+                    mediaUrl: video,
+                }
+            },
         }, { upload: nyanBot2.waUploadToServer });
 
         await nyanBot2.relayMessage(m.chat, mediaMessage.message, { quoted: m });
@@ -1616,7 +1655,6 @@ case 'ytmp4': case 'ytv': {
     db.data.users[sender].limit -= 30;
 }
 break
-
 // Case para Facebook
 case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
