@@ -1573,7 +1573,7 @@ break
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
-if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/....`);
+if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/....`);
 
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 reply('> Esperé un momento, se esta enviando su video...')
@@ -1603,7 +1603,7 @@ try {
         }, { quoted: m });
 	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
 } catch {
-	reply(`*No se reconoce la opción seleccionada.*\n*Opciones disponibles:*\n1\n2`)
+	reply(`*ERROR*`)
 }
 db.data.users[sender].limit -= 30
 }
