@@ -1629,18 +1629,18 @@ case 'ytmp5': case 'yta': {
     let { title, audio, thumbnail } = await ytmp3v3(text);
     let audioYt = await fetchBuffer(audio);
     
-    // Preparar el mensaje media
+    // Preparar el mensaje media como documento
     const mediaMessage = await prepareWAMessageMedia({
-        audio: audioYt,
+        document: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
     }, { upload: nyanBot2.waUploadToServer });
 
-	 // Agregar el caption
-    mediaMessage.caption = title; // Asegúrate de que esto sea correcto
     // Crear el mensaje completo
     const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
 
+    // Agregar el caption
+    message.caption = title; // Este es el caption que aparecerá debajo del audio
 
     // Enviar el mensaje
     await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
