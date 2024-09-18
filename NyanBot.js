@@ -1536,7 +1536,7 @@ case 'ytmp3': case 'yta': {
         if (error) {
             console.error(`Error al procesar el audio: ${error.message}`);
             nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
-            return reply(`Ocurrió un error al procesar el audio.\n${error}`);
+            return reply(`Ocurrió un error al procesar el audio.\n${error.message}`);
         }
 
         // Enviar el audio procesado
@@ -1564,7 +1564,7 @@ if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Yout
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 reply('> Esperé un momento, se esta enviando su video...')
 let { title, size, video, quality, thumbnail } = await ytmp4(text);
-let caption = `> Yt MP4 📽\n`
+let caption = `> Yt MP4 📽\n`;
       caption += `- *Titulo:* ${title}\n`;
       caption += `- *Calidad:* ${quality}\n`;
       caption += `- *Peso:* ${size}\n\n`;
