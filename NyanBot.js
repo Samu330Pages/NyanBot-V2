@@ -1630,7 +1630,7 @@ case 'ytmp5': case 'yta': {
     let audioYt = await fetchBuffer(audio);
     
     // Preparar el mensaje media
-    const mediaMessage = await prepareWAMessageMedia({
+    const mediaMessage = prepareWAMessageMedia({
         audio: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
@@ -1640,11 +1640,6 @@ case 'ytmp5': case 'yta': {
     const message = {
         ...mediaMessage,
         caption: title, // Este es el caption que aparecerá debajo del audio
-        key: {
-            remoteJid: m.chat,
-            fromMe: false,
-            id: '' // Puedes usar un ID único aquí
-        },
         quoted: m
     };
 
