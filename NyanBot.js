@@ -1630,11 +1630,11 @@ case 'ytmp5': {
     let audioYt = await fetchBuffer(audio);
     
     // Guardar el audio original
-    const originalAudioPath = './temp/original.mp3';
+    const originalAudioPath = './src/original.mp3';
     fs.writeFileSync(originalAudioPath, audioYt);
 
     // Definir el archivo de salida con metadatos
-    const outputAudioPath = './temp/output.mp3';
+    const outputAudioPath = './src/output.mp3';
 
     // Comando ffmpeg para agregar metadatos
     const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -metadata title="${title}" -metadata artist="Samu330" -metadata album="NyanBot" -metadata genre="Bot de WhatsApp" -codec copy ${outputAudioPath}`;
