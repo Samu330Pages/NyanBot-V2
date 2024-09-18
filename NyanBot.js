@@ -1623,11 +1623,6 @@ case 'ytmp5': case 'yta': {
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
     
-    /*const primerArg = parseInt(args[0], 10);
-    if (isNaN(primerArg)) {
-        return reply(`*Por favor selecciona la opción 1 o 2.*\n\n_ejemplo de uso del comando:_\n${prefix + command} 1 https://youtube.com/...\n\n*La opción 1 descarga el audio en formato MP3, la opción 2 descarga el audio en documento.*`);
-    }*/
-    
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se esta enviando su audio...*');
     
@@ -1635,7 +1630,7 @@ case 'ytmp5': case 'yta': {
     let audioYt = await fetchBuffer(audio);
     
     // Preparar el mensaje media
-    const mediaMessage = prepareWAMessageMedia({
+    const mediaMessage = await prepareWAMessageMedia({
         audio: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
@@ -1645,11 +1640,16 @@ case 'ytmp5': case 'yta': {
     const message = {
         ...mediaMessage,
         caption: title, // Este es el caption que aparecerá debajo del audio
+        key: {
+            remoteJid: m.chat,
+            fromMe: false,
+            id: '' // Puedes usar un ID único aquí
+        },
         quoted: m
     };
 
     // Enviar el mensaje
-    await nyanBot2.relayMessage(m.chat, message.message, {});
+    await nyanBot2.relayMessage(m.chat, message.message, { messageId: m.key.id });
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 
     db.data.users[sender].limit -= 30;
