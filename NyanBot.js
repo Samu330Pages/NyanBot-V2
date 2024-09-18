@@ -1637,7 +1637,8 @@ case 'ytmp5': case 'yta': {
     let messageOptions = {
         quoted: m,
         mimetype: 'audio/mpeg',
-        fileName: title + '.mp3'
+        fileName: title + '.mp3',
+	caption: title
     };
 
     if (primerArg === 1) {
