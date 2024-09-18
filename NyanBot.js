@@ -1631,11 +1631,11 @@ case 'ytmp5': case 'yta': {
     
     // Preparar el mensaje media como documento
     const mediaMessage = await prepareWAMessageMedia({
-        document: audioYt,
+        audio: audioYt,
         mimetype: 'audio/mpeg',
         fileName: title + '.mp3',
 	caption: title,
-	jpegThumbnail: await getBuffer(thumbnail)
+	jpegThumbnail: await fetchBuffer(thumbnail)
     }, { upload: nyanBot2.waUploadToServer });
 
     // Crear el mensaje completo
