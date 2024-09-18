@@ -1511,13 +1511,13 @@ break
 					
 case 'ytmp3': case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/....`);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está enviando su audio...*');
 
-    let { title, audio, thumbnail } = await ytmp3v3(text); // Asegúrate de que args[1] sea el enlace correcto
+    let { title, audio, thumbnail } = await ytmp3v3(args[1]); // Asegúrate de que args[1] contenga el enlace correcto
     let audioYt = await fetchBuffer(audio);
     
     // Guardar el audio original
@@ -1529,14 +1529,15 @@ case 'ytmp3': case 'yta': {
     const outputAudioPath = './src/output.mp3';
 
     // Comando ffmpeg para agregar metadatos y portada
-    const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -i ${coverImagePath} -metadata title="${title}" -metadata artist="${ownername}" -metadata album="${botname}" -metadata genre="Bot de WhatsApp" -map 0:a -map 1 -c:v mjpeg -c:a aac -b:a 192k -shortest ${outputAudioPath}`;
+    const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -i ${coverImagePath} -metadata title="${title}" -metadata artist="Samu330" -metadata album="NyanBot" -metadata genre="Bot de WhatsApp" -map 0:a -map 1 -c:v mjpeg -c:a aac -b:a 192k -shortest ${outputAudioPath}`;
 
     // Ejecutar el comando ffmpeg
-    exec(ffmpegCommand, async (error) => {
+    exec(ffmpegCommand, async (error, stdout, stderr) => {
         if (error) {
+            // Enviar el mensaje de error al chat
             console.error(`Error al procesar el audio: ${error.message}`);
-            nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
-            return reply(`Ocurrió un error al procesar el audio.\n${error.message}`);
+            await nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+            return reply(`Ocurrió un error al procesar el audio:\n${stderr}`);
         }
 
         // Enviar el audio procesado
