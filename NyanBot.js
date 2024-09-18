@@ -1584,7 +1584,6 @@ let { title, size, video, quality, thumbnail } = await ytmp4(text);
       caption += - *Peso:* ${size}\n\n
       caption += > ${botname} by ${ownername}`
 let videoYt = await fetchBuffer(video);
-try {
 	await nyanBot2.sendMessage(m.chat, {
             video: videoYt,
             fileName: title + '.mp4',
@@ -1602,9 +1601,6 @@ try {
             },
         }, { quoted: m });
 	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
-} catch {
-	reply(`*ERROR*`)
-}
 db.data.users[sender].limit -= 30
 }
 break
