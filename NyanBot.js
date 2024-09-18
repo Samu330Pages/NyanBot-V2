@@ -1042,7 +1042,7 @@ case 'menu': {
 	nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
-        "📥 Descargas": ['play `SEARCH` *-30 PUNTOS*', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
+        "📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
 	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
@@ -1480,7 +1480,6 @@ await sendReplyButton(m.chat, buttons, m, {
 
 `
 })
-db.data.users[sender].limit -= 30
 }
 break
 case 'args': {
@@ -1539,26 +1538,11 @@ case 'ytmp3': case'yta': {
             return reply('Ocurrió un error al procesar el audio.');
         }
 
-        // Enviar el audio como documento
-        const mediaMessage = await prepareWAMessageMedia({
-            document: fs.readFileSync(originalAudioPath),
-            mimetype: 'audio/mpeg',
-            fileName: title + '.mp3',
-            jpegThumbnail: await fs.readFileSync(coverImagePath) // Incluye la imagen de portada aquí si deseas
-        }, { upload: nyanBot2.waUploadToServer });
-
-        const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
-        await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
-
-        // Enviar el audio con metadatos y portada
-        const processedAudioMessage = await prepareWAMessageMedia({
-            audio: fs.readFileSync(outputAudioPath),
+	    await nyanBot2.sendMessage(m.chat, {
+	    audio: fs.readFileSync(`${outputAudioPath}`),
             mimetype: 'audio/mpeg',
             fileName: title + '.mp3'
-        }, { upload: nyanBot2.waUploadToServer });
-
-        const processedMessage = generateWAMessageFromContent(m.chat, processedAudioMessage, { quoted: m });
-        await nyanBot2.relayMessage(m.chat, processedMessage.message, { messageId: processedMessage.key.id });
+	    }, {quoted: m})
 
         // Limpiar archivos temporales
         fs.unlinkSync(originalAudioPath);
