@@ -1511,15 +1511,19 @@ break
 					
 case 'ytmp3': case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está enviando su audio...*');
 
-    let { title, audio, thumbnail } = await ytmp3v3(args[1]); // Asegúrate de que args[1] contenga el enlace correcto
+    let { title, audio, thumbnail } = await ytmp3v3(text); // Asegúrate de que args[1] contenga el enlace correcto
     let audioYt = await fetchBuffer(audio);
-    
+
+    if (!Buffer.isBuffer(audioYt)) {
+        return reply('No se pudo obtener el audio de YouTube.'); // Manejo de error si no se obtuvo un buffer
+    }
+
     // Guardar el audio original
     const originalAudioPath = './src/original.mp3';
     fs.writeFileSync(originalAudioPath, audioYt);
@@ -1535,7 +1539,7 @@ case 'ytmp3': case 'yta': {
     exec(ffmpegCommand, async (error, stdout, stderr) => {
         if (error) {
             // Enviar el mensaje de error al chat
-            console.error(`Error al procesar el audio: ${error.message}`);
+            console.error(`Error al procesar el audio: ${stderr}`);
             await nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
             return reply(`Ocurrió un error al procesar el audio:\n${stderr}`);
         }
