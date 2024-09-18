@@ -1522,12 +1522,12 @@ case 'ytmp3': case'yta': {
     let audioYt = await fetchBuffer(audio);
     
     // Guardar el audio original
-    const originalAudioPath = './temp/original.mp3';
+    const originalAudioPath = './src/original.mp3';
     fs.writeFileSync(originalAudioPath, audioYt);
 
     // Definir la imagen de portada
     const coverImagePath = './Media/theme/NyanBot.jpg'; // Cambia esto a la ruta de tu imagen de portada
-    const outputAudioPath = './temp/output.mp3';
+    const outputAudioPath = './src/output.mp3';
 
     // Comando ffmpeg para agregar metadatos y portada
     const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -i ${coverImagePath} -metadata title="${title}" -metadata artist="Samu330" -metadata album="NyanBot" -metadata genre="Bot de WhatsApp" -map 0:a -map 1 -c:v mjpeg -c:a copy -shortest ${outputAudioPath}`;
