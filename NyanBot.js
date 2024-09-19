@@ -1577,32 +1577,43 @@ case 'ytmp5': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
-    // Importación dinámica del módulo ES6
-    (async () => {
-        try {
-            const s = (await import('videos-downloader')).default;
-            const downloadUrl = await s.youtube(text); // Esperar la resolución de la promesa
+    const axios = require('axios'); // Asegúrate de tener axios instalado
+    const apiUrl = 'https://api.cobalt.tools/';
 
-            if (downloadUrl) {
-                reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
-            } else {
-                reply('Ocurrió un error al obtener el enlace de descarga.');
-            }
-        } catch (error) {
-            console.error('Error al obtener el enlace de descarga:', error);
-            if (error.message.includes('ECONNRESET')) {
-                reply('Ocurrió un error de conexión. Por favor, intenta nuevamente más tarde.');
-            } else {
-                reply('Ocurrió un error al procesar el enlace.');
-            }
+    // Configuración de la solicitud POST
+    const requestBody = {
+        url: text,
+        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        audioFormat: 'mp3', // Formato de audio
+        downloadMode: 'audio', // Modo de descarga
+    };
+
+    try {
+        const response = await axios.post(apiUrl, requestBody, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Manejo de la respuesta
+        if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
+            const downloadUrl = response.data.url;
+            reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
+        } else if (response.data.status === 'error') {
+            reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
+        } else {
+            reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
         }
-    })();
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
+    }
 
     db.data.users[sender].limit -= 30;
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
-break
-			
+break			
 
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
