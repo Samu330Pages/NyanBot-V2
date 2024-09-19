@@ -16,6 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
+const ffmpeg = require('fluent-ffmpeg')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
@@ -59,7 +60,7 @@ const {
     toAudio,
     toPTT,
     toVideo,
-    ffmpeg,
+    //ffmpeg,
     addExifAvatar
 } = require('./lib/converter')
 const {
@@ -1620,7 +1621,6 @@ case 'ytmp5': {
                     `-metadata genre=${genre}`,
                     `-metadata title=Descarga de YouTube`
                 ])
-                .save(outputFilePath)
                 .on('end', async () => {
                     // Enviar audio procesado al usuario
                     await nyanBot2.sendMessage(m.chat, {
@@ -1641,7 +1641,8 @@ case 'ytmp5': {
                     reply('Ocurrió un error al procesar el audio.');
                     // Eliminar el archivo temporal si ocurre un error
                     if (fs.existsSync(audioFilePath)) fs.unlinkSync(audioFilePath);
-                });
+                })
+                .save(outputFilePath); // Guardar el archivo de salida
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
@@ -1656,7 +1657,7 @@ case 'ytmp5': {
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
 break
-
+			
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
