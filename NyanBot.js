@@ -1610,13 +1610,16 @@ case 'ytmp3': {
             fs.writeFileSync(audioFilePath, audioBuffer);
 
             // Usar ffmpeg para agregar metadatos
-            ffmpeg(audioFilePath)
+            ffmpeg()
+                .input(audioFilePath) // Correcta forma de agregar el archivo de audio
                 .input('./Media/theme/NyanBot.jpg') // Ruta de la imagen
                 .outputOptions([
                     '-metadata', 'artist=Samu330',
                     '-metadata', 'album=NyanBot',
                     '-metadata', `title=${originalFilename}`,
-                    '-metadata', 'genre=Desconocido'
+                    '-metadata', 'genre=Desconocido',
+                    '-map', '0:a', // Solo el audio
+                    '-map', '1' // Mapa la imagen
                 ])
                 .on('end', async () => {
                     // Enviar audio procesado al usuario
