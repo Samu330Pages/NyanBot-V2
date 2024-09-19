@@ -1611,13 +1611,13 @@ case 'ytmp3': {
 
             // Usar ffmpeg para agregar metadatos
             ffmpeg(audioFilePath)
-                .outputOptions('-metadata', 'artist=Samu330')
-                .outputOptions('-metadata', 'album=NyanBot')
-                .outputOptions('-metadata', `title=${originalFilename}`)
-                .outputOptions('-metadata', 'genre=Desconocido')
-                .outputOptions('-i', fs.readFileSync('./Media/theme/NyanBot.jpg')) // Ruta de la imagen
-                .outputOptions('-map', '0:a') // Solo el audio
-                .outputOptions('-map', '1') // Mapa la imagen
+                .input('./Media/theme/NyanBot.jpg') // Ruta de la imagen
+                .outputOptions([
+                    '-metadata', 'artist=Samu330',
+                    '-metadata', 'album=NyanBot',
+                    '-metadata', `title=${originalFilename}`,
+                    '-metadata', 'genre=Desconocido'
+                ])
                 .on('end', async () => {
                     // Enviar audio procesado al usuario
                     await nyanBot2.sendMessage(m.chat, {
