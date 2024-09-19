@@ -1651,16 +1651,7 @@ case 'facebook': case 'fb': {
             fileName: nyanBot2.getName(sender) + '.mp4',
             caption: '> *FaceBook Dl*',
             mimetype: 'video/mp4',
-            contextInfo: {
-                externalAdReply: {
-                    title: nyanBot2.getName(sender),
-                    body: botname,
-                    thumbnail: await fetchBuffer(data.thumbnail),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: video,
-                }
-            },
+	    jpegThumbnail: await fetchBuffer(data.thumbnail)
         }, { quoted: m });
         nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
         db.data.users[sender].limit -= 20;
