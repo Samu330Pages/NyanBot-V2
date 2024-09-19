@@ -1577,44 +1577,22 @@ case 'ytmp5': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se esta procesando su solicitud...*');
 
-    // Función para obtener la URL desde el servidor
-    async function obtenerURL(videoUrl) {
-        const headers = {
-            'Accept': 'application/json',
-            'Accept-Encoding': 'gzip, deflate, br, zstd',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Content-Length': '53',
-            'Content-Type': 'application/json',
-            'Origin': 'https://cobalt.tools',
-            'Priority': 'u=1, i',
-            'Referer': 'https://cobalt.tools/',
-            'Sec-Ch-Ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Brave";v="126"',
-            'Sec-Ch-Ua-Mobile': '?0',
-            'Sec-Ch-Ua-Platform': '"Windows"',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-site',
-            'Sec-Gpc': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
-        };
-
+    // Importación dinámica del módulo ES6
+    (async () => {
         try {
-            const response = await axios.post(process.env.ytUrl, { url: videoUrl }, { headers });
-            return response.data.url;
+            const s = (await import('videos-downloader')).default;
+            const downloadUrl = s.youtube(text);
+
+            if (downloadUrl) {
+                reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
+            } else {
+                reply('Ocurrió un error al obtener el enlace de descarga.');
+            }
         } catch (error) {
-            console.error(error.message, error);
-            return null;
+            console.error('Error al obtener el enlace de descarga:', error);
+            reply('Ocurrió un error al procesar el enlace.');
         }
-    }
-
-    // Obtener la URL procesada
-    const processedUrl = await obtenerURL(text);
-
-    if (processedUrl) {
-        reply(`Aquí está tu enlace procesado: ${processedUrl}`);
-    } else {
-        reply('Ocurrió un error al procesar el enlace.');
-    }
+    })();
 
     db.data.users[sender].limit -= 30;
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
