@@ -1601,9 +1601,9 @@ case 'ytmp5': {
         // Manejo de la respuesta
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
-
-            // Obtener el buffer del audio y guardarlo en un archivo temporal
             const audioBuffer = await fetchBuffer(downloadUrl);
+
+            // Guardar el buffer en un archivo temporal
             fs.writeFileSync(audioFilePath, audioBuffer);
 
             // Obtener metadatos
@@ -1612,16 +1612,16 @@ case 'ytmp5': {
             const genre = response.data.genre || 'Desconocido';
             const imageUrl = response.data.thumbnail || ''; // Suponiendo que la API proporciona una imagen
 
-            // Procesar audio con ffmpeg para agregar metadatos
+            // Procesar audio con ffmpeg
             ffmpeg(audioFilePath)
-                .outputOptions('-metadata', `artist=${artist}`)
-                .outputOptions('-metadata', `album=${album}`)
-                .outputOptions('-metadata', `genre=${genre}`)
-                .outputOptions('-metadata', 'title=Descarga de YouTube')
-                .save(outputFilePath) // Guardar el archivo de salida
+                .outputOptions([
+                    `-metadata artist=${artist}`,
+                    `-metadata album=${album}`,
+                    `-metadata genre=${genre}`,
+                    `-metadata title=Descarga de YouTube`
+                ])
+                .save(outputFilePath)
                 .on('end', async () => {
-		// Enviar respuesta completa de la API
-                    reply(`Respuesta de la API:\n${JSON.stringify(response.data, null, 2)}`);
                     // Enviar audio procesado al usuario
                     await nyanBot2.sendMessage(m.chat, {
                         audio: await fetchBuffer(outputFilePath),
@@ -1629,6 +1629,8 @@ case 'ytmp5': {
                         mimetype: 'audio/mpeg',
                     }, { quoted: m });
 
+                    // Enviar respuesta completa de la API
+                    reply(`Respuesta de la API:\n${JSON.stringify(response.data, null, 2)}`);
 
                     // Eliminar archivos temporales
                     fs.unlinkSync(audioFilePath);
@@ -1653,7 +1655,7 @@ case 'ytmp5': {
     db.data.users[sender].limit -= 30;
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
-break			
+break
 
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
