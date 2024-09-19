@@ -1577,15 +1577,17 @@ case 'ytmp5': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
-    const axios = require('axios'); // Asegúrate de tener axios instalado
     const apiUrl = 'https://api.cobalt.tools/';
+    const tempDir = path.join(__dirname, 'src'); // Asegúrate de que esta carpeta exista
+    const audioFilePath = path.join(tempDir, 'audio.mp3');
+    const outputFilePath = path.join(tempDir, 'output.mp3');
 
     // Configuración de la solicitud POST
     const requestBody = {
         url: text,
-        videoQuality: '720', // Puedes ajustar esto según tus necesidades
-        audioFormat: 'mp3', // Formato de audio
-        downloadMode: 'audio', // Modo de descarga
+        videoQuality: '720',
+        audioFormat: 'mp3',
+        downloadMode: 'audio',
     };
 
     try {
@@ -1599,8 +1601,45 @@ case 'ytmp5': {
         // Manejo de la respuesta
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
-	await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName:"test", mimetype:"audio/mpeg"}, {quoted:m})
-            //reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
+
+            // Obtener el buffer del audio y guardarlo en un archivo temporal
+            const audioBuffer = await fetchBuffer(downloadUrl);
+            fs.writeFileSync(audioFilePath, audioBuffer);
+
+            // Obtener metadatos
+            const artist = response.data.artist || 'Desconocido';
+            const album = 'by samu330 | Nyanbot';
+            const genre = response.data.genre || 'Desconocido';
+            const imageUrl = response.data.thumbnail || ''; // Suponiendo que la API proporciona una imagen
+
+            // Procesar audio con ffmpeg para agregar metadatos
+            ffmpeg(audioFilePath)
+                .outputOptions('-metadata', `artist=${artist}`)
+                .outputOptions('-metadata', `album=${album}`)
+                .outputOptions('-metadata', `genre=${genre}`)
+                .outputOptions('-metadata', 'title=Descarga de YouTube')
+                .save(outputFilePath) // Guardar el archivo de salida
+                .on('end', async () => {
+                    // Enviar audio procesado al usuario
+                    await nyanBot2.sendMessage(m.chat, {
+                        audio: await fetchBuffer(outputFilePath),
+                        fileName: 'output.mp3',
+                        mimetype: 'audio/mpeg',
+                    }, { quoted: m });
+
+                    // Enviar respuesta completa de la API
+                    reply(`Respuesta de la API:\n${JSON.stringify(response.data, null, 2)}`);
+
+                    // Eliminar archivos temporales
+                    fs.unlinkSync(audioFilePath);
+                    fs.unlinkSync(outputFilePath);
+                })
+                .on('error', (err) => {
+                    console.error('Error en el procesamiento de ffmpeg:', err);
+                    reply('Ocurrió un error al procesar el audio.');
+                    // Eliminar el archivo temporal si ocurre un error
+                    if (fs.existsSync(audioFilePath)) fs.unlinkSync(audioFilePath);
+                });
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
