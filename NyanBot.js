@@ -1622,8 +1622,74 @@ case 'ytmp3': {
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
 break
+
+case 'ytmp4': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
+
+    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    reply('> *Esperé un momento, se está procesando su solicitud...*');
+
+    const apiUrl = 'https://api.cobalt.tools/';
+    const requestBody = {
+        url: text,
+        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        audioFormat: 'best', // Puede ser útil si deseas mantener la mejor calidad de audio
+        downloadMode: 'auto', // Descarga el video completo
+        disableMetadata: false,
+        filenameStyle: 'basic'
+    };
+
+    try {
+        const response = await axios.post(apiUrl, requestBody, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Manejo de la respuesta
+        if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
+            const downloadUrl = response.data.url;
+            const originalFilename = response.data.filename;
+
+            // Obtener el video
+            const videoBuffer = await fetchBuffer(downloadUrl);
+            const videoFilePath = path.join('src', originalFilename); // Ruta del archivo de video
+
+            // Guardar el buffer en un archivo temporal
+            fs.writeFileSync(videoFilePath, videoBuffer);
+
+            // Enviar video al usuario
+            await nyanBot2.sendMessage(m.chat, {
+                video: await fetchBuffer(videoFilePath),
+                fileName: originalFilename,
+                mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
+            }, { quoted: m });
+
+            // Enviar respuesta completa de la API
+            reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
+
+            // Eliminar archivos temporales
+            fs.unlinkSync(videoFilePath);
+        } else if (response.data.status === 'error') {
+            reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
+        } else {
+            reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+        }
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
+    }
+
+    db.data.users[sender].limit -= 30;
+    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+}
+break
 			
-case 'ytmp4': case 'ytv': {
+			
+case 'ytmp6': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit)
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
 if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/....`);
