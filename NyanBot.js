@@ -1600,7 +1600,7 @@ case 'ytmp3': case'yta': {
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
 	await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName:"test", mimetype:"audio/mpeg"}, {quoted:m})
-            reply(`${JSON.stringify(response.data, null, 2}`);
+            reply(`${JSON.stringify(response.data, null, 2)}`);
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
