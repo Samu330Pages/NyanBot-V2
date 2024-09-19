@@ -1521,7 +1521,7 @@ case 'ytmp3': {
     let audioYt = await fetchBuffer(audio);
     
     // Guardar el audio original
-    const originalAudioPath = './src/output.mp3';
+    /*const originalAudioPath = './src/output.mp3';
     fs.writeFileSync(originalAudioPath, audioYt);
 
     // Definir el archivo de salida con metadatos
@@ -1538,8 +1538,8 @@ case 'ytmp3': {
         }
 
         // Enviar el audio como documento
-        const mediaMessage = await prepareWAMessageMedia({
-            document: fs.readFileSync(originalAudioPath),
+        */const mediaMessage = await prepareWAMessageMedia({
+            document: audioYt,
             mimetype: 'audio/mpeg',
             fileName: title + '.mp3',
             jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
@@ -1575,13 +1575,13 @@ case 'ytmp5': {
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se esta procesando su solicitud...*');
+    reply('> *Esperé un momento, se está procesando su solicitud...*');
 
     // Importación dinámica del módulo ES6
     (async () => {
         try {
             const s = (await import('videos-downloader')).default;
-            const downloadUrl = await s.youtube(text);
+            const downloadUrl = await s.youtube(text); // Esperar la resolución de la promesa
 
             if (downloadUrl) {
                 reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
@@ -1590,7 +1590,11 @@ case 'ytmp5': {
             }
         } catch (error) {
             console.error('Error al obtener el enlace de descarga:', error);
-            reply('Ocurrió un error al procesar el enlace.');
+            if (error.message.includes('ECONNRESET')) {
+                reply('Ocurrió un error de conexión. Por favor, intenta nuevamente más tarde.');
+            } else {
+                reply('Ocurrió un error al procesar el enlace.');
+            }
         }
     })();
 
