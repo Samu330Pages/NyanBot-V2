@@ -1581,7 +1581,7 @@ case 'ytmp5': {
     (async () => {
         try {
             const s = (await import('videos-downloader')).default;
-            const downloadUrl = s.youtube(text);
+            const downloadUrl = await s.youtube(text);
 
             if (downloadUrl) {
                 reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
