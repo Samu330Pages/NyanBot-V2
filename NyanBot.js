@@ -1569,7 +1569,7 @@ break
 break
 */
 
-case 'ytmp3': case'yta': {
+case 'ytmp3': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
@@ -1586,6 +1586,7 @@ case 'ytmp3': case'yta': {
         videoQuality: '720', // Puedes ajustar esto según tus necesidades
         audioFormat: 'mp3', // Formato de audio
         downloadMode: 'audio', // Modo de descarga
+        disableMetadata: false // Asegúrate de que esto esté en false para obtener metadatos
     };
 
     try {
@@ -1599,8 +1600,19 @@ case 'ytmp3': case'yta': {
         // Manejo de la respuesta
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
-	await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName:"test", mimetype:"audio/mpeg"}, {quoted:m})
-            reply(`${JSON.stringify(response.data, null, 2)}`);
+
+            // Enviar el audio
+            await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName: "test.mp3", mimetype: "audio/mpeg"}, {quoted: m});
+
+            // Preparar los metadatos de la respuesta
+            const metadata = {
+                filename: response.data.filename,
+                originalResponse: response.data // Respuesta completa de la API
+            };
+
+            // Enviar la respuesta con metadatos
+            reply(`**Metadatos del Audio:**\n${JSON.stringify(metadata, null, 2)}`);
+            reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
