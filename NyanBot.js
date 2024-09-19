@@ -1564,7 +1564,7 @@ case 'ytmp3': {
 
         nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
         db.data.users[sender].limit -= 30;
-    });
+    
 }
 break
 
