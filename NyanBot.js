@@ -1599,7 +1599,8 @@ case 'ytmp5': {
         // Manejo de la respuesta
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
-            reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
+	await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName:"test", mimetype:"audio/mpeg"}, {quoted:m})
+            //reply(`Aquí está tu enlace de descarga: ${downloadUrl}`);
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
