@@ -1586,7 +1586,8 @@ case 'ytmp3': {
         videoQuality: '720', // Puedes ajustar esto según tus necesidades
         audioFormat: 'mp3', // Formato de audio
         downloadMode: 'audio', // Modo de descarga
-        disableMetadata: false // Asegúrate de que esto esté en false para obtener metadatos
+        disableMetadata: false, // Asegúrate de que esto esté en false para obtener metadatos
+        filenameStyle: 'basic' // Estilo de nombre de archivo básico
     };
 
     try {
@@ -1606,12 +1607,14 @@ case 'ytmp3': {
 
             // Preparar los metadatos de la respuesta
             const metadata = {
-                filename: response.data.filename,
+                title: response.data.filename.split('_').slice(1, -1).join(' '), // Extraer título del nombre del archivo
+                author: response.data.filename.split('_')[0], // Autor
+                quality: '720p', // Calidad del audio
                 originalResponse: response.data // Respuesta completa de la API
             };
 
             // Enviar la respuesta con metadatos
-            reply(`**Metadatos del Audio:**\n${JSON.stringify(metadata, null, 2)}`);
+            reply(`**Metadatos del Audio:**\nTítulo: ${metadata.title}\nAutor: ${metadata.author}\nCalidad: ${metadata.quality}`);
             reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
