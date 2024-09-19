@@ -1509,7 +1509,7 @@ case 'args': {
 }
 break
 					
-case 'ytmp3': {
+/*case 'ytmp3': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
@@ -1538,7 +1538,7 @@ case 'ytmp3': {
         }
 
         // Enviar el audio como documento
-        */const mediaMessage = await prepareWAMessageMedia({
+        const mediaMessage = await prepareWAMessageMedia({
             document: audioYt,
             mimetype: 'audio/mpeg',
             fileName: title + '.mp3',
@@ -1567,7 +1567,7 @@ case 'ytmp3': {
     
 }
 break
-
+*/
 
 case 'ytmp5': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
@@ -1620,6 +1620,8 @@ case 'ytmp5': {
                 .outputOptions('-metadata', 'title=Descarga de YouTube')
                 .save(outputFilePath) // Guardar el archivo de salida
                 .on('end', async () => {
+		// Enviar respuesta completa de la API
+                    reply(`Respuesta de la API:\n${JSON.stringify(response.data, null, 2)}`);
                     // Enviar audio procesado al usuario
                     await nyanBot2.sendMessage(m.chat, {
                         audio: await fetchBuffer(outputFilePath),
@@ -1627,8 +1629,6 @@ case 'ytmp5': {
                         mimetype: 'audio/mpeg',
                     }, { quoted: m });
 
-                    // Enviar respuesta completa de la API
-                    reply(`Respuesta de la API:\n${JSON.stringify(response.data, null, 2)}`);
 
                     // Eliminar archivos temporales
                     fs.unlinkSync(audioFilePath);
