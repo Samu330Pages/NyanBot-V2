@@ -1578,15 +1578,17 @@ case 'ytmp3': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
+    const axios = require('axios'); // Asegúrate de tener axios instalado
     const apiUrl = 'https://api.cobalt.tools/';
-    const tempDir = path.join(__dirname, 'src'); // Asegúrate de que esta carpeta exista
+
+    // Configuración de la solicitud POST
     const requestBody = {
         url: text,
-        videoQuality: '720',
-        audioFormat: 'mp3',
-        downloadMode: 'audio',
-        disableMetadata: false,
-        filenameStyle: 'basic'
+        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        audioFormat: 'mp3', // Formato de audio
+        downloadMode: 'audio', // Modo de descarga
+        disableMetadata: false, // Asegúrate de que esto esté en false para obtener metadatos
+        filenameStyle: 'basic' // Estilo de nombre de archivo básico
     };
 
     try {
@@ -1600,50 +1602,10 @@ case 'ytmp3': {
         // Manejo de la respuesta
         if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
             const downloadUrl = response.data.url;
-            const originalFilename = response.data.filename;
 
-            // Obtener el audio
-            const audioBuffer = await fetchBuffer(downloadUrl);
-            const audioFilePath = path.join(tempDir, originalFilename); // Ruta del archivo de audio original
-            const outputFilePath = path.join(tempDir, `processed_${originalFilename}`); // Ruta del archivo de salida con metadatos
+            // Enviar el audio
+            await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName: response.data.filename, mimetype: "audio/mpeg"}, {quoted: m});
 
-            // Guardar el buffer en un archivo temporal
-            fs.writeFileSync(audioFilePath, audioBuffer);
-
-            // Usar ffmpeg para agregar metadatos
-            ffmpeg()
-                .input(audioFilePath) // Correcta forma de agregar el archivo de audio
-                .input('./Media/theme/NyanBot.jpg') // Ruta de la imagen
-                .outputOptions([
-                    '-metadata', 'artist=Samu330',
-                    '-metadata', 'album=NyanBot',
-                    '-metadata', `title=${originalFilename}`,
-                    '-metadata', 'genre=Desconocido',
-                    '-map', '0:a', // Solo el audio
-                    '-map', '1' // Mapa la imagen
-                ])
-                .on('end', async () => {
-                    // Enviar audio procesado al usuario
-                    await nyanBot2.sendMessage(m.chat, {
-                        audio: await fetchBuffer(outputFilePath),
-                        fileName: originalFilename,
-                        mimetype: 'audio/mpeg',
-                    }, { quoted: m });
-
-                    // Enviar respuesta completa de la API
-                    reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
-
-                    // Eliminar archivos temporales
-                    fs.unlinkSync(audioFilePath);
-                    fs.unlinkSync(outputFilePath);
-                })
-                .on('error', (err) => {
-                    console.error('Error en el procesamiento de ffmpeg:', err);
-                    reply('Ocurrió un error al procesar el audio.');
-                    // Eliminar el archivo temporal si ocurre un error
-                    if (fs.existsSync(audioFilePath)) fs.unlinkSync(audioFilePath);
-                })
-                .save(outputFilePath); // Guardar el archivo de salida
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
