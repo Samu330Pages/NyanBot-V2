@@ -1604,7 +1604,7 @@ case 'ytmp3': {
             const downloadUrl = response.data.url;
 
             // Enviar el audio
-            await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName: response.data.filename, mimetype: "audio/mpeg"}, {quoted: m});
+            await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), fileName: `${response.data.filename}`, mimetype: "audio/mpeg"}, {quoted: m});
 
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
