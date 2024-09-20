@@ -714,23 +714,24 @@ list.push({
    }
  
         //respond
-        if (db.data.chats[m.chat].badword) {
-            for (let bak of bad) {
-               if (budy === bak) {
-                  let baduser = await db.data.users[sender].badword
-                  nyanBot2.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-               }
-            }
+if (db.data.chats[m.chat].badword) {
+    for (let bak of bad) {
+        // Convertir el mensaje y la palabra prohibida a minúsculas para comparación
+        if (budy.toLowerCase().includes(bak.toLowerCase())) {
+            let baduser = await db.data.users[sender].badword;
+            nyanBot2.sendMessage(m.chat,
+            {
+                delete: {
+                    remoteJid: m.chat,
+                    fromMe: false,
+                    id: m.key.id,
+                    participant: m.key.participant
+                }
+            });
+            nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m});
         }
+    }
+}
         //autosticker
         if (db.data.settings[botNumber].autosticker) {
         	if (m.key.fromMe) return
