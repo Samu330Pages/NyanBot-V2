@@ -1479,7 +1479,8 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Duración:* ${video.timestamp}\n
 - *Vistas:* ${formatNumber(video.views)}
 
-`
+`,
+	media: await fetchBuffer(`${video.thumbnail}`)
 })
 }
 break
@@ -1626,7 +1627,7 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 }
 break
 
-case 'ytmp4': {
+case 'ytmp4': case'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
@@ -1659,8 +1660,7 @@ case 'ytmp4': {
             // Obtener el video
             const videoBuffer = await fetchBuffer(downloadUrl);
 
-	    reply(`*Su video se está enviando, por favor espera unos segundos...*`)
-            // Enviar video al usuario
+	    // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer, // Usar fs.createReadStream para el envío
 		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n*${originalFilename}\n\n> ${ownername}`,
