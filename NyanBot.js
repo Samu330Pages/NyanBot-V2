@@ -1576,8 +1576,8 @@ case 'ytmp3': {
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply(`> *Esperé un momento, se está procesando su solicitud...*\n
-${forma1}*CONSEJO:*${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
+    reply(`*Esperé un momento, se está procesando su solicitud...*\n
+${forma1}CONSEJO:${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
 _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*_\nY automáticamente aparecerá en tu reproductor, en dado caso que el audio no aparezca, solamente busca dentro de ese directorio un archivo llamado:
 *.nomedia* y elimínalo, ya qué este archivo no permite la visualización de archivos en el dispositivo! 😙`);
 
@@ -1633,7 +1633,6 @@ case 'ytmp4': {
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
-
     const apiUrl = 'https://api.cobalt.tools/';
     const requestBody = {
         url: text,
