@@ -1443,14 +1443,11 @@ case 'test':
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
-if (db.data.users[sender].limit < 1) return reply(mess.limit)
-if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 const r = await yts(text);
-
 if (!r || !r.videos || r.videos.length === 0) {
 return reply("No se encontraron videos para esa búsqueda.");
 }
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 const video = r.videos[0];
 const buttons = [{
           name: "quick_reply",
@@ -1511,71 +1508,11 @@ case 'args': {
     }
 }
 break
-					
-/*case 'ytmp3': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
-
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se esta enviando su audio...*');
-
-    let { title, audio, thumbnail } = await ytmp3v3(text);
-    let audioYt = await fetchBuffer(audio);
-    
-    // Guardar el audio original
-    /*const originalAudioPath = './src/output.mp3';
-    fs.writeFileSync(originalAudioPath, audioYt);
-
-    // Definir el archivo de salida con metadatos
-    const outputAudioPath = './src/output.mp3';
-
-    // Comando ffmpeg para agregar metadatos
-    const ffmpegCommand = `ffmpeg -i ${originalAudioPath} -metadata title="${title}" -metadata artist="Samu330" -metadata album="NyanBot" -metadata genre="Bot de WhatsApp" -codec copy ${outputAudioPath}`;
-
-    // Ejecutar el comando ffmpeg
-    exec(ffmpegCommand, async (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error al procesar el audio: ${error.message}`);
-            return reply('Ocurrió un error al procesar el audio.');
-        }
-
-        // Enviar el audio como documento
-        const mediaMessage = await prepareWAMessageMedia({
-            document: audioYt,
-            mimetype: 'audio/mpeg',
-            fileName: title + '.mp3',
-            jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")
-        }, { upload: nyanBot2.waUploadToServer });
-
-        const message = generateWAMessageFromContent(m.chat, mediaMessage, { quoted: m });
-        await nyanBot2.relayMessage(m.chat, message.message, { messageId: message.key.id });
-
-        // Enviar el audio con metadatos
-        const processedAudioMessage = await prepareWAMessageMedia({
-            audio: fs.readFileSync(outputAudioPath),
-            mimetype: 'audio/mpeg',
-            fileName: title + '.mp3'
-        }, { upload: nyanBot2.waUploadToServer });
-
-        const processedMessage = generateWAMessageFromContent(m.chat, processedAudioMessage, { quoted: m });
-        await nyanBot2.relayMessage(m.chat, processedMessage.message, { messageId: processedMessage.key.id });
-
-        // Limpiar archivos temporales
-        fs.unlinkSync(originalAudioPath);
-        fs.unlinkSync(outputAudioPath);
-
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-        db.data.users[sender].limit -= 30;
-    
-}
-break
-*/
 
 case 'ytmp3': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|you\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply(`*Esperé un momento, se está procesando su solicitud...*\n
@@ -1631,7 +1568,7 @@ break
 case 'ytmp4': case'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|you\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
@@ -1683,32 +1620,6 @@ case 'ytmp4': case'ytv': {
     nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
 break
-			
-			
-case 'ytmp6': {
-if (db.data.users[sender].limit < 1) return reply(mess.limit)
-if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`)
-if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/....`);
-
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
-reply('> Esperé un momento, se esta enviando su video...')
-let { title, size, video, quality, thumbnail } = await ytmp4(text);
-let caption = `> Yt MP4 📽\n`;
-      caption += `- *Titulo:* ${title}\n`;
-      caption += `- *Calidad:* ${quality}\n`;
-      caption += `- *Peso:* ${size}\n\n`;
-      caption += `> ${botname} by ${ownername}`;
-let videoYt = await fetchBuffer(video);
-await nyanBot2.sendMessage(m.chat, {
-            video: videoYt,
-            fileName: title + '.mp4',
-	    caption: caption,
-            mimetype: 'video/mp4',
-        }, { quoted: m });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
-db.data.users[sender].limit -= 30
-}
-break
 
 // Case para Facebook
 case 'facebook': case 'fb': {
@@ -1750,7 +1661,7 @@ break
 case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(Instagram\.com|insta\.reel)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://Instagram.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
@@ -1807,7 +1718,7 @@ break
 case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (!text) return reply(`*Es necesario el link de TikTok.*\n_*Ejemplo de uso*_\n${prefix+command}` + ' https://vt.tiktok.com/...');
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(tiktok\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
     try {
         let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
         let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`;
