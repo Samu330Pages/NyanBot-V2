@@ -1045,9 +1045,9 @@ case 'menu': {
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
         "📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
-	"🎭 Grupos": ['anti `(CONTROL DE PALABRAS)`', 'bienvenida'],
+	"🎭 Grupos": ['bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos'],
-        "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', 'groseria', 'deldb', '<', '=>', '$']
+        "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
     };
 
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠'
