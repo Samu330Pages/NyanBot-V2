@@ -211,11 +211,11 @@ Lft = await getBuffer(ppuser)
 	            const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
 	            const members = metadata.participants.length
                 WlcBody = `> *Hola* @${userNumber.split("@")[0]}
-                _*Bienvenido al grupo*_
-                ${metadata.subject}
+_*Bienvenido al grupo*_
+${metadata.subject}
 
-                Eres el # : ${members}
-                Hora/Fecha de ingreso : ${time} ${date}`
+Eres el participante Nº.: ${members}
+Hora/Fecha de ingreso : ${time} ${date}`
 NyanBotUser.sendMessage(anu.id,
  { text: WlcBody,
  contextInfo:{
@@ -235,7 +235,7 @@ NyanBotUser.sendMessage(anu.id,
                 	let userNumber = num
                     const members = metadata.participants.length
                     WlcBody = `*Sa ah salido* @${userNumber.split("@")[0]}
-                    > a las ${time} del ${date}`
+> a las ${time} del ${date}`
 NyanBotUser.sendMessage(anu.id,
  { text: WlcBody,
  contextInfo:{
