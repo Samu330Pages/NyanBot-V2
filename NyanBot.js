@@ -1477,6 +1477,7 @@ await sendReplyButton(m.chat, buttons, m, {
  
 - *Título:* ${video.title}\n
 - *Duración:* ${video.timestamp}\n
+- *Autor:* ${video.author.name\n}
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
@@ -1746,31 +1747,59 @@ case 'facebook': case 'fb': {
 }
 break
 
-// Case para Instagram
-case 'instagram': case 'ig': {
+case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(instagram\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/....`);
+    if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    reply('> *Esperé un momento, se está procesando su solicitud...*');
+    
+    const apiUrl = 'https://api.cobalt.tools/';
+    const requestBody = {
+        url: text,
+        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        downloadMode: 'auto', // Descarga el video completo
+        disableMetadata: false,
+        filenameStyle: 'basic'
+    };
+
     try {
-        let res = await igdl(text);
-        let data = await res.data;
-        let videoIg = await fetchBuffer(url);
-        
-        await nyanBot2.sendMessage(m.chat, {
-            video: videoIg,
-            fileName: nyanBot2.getName(sender) + '.mp4',
-            caption: '> *Instagram Dl*',
-            mimetype: 'video/mp4'
-        }, { quoted: m });
-        
-        db.data.users[sender].limit -= 20;
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-    } catch (err) {
-        nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
-        return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${err}`);
+        const response = await axios.post(apiUrl, requestBody, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Manejo de la respuesta
+        if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
+            const downloadUrl = response.data.url;
+            const originalFilename = response.data.filename;
+
+            // Obtener el video
+            const videoBuffer = await fetchBuffer(downloadUrl);
+
+            // Enviar video al usuario
+            await nyanBot2.sendMessage(m.chat, {
+                video: videoBuffer, // Enviar el video
+                caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
+                fileName: originalFilename,
+                mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
+            }, { quoted: m });
+
+        } else if (response.data.status === 'error') {
+            reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
+        } else {
+            reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+        }
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
+
+    db.data.users[sender].limit -= 20; // Deducir 20 puntos por la descarga
+    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 }
 break
 
