@@ -1883,7 +1883,7 @@ if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
 if (welcome === true) return reply('¡la opción de bienvenida está ya activa!')
 welcome = true
-reply(`La opción de badwords sé ha activado en este chat.`)
+reply(`La bienvenida sé ha activado en este chat.`)
 }
 break
 case 'weloff': {
@@ -1892,7 +1892,7 @@ if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
 if (welcome === false) return reply('¡la opción de bienvenida está ya desactivada!')
 welcome = false
-reply(`La opción de badwords sé ha desactivado en este chat.`)
+reply(`La bienvenida sé ha desactivado en este chat.`)
 }
 break
 			
