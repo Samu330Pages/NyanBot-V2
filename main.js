@@ -348,7 +348,27 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
 }
 			console.log(json)
 			const res = json[0]
-			if (res.announce == true) {
+			if (res.joinApprovalMode == false) {
+				await sleep(2000)
+				NyanBotUser.sendMessage(res.id, {
+					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nCualquier persona puede entrar al grupo!!`,
+				})
+			} else if (res.joinApprovalMode == true) {
+				await sleep(2000)
+				NyanBotUser.sendMessage(res.id, {
+					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nPara poder entrar al grupo se requerirá aprobación de los administradores!!`,
+				})
+			} else if (res.memberAddMode == false) {
+				await sleep(2000)
+				NyanBotUser.sendMessage(res.id, {
+					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora solo los administradores pueden agregar personas al grupo!!`,
+				})
+			} else if (res.memberAddMode == true) {
+				await sleep(2000)
+				NyanBotUser.sendMessage(res.id, {
+					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora todos pueden agregar personas al grupo!!`,
+				})
+			} else if (res.announce == true) {
 				await sleep(2000)
 				NyanBotUser.sendMessage(res.id, {
 					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo ha sido cerrado, solo los administradores podrán enviar mensajes!`,
