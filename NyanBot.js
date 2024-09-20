@@ -1477,7 +1477,7 @@ await sendReplyButton(m.chat, buttons, m, {
  
 - *Título:* ${video.title}\n
 - *Duración:* ${video.timestamp}\n
-- *Autor:* ${video.author.name\n}
+- *Autor:* ${video.author.name}\n
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
