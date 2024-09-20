@@ -1528,7 +1528,7 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
     // Configuración de la solicitud POST
     const requestBody = {
         url: text,
-        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        videoQuality: '480', // Puedes ajustar esto según tus necesidades
         audioFormat: 'mp3', // Formato de audio
         downloadMode: 'audio', // Modo de descarga
         disableMetadata: false, // Asegúrate de que esto esté en false para obtener metadatos
