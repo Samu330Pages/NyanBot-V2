@@ -1663,7 +1663,7 @@ case 'ytmp4': {
 
             // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
-                video: await fetchBuffer(videoFilePath),
+                video: fs.createReadStream(videoFilePath), // Usar fs.createReadStream para el envío
                 fileName: originalFilename,
                 mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
             }, { quoted: m });
