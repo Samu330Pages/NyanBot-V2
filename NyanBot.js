@@ -1576,7 +1576,7 @@ case 'ytmp4': case'ytv': {
     const apiUrl = 'https://api.cobalt.tools/';
     const requestBody = {
         url: text,
-        videoQuality: '720', // Puedes ajustar esto según tus necesidades
+        videoQuality: '480', // Puedes ajustar esto según tus necesidades
         audioFormat: 'best', // Puede ser útil si deseas mantener la mejor calidad de audio
         downloadMode: 'auto', // Descarga el video completo
         disableMetadata: false,
