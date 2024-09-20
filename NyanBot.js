@@ -1576,7 +1576,10 @@ case 'ytmp3': {
     if (args.length < 1 || !isUrl(text)) return reply(`*Es necesario el link de Youtube.*\n_*Ejemplo de uso*_\n\n${prefix + command} [opcion: 1/2] https://youtube.com/....`);
 
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    reply('> *Esperé un momento, se está procesando su solicitud...*');
+    reply(`> *Esperé un momento, se está procesando su solicitud...*\n
+${forma1}*CONSEJO:*${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
+_*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*_\nY automáticamente aparecerá en tu reproductor, en dado caso que el audio no aparezca, solamente busca dentro de ese directorio un archivo llamado:
+*.nomedia* y elimínalo, ya qué este archivo no permite la visualización de archivos en el dispositivo! 😙`);
 
     const axios = require('axios'); // Asegúrate de tener axios instalado
     const apiUrl = 'https://api.cobalt.tools/';
@@ -1605,7 +1608,7 @@ case 'ytmp3': {
 	    const audioName = response.data.filename;
 
             // Enviar el audio
-            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")}, {quoted: m});
+            //await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")}, {quoted: m});
 	    await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
@@ -1657,15 +1660,14 @@ case 'ytmp4': {
             // Obtener el video
             const videoBuffer = await fetchBuffer(downloadUrl);
 
+	    reply(`*Su video se está enviando, por favor espera unos segundos...*`)
             // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer, // Usar fs.createReadStream para el envío
+		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n*${originalFilename}\n\n> ${ownername}`,
                 fileName: originalFilename,
                 mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
             }, { quoted: m });
-
-            // Enviar respuesta completa de la API
-            reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
 
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
