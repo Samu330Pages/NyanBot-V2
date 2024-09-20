@@ -1656,14 +1656,10 @@ case 'ytmp4': {
 
             // Obtener el video
             const videoBuffer = await fetchBuffer(downloadUrl);
-            const videoFilePath = path.join('src', originalFilename); // Ruta del archivo de video
-
-            // Guardar el buffer en un archivo temporal
-            fs.writeFileSync(videoFilePath, videoBuffer);
 
             // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
-                video: fs.createReadStream(videoFilePath), // Usar fs.createReadStream para el envío
+                video: videoBuffer, // Usar fs.createReadStream para el envío
                 fileName: originalFilename,
                 mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
             }, { quoted: m });
@@ -1671,8 +1667,6 @@ case 'ytmp4': {
             // Enviar respuesta completa de la API
             reply(`**Respuesta Completa de la API:**\n${JSON.stringify(response.data, null, 2)}`);
 
-            // Eliminar archivos temporales
-            fs.unlinkSync(videoFilePath);
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
