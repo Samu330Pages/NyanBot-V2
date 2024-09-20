@@ -1083,6 +1083,9 @@ case 'menu': {
                         }),
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
+                                "name": "quick_reply",
+                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\`${prefix}reg\`}`
+			    }, {
                                 "name": "cta_url",
                                 "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
                             },],
@@ -1120,7 +1123,7 @@ const buttons = [{
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Si',
-                        id: `%lg ${sender}`
+                        id: `${prefix}lg ${sender}`
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
@@ -1169,7 +1172,7 @@ _*Ya puedes usar las funciones del bot que requieran registro!*_
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Registro desde WhatsApp 🧩',
-                        id: `%reg`
+                        id: `${prefix}reg`
                     }),
                 }, {
                     name: "cta_url",
@@ -1280,7 +1283,7 @@ const auth = getAuth(app);
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Iniciar sesión! 🔐',
-                        id: `%login ${data.Result}`
+                        id: `${prefix}login ${data.Result}`
                     }),
                 }];
                 sendReplyButton(m.chat, buttons, m, {
@@ -1312,7 +1315,7 @@ const auth = getAuth(app);
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Iniciar sesión! 🔐',
-                        id: `%login ${data.Result}`
+                        id: `${prefix}login ${data.Result}`
                     }),
                 }, {
                     name: "cta_url",
@@ -1420,14 +1423,14 @@ case 'test':
         {
             name: "cta_url",
             buttonParamsJson: JSON.stringify({
-                display_text: 'Menu',
+                display_text: 'Page',
                 url: 'https://wa.me/samu330'
             }),
         },
         {
             name: "cta_call",
             buttonParamsJson: JSON.stringify({
-                display_text: 'Menu',
+                display_text: 'Call',
                 number: '5219984907794'
             }),
         }
@@ -1453,13 +1456,13 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Descargar audio 🎙️',
-            id: `%ytmp3 ${video.url}`
+            id: `${prefix}ytmp3 ${video.url}`
           }),
         }, {
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Descargar video 🎬',
-            id: `%ytv ${video.url}`
+            id: `${prefix}ytv ${video.url}`
           }),
 	}, {
           name: "cta_url",
@@ -1512,8 +1515,7 @@ break
 case 'ytmp3': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|you\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
-
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply(`*Esperé un momento, se está procesando su solicitud...*\n
 ${forma1}CONSEJO:${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
@@ -1568,8 +1570,7 @@ break
 case 'ytmp4': case'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|you\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
-
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
     const apiUrl = 'https://api.cobalt.tools/';
@@ -1661,8 +1662,7 @@ break
 case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(Instagram\.com|insta\.reel)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://Instagram.com/....`);
-
+    if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
     
@@ -1718,7 +1718,7 @@ break
 case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(tiktok\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?tiktok\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
     try {
         let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
         let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`;
@@ -1856,7 +1856,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Activar ✔',
-            id: '%welon'
+            id: `${prefix}welon'`
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
@@ -1867,7 +1867,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Desactivar ❌',
-            id: '%weloff'
+            id: `${prefix}weloff`
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
@@ -1915,7 +1915,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Activar ✔',
-            id: '%bdon'
+            id: `${prefix}bdon`
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
@@ -1926,7 +1926,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Desactivar ❌',
-            id: '%bdoff'
+            id: `${prefix}bdoff`
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
