@@ -1084,7 +1084,7 @@ case 'menu': {
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
                                 "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\`${prefix}reg\`}`
+                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg"\}`
 			    }, {
                                 "name": "cta_url",
                                 "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
@@ -1718,8 +1718,8 @@ break
 case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?tiktok\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
-    try {
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(tiktok\.com|vt\.tiktok\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
+	try {
         let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
         let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`;
         caption += `- *Autor:* ${author}\n`;
