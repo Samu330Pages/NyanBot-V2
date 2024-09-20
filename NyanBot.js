@@ -1480,7 +1480,7 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
-	media: fs.readFileSync('./Media/theme/play.jpg')
+	media: './Media/theme/play.jpg'
 })
 }
 break
