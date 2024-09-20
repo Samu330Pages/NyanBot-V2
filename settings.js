@@ -21,7 +21,7 @@ global.botscript = 'https://github.com/Samu330'
 global.packname = "🪅 NyanBot V2\n🎳 Web\n🍟 WhatsApp Bot By:\n💎 Meta Verified"
 global.author = "WhatsApp Bot ✅\nWa.me/samu330\nᶻ 𝗓 𐰁 Ⴝᶏᷤᶆͣᶙͫ❦ვვ͠ჿ͢\n© 2024 inc"
 global.creator = "5219984907794@s.whatsapp.net"
-global.xprefix = ''
+global.xprefix = '.'
 global.premium = ["5219984907794"]
 global.hituet = 0
 
