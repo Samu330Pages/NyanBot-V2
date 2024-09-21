@@ -1763,33 +1763,38 @@ case 'tt': case 'tiktok': {
 }
 break
 
-case 'clima':{
-if (!text) return reply('¿Qué ubicación?')
-            let wdata = await axios.get(
-                `https://api.openweathermap.org/data/2.5/weather?q=${text}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en`
-            );
-            let textw = ""
-            textw += `*🗺️Clima de  ${text}*\n\n`
-            textw += `*Clima:-* ${wdata.data.weather[0].main}\n`
-            textw += `*Descripción:-* ${wdata.data.weather[0].description}\n`
-            textw += `*Temp. Promedio:-* ${wdata.data.main.temp}\n`
-            textw += `*Sensación Térmica:-* ${wdata.data.main.feels_like}\n`
-            textw += `*Presión:-* ${wdata.data.main.pressure}\n`
-            textw += `*Humedad:-* ${wdata.data.main.humidity}\n`
-            textw += `*Velocidad del Viento:-* ${wdata.data.wind.speed}\n`
-            textw += `*Latitud:-* ${wdata.data.coord.lat}\n`
-            textw += `*Longitud:-* ${wdata.data.coord.lon}\n`
-            textw += `*País:-* ${wdata.data.sys.country}\n`
+case 'clima': {
+    if (!text) return reply('¿Qué ubicación?');
+    let wdata = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${text}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=es`
+    );
+    let textw = "";
+    textw += `*🗺️Clima de ${wdata.data.name}*\n\n`;
+    textw += `*Clima:-* ${wdata.data.weather[0].main}\n`;
+    textw += `*Descripción:-* ${wdata.data.weather[0].description}\n`;
+    textw += `*Temp. Promedio:-* ${wdata.data.main.temp} °C\n`;
+    textw += `*Sensación Térmica:-* ${wdata.data.main.feels_like} °C\n`;
+    textw += `*Temp. Mínima:-* ${wdata.data.main.temp_min} °C\n`;
+    textw += `*Temp. Máxima:-* ${wdata.data.main.temp_max} °C\n`;
+    textw += `*Presión:-* ${wdata.data.main.pressure} hPa\n`;
+    textw += `*Humedad:-* ${wdata.data.main.humidity}%\n`;
+    textw += `*Velocidad del Viento:-* ${wdata.data.wind.speed} m/s\n`;
+    textw += `*Dirección del Viento:-* ${wdata.data.wind.deg}°\n`;
+    textw += `*Lluvia en la última hora:-* ${wdata.data.rain ? wdata.data.rain['1h'] : 0} mm\n`;
+    textw += `*Nubosidad:-* ${wdata.data.clouds.all}%\n`;
+    textw += `*Latitud:-* ${wdata.data.coord.lat}\n`;
+    textw += `*Longitud:-* ${wdata.data.coord.lon}\n`;
+    textw += `*País:-* ${wdata.data.sys.country}\n`;
 
-           nyanBot2.sendMessage(
-                m.chat, {
-                    text: textw,
-                }, {
-                    quoted: m,
-                }
-           )
-           }
-           break
+    nyanBot2.sendMessage(
+        m.chat, {
+            text: textw,
+        }, {
+            quoted: m,
+        }
+    );
+}
+break
 
 			
             case 's': case 'sticker': case 'stiker': {
