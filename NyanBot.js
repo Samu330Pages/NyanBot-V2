@@ -1766,7 +1766,7 @@ break
 case 'clima': {
     if (!text) return reply('¿Qué ubicación?');
     let wdata = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${text}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=es`
+        `https://api.openweathermap.org/data/2.5/weather?q=${text}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&lang=es`
     );
     let textw = "";
     textw += `*🗺️Clima de ${wdata.data.name}*\n\n`;
