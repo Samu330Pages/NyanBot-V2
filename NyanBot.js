@@ -2358,7 +2358,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 
 if (budy.includes('@5219984907794')) {
     if (isSamu) return;
-    const emojis = ['✅', '❌', '👍', '👎', '🎉']; // Array de emojis para las reacciones
+    const emojis = ['🌮', '❤️', '🐡', '🪅', '🔥', '🦞', '🍟', '🪀', '🌺', '🍋‍🟩]; // Array de emojis para las reacciones
     let emojiIndex = 0; // Índice para el emoji actual
     const sendReaction = () => {
         nyanBot2.sendMessage(m.chat, { react: { text: emojis[emojiIndex], key: m.key } });
