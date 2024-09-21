@@ -2355,6 +2355,21 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                         }
                     } })
                 }
+
+if (budy.includes('@5219984907794')) {
+    if (isSamu) return;
+    const emojis = ['✅', '❌', '👍', '👎', '🎉']; // Array de emojis para las reacciones
+    let emojiIndex = 0; // Índice para el emoji actual
+    const sendReaction = () => {
+        nyanBot2.sendMessage(m.chat, { react: { text: emojis[emojiIndex], key: m.key } });
+        emojiIndex = (emojiIndex + 1) % emojis.length; // Cambiar al siguiente emoji, y volver al inicio si es necesario
+    };
+    
+    const intervalId = setInterval(sendReaction, 1000); // Enviar reacción cada segundo
+
+    // Opcional: detener el intervalo después de cierto tiempo o bajo una condición
+    setTimeout(() => clearInterval(intervalId), 10000); // Detener después de 10 segundos, por ejemplo
+}
                 if (budy.startsWith('=>')) {
                     if (!isSamu) return
                     try {
