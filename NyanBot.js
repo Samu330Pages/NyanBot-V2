@@ -2368,7 +2368,7 @@ if (budy.includes('@5219984907794')) {
     const intervalId = setInterval(sendReaction, 1000); // Enviar reacción cada segundo
 
     // Opcional: detener el intervalo después de cierto tiempo o bajo una condición
-    setTimeout(() => clearInterval(intervalId), 10000); // Detener después de 10 segundos, por ejemplo
+    setTimeout(() => clearInterval(intervalId), 11000); // Detener después de 10 segundos, por ejemplo
 }
                 if (budy.startsWith('=>')) {
                     if (!isSamu) return
