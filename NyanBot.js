@@ -1459,7 +1459,7 @@ const buttons = [
         }
     ];
 
-    const mediaPath = await fetchBuffer(`${lyric.image}`)
+    //const mediaPath = await fetchBuffer(`${lyric.image}`)
 
     return await sendReplyButton(m.chat, buttons, m, {
         content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
@@ -1467,11 +1467,11 @@ _*Titulo:*_ ${lyric.title}
 _*Artista:*_ ${lyric.artist}\n
 *Letra:*\n
 ${lyric.lyrics}\n
-`,
-	media: mediaPath
+`
     });
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 } catch (error) {
+nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
 console.error('Error al procesar la solicitud:', error);
 reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
 }
