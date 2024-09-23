@@ -17,6 +17,7 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
+const { youtube } = require('../../lib/scrape')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1572,53 +1573,9 @@ break
 
 
 case 'vtest': { 
-    try {
-        // Obtiene la información del video
-        let infoYt = await ytdl.getInfo(text);
-        
-        // Verifica si la duración del video es aceptable
-        if (infoYt.videoDetails.lengthSeconds >= 60000) {
-            reply('😔 Video file too big!');
-            break;
-        }
-
-        // Prepara el título del video
-        let titleYt = infoYt.videoDetails.title;
-
-        // Informa que se está descargando el video
-        reply(`*Downloading:* ${titleYt}`);
-
-        // Obtiene el primer formato disponible en el array formats
-        const format = infoYt.formats[0]; // Obtiene el primer formato
-
-        if (!format) {
-            reply('No se encontró un formato de video disponible.');
-            break;
-        }
-
-        // URL del video para enviar
-        const videoUrl = format.url;
-
-        // Envía el video como un documento
-        //const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
-
-	reply(`${videoUrl}`)
-        /*await nyanBot2.sendMessage(m.chat, {
-            document: `${videoBuffer}`,
-            mimetype: 'video/mp4',
-            fileName: `${titleYt}.mp4`,
-            caption: `
-Título: ${titleYt}
-ID del Video: ${infoYt.videoDetails.videoId}
-Duración: ${infoYt.videoDetails.lengthSeconds} segundos
-Descripción: ${infoYt.videoDetails.shortDescription}
-Autor: ${infoYt.videoDetails.author}
-Cantidad de Vistas: ${infoYt.videoDetails.viewCount}
-Calidad: ${format.qualityLabel}
-URL: ${videoUrl}
-            `
-        }, { quoted: m });*/
-
+try {
+let res = await youtube.ytmp4(text)
+reply(`${res}`)
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
