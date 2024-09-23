@@ -1606,7 +1606,7 @@ case 'ytmp4': case'ytv': {
                 fileName: originalFilename,
                 mimetype: 'video/mp4',
 		jpegThumbnail: './Media/theme/play.jpg',
-		gifPlayback: true
+		//gifPlayback: true
             }, { quoted: m });
 
         } else if (response.data.status === 'error') {
