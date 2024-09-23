@@ -1579,16 +1579,15 @@ try {
 let res = await fg.ytv(text)
 await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
-                fileName: `${res.dl_url}.mp4`,
+                fileName: `${res.title}.mp4`,
                 mimetype: 'video/mp4',
-		thumbnail: './Media/theme/play.jpg'
+		jpegThumbnail: fs.readFileSync('./Media/theme/play.jpg')
             }, { quoted: m });
 nyanBot2.sendMessage(m.chat, {
                 video: await fetchBuffer(res.dl_url),
 		caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Bytes:_ ${formatBytes(res.sizeB)}\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
                 fileName: `${res.dl_url}.mp4`,
-                mimetype: 'video/mp4',
-		gifPlayback: true
+                mimetype: 'video/mp4'
             }, { quoted: m });
 db.data.users[sender].limit -= 30;
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
