@@ -1573,7 +1573,7 @@ break
 case 'vtest': {
 const { ytmp4 } = require('ruhend-scraper')
 let data = await ytmp4(text)
-let videoV = await fetchBuffer(`${data.url}`);
+let videoV = await fetchBuffer(`${data.video}`);
 await nyanBot2.sendMessage(m.chat, {
 	document: `${videoV}`,
 	caption: `${ownername}`,
