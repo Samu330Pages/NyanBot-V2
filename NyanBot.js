@@ -17,7 +17,6 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
-const { ytmp4 } = require('./lib/scrape/youtube.js')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1573,7 +1572,7 @@ break
 
 case 'vtest': { 
 try {
-let res = await ytmp4(text)
+let res = await fg.ytv(text)
 reply(`${res}`)
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
