@@ -27,7 +27,7 @@ const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v2 } = require('ruhend-scraper');
+const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -1572,7 +1572,7 @@ break
 
 case 'vtest': {
 const { ytmp4 } = require('ruhend-scraper')
-let data = await ytmp4v2(text)
+let data = await ytmp4v4(text)
 let videoV = await fetchBuffer(`${data.video}`);
 await nyanBot2.sendMessage(m.chat, {
 	document: `${videoV}`,
