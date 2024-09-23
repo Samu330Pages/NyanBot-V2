@@ -1800,7 +1800,7 @@ break
 case 'wn': case 'stickerwm': case 'take':{
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-if (!args.join(" ")) return reply(`*Porfavor incluye los datos correctos, tanto como el nombre de paquete y autor para renombrar el sticker, ejemplo:*\n\n${prefix+command} paquete|autor\n\n_Asegurate de incluir el símbolo ${forma1}|${forma1}_`)
+if (!args.join(" ")) return reply(`*Porfavor incluye los datos correctos, tanto como el nombre de paquete y autor para renombrar el sticker, ejemplo:*\n\n${prefix+command} paquete|autor\n\n*Asegurate de incluir el símbolo ${forma1}|${forma1}*`)
 const swn = args.join(" ")
 const pcknm = swn.split("|")[0]
 const atnm = swn.split("|")[1]
