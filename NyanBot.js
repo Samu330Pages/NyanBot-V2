@@ -1588,17 +1588,8 @@ case 'vtest': {
         // Informa que se está descargando el video
         reply(`*Downloading:* ${titleYt}`);
 
-        // Filtra los formatos disponibles y elige uno, preferiblemente 360p si está disponible
-        const format = ytdl.chooseFormat(infoYt.formats, { quality: '360p' }) || 
-                       ytdl.chooseFormat(infoYt.formats, { quality: 'lowest' });
-
-        if (!format) {
-            reply('No se encontró un formato adecuado para descargar el video.');
-            break;
-        }
-
         // Descarga el video usando el formato elegido
-        const stream = ytdl(urlYt, { filter: () => format });
+        const stream = ytdl(text, { filter: (info) => info.itag == 22 || info.itag == 18, });
 
         // Envía el video como un documento
         await nyanBot2.sendMessage(m.chat, {
