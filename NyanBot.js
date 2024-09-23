@@ -1602,12 +1602,12 @@ case 'ytmp4': case'ytv': {
 
 	    // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
-                document: videoBuffer,
+                video: videoBuffer,
 		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
                 fileName: originalFilename,
                 mimetype: 'video/mp4',
 		jpegThumbnail: './Media/theme/play.jpg',
-		//gifPlayback: true
+		gifPlayback: true
             }, { quoted: m });
 
         } else if (response.data.status === 'error') {
