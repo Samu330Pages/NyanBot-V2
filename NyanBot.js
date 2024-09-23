@@ -1602,7 +1602,8 @@ case 'vtest': {
         // Envía el video como un documento
         const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
 
-        await nyanBot2.sendMessage(m.chat, {
+	reply(`${videoBuffer}`)
+        /*await nyanBot2.sendMessage(m.chat, {
             document: `${videoBuffer}`,
             mimetype: 'video/mp4',
             fileName: `${titleYt}.mp4`,
@@ -1616,7 +1617,7 @@ Cantidad de Vistas: ${infoYt.videoDetails.viewCount}
 Calidad: ${format.qualityLabel}
 URL: ${videoUrl}
             `
-        }, { quoted: m });
+        }, { quoted: m });*/
 
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
