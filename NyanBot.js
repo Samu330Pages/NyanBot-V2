@@ -1601,10 +1601,12 @@ case 'ytmp4': case'ytv': {
 
 	    // Enviar video al usuario
             await nyanBot2.sendMessage(m.chat, {
-                video: videoBuffer, // Usar fs.createReadStream para el envío
+                document: videoBuffer,
 		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
                 fileName: originalFilename,
-                mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
+                mimetype: 'video/mp4',
+		jpegThumbnail: './Media/theme/play.jpg',
+		gifPlayback: true
             }, { quoted: m });
 
         } else if (response.data.status === 'error') {
