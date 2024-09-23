@@ -1568,6 +1568,25 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 }
 break
 
+
+
+case 'vtest': {
+const { ytmp4 } = require('ruhend-scraper')
+let data = await ytmp4(text)
+let videoV = await fetchBuffer(`${data.url}`);
+await nyanBot2.sendMessage(m.chat, {
+	document: videoV,
+	caption: `${ownername}`,
+	fileName: 'test.mp4',
+	mimetype: 'video/mp4',
+	//jpegThumbnail: './Media/theme/play.jpg',
+	//gifPlayback: true
+	}, { quoted: m });
+}
+break
+
+			
+
 case 'ytmp4': case'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
