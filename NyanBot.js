@@ -1600,9 +1600,9 @@ case 'vtest': {
         const videoUrl = format.url;
 
         // Envía el video como un documento
-        const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
+        //const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
 
-	reply(`${videoBuffer}`)
+	reply(`${videoUrl}`)
         /*await nyanBot2.sendMessage(m.chat, {
             document: `${videoBuffer}`,
             mimetype: 'video/mp4',
