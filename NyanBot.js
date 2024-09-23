@@ -27,6 +27,7 @@ const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
+const ytdl = require('ytdl-secktor')
 const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
@@ -1570,18 +1571,45 @@ break
 
 
 
-case 'vtest': {
-const { ytmp4 } = require('ruhend-scraper')
-let data = await ytmp4v4(text)
-let videoV = await fetchBuffer(`${data.video}`);
-await nyanBot2.sendMessage(m.chat, {
-	document: `${videoV}`,
-	caption: `${ownername}`,
-	fileName: 'test.mp4',
-	mimetype: 'video/mp4',
-	//jpegThumbnail: './Media/theme/play.jpg',
-	//gifPlayback: true
-	}, { quoted: m });
+case 'vtest': { 
+    try {
+        // Obtiene la información del video utilizando getInfo
+        const videoInfo = await ytdl.getInfo(text);
+        
+        // Filtra y elige el formato de video 360p
+        const format360p = ytdl.chooseFormat(videoInfo.formats, { quality: '360p' });
+
+        if (!format360p) {
+            reply('No se encontró un video en calidad 360p.');
+            break;
+        }
+
+        // Descarga el video en calidad 360p
+        const videoBuffer = await ytdl.downloadFromInfo(videoInfo, { format: format360p });
+
+        // Prepara el caption con toda la información del video
+        const caption = `
+Título: ${videoInfo.videoDetails.title}
+ID del Video: ${videoInfo.videoDetails.videoId}
+Duración: ${videoInfo.videoDetails.lengthSeconds} segundos
+Descripción: ${videoInfo.videoDetails.shortDescription}
+Autor: ${videoInfo.videoDetails.author}
+Cantidad de Vistas: ${videoInfo.videoDetails.viewCount}
+Calidad: ${format360p.qualityLabel}
+URL: ${format360p.url}
+`;
+
+        // Envía el mensaje con el video
+        await nyanBot2.sendMessage(m.chat, {
+            document: videoBuffer,
+            caption: caption,
+            fileName: 'test.mp4',
+            mimetype: 'video/mp4',
+        }, { quoted: m });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        reply('Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.');
+    }
 }
 break
 
