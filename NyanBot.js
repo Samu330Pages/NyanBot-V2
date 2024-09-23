@@ -1573,39 +1573,50 @@ break
 
 case 'vtest': { 
     try {
-        // Obtiene la información del video utilizando getInfo
-        const videoInfo = await ytdl.getInfo(text);
+        // Obtiene la información del video
+        let infoYt = await ytdl.getInfo(text);
         
-        // Filtra y elige el formato de video 360p
-        const format360p = ytdl.chooseFormat(videoInfo.formats, { quality: '360p' });
-
-        if (!format360p) {
-            reply('No se encontró un video en calidad 360p.');
+        // Verifica si la duración del video es aceptable
+        if (infoYt.videoDetails.lengthSeconds >= 60000) {
+            reply('😔 Video file too big!');
             break;
         }
 
-        // Descarga el video en calidad 360p
-        const videoBuffer = await ytdl.downloadFromInfo(videoInfo, { format: format360p });
+        // Prepara el título del video
+        let titleYt = infoYt.videoDetails.title;
 
-        // Prepara el caption con toda la información del video
-        const caption = `
-Título: ${videoInfo.videoDetails.title}
-ID del Video: ${videoInfo.videoDetails.videoId}
-Duración: ${videoInfo.videoDetails.lengthSeconds} segundos
-Descripción: ${videoInfo.videoDetails.shortDescription}
-Autor: ${videoInfo.videoDetails.author}
-Cantidad de Vistas: ${videoInfo.videoDetails.viewCount}
-Calidad: ${format360p.qualityLabel}
-URL: ${format360p.url}
-`;
+        // Informa que se está descargando el video
+        reply(`*Downloading:* ${titleYt}`);
 
-        // Envía el mensaje con el video
+        // Filtra los formatos disponibles y elige uno, preferiblemente 360p si está disponible
+        const format = ytdl.chooseFormat(infoYt.formats, { quality: '360p' }) || 
+                       ytdl.chooseFormat(infoYt.formats, { quality: 'lowest' });
+
+        if (!format) {
+            reply('No se encontró un formato adecuado para descargar el video.');
+            break;
+        }
+
+        // Descarga el video usando el formato elegido
+        const stream = ytdl(urlYt, { filter: () => format });
+
+        // Envía el video como un documento
         await nyanBot2.sendMessage(m.chat, {
-            document: videoBuffer,
-            caption: caption,
-            fileName: 'test.mp4',
+            document: stream,
             mimetype: 'video/mp4',
+            fileName: `${titleYt}.mp4`,
+            caption: `
+Título: ${titleYt}
+ID del Video: ${infoYt.videoDetails.videoId}
+Duración: ${infoYt.videoDetails.lengthSeconds} segundos
+Descripción: ${infoYt.videoDetails.shortDescription}
+Autor: ${infoYt.videoDetails.author}
+Cantidad de Vistas: ${infoYt.videoDetails.viewCount}
+Calidad: ${format.qualityLabel}
+URL: ${format.url}
+            `
         }, { quoted: m });
+
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
