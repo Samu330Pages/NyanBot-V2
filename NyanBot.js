@@ -1046,7 +1046,7 @@ case 'menu': {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
         "📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
 	"🎭 Grupos": ['bienvenida'],
-	"🛠 Herramientas": ['sticker', 's', 'puntos'],
+	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
     };
 
@@ -1796,6 +1796,33 @@ case 'clima': {
 }
 break
 
+
+case 'wn': case 'stickerwm': case 'take':{
+if (db.data.users[sender].limit < 1) return reply(mess.limit);
+if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+if (!args.join(" ")) return reply(`*Porfavor incluye los datos correctos, tanto como el nombre de paquete y autor para renombrar el sticker, ejemplo:*\n\n${prefix+command} paquete|autor\n\n_Asegurate de incluir el símbolo ${forma1}|${forma1}_`)
+const swn = args.join(" ")
+const pcknm = swn.split("|")[0]
+const atnm = swn.split("|")[1]
+if (m.quoted.isAnimated === true) {
+nyanBot2.downloadAndSaveMediaMessage(quoted, "gifee")
+nyanBot2.sendMessage(from, {sticker:fs.readFileSync("gifee.webp")},{quoted:m})
+db.data.users[sender].limit -= 50;
+} else if (/image/.test(mime)) {
+let media = await quoted.download()
+let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
+db.data.users[sender].limit -= 50;
+} else if (/video/.test(mime)) {
+if ((quoted.msg || quoted).seconds > 11) return reply('El video debe ser de maximo 10 segundos!')
+let media = await quoted.download()
+let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
+db.data.users[sender].limit -= 50;
+} else {
+reply(`Etiqueta porfavor un sticker, imagen o video!`)
+}
+}
+break
+			
 			
             case 's': case 'sticker': case 'stiker': {
                 if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos.`)
