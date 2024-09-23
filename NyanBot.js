@@ -1581,7 +1581,7 @@ await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
                 fileName: `${res.title}.mp4`,
                 mimetype: 'video/mp4',
-		jpegThumbnail: fs.readFileSync('./Media/theme/play.jpg')
+		jpegThumbnail: await fetchBuffer('https://png.pngitem.com/pimgs/s/509-5099390_check-green-check-list-icon-hd-png-download.png')
             }, { quoted: m });
 nyanBot2.sendMessage(m.chat, {
                 video: await fetchBuffer(res.dl_url),
