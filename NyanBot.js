@@ -1471,7 +1471,10 @@ ${lyric.lyrics}\n
 	media: mediaPath
     });
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-} catch {}
+} catch (error) {
+console.error('Error al procesar la solicitud:', error);
+reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
+}
 }
 break
 case 'play': {
@@ -1622,8 +1625,8 @@ nyanBot2.sendMessage(m.chat, {
 db.data.users[sender].limit -= 30;
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
     } catch (error) {
-        console.error('Error al procesar la solicitud:', error);
-        reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
+        console.error('Error al procesar la solicitud:', error)
+        reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`)
     }
 }
 break
