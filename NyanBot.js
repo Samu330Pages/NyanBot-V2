@@ -1588,12 +1588,22 @@ case 'vtest': {
         // Informa que se está descargando el video
         reply(`*Downloading:* ${titleYt}`);
 
-        // Descarga el video usando el formato elegido
-        const stream = ytdl(text, { filter: (info) => info.itag == 22 || info.itag == 18, });
+        // Obtiene el primer formato disponible en el array formats
+        const format = infoYt.formats[0]; // Obtiene el primer formato
+
+        if (!format) {
+            reply('No se encontró un formato de video disponible.');
+            break;
+        }
+
+        // URL del video para enviar
+        const videoUrl = format.url;
 
         // Envía el video como un documento
+        const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
+
         await nyanBot2.sendMessage(m.chat, {
-            document: stream,
+            document: videoBuffer,
             mimetype: 'video/mp4',
             fileName: `${titleYt}.mp4`,
             caption: `
@@ -1604,7 +1614,7 @@ Descripción: ${infoYt.videoDetails.shortDescription}
 Autor: ${infoYt.videoDetails.author}
 Cantidad de Vistas: ${infoYt.videoDetails.viewCount}
 Calidad: ${format.qualityLabel}
-URL: ${format.url}
+URL: ${videoUrl}
             `
         }, { quoted: m });
 
