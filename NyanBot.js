@@ -1444,6 +1444,34 @@ case 'test':
     });
     break
 
+case 'letra': case 'lyrics': {
+if (!text) return reply(`¡Porfavor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix+command} me olvide de vivir*`)
+try {
+let lyric = await fg.lyrics(text)
+const buttons = [
+        {
+            name: "cta_copy",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Copiar 🪄',
+                copy_code: `${lyric.lyrics}`
+            }),
+        }
+    ];
+
+    const mediaPath = await fetchBuffer(`${lyric.image}`)
+
+    return await sendReplyButton(m.chat, buttons, m, {
+        content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
+_*Titulo:*_ ${lyric.title}
+_*Artista:*_ ${lyric.artis}\n
+*Letra:*\n
+${lyric.lyrics}\n
+`,
+	media: mediaPath
+    });
+} catch {}
+}
+break
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
