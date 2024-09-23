@@ -1581,7 +1581,7 @@ await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
                 fileName: `${res.dl_url}.mp4`,
                 mimetype: 'video/mp4',
-		jpegThumbnail: './Media/theme/play.jpg'
+		thumbnail: './Media/theme/play.jpg'
             }, { quoted: m });
 nyanBot2.sendMessage(m.chat, {
                 video: await fetchBuffer(res.dl_url),
