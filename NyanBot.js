@@ -1603,7 +1603,7 @@ case 'vtest': {
         const videoBuffer = await fetchBuffer(videoUrl); // Asegúrate de que fetchBuffer esté disponible
 
         await nyanBot2.sendMessage(m.chat, {
-            document: videoBuffer,
+            document: `${videoBuffer}`,
             mimetype: 'video/mp4',
             fileName: `${titleYt}.mp4`,
             caption: `
