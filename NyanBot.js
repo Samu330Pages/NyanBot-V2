@@ -1044,7 +1044,8 @@ case 'menu': {
 	nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
-        "📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
+        "🔍 Busqueda": ['letra `LETRA DE CANCIONES`'],
+	"📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
 	"🎭 Grupos": ['bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
