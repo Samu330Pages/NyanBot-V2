@@ -1608,7 +1608,7 @@ URL: ${format360p.url}
         }, { quoted: m });
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
-        reply('Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.');
+        reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
     }
 }
 break
