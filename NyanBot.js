@@ -1578,6 +1578,7 @@ case 'ytmp4': case'ytv': {
     const requestBody = {
         url: text,
         videoQuality: '480', // Puedes ajustar esto según tus necesidades
+	audioFormat: 'best',
         downloadMode: 'auto', // Descarga el video completo
         disableMetadata: false,
         filenameStyle: 'basic'
