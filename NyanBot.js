@@ -1573,10 +1573,11 @@ break
 case 'vtest': { 
 try {
 let res = await fg.ytv(text)
+reply(`${res.dl_url}`)
 await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
-		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
-                fileName: originalFilename,
+		caption: `test`,
+                fileName:'test.mp4',
                 mimetype: 'video/mp4',
 		//jpegThumbnail: './Media/theme/play.jpg',
 		//gifPlayback: true
