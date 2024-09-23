@@ -28,7 +28,6 @@ const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const ytdl = require('ytdl-secktor')
 const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
 const cheerio = require('cheerio')
