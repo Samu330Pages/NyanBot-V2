@@ -1459,15 +1459,14 @@ const buttons = [
         }
     ];
 
-    //const mediaPath = await fetchBuffer(`${lyric.image}`)
-
     return await sendReplyButton(m.chat, buttons, m, {
         content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
 _*Titulo:*_ ${lyric.title}
 _*Artista:*_ ${lyric.artist}\n
 *Letra:*\n
 ${lyric.lyrics}\n
-`
+`,
+	media: './Media/theme/lyrics.jpg'
     });
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 } catch (error) {
@@ -1504,6 +1503,12 @@ const buttons = [{
             display_text: 'Ver en la app ❤️',
             url: `${video.url}`,
 	    merchant_url: `${video.url}`
+          }),
+        }, {
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Buscar letra de la canción 📝',
+            id: `${prefix}letra ${video.title}`
           }),
 }]
 await sendReplyButton(m.chat, buttons, m, {
