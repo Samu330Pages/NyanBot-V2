@@ -1446,6 +1446,7 @@ case 'test':
 
 case 'letra': case 'lyrics': {
 if (!text) return reply(`¡Porfavor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix+command} me olvide de vivir*`)
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 try {
 let lyric = await fg.lyrics(text)
 const buttons = [
@@ -1463,12 +1464,13 @@ const buttons = [
     return await sendReplyButton(m.chat, buttons, m, {
         content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
 _*Titulo:*_ ${lyric.title}
-_*Artista:*_ ${lyric.artis}\n
+_*Artista:*_ ${lyric.artist}\n
 *Letra:*\n
 ${lyric.lyrics}\n
 `,
 	media: mediaPath
     });
+nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
 } catch {}
 }
 break
