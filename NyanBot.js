@@ -1575,7 +1575,7 @@ const { ytmp4 } = require('ruhend-scraper')
 let data = await ytmp4(text)
 let videoV = await fetchBuffer(`${data.url}`);
 await nyanBot2.sendMessage(m.chat, {
-	document: videoV,
+	document: `${videoV}`,
 	caption: `${ownername}`,
 	fileName: 'test.mp4',
 	mimetype: 'video/mp4',
