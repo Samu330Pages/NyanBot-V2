@@ -1573,7 +1573,14 @@ break
 case 'vtest': { 
 try {
 let res = await fg.ytv(text)
-reply(`${res}`)
+await nyanBot2.sendMessage(m.chat, {
+                document: await fetchBuffer(res.dl_url),
+		caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
+                fileName: originalFilename,
+                mimetype: 'video/mp4',
+		//jpegThumbnail: './Media/theme/play.jpg',
+		//gifPlayback: true
+            }, { quoted: m });
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
