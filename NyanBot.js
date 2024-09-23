@@ -1581,7 +1581,7 @@ case 'ytmp4': case'ytv': {
 	audioFormat: 'best',
 	youtubeVideoCodec: 'h264',
         downloadMode: 'auto', // Descarga el video completo
-        disableMetadata: false,
+        //disableMetadata: false,
         filenameStyle: 'basic'
     };
 
