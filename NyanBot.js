@@ -819,7 +819,7 @@ senddocu(buffer)
 }
 
 // Respon Cmd with media
-if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.data.sticker)) {
+/*if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.data.sticker)) {
 let hash = global.db.data.sticker[m.msg.fileSha256.toString('base64')]
 let { text, mentionedJid } = hash
 let messages = await generateWAMessage(m.chat, { text: text, mentions: mentionedJid }, {
@@ -837,7 +837,7 @@ let msg = {
 }
 nyanBot2.ev.emit('messages.upsert', msg)
 }
-
+*/
 //math
 if (quizmath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
 	if (m.key.fromMe) return
