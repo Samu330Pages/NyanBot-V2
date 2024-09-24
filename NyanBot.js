@@ -1136,7 +1136,7 @@ case 'menu': {
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmdObj => {
-            menuMessage += `- ${cmdObj.command}: ${cmdObj.description}\n`;
+            menuMessage += `- \`\`\`${cmdObj.command}\`\`\`: ${cmdObj.description}\n`;
         });
         menuMessage += '\n';
     }
@@ -2423,14 +2423,14 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
         }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
         // Mensaje de respuesta
-        let response = `El comando "${command}" no existe o está mal escrito.`;
+        let response = `❌ Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
 
         // Crear botones para las sugerencias
         const buttons = similarities.map(item => ({
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
-                display_text: `${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
-                id: `.${item.availableCommand+text}` // Aquí se pone el comando corregido
+                display_text: `✏️ *${item.availableCommand}* _(Similitud: ${Math.round(item.similarity * 100)}%)_`,
+                id: `.${item.availableCommand} ${text}` // Aquí se pone el comando corregido
             }),
         }));
 
@@ -2441,7 +2441,7 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
             });
         } else {
             // Si no hay sugerencias, enviar un mensaje simple
-            return reply(response);
+            return reply(`*El comando "${command}" no existe o está mal escrito.*`);
         }
 
         return; // Asegurarse de que no se continúe con el resto del código
