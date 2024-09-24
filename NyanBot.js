@@ -1995,26 +1995,32 @@ case 'buscarsticker': {
 
         // Procesar cada URL de sticker
         for (const url of stickers) {
-            let media = await fetchBuffer(url);
-            let isImage = url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg');
-            let isVideo = url.includes('.mp4') || url.includes('.gif');
-
             try {
+                let media = await fetchBuffer(url)
+                if (!media) {
+                    reply(`Error: No se pudo obtener el contenido de la URL: ${url}`)
+                    nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
+                    continue; // Saltar a la siguiente URL
+                }
+
+                let isImage = url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg')
+                let isVideo = url.includes('.mp4') || url.includes('.gif')
+
                 if (isImage) {
-                    await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                    await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 } else if (isVideo) {
-                    await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                    await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 }
                 // Enviar reacción de éxito
-                nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+                nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
             } catch (error) {
                 // Enviar reacción de error
-                nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
-                console.error("Error al enviar el sticker:", error);
+                nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
+                console.error("Error al enviar el sticker:", error)
             }
         }
     } catch (error) {
-        reply(`*Hubo un error al buscar los stickers*\n${error}`);
+        reply(`*Hubo un error al buscar los stickers*\n${error}`)
         console.error("Error en buscarsticker:", error);
     }
 }
