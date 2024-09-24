@@ -139,6 +139,48 @@ function calculateSimilarity(str1, str2) {
     return 1 - lengthDifference / longer.length; // Normaliza la similitud
 }
 
+const categories = {
+        "📝 Registro": [
+            { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
+            { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
+            { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
+            { command: 'logout', description: '*Cerrar sesión*' }
+        ],
+        "🔍 Búsqueda": [
+            { command: 'letra', description: '*Buscar letra de canciones*' }
+        ],
+        "📥 Descargas": [
+            { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
+            { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
+            { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
+            { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
+            { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
+            { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
+            { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
+        ],
+        "🎭 Grupos": [
+            { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
+        ],
+        "🛠 Herramientas": [
+            { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
+            { command: 's', description: '*Alias para el comando de sticker*' },
+            { command: 'puntos', description: '*Consultar tus puntos*' },
+            { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
+            { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
+            { command: 'buscarsticker', description: '*Buscar stickers*' }
+        ],
+        "⚙ Bot": [
+            { command: 'actualizar', description: '*Actualizar el bot*' },
+            { command: 'update', description: '*Alias para el comando de actualizar*' },
+            { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
+            { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
+            { command: 'delsticker', description: '*Eliminar un sticker*' },
+            { command: '<', description: '*EVAL*' },
+            { command: '=>', description: '*EVAL*' },
+            { command: '$', description: '*EXECUTE*' }
+        ]
+    }
+
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
@@ -1063,49 +1105,6 @@ case 'flow': {
 break
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
-
-    const categories = {
-        "📝 Registro": [
-            { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
-            { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
-            { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
-            { command: 'logout', description: '*Cerrar sesión*' }
-        ],
-        "🔍 Búsqueda": [
-            { command: 'letra', description: '*Buscar letra de canciones*' }
-        ],
-        "📥 Descargas": [
-            { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
-            { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
-            { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
-            { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
-            { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
-            { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
-            { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
-        ],
-        "🎭 Grupos": [
-            { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
-        ],
-        "🛠 Herramientas": [
-            { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
-            { command: 's', description: '*Alias para el comando de sticker*' },
-            { command: 'puntos', description: '*Consultar tus puntos*' },
-            { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
-            { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
-            { command: 'buscarsticker', description: '*Buscar stickers*' }
-        ],
-        "⚙ Bot": [
-            { command: 'actualizar', description: '*Actualizar el bot*' },
-            { command: 'update', description: '*Alias para el comando de actualizar*' },
-            { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
-            { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
-            { command: 'delsticker', description: '*Eliminar un sticker*' },
-            { command: '<', description: '*EVAL*' },
-            { command: '=>', description: '*EVAL*' },
-            { command: '$', description: '*EXECUTE*' }
-        ]
-    };
-
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
     let nickName = nyanBot2.getName(sender);
     let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
