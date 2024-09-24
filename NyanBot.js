@@ -17,6 +17,7 @@ const path = require('path')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
+const archiver = require('archiver');
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1810,10 +1811,6 @@ case 'clima': {
 }
 break
 
-
-const fs = require('fs');
-const archiver = require('archiver');
-const path = require('path');
 
 case 'mediafire': {
     if (!text) return reply("*Porfavor asegurate de incluir el link de mediafire después del comando*");
