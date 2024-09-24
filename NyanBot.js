@@ -2385,8 +2385,9 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
+const receivedCommand = budy.toLowerCase();
     // Asegurarse de que las constantes estén dentro del if
-    if (isCmd && budy.toLowerCase() !== undefined) {
+    if (isCmd && receivedCommand !== undefined) {
         const allCommands = Object.values(categories)
             .flat()
             .map(cmdObj => cmdObj.command.toLowerCase());
