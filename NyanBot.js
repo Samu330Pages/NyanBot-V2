@@ -127,13 +127,13 @@ function calculateSimilarity(str1, str2) {
     const shorter = str1.length > str2.length ? str2 : str1;
 
     const lengthDifference = longer.length - shorter.length;
-    if (lengthDifference > 1) return 0;
+    if (lengthDifference > 1) return 0; // Permitir solo una diferencia de longitud
 
     let differences = 0;
     for (let i = 0; i < shorter.length; i++) {
         if (longer[i + differences] !== shorter[i]) {
             differences++;
-            if (differences > 1) return 0;
+            if (differences > 1) return 0; // Permitir solo un error
         }
     }
 
