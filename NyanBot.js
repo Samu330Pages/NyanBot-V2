@@ -1811,11 +1811,15 @@ case 'clima': {
 break
 
 
+const fs = require('fs');
+const archiver = require('archiver');
+const path = require('path');
+
 case 'mediafire': {
-    if (!text) return reply("*Porfavor proporciona el link de mediafire después del comando*");
+    if (!text) return reply("*Porfavor asegurate de incluir el link de mediafire después del comando*");
 
     // Lógica para detectar si el link es válido de MediaFire
-    if (!/^https?:\/\/(www\.)?mediafire\.com\/file\/[a-zA-Z0-9]+\/.+/.test(text)) {
+    if (!/^https?:\/\/(www\.)?mediafire\.com\/[a-zA-Z0-9]+\/.+/.test(text)) {
         return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
     }
 
@@ -1824,8 +1828,8 @@ case 'mediafire': {
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
-        if (filesizeMB > 1000) {
-            return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
+        if (filesizeMB > 100) {
+            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
         // Determina el mimetype según la extensión del archivo
@@ -1909,18 +1913,54 @@ case 'mediafire': {
                 break;
         }
 
-        // Envía el documento
-        await nyanBot2.sendMessage(m.chat, {
-            document: await fetchBuffer(data.url), // URL 1 de la respuesta
-            fileName: data.filename,
-            mimetype: mimeType,
-            caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
-*Nombre:* ${data.filename}
+        // Si el mimetype es 'application/octet-stream', comprime el archivo en un ZIP
+        if (mimeType === 'application/octet-stream') {
+            const tempFilePath = path.join(__dirname, data.filename); // Crear una ruta temporal para el archivo
+            const zipFilePath = path.join(__dirname, `${data.filename}.zip`);
+
+            // Descarga el archivo primero
+            const fileBuffer = await fetchBuffer(data.url);
+            fs.writeFileSync(tempFilePath, fileBuffer);
+
+            // Crear un archivo ZIP
+            const output = fs.createWriteStream(zipFilePath);
+            const archive = archiver('zip', { zlib: { level: 9 } });
+
+            output.on('close', async () => {
+                await nyanBot2.sendMessage(m.chat, {
+                    document: fs.readFileSync(zipFilePath),
+                    fileName: `${data.filename}.zip`,
+                    mimetype: 'application/zip',
+                    caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}
+*Título:* ${data.filename}
 *Tamaño:* ${data.filesize}
 *Fecha de Publicación:* ${data.upload_date}\n
 > ${botname}
-            `
-        }, { quoted: m });
+                    `
+                }, { quoted: m });
+
+                // Elimina los archivos temporales
+                fs.unlinkSync(tempFilePath);
+                fs.unlinkSync(zipFilePath);
+            });
+
+            archive.pipe(output);
+            archive.file(tempFilePath, { name: data.filename });
+            archive.finalize();
+
+        } else {
+            // Envía el documento directamente si tiene un mimetype reconocido
+            await nyanBot2.sendMessage(m.chat, {
+                document: await fetchBuffer(data.url), // URL 1 de la respuesta
+                fileName: data.filename,
+                mimetype: mimeType,
+                caption: `
+Título: ${data.filename}
+Tamaño: ${data.filesize}
+Fecha de Publicación: ${data.upload_date}
+                `
+            }, { quoted: m });
+        }
 
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
