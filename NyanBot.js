@@ -2423,13 +2423,13 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
         }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
         // Mensaje de respuesta
-        let response = `❌ Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
+        let response = `❌ *Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!*\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
 
         // Crear botones para las sugerencias
         const buttons = similarities.map(item => ({
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
-                display_text: `✏️ *${item.availableCommand}* _(Similitud: ${Math.round(item.similarity * 100)}%)_`,
+                display_text: `✏️ ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
                 id: `.${item.availableCommand} ${text}` // Aquí se pone el comando corregido
             }),
         }));
