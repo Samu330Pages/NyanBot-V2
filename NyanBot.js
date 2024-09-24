@@ -2392,12 +2392,15 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
 
+    // Verificar si el comando existe
     if (!allCommands.includes(command)) {
+        // Calcular similitudes
         const similarities = allCommands.map(availableCommand => {
             const similarity = calculateSimilarity(command, availableCommand);
             return { availableCommand, similarity };
         }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
+        // Mensaje de respuesta
         let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
         if (similarities.length > 0) {
             response += 'Quizás quisiste decir:\n';
@@ -2408,6 +2411,7 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
             response += 'No se encontraron comandos similares.';
         }
 
+        // Enviar la respuesta
         return reply(response);
     }
 }
