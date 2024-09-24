@@ -1984,10 +1984,10 @@ case 'buscarsticker': {
         }*/
 
         let stickers = data.sticker_url;
-        let totalStickers = stickers.length;
+        //let totalStickers = stickers.length;
         
         // Enviar mensaje con la cantidad de stickers y el título
-        reply(`Se están enviando *${totalStickers}* stickers\n\n*Título:* ${data.title}`);
+        reply(`Se están enviando stickers\n\n*Título:* ${data.title}`);
 
         // Enviar reacción de espera
         nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
