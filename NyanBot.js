@@ -121,6 +121,7 @@ function formatNumber(num) {
     return parseFloat((num / Math.pow(1e3, index)).toFixed(2)) + ' ' + suffixes[index];
 }
 
+// Función para calcular similitud
 function calculateSimilarity(str1, str2) {
     const longer = str1.length > str2.length ? str1 : str2;
     const shorter = str1.length > str2.length ? str2 : str1;
@@ -139,48 +140,48 @@ function calculateSimilarity(str1, str2) {
     return 1 - lengthDifference / longer.length; // Normaliza la similitud
 }
 
+// Constante de categorías y comandos disponibles
 const categories = {
-        "📝 Registro": [
-            { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
-            { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
-            { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
-            { command: 'logout', description: '*Cerrar sesión*' }
-        ],
-        "🔍 Búsqueda": [
-            { command: 'letra', description: '*Buscar letra de canciones*' }
-        ],
-        "📥 Descargas": [
-            { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
-            { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
-            { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
-            { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
-            { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
-            { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
-            { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
-        ],
-        "🎭 Grupos": [
-            { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
-        ],
-        "🛠 Herramientas": [
-            { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
-            { command: 's', description: '*Alias para el comando de sticker*' },
-            { command: 'puntos', description: '*Consultar tus puntos*' },
-            { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
-            { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
-            { command: 'buscarsticker', description: '*Buscar stickers*' }
-        ],
-        "⚙ Bot": [
-            { command: 'actualizar', description: '*Actualizar el bot*' },
-            { command: 'update', description: '*Alias para el comando de actualizar*' },
-            { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
-            { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
-            { command: 'delsticker', description: '*Eliminar un sticker*' },
-            { command: '<', description: '*EVAL*' },
-            { command: '=>', description: '*EVAL*' },
-            { command: '$', description: '*EXECUTE*' }
-        ]
-    }
-
+    "📝 Registro": [
+        { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
+        { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
+        { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
+        { command: 'logout', description: '*Cerrar sesión*' }
+    ],
+    "🔍 Búsqueda": [
+        { command: 'letra', description: '*Buscar letra de canciones*' }
+    ],
+    "📥 Descargas": [
+        { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
+        { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
+        { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
+        { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
+        { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
+        { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
+        { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
+    ],
+    "🎭 Grupos": [
+        { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
+    ],
+    "🛠 Herramientas": [
+        { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
+        { command: 's', description: '*Alias para el comando de sticker*' },
+        { command: 'puntos', description: '*Consultar tus puntos*' },
+        { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
+        { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
+        { command: 'buscarsticker', description: '*Buscar stickers*' }
+    ],
+    "⚙ Bot": [
+        { command: 'actualizar', description: '*Actualizar el bot*' },
+        { command: 'update', description: '*Alias para el comando de actualizar*' },
+        { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
+        { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
+        { command: 'delsticker', description: '*Eliminar un sticker*' },
+        { command: '<', description: '*EVAL*' },
+        { command: '=>', description: '*EVAL*' },
+        { command: '$', description: '*EXECUTE*' }
+    ]
+};
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
@@ -2385,31 +2386,31 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if ('.'+command) {
-if (!budy.includes('.')) return
-        const allCommands = Object.values(categories)
-            .flat()
-            .map(cmdObj => cmdObj.command.toLowerCase());
-        
-        if (!allCommands.includes(command)) {
-            const similarities = allCommands.map(commands => {
-                const similarity = calculateSimilarity(command, commands);
-                return { commands, similarity };
-            }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
+if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
+    const command = budy.slice(1).toLowerCase(); // Extraer el comando sin el punto
+    const allCommands = Object.values(categories)
+        .flat()
+        .map(cmdObj => cmdObj.command.toLowerCase());
 
-            let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
-            if (similarities.length > 0) {
-                response += 'Quizás quisiste decir:\n';
-                similarities.forEach(item => {
-                    response += `- ${item.commands} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
-                });
-            } else {
-                response += 'No se encontraron comandos similares.';
-            }
-            
-            return reply(response);
+    if (!allCommands.includes(command)) {
+        const similarities = allCommands.map(commands => {
+            const similarity = calculateSimilarity(command, commands);
+            return { commands, similarity };
+        }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
+
+        let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
+        if (similarities.length > 0) {
+            response += 'Quizás quisiste decir:\n';
+            similarities.forEach(item => {
+                response += `- ${item.commands} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
+            });
+        } else {
+            response += 'No se encontraron comandos similares.';
         }
+
+        return reply(response);
     }
+}
                 if (budy == '🎯') {
                     totalTiro = ["failTiro","tiro10p","tiro30p","tiro50p","tiro70p","tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
