@@ -121,23 +121,41 @@ function formatNumber(num) {
     return parseFloat((num / Math.pow(1e3, index)).toFixed(2)) + ' ' + suffixes[index];
 }
 
-// Función para calcular similitud
-function calculateSimilarity(str1, str2) {
-    const longer = str1.length > str2.length ? str1 : str2;
-    const shorter = str1.length > str2.length ? str2 : str1;
+function calculateLevenshteinDistance(a, b) {
+    const matrix = [];
 
-    const lengthDifference = longer.length - shorter.length;
-    if (lengthDifference > 1) return 0; // Permitir solo una diferencia de longitud
+    // Inicializar matriz
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
 
-    let differences = 0;
-    for (let i = 0; i < shorter.length; i++) {
-        if (longer[i + differences] !== shorter[i]) {
-            differences++;
-            if (differences > 1) return 0; // Permitir solo un error
+    // Calcular distancia
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // sustitución
+                    Math.min(matrix[i][j - 1] + 1, // inserción
+                              matrix[i - 1][j] + 1) // eliminación
+                );
+            }
         }
     }
 
-    return 1 - lengthDifference / longer.length; // Normaliza la similitud
+    return matrix[b.length][a.length];
+}
+
+function calculateSimilarity(str1, str2) {
+    const distance = calculateLevenshteinDistance(str1, str2);
+    const maxLength = Math.max(str1.length, str2.length);
+    
+    // Normalizar la similitud
+    return maxLength ? (1 - distance / maxLength) : 1; // Evita división por cero
 }
 
 // Constante de categorías y comandos disponibles
@@ -2391,7 +2409,6 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-// Lógica del bot para recibir y procesar comandos
 if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
     const allCommands = Object.values(categories)
         .flat()
