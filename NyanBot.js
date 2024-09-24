@@ -1812,7 +1812,7 @@ break
 
 
 case 'mediafire': {
-    if (!text) return reply("#mensaje de que falta link");
+    if (!text) return reply("*Porfavor proporciona el link de mediafire después del comando*");
 
     // Lógica para detectar si el link es válido de MediaFire
     if (!/^https?:\/\/(www\.)?mediafire\.com\/file\/[a-zA-Z0-9]+\/.+/.test(text)) {
@@ -1820,11 +1820,11 @@ case 'mediafire': {
     }
 
     try {
-        let data = await fg.mediafireDl(text);
+        let data = await require("api-dylux").mediafireDl(text);
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
-        if (filesizeMB > 100) {
+        if (filesizeMB > 10) {
             return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
@@ -1847,9 +1847,63 @@ case 'mediafire': {
                 mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
                 break;
             case 'zip':
-            case 'rar':
                 mimeType = 'application/zip';
                 break;
+            case 'rar':
+                mimeType = 'application/x-rar-compressed';
+                break;
+            case '7z':
+                mimeType = 'application/x-7z-compressed';
+                break;
+            case 'mp4':
+                mimeType = 'video/mp4';
+                break;
+            case 'mp3':
+                mimeType = 'audio/mpeg';
+                break;
+            case 'jpg':
+            case 'jpeg':
+                mimeType = 'image/jpeg';
+                break;
+            case 'png':
+                mimeType = 'image/png';
+                break;
+            case 'gif':
+                mimeType = 'image/gif';
+                break;
+            case 'bmp':
+                mimeType = 'image/bmp';
+                break;
+            case 'svg':
+                mimeType = 'image/svg+xml';
+                break;
+            case 'txt':
+                mimeType = 'text/plain';
+                break;
+            case 'html':
+            case 'htm':
+                mimeType = 'text/html';
+                break;
+            case 'csv':
+                mimeType = 'text/csv';
+                break;
+            case 'apk':
+                mimeType = 'application/vnd.android.package-archive';
+                break;
+            case 'exe':
+                mimeType = 'application/vnd.microsoft.portable-executable';
+                break;
+            case 'mcp':
+            case 'mcpack':
+                mimeType = 'application/octet-stream'; // Para archivos MCPACK
+                break;
+            case 'json':
+                mimeType = 'application/json';
+                break;
+            case 'xml':
+                mimeType = 'application/xml';
+                break;
+            // Agrega más tipos de archivos según sea necesario
             default:
                 mimeType = 'application/octet-stream'; // Tipo genérico para otros documentos
                 break;
@@ -1858,12 +1912,13 @@ case 'mediafire': {
         // Envía el documento
         await nyanBot2.sendMessage(m.chat, {
             document: await fetchBuffer(data.url), // URL 1 de la respuesta
-            fileName: `${data.filename}`,
-            mimetype: `${mimeType}`,
-            caption: `
-Título: ${data.filename}
-Tamaño: ${data.filesize}
-Fecha de Publicación: ${data.upload_date}
+            fileName: data.filename,
+            mimetype: mimeType,
+            caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
+*Nombre:* ${data.filename}
+*Tamaño:* ${data.filesize}
+*Fecha de Publicación:* ${data.upload_date}\n
+> ${botname}
             `
         }, { quoted: m });
 
