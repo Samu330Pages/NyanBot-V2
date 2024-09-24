@@ -1983,6 +1983,7 @@ case 'buscarsticker': {
             return reply("*No se encontraron stickers*");
         }*/
 
+	reply(`${data}`)
         let stickers = data.sticker_url;
         //let totalStickers = stickers.length;
         
