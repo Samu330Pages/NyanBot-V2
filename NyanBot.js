@@ -1978,14 +1978,14 @@ case 'buscarsticker': {
     if (!text) return reply("*Escribe después del comando el tipo de stickers que desees*");
 
     try {
-        let data = fg.StickerSearch(text)
-        /*if (data.status !== 200) {
+        let data = await fg.StickerSearch(text)
+        if (data.status !== 200) {
             return reply("*No se encontraron stickers*");
-        }*/
+        }
 
 	reply(`${data}`)
         let stickers = data.sticker_url;
-        //let totalStickers = stickers.length;
+        let totalStickers = stickers.length;
         
         // Enviar mensaje con la cantidad de stickers y el título
         reply(`Se están enviando stickers\n\n*Título:* ${data.title}`);
