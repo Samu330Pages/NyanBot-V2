@@ -1046,7 +1046,7 @@ case 'menu': {
     const categories = {
 	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
         "🔍 Busqueda": ['letra `LETRA DE CANCIONES`'],
-	"📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*'],
+	"📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*', 'mediafire `LINK` *-50 PUNTOS*'],
 	"🎭 Grupos": ['bienvenida'],
 	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
@@ -1813,7 +1813,9 @@ break
 
 
 case 'mediafire': {
-    if (!text) return reply("*Porfavor asegurate de incluir el link de mediafire después del comando*");
+if (!text) return reply("*Porfavor asegurate de incluir el link de mediafire después del comando*");
+if (db.data.users[sender].limit < 1) return reply(mess.limit);
+if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 
     // Lógica para detectar si el link es válido de MediaFire
     if (!/^https?:\/\/(www\.)?mediafire\.com\/[a-zA-Z0-9]+\/.+/.test(text)) {
@@ -1821,6 +1823,7 @@ case 'mediafire': {
     }
 
     try {
+	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
         let data = await require("api-dylux").mediafireDl(text);
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
@@ -1928,7 +1931,8 @@ case 'mediafire': {
                     document: fs.readFileSync(zipFilePath),
                     fileName: `${data.filename}.zip`,
                     mimetype: 'application/zip',
-                    caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}
+                    caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
+_*No se encontró extención adecuada al documento, asi que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
 *Título:* ${data.filename}
 *Tamaño:* ${data.filesize}
 *Fecha de Publicación:* ${data.upload_date}\n
@@ -1949,17 +1953,20 @@ case 'mediafire': {
             // Envía el documento directamente si tiene un mimetype reconocido
             await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(data.url), // URL 1 de la respuesta
-                fileName: data.filename,
-                mimetype: mimeType,
+                fileName: `${data.filename}`,
+                mimetype: `${mimeType}`,
                 caption: `
-Título: ${data.filename}
-Tamaño: ${data.filesize}
-Fecha de Publicación: ${data.upload_date}
+*Título:* ${data.filename}
+*Tamaño:* ${data.filesize}
+*Fecha de Publicación:* ${data.upload_date}\n
+> ${botname}
                 `
             }, { quoted: m });
         }
-
+nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+db.data.users[sender].limit -= 50;
     } catch (error) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
     }
