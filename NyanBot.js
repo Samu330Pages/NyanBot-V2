@@ -2385,23 +2385,22 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (isCmd) {
-	if (isSamu) return
+if (command) {
         const allCommands = Object.values(categories)
             .flat()
             .map(cmdObj => cmdObj.command.toLowerCase());
         
-        if (!allCommands.includes(isCmd)) {
-            const similarities = allCommands.map(command => {
-                const similarity = calculateSimilarity(isCmd, command);
-                return { command, similarity };
+        if (!allCommands.includes(command)) {
+            const similarities = allCommands.map(commands => {
+                const similarity = calculateSimilarity(command, commands);
+                return { commands, similarity };
             }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
             let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
             if (similarities.length > 0) {
                 response += 'Quizás quisiste decir:\n';
                 similarities.forEach(item => {
-                    response += `- ${item.command} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
+                    response += `- ${item.commands} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
                 });
             } else {
                 response += 'No se encontraron comandos similares.';
