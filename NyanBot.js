@@ -2385,7 +2385,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (command) {
+if (prefix+command) {
         const allCommands = Object.values(categories)
             .flat()
             .map(cmdObj => cmdObj.command.toLowerCase());
