@@ -153,11 +153,16 @@ const categories = {
     ],
     "📥 Descargas": [
         { command: 'play', description: '*Descargar música de YouTube. Ejemplo: play canción favorita*' },
-        { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
-        { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
-        { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
-        { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
-        { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
+        { command: 'yta', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube*' },
+        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube*' },
+        { command: 'ytv', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube*' },
+        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube*' },
+        { command: 'tiktok', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
+        { command: 'tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
+        { command: 'facebook', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
+        { command: 'fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
+        { command: 'instagram', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
+        { command: 'ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
         { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
     ],
     "🎭 Grupos": [
