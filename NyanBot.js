@@ -2385,20 +2385,18 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-const receivedCommand = budy.toLowerCase();
-    // Asegurarse de que las constantes estén dentro del if
-    if (isCmd && receivedCommand !== undefined) {
+if (isCmd) {
         const allCommands = Object.values(categories)
             .flat()
             .map(cmdObj => cmdObj.command.toLowerCase());
         
-        if (!allCommands.includes(receivedCommand)) {
+        if (!allCommands.includes(isCmd)) {
             const similarities = allCommands.map(command => {
                 const similarity = calculateSimilarity(receivedCommand, command);
                 return { command, similarity };
             }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
-            let response = `El comando "${budy}" no existe o está mal escrito.\n\n`;
+            let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
             if (similarities.length > 0) {
                 response += 'Quizás quisiste decir:\n';
                 similarities.forEach(item => {
