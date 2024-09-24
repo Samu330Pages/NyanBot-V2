@@ -1996,8 +1996,8 @@ case 'buscarsticker': {
         // Procesar cada URL de sticker
         for (const url of stickers) {
             let media = await fetchBuffer(url);
-            let isImage = url.includes('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
-            let isVideo = url.includes('.mp4') || url.endsWith('.gif');
+            let isImage = url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg');
+            let isVideo = url.includes('.mp4') || url.includes('.gif');
 
             try {
                 if (isImage) {
