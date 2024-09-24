@@ -121,6 +121,24 @@ function formatNumber(num) {
     return parseFloat((num / Math.pow(1e3, index)).toFixed(2)) + ' ' + suffixes[index];
 }
 
+function calculateSimilarity(str1, str2) {
+    const longer = str1.length > str2.length ? str1 : str2;
+    const shorter = str1.length > str2.length ? str2 : str1;
+
+    const lengthDifference = longer.length - shorter.length;
+    if (lengthDifference > 1) return 0;
+
+    let differences = 0;
+    for (let i = 0; i < shorter.length; i++) {
+        if (longer[i + differences] !== shorter[i]) {
+            differences++;
+            if (differences > 1) return 0;
+        }
+    }
+
+    return 1 - lengthDifference / longer.length; // Normaliza la similitud
+}
+
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
@@ -1044,23 +1062,58 @@ case 'flow': {
 }
 break
 case 'menu': {
-	nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
+    nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
+
     const categories = {
-	"📝 Registro": ['login `CORREO`', 'reg *+200 PUNTOS*', 'reset `CORREO`', 'logout'],
-        "🔍 Busqueda": ['letra `LETRA DE CANCIONES`'],
-	"📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*', 'mediafire `LINK` *-50 PUNTOS*'],
-	"🎭 Grupos": ['bienvenida'],
-	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*', 'buscarsticker `SEARCH`'],
-        "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
+        "📝 Registro": [
+            { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
+            { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
+            { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
+            { command: 'logout', description: '*Cerrar sesión*' }
+        ],
+        "🔍 Búsqueda": [
+            { command: 'letra', description: '*Buscar letra de canciones*' }
+        ],
+        "📥 Descargas": [
+            { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
+            { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
+            { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
+            { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
+            { command: 'facebook / fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
+            { command: 'instagram / ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
+            { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
+        ],
+        "🎭 Grupos": [
+            { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
+        ],
+        "🛠 Herramientas": [
+            { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
+            { command: 's', description: '*Alias para el comando de sticker*' },
+            { command: 'puntos', description: '*Consultar tus puntos*' },
+            { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
+            { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
+            { command: 'buscarsticker', description: '*Buscar stickers*' }
+        ],
+        "⚙ Bot": [
+            { command: 'actualizar', description: '*Actualizar el bot*' },
+            { command: 'update', description: '*Alias para el comando de actualizar*' },
+            { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
+            { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
+            { command: 'delsticker', description: '*Eliminar un sticker*' },
+            { command: '<', description: '*EVAL*' },
+            { command: '=>', description: '*EVAL*' },
+            { command: '$', description: '*EXECUTE*' }
+        ]
     };
 
-    let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠'
+    let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
     let nickName = nyanBot2.getName(sender);
     let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+    
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
-        commands.forEach(cmd => {
-            menuMessage += `- ${cmd}\n`;
+        commands.forEach(cmdObj => {
+            menuMessage += `- ${cmdObj.command}: ${cmdObj.description}\n`;
         });
         menuMessage += '\n';
     }
@@ -1082,18 +1135,18 @@ case 'menu': {
                             text: botname
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
-			    text: 'test header',
+                            text: 'test header',
                             hasMediaAttachment: true,
                             ...await prepareWAMessageMedia({ image: fs.readFileSync(imagePath) }, { upload: nyanBot2.waUploadToServer })
                         }),
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
                                 "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg"\}`
-			    }, {
+                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg\"}`
+                            }, {
                                 "name": "cta_url",
                                 "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
-                            },],
+                            }],
                         }),
                         contextInfo: {
                             mentionedJid: [m.sender],
@@ -2333,6 +2386,31 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
+    // Asegurarse de que las constantes estén dentro del if
+    if (isCmd && budy.toLowerCase() !== undefined) {
+        const allCommands = Object.values(categories)
+            .flat()
+            .map(cmdObj => cmdObj.command.toLowerCase());
+        
+        if (!allCommands.includes(receivedCommand)) {
+            const similarities = allCommands.map(command => {
+                const similarity = calculateSimilarity(receivedCommand, command);
+                return { command, similarity };
+            }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
+
+            let response = `El comando "${budy}" no existe o está mal escrito.\n\n`;
+            if (similarities.length > 0) {
+                response += 'Quizás quisiste decir:\n';
+                similarities.forEach(item => {
+                    response += `- ${item.command} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
+                });
+            } else {
+                response += 'No se encontraron comandos similares.';
+            }
+            
+            return reply(response);
+        }
+    }
                 if (budy == '🎯') {
                     totalTiro = ["failTiro","tiro10p","tiro30p","tiro50p","tiro70p","tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
