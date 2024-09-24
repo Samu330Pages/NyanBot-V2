@@ -2423,18 +2423,23 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
         }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
         // Mensaje de respuesta
-        let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
-        if (similarities.length > 0) {
-            response += 'Quizás quisiste decir:\n';
-            similarities.forEach(item => {
-                response += `- ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
-            });
-        } else {
-            response += 'No se encontraron comandos similares.';
-        }
+        let response = `El comando "${command}" no existe o está mal escrito.`;
 
-        // Enviar la respuesta
-        return reply(response);
+        // Crear botones para las sugerencias
+        const buttons = similarities.map(item => ({
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: `${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
+                id: item.availableCommand // Aquí se pone el comando corregido
+            }),
+        }));
+
+        // Enviar el mensaje con los botones
+        sendReplyButton(m.chat, buttons, m, {
+            content: response
+        });
+
+        return // Asegurarse de que no se continúe con el resto del código
     }
 }
                 if (budy == '🎯') {
