@@ -2011,7 +2011,7 @@ case 'buscarsticker': {
             }
         });
     } catch (error) {
-        reply("*Hubo un error al buscar los stickers*");
+        reply(`*Hubo un error al buscar los stickers*\n${error}`);
         console.error("Error en buscarsticker:", error);
     }
 }
