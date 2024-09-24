@@ -1811,6 +1811,70 @@ case 'clima': {
 break
 
 
+case 'mediafire': {
+    if (!text) return reply("#mensaje de que falta link");
+
+    // Lógica para detectar si el link es válido de MediaFire
+    if (!/^https?:\/\/(www\.)?mediafire\.com\/file\/[a-zA-Z0-9]+\/.+/.test(text)) {
+        return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
+    }
+
+    try {
+        let data = await fg.mediafireDl(text);
+
+        // Verifica si el tamaño del archivo es mayor a 100 MB
+        const filesizeMB = parseFloat(data.filesize);
+        if (filesizeMB > 100) {
+            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
+        }
+
+        // Determina el mimetype según la extensión del archivo
+        let mimeType;
+        switch (data.ext.toLowerCase()) {
+            case 'pdf':
+                mimeType = 'application/pdf';
+                break;
+            case 'doc':
+            case 'docx':
+                mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                break;
+            case 'xls':
+            case 'xlsx':
+                mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                break;
+            case 'ppt':
+            case 'pptx':
+                mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+                break;
+            case 'zip':
+            case 'rar':
+                mimeType = 'application/zip';
+                break;
+            default:
+                mimeType = 'application/octet-stream'; // Tipo genérico para otros documentos
+                break;
+        }
+
+        // Envía el documento
+        await nyanBot2.sendMessage(m.chat, {
+            document: await fetchBuffer(data.url), // URL 1 de la respuesta
+            fileName: `${data.filename}`,
+            mimetype: `${mimeType}`,
+            caption: `
+Título: ${data.filename}
+Tamaño: ${data.filesize}
+Fecha de Publicación: ${data.upload_date}
+            `
+        }, { quoted: m });
+
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
+    }
+}
+break
+
+
 case 'wn': case 'stickerwm': case 'take':{
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
