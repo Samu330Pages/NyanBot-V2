@@ -153,9 +153,17 @@ let vote = db.data.others.vote = []
 let quizmath = db.data.game.math = []
 
 //time
-const time = moment.tz('America/Cancun').format('HH:mm:ss')
-const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
-const time2 = moment().tz('America/Cancun').format('HH:mm:ss')  
+// Hora actual en la zona horaria 'America/Cancun'
+const time = moment().tz('America/Cancun').format('HH:mm:ss');
+
+// Fecha actual en formato 'DD/MM/YYYY' en la zona horaria 'America/Cancun'
+const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
+
+// Hora actual en la zona horaria 'America/Cancun' (otra constante)
+const time2 = moment().tz('America/Cancun').format('HH:mm:ss');
+
+// Fecha larga con día, mes y año en la zona horaria 'America/Cancun'
+const longDate = moment().tz('America/Cancun').format('dddd, MMMM DD, YYYY');
 if(time2 < "23:59:00"){
 var timeNow = `Buenas noches 🌌`
  }
@@ -1054,7 +1062,7 @@ case 'menu': {
 
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠'
     let nickName = nyanBot2.getName(sender);
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${date}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmd => {
@@ -1510,7 +1518,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Buscar letra de la canción 📝',
-            id: `${prefix}letra ${video.title}`
+            id: `${prefix}letra ${text}`
           }),
 }]
 await sendReplyButton(m.chat, buttons, m, {
@@ -1555,7 +1563,7 @@ break
 
 case 'ytmp3': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply(`*Esperé un momento, se está procesando su solicitud...*\n
@@ -1612,7 +1620,7 @@ break
 
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
-if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
 try {
@@ -1677,7 +1685,7 @@ break
 
 case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
     reply('> *Esperé un momento, se está procesando su solicitud...*');
