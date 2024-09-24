@@ -1824,8 +1824,8 @@ case 'mediafire': {
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
-        if (filesizeMB > 10) {
-            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
+        if (filesizeMB > 1000) {
+            return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
 
         // Determina el mimetype según la extensión del archivo
