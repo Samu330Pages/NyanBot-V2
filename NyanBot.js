@@ -152,7 +152,7 @@ const categories = {
         { command: 'letra', description: '*Buscar letra de canciones*' }
     ],
     "📥 Descargas": [
-        { command: 'play', description: '*Descargar música de YouTube.* `Ejemplo: play canción favorita`' },
+        { command: 'play', description: '*Descargar música de YouTube. Ejemplo: play canción favorita*' },
         { command: 'yta / ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
         { command: 'ytv / ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
         { command: 'tiktok / tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
@@ -2386,23 +2386,23 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
+// Lógica del bot para recibir y procesar comandos
 if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
-    const command = budy.slice(1).toLowerCase(); // Extraer el comando sin el punto
     const allCommands = Object.values(categories)
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
 
     if (!allCommands.includes(command)) {
-        const similarities = allCommands.map(commands => {
-            const similarity = calculateSimilarity(command, commands);
-            return { commands, similarity };
+        const similarities = allCommands.map(availableCommand => {
+            const similarity = calculateSimilarity(command, availableCommand);
+            return { availableCommand, similarity };
         }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
         let response = `El comando "${command}" no existe o está mal escrito.\n\n`;
         if (similarities.length > 0) {
             response += 'Quizás quisiste decir:\n';
             similarities.forEach(item => {
-                response += `- ${item.commands} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
+                response += `- ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)\n`;
             });
         } else {
             response += 'No se encontraron comandos similares.';
