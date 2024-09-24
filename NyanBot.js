@@ -1050,7 +1050,7 @@ case 'menu': {
         "🔍 Busqueda": ['letra `LETRA DE CANCIONES`'],
 	"📥 Descargas": ['play `SEARCH`', 'yta / ytmp3 `LINK` *-30 PUNTOS*', 'ytv / ytmp4 `LINK` *-30 PUNTOS*', 'tiktok / tt `LINK` *-10 PUNTOS*', 'facebook / fb `LINK` *-20 PUNTOS*', 'instagram / ig `LINK` *-20 PUNTOS*', 'mediafire `LINK` *-50 PUNTOS*'],
 	"🎭 Grupos": ['bienvenida'],
-	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*'],
+	"🛠 Herramientas": ['sticker', 's', 'puntos', 'take *-50 PUNTOS*', 'wm *-50 PUNTOS*', 'buscarsticker `SEARCH`'],
         "⚙ Bot": ['actualizar', 'update', 'addsticker', 'liststicker', 'delsticker', '<', '=>', '$']
     };
 
@@ -1969,6 +1969,50 @@ db.data.users[sender].limit -= 50;
 	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
+    }
+}
+break
+
+
+case 'buscarsticker': {
+    if (!text) return reply("*Escribe después del comando el tipo de stickers que desees*");
+
+    try {
+        let data = fg.StickerSearch(text);
+        if (data.status !== 200) {
+            return reply("*No se encontraron stickers*");
+        }
+
+        let stickers = data.sticker_url;
+        let totalStickers = stickers.length;
+        
+        // Enviar mensaje con la cantidad de stickers y el título
+        reply(`Se están enviando *${totalStickers}* stickers\n\n*Título:* ${data.title}`);
+
+        // Enviar reacción de espera
+        nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+
+        // Procesar cada URL de sticker
+        stickers.forEach(async (url) => {
+            let media = await fetchBuffer(url);
+            let isImage = url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg');
+            let isVideo = url.endsWith('.mp4') || url.endsWith('.gif');
+
+            try {
+                if (isImage) {
+                    await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                } else if (isVideo) {
+                    await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                }
+                nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+            } catch (error) {
+                nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+                console.error("Error al enviar el sticker:", error);
+            }
+        });
+    } catch (error) {
+        reply("*Hubo un error al buscar los stickers*");
+        console.error("Error en buscarsticker:", error);
     }
 }
 break
