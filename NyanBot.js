@@ -2430,16 +2430,21 @@ if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: `${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
-                id: item.availableCommand // Aquí se pone el comando corregido
+                id: `.${item.availableCommand+text}` // Aquí se pone el comando corregido
             }),
         }));
 
-        // Enviar el mensaje con los botones
-        sendReplyButton(m.chat, buttons, m, {
-            content: response
-        });
+        // Enviar el mensaje con los botones solo si hay sugerencias
+        if (buttons.length > 0) {
+            sendReplyButton(m.chat, buttons, m, {
+                content: response
+            });
+        } else {
+            // Si no hay sugerencias, enviar un mensaje simple
+            return reply(response);
+        }
 
-        return // Asegurarse de que no se continúe con el resto del código
+        return; // Asegurarse de que no se continúe con el resto del código
     }
 }
                 if (budy == '🎯') {
