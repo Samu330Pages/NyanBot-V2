@@ -153,17 +153,11 @@ let vote = db.data.others.vote = []
 let quizmath = db.data.game.math = []
 
 //time
-// Hora actual en la zona horaria 'America/Cancun'
+moment.locale('es');
 const time = moment().tz('America/Cancun').format('HH:mm:ss');
-
-// Fecha actual en formato 'DD/MM/YYYY' en la zona horaria 'America/Cancun'
 const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
-
-// Hora actual en la zona horaria 'America/Cancun' (otra constante)
 const time2 = moment().tz('America/Cancun').format('HH:mm:ss');
-
-// Fecha larga con día, mes y año en la zona horaria 'America/Cancun'
-const longDate = moment().tz('America/Cancun').format('dddd, MMMM DD, YYYY');
+const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [de] YYYY');
 if(time2 < "23:59:00"){
 var timeNow = `Buenas noches 🌌`
  }
@@ -1103,8 +1097,6 @@ case 'menu': {
                         }),
                         contextInfo: {
                             mentionedJid: [m.sender],
-                            forwardingScore: 999,
-                            isForwarded: true,
                         }
                     })
                 }
