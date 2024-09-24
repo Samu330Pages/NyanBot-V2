@@ -2392,7 +2392,7 @@ if (isCmd) {
         
         if (!allCommands.includes(isCmd)) {
             const similarities = allCommands.map(command => {
-                const similarity = calculateSimilarity(receivedCommand, command);
+                const similarity = calculateSimilarity(isCmd, command);
                 return { command, similarity };
             }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
 
