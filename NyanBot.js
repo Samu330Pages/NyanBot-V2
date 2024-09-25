@@ -1661,12 +1661,12 @@ case 'yts': {
                 {
                     title: `Descargar video`,
                     description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
-                    id: `${prefix}ytv ${video.url}` // Deja el ID en blanco para completar más tarde
+                    id: `${prefix}ytv` // Deja el ID en blanco para completar más tarde
                 },
                 {
                     title: `Descargar audio`,
                     description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
-                    id: `${prefix}yta ${video.url}` // Deja el ID en blanco para completar más tarde
+                    id: `${prefix}yta` // Deja el ID en blanco para completar más tarde
                 }
             ]
         }));
