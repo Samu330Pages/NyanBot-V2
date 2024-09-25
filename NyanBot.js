@@ -30,6 +30,7 @@ const fetch = require('node-fetch')
 const yts = require('yt-search')
 const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v4 } = require('ruhend-scraper');
 const gis = require('g-i-s')
+const google = require('googlethis')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
 const fg = require('api-dylux')
