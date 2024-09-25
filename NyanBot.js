@@ -1572,14 +1572,9 @@ case 'buscar':
 
     try {
         const response = await google.search(text, options);
-        
-        // Comprobar si hay resultados
-        if (response.results.length === 0 && response.knowledge_panel.title === null) {
-            return reply('No se encontraron resultados para tu búsqueda.');
-        }
 
         // Preparar la respuesta
-        let resultado = `Resultados de búsqueda para: *${query}*\n\n`;
+        let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
 
         // Si hay un panel de conocimiento
         if (response.knowledge_panel.title) {
