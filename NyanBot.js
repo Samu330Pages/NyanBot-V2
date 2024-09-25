@@ -1641,9 +1641,9 @@ reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la UR
 }
 break
 
-case 'yts': {
+case 'youtube': {
     if (!text) {
-        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
 
     try {
@@ -1653,29 +1653,23 @@ case 'yts': {
         // Limitar a los primeros 10 resultados
         const results = r.all.slice(0, 10);
         
-        // Crear la sección y los rows
-        const sections = [{
-            title: 'Resultados de la búsqueda',
-            highlight_label: 'Selecciona un video 📹',
-            rows: []
-        }];
-
-        results.forEach((video, index) => {
-            const videoTitle = video.title;
-            const author = video.author.name; // Suponiendo que el autor es un objeto con un nombre
-            const duration = video.timestamp; // Duración del video
-
-            sections[0].rows.push({
-                title: `Descargar video: ${videoTitle}`,
-                description: `Autor: ${author} | Duración: ${duration}`,
-                id: '' // Deja el ID en blanco para completar más tarde
-            });
-            sections[0].rows.push({
-                title: `Descargar audio: ${videoTitle}`,
-                description: `Autor: ${author} | Duración: ${duration}`,
-                id: '' // Deja el ID en blanco para completar más tarde
-            });
-        });
+        // Crear secciones para cada video
+        const sections = results.map((video, index) => ({
+            title: video.title, // Título del video
+            highlight_label: index === 0 ? 'Video más popular 📹' : '', // Highlight solo en el primer video
+            rows: [
+                {
+                    title: `Descargar video`,
+                    description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
+                    id: `${prexix}ytv ${video.url}` // Deja el ID en blanco para completar más tarde
+                },
+                {
+                    title: `Descargar audio`,
+                    description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
+                    id: `${prexix}yta ${video.url}` // Deja el ID en blanco para completar más tarde
+                }
+            ]
+        }));
 
         // Enviar el botón de lista
         await sendReplyButton(m.chat, [{
@@ -1685,7 +1679,7 @@ case 'yts': {
                 sections: sections
             }),
         }], m, {
-            content: `Se encontraron ${results.length} resultados. Haz clic en el botón para seleccionar tu favorito y poder descargar en el formato preferido.`
+            content: `\n*Se encontraron ${results.length} resultados. Haz clic en el botón para seleccionar tu favorito y poder descargar en el formato preferido.*\n`
         });
 
     } catch (error) {
