@@ -162,20 +162,21 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: '`CORREO` *Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com*' },
+        { command: 'login', description: '`CORREO` Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com' },
         { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
-        { command: 'reset', description: '`CORREO` *Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com*' },
-        { command: 'logout', description: '*Cerrar sesión*' }
+        { command: 'reset', description: '`CORREO` Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com' },
+        { command: 'logout', description: 'Cerrar sesión' }
     ],
     "🔍 Búsqueda": [
-        { command: 'letra', description: '*Buscar letra de canciones*' }
+	{ command: 'google', description: 'Busqueda en Google' },
+        { command: 'letra', description: 'Buscar letra de canciones' }
     ],
     "📥 Descargas": [
-        { command: 'play', description: '*Descargar música de YouTube. Ejemplo: play canción favorita*' },
-        { command: 'yta', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube*' },
-        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube*' },
-        { command: 'ytv', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube*' },
-        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube*' },
+        { command: 'play', description: 'Descargar música de YouTube. Ejemplo: play canción favorita' },
+        { command: 'yta', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
+        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
+        { command: 'ytv', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
+        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
         { command: 'tiktok', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
         { command: 'tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
         { command: 'facebook', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
@@ -185,22 +186,22 @@ const categories = {
         { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
     ],
     "🎭 Grupos": [
-        { command: 'bienvenida', description: '*Enviar mensaje de bienvenida a los nuevos miembros*' }
+        { command: 'bienvenida', description: 'Enviar mensaje de bienvenida a los nuevos miembros' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: '*Crear un sticker a partir de imagen/video/gif*' },
-        { command: 's', description: '*Alias para el comando de sticker*' },
-        { command: 'puntos', description: '*Consultar tus puntos*' },
+        { command: 'sticker', description: 'Crear un sticker a partir de imagen/video/gif' },
+        { command: 's', description: 'Alias para el comando de sticker' },
+        { command: 'puntos', description: 'Consultar tus puntos' },
         { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
         { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
-        { command: 'buscarsticker', description: '*Buscar stickers*' }
+        { command: 'buscarsticker', description: 'Buscar stickers' }
     ],
     "⚙ Bot": [
-        { command: 'actualizar', description: '*Actualizar el bot*' },
-        { command: 'update', description: '*Alias para el comando de actualizar*' },
-        { command: 'addsticker', description: '*Agregar un nuevo sticker*' },
-        { command: 'liststicker', description: '*Listar todos los stickers disponibles*' },
-        { command: 'delsticker', description: '*Eliminar un sticker*' },
+        { command: 'actualizar', description: 'Actualizar el bot' },
+        { command: 'update', description: 'Alias para el comando de actualizar' },
+        { command: 'addsticker', description: 'Agregar un nuevo sticker' },
+        { command: 'liststicker', description: 'Listar todos los stickers disponibles' },
+        { command: 'delsticker', description: 'Eliminar un sticker' },
         { command: '<', description: '*EVAL*' },
         { command: '=>', description: '*EVAL*' },
         { command: '$', description: '*EXECUTE*' }
@@ -1555,9 +1556,9 @@ case 'test':
     });
     break
 
-case 'buscar':
+case 'buscar': case 'gg': case 'google': {
 if (!text) {
-        return reply('Por favor, proporciona un término de búsqueda. Ejemplo: .buscar [término]');
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prexix+command} [término]`);
     }
 
     const options = {
@@ -1588,34 +1589,33 @@ if (!text) {
                 });
                 resultado += `\n`;
             }
-
-            // Incluir enlace de demostración si existe
-            if (response.knowledge_panel.demonstration) {
-                resultado += `*Enlace de demostración:* ${response.knowledge_panel.demonstration}\n\n`;
-            }
         }
 
-        // Incluir preguntas frecuentes si existen
-        if (response.people_also_ask.length > 0) {
-            resultado += `*Preguntas que también podrían interesarte:*\n`;
-            response.people_also_ask.forEach((pregunta) => {
-                resultado += `- ${pregunta}\n`;
+        // Crear botones con preguntas frecuentes
+        const buttons = response.people_also_ask.map(pregunta => ({
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: `🔍 ${pregunta}`,
+                id: `${prefix}gg ${pregunta}` // ID para manejar la respuesta al pulsar el botón
+            }),
+        }));
+
+        // Enviar el mensaje con los botones solo si hay preguntas frecuentes
+        if (buttons.length > 0) {
+            // Enviar el mensaje con los botones
+            sendReplyButton(m.chat, buttons, m, {
+                content: resultado // Enviamos la descripción y metadatos en el contenido del botón
             });
         } else {
-            resultado += `No se encontraron preguntas relacionadas.\n`;
+            await reply(`No se encontraron preguntas relacionadas.`);
         }
 
-        // Enviar la respuesta resumida
-        await reply(resultado);
-
-        // Enviar la respuesta completa de la API
-        await reply(`Respuesta completa de la búsqueda:\n${JSON.stringify(response, null, 2)}`);
-        
     } catch (error) {
         console.error('Error en la búsqueda de Google:', error);
         return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error.message}`);
     }
-    break
+}
+break
 
 case 'letra': case 'lyrics': {
 if (!text) return reply(`¡Porfavor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix+command} me olvide de vivir*`)
