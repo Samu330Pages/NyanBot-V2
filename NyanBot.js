@@ -1556,8 +1556,7 @@ case 'test':
     break
 
 case 'buscar':
-    
-    if (!text) {
+if (!text) {
         return reply('Por favor, proporciona un término de búsqueda. Ejemplo: .buscar [término]');
     }
 
@@ -1589,6 +1588,8 @@ case 'buscar':
             response.people_also_ask.forEach((pregunta, index) => {
                 resultado += `- ${pregunta}\n`;
             });
+        } else {
+            resultado += `No se encontraron preguntas relacionadas.\n`;
         }
 
         // Enviar la respuesta
