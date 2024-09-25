@@ -143,7 +143,7 @@ const getOrganicData = () => {
           displayedLink: displayedLinks[i],
         };
       }
-      console.log(organicResults)
+      return organicResults;
     });
 };
 
@@ -1133,7 +1133,8 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 		
 case 'flow': {
-getOrganicData();
+let data = await getOrganicData();
+reply(`${data}`)
 }
 break
 case 'menu': {
