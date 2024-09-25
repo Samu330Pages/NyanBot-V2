@@ -1641,7 +1641,7 @@ reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la UR
 }
 break
 
-case 'youtube': {
+case 'yts': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
@@ -1661,12 +1661,12 @@ case 'youtube': {
                 {
                     title: `Descargar video`,
                     description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
-                    id: `${prexix}ytv ${video.url}` // Deja el ID en blanco para completar más tarde
+                    id: `${prefix}ytv ${video.url}` // Deja el ID en blanco para completar más tarde
                 },
                 {
                     title: `Descargar audio`,
                     description: `> Autor: ${video.author.name} | Duración: ${video.timestamp}`,
-                    id: `${prexix}yta ${video.url}` // Deja el ID en blanco para completar más tarde
+                    id: `${prefix}yta ${video.url}` // Deja el ID en blanco para completar más tarde
                 }
             ]
         }));
