@@ -1545,16 +1545,16 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 
         // Intentar obtener datos de la búsqueda de Google
         if (response.knowledge_panel.description) {
-            content += `*Descripción:* ${response.knowledge_panel.description}\n`;
+            content += `*📝 Descripción:* ${response.knowledge_panel.description}\n\n`;
         }
 
         if (response.knowledge_panel.url) {
-            content += `*URL:* ${response.knowledge_panel.url}\n`;
+            content += `*📌 URL:* ${response.knowledge_panel.url}\n\n`;
         }
 
         // Incluir metadatos si existen
         if (response.knowledge_panel.metadata.length > 0) {
-            content += `*Metadatos:*\n`;
+            content += `*📂 Información importante:*\n`;
             response.knowledge_panel.metadata.forEach(item => {
                 content += `- ${item.title}: ${item.value}\n`;
             });
@@ -1563,9 +1563,9 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         // Obtener datos de la nueva función si hay resultados
         const organicData = await getOrganicData(text);
         if (organicData.length > 0) {
-            content += `\n*Resultados de búsqueda orgánica:*\n`;
+            content += `\n*Resultados de búsqueda orgánica:*\n\n`;
             organicData.forEach(result => {
-                content += `*Título:* ${result.title}\n*Enlace:* ${result.links}\n*Snippet:* ${result.snippet}\n*Link mostrado:* ${result.displayedLink}\n\n`;
+                content += `╭── *Título:*\n│ - ${result.title}\n│\n├ *Enlace:*\n│ - ${result.links}\n│\n├ *Snippet:*\n│ - ${result.snippet}\n│\n├ *Link mostrado:*\n│ - ${result.displayedLink}\n╰───\n`;
             });
         } else {
             content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
