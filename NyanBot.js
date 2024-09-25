@@ -1570,15 +1570,16 @@ if (!text) {
     };
 
     try {
-        const response = await google.search(text, options);
+        // Asegúrate de que la función contenedora sea async
+        const response = await google.search(`${text}`, options);
 
         // Preparar la respuesta con descripción, URL y preguntas frecuentes
         let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
 
         // Si hay un panel de conocimiento
         if (response.knowledge_panel.description) {
-            resultado += `*Descripción:* ${response.knowledge_panel.description}\n`;
-            resultado += `*URL:* ${response.knowledge_panel.url}\n\n`;
+            resultado += `*Descripción:* ${response.knowledge_panel.description || 'No disponible'}\n`;
+            resultado += `*URL:* ${response.knowledge_panel.url || 'No disponible'}\n\n`;
         }
 
         // Incluir preguntas frecuentes si existen
@@ -1599,7 +1600,7 @@ if (!text) {
         
     } catch (error) {
         console.error('Error en la búsqueda de Google:', error);
-        return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error}`);
+        return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error.message}`);
     }
     break
 
