@@ -1554,6 +1554,55 @@ case 'test':
     });
     break
 
+case 'buscar':
+    
+    if (!text) {
+        return reply('Por favor, proporciona un término de búsqueda. Ejemplo: .buscar [término]');
+    }
+
+    const options = {
+        page: 0, 
+        safe: false, 
+        parse_ads: false, 
+        additional_params: { 
+            hl: 'es' // Configurar idioma a español
+        }
+    };
+
+    try {
+        const response = await google.search(text, options);
+        
+        // Comprobar si hay resultados
+        if (response.results.length === 0 && response.knowledge_panel.title === null) {
+            return reply('No se encontraron resultados para tu búsqueda.');
+        }
+
+        // Preparar la respuesta
+        let resultado = `Resultados de búsqueda para: *${query}*\n\n`;
+
+        // Si hay un panel de conocimiento
+        if (response.knowledge_panel.title) {
+            resultado += `*Título:* ${response.knowledge_panel.title}\n`;
+            resultado += `*Descripción:* ${response.knowledge_panel.description}\n`;
+            resultado += `*URL:* ${response.knowledge_panel.url}\n\n`;
+        }
+
+        // Incluir preguntas frecuentes si existen
+        if (response.people_also_ask.length > 0) {
+            resultado += `*Preguntas que también podrían interesarte:*\n`;
+            response.people_also_ask.forEach((pregunta, index) => {
+                resultado += `- ${pregunta}\n`;
+            });
+        }
+
+        // Enviar la respuesta
+        return reply(resultado);
+    } catch (error) {
+        console.error('Error en la búsqueda de Google:', error);
+        return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error}`);
+    }
+    break
+
 case 'letra': case 'lyrics': {
 if (!text) return reply(`¡Porfavor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix+command} me olvide de vivir*`)
 nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
