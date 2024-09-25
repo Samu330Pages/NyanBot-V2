@@ -1498,8 +1498,13 @@ case 'test':
                 display_text: 'Ubicación',
                 id: ''
             }),
-        },
-        {
+        }, {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Reply',
+                id: ''
+            }),
+	}, {
             name: "cta_url",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Page',
@@ -1512,8 +1517,35 @@ case 'test':
                 display_text: 'Call',
                 number: '5219984907794'
             }),
-        }
-    ];
+        }, {
+            name: "cta_copy",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Copy',
+                copy_code: '😈۔ᷤSᷤaͣmͫu͜͡‡ℨℨᱵ༉₃ᷜ₃ᷢ₀ݽۚۚ'
+            }),
+	}, {
+		name: 'single_select',
+                buttonParamsJson: JSON.stringify({
+                title: 'Select',
+                sections: [{
+			title: 'Select 1',
+			highlight_label: 'test 📂',
+                        rows: [{
+				title: 'Test',
+				description: 'test 1',
+                                id: '1'
+                            }]
+		}, {
+			title: 'Select 2',
+			highlight_label: '',
+                        rows: [{
+                                title: 'Test',
+				description: 'test 2',
+                                id: '2'
+                            }]
+                        }]
+                    })
+                }]
 
     const mediaPath = ''; // Aquí coloca la ruta de la imagen si la tienes, si no, deja como string vacío
 
