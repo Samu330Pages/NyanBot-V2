@@ -624,8 +624,6 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         contextInfo: {
             mentionedJid: [m.sender],
-            forwardingScore: 999,
-            isForwarded: true,
 	    businessMessageForwardInfo: {
 		"businessOwnerJid": '5219984907794@s.whatsapp.net'
 	}
@@ -1595,8 +1593,8 @@ if (!text) {
         const buttons = response.people_also_ask.map(pregunta => ({
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
-                display_text: `🔍 ${pregunta}`,
-                id: `${prefix}gg ${pregunta}` // ID para manejar la respuesta al pulsar el botón
+                display_text: `❓ ${pregunta}`,
+                id: `${prefix}google ${pregunta}` // ID para manejar la respuesta al pulsar el botón
             }),
         }));
 
