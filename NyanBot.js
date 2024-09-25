@@ -1640,6 +1640,61 @@ reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la UR
 }
 }
 break
+
+case 'yts': {
+    if (!text) {
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
+    }
+
+    try {
+        // Realizar la búsqueda en YouTube
+        const r = await yts(text);
+        
+        // Limitar a los primeros 10 resultados
+        const results = r.all.slice(0, 10);
+        
+        // Crear la sección y los rows
+        const sections = [{
+            title: 'Resultados de la búsqueda',
+            highlight_label: 'Selecciona un video 📹',
+            rows: []
+        }];
+
+        results.forEach((video, index) => {
+            const videoTitle = video.title;
+            const author = video.author.name; // Suponiendo que el autor es un objeto con un nombre
+            const duration = video.timestamp; // Duración del video
+
+            sections[0].rows.push({
+                title: `Descargar video: ${videoTitle}`,
+                description: `Autor: ${author} | Duración: ${duration}`,
+                id: '' // Deja el ID en blanco para completar más tarde
+            });
+            sections[0].rows.push({
+                title: `Descargar audio: ${videoTitle}`,
+                description: `Autor: ${author} | Duración: ${duration}`,
+                id: '' // Deja el ID en blanco para completar más tarde
+            });
+        });
+
+        // Enviar el botón de lista
+        await sendReplyButton(m.chat, [{
+            name: 'single_select',
+            buttonParamsJson: JSON.stringify({
+                title: 'Selecciona un video',
+                sections: sections
+            }),
+        }], m, {
+            content: `Se encontraron ${results.length} resultados. Haz clic en el botón para seleccionar tu favorito y poder descargar en el formato preferido.`
+        });
+
+    } catch (error) {
+        console.error('Error en la búsqueda de YouTube:', error);
+        return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
+    }
+}
+break
+			
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
