@@ -1134,7 +1134,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		
 case 'flow': {
 let data = await getOrganicData();
-reply(`${data}`)
+reply(JSON.stringify(`${data}`))
 }
 break
 case 'menu': {
@@ -1541,6 +1541,7 @@ case 'test':
 			title: 'Select 1',
 			highlight_label: 'test 📂',
                         rows: [{
+				text: '🪅',
 				title: 'Test',
 				description: 'test 1',
                                 id: '1'
