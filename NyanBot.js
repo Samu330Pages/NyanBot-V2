@@ -1554,15 +1554,6 @@ case 'test':
     });
     break
 
-Gracias por la aclaración. Vamos a realizar las modificaciones necesarias para asegurar que el contenido se envíe correctamente en cualquier caso, ya sea que haya descripción, URL, metadatos o preguntas frecuentes.
-
-### Ajustes Realizados
-
-1. **Siempre mostrar la descripción y la URL**: Si hay una descripción o URL, se incluirá en el contenido.
-2. **No mostrar el mensaje de "No se encontró información relevante" si hay algún dato disponible**: El mensaje solo se mostrará si efectivamente no hay descripción, URL ni metadatos.
-
-Aquí tienes el código ajustado:
-
 case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
