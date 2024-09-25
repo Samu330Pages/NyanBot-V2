@@ -361,7 +361,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         async function reply(teks) {
                 nyanBot2.sendMessage(m.chat, {
                     contextInfo: {
-                        "forwardingScore":999,"isForwarded":true,
+                        "isForwarded":true,
 			forwardedNewsletterMessageInfo: {
                            "newsletterJid": '120363215018837468@newsletter',
 			   "newsletterName": `ᶻ 𝗓 𐰁 ${botname} 🍟`
