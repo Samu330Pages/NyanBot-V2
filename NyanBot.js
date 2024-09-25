@@ -1572,12 +1572,11 @@ if (!text) {
     try {
         const response = await google.search(text, options);
 
-        // Preparar la respuesta
+        // Preparar la respuesta con descripción, URL y preguntas frecuentes
         let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
 
         // Si hay un panel de conocimiento
-        if (response.knowledge_panel.title) {
-            resultado += `*Título:* ${response.knowledge_panel.title}\n`;
+        if (response.knowledge_panel.description) {
             resultado += `*Descripción:* ${response.knowledge_panel.description}\n`;
             resultado += `*URL:* ${response.knowledge_panel.url}\n\n`;
         }
@@ -1585,15 +1584,19 @@ if (!text) {
         // Incluir preguntas frecuentes si existen
         if (response.people_also_ask.length > 0) {
             resultado += `*Preguntas que también podrían interesarte:*\n`;
-            response.people_also_ask.forEach((pregunta, index) => {
+            response.people_also_ask.forEach((pregunta) => {
                 resultado += `- ${pregunta}\n`;
             });
         } else {
             resultado += `No se encontraron preguntas relacionadas.\n`;
         }
 
-        // Enviar la respuesta
-        return reply(resultado);
+        // Enviar la respuesta resumida
+        await reply(resultado);
+
+        // Enviar la respuesta completa de la API
+        await reply(`Respuesta completa de la búsqueda:\n${JSON.stringify(response, null, 2)}`);
+        
     } catch (error) {
         console.error('Error en la búsqueda de Google:', error);
         return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error}`);
