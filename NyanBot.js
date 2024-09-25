@@ -10,7 +10,6 @@ const {
     areJidsSameUser,
     getContentType
 } = require('@whiskeysockets/baileys')
-const unirest = require('unirest')
 const os = require('os')
 const fs = require('fs')
 const fsx = require('fs-extra')
@@ -40,6 +39,7 @@ const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
 const scp2 = require('./lib/scraper2') 
 const { Rapi } = require('./lib/rapi.js')
+const { getOrganicData } = require('./lib/gg.js')
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
 const client = new ImgurClient({ clientId: "a0113354926015a" })*/
@@ -104,50 +104,6 @@ const {
     checkPremiumUser,
     getAllPremiumUser,
 } = require('./lib/premiun')
-
-const getOrganicData = () => {
-  return unirest
-    .get("https://www.google.com/search?q=javascript&gl=us&hl=en")
-    .headers({
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36",
-    })
-    .then((response) => {
-      let $ = cheerio.load(response.body);
-      console.log(response.status)
-      let titles = [];
-      let links = [];
-      let snippets = [];
-      let displayedLinks = [];
-
-      $(".g .yuRUbf h3").each((i, el) => {
-        titles[i] = $(el).text();
-      });
-      $(".yuRUbf a").each((i, el) => {
-        links[i] = $(el).attr("href");
-      });
-      $(".g .VwiC3b ").each((i, el) => {
-        snippets[i] = $(el).text();
-      });
-      $(".g .yuRUbf .NJjxre .tjvcx").each((i, el) => {
-        displayedLinks[i] = $(el).text();
-      });
-
-      const organicResults = [];
-
-      for (let i = 0; i < titles.length; i++) {
-        organicResults[i] = {
-          title: titles[i],
-          links: links[i],
-          snippet: snippets[i],
-          displayedLink: displayedLinks[i],
-        };
-      }
-      return organicResults;
-    });
-};
-
-
 
 const forma1 = '`'
 
@@ -1133,8 +1089,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 		
 case 'flow': {
-  let data = await getOrganicData();
-  // Convertir cada objeto en el arreglo a una cadena JSON
+  let data = await getOrganicData(text);
   let formattedData = data.map(result => JSON.stringify(result, null, 2)).join(',\n');
   reply(formattedData);
 }
