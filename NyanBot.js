@@ -1565,7 +1565,7 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         if (organicData.length > 0) {
             content += `\n*Resultados de búsqueda orgánica:*\n\n`;
             organicData.forEach(result => {
-                content += `╭── *Título:*\n│ - ${result.title}\n│\n├ *Enlace:*\n│ - ${result.links}\n│\n├ *Snippet:*\n│ - ${result.snippet}\n│\n├ *Link mostrado:*\n│ - ${result.displayedLink}\n╰───\n`;
+                content += `▫ *Título:*\n> ${result.title}\n\n▫ *Snippet:*\n> ${result.snippet}\n\n───✂–––`;
             });
         } else {
             content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
@@ -1579,6 +1579,14 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
                 id: `${prefix}google ${pregunta}` // ID para manejar la respuesta al pulsar el botón
             }),
         }));
+	const customButton = {
+            name: "cta_url",
+            buttonParamsJson: JSON.stringify({
+                display_text: '🔗 Más información...',
+                url: `https://www.google.com/search?q=${text}`
+            }),
+	};
+	buttons.push(customButton);
 
         // Enviar el mensaje con los botones solo si hay preguntas frecuentes
         if (buttons.length > 0) {
