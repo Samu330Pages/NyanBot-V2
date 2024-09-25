@@ -1133,8 +1133,10 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 		
 case 'flow': {
-let data = await getOrganicData();
-reply(JSON.stringify(`${data}`))
+  let data = await getOrganicData();
+  // Convertir cada objeto en el arreglo a una cadena JSON
+  let formattedData = data.map(result => JSON.stringify(result, null, 2)).join(',\n');
+  reply(formattedData);
 }
 break
 case 'menu': {
