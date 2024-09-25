@@ -1570,7 +1570,6 @@ if (!text) {
     };
 
     try {
-        // Asegúrate de que la función contenedora sea async
         const response = await google.search(`${text}`, options);
 
         // Preparar la respuesta con descripción, URL y preguntas frecuentes
@@ -1580,6 +1579,20 @@ if (!text) {
         if (response.knowledge_panel.description) {
             resultado += `*Descripción:* ${response.knowledge_panel.description || 'No disponible'}\n`;
             resultado += `*URL:* ${response.knowledge_panel.url || 'No disponible'}\n\n`;
+
+            // Incluir metadatos si existen
+            if (response.knowledge_panel.metadata.length > 0) {
+                resultado += `*Metadatos:*\n`;
+                response.knowledge_panel.metadata.forEach(item => {
+                    resultado += `- ${item.title}: ${item.value}\n`;
+                });
+                resultado += `\n`;
+            }
+
+            // Incluir enlace de demostración si existe
+            if (response.knowledge_panel.demonstration) {
+                resultado += `*Enlace de demostración:* ${response.knowledge_panel.demonstration}\n\n`;
+            }
         }
 
         // Incluir preguntas frecuentes si existen
