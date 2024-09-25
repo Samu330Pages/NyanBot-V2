@@ -1565,7 +1565,7 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         if (organicData.length > 0) {
             content += `\n*Resultados de búsqueda orgánica:*\n\n`;
             organicData.forEach(result => {
-                content += `▫ *Título:*\n> ${result.title}\n\n▫ *Snippet:*\n> ${result.snippet}\n\n───✂–––`;
+                content += `\n⬦ *Título:*\n> ${result.title}\n\n⬦ *Snippet:*\n> ${result.snippet}\n\n───✁–––`;
             });
         } else {
             content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
