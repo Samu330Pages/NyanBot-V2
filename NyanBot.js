@@ -362,8 +362,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 nyanBot2.sendMessage(m.chat, {
                     contextInfo: {
                         "forwardingScore":999,"isForwarded":true,
-			businessMessageForwardInfo: {
-                           "businessOwnerJid": '5219984907794@s.whatsapp.net'
+			forwardedNewsletterMessageInfo: {
+                           "newsletterJid": '120363215018837468@newsletter'
                         }
                     },
                     text: teks
