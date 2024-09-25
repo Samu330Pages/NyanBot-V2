@@ -1555,8 +1555,8 @@ case 'test':
     break
 
 case 'buscar': case 'gg': case 'google': {
-if (!text) {
-        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prexix+command} [término]`);
+    if (!text) {
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
     }
 
     const options = {
@@ -1573,20 +1573,26 @@ if (!text) {
 
         // Preparar la respuesta con descripción, URL y preguntas frecuentes
         let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
+        let content = ''; // Variable para almacenar el contenido a enviar
 
         // Si hay un panel de conocimiento
         if (response.knowledge_panel.description) {
-            resultado += `*Descripción:* ${response.knowledge_panel.description || 'No disponible'}\n`;
-            resultado += `*URL:* ${response.knowledge_panel.url || 'No disponible'}\n\n`;
+            content += `*Descripción:* ${response.knowledge_panel.description || 'No disponible'}\n`;
+            content += `*URL:* ${response.knowledge_panel.url || 'No disponible'}\n\n`;
+        }
 
-            // Incluir metadatos si existen
-            if (response.knowledge_panel.metadata.length > 0) {
-                resultado += `*Metadatos:*\n`;
-                response.knowledge_panel.metadata.forEach(item => {
-                    resultado += `- ${item.title}: ${item.value}\n`;
-                });
-                resultado += `\n`;
-            }
+        // Incluir metadatos si existen
+        if (response.knowledge_panel.metadata.length > 0) {
+            content += `*Metadatos:*\n`;
+            response.knowledge_panel.metadata.forEach(item => {
+                content += `- ${item.title}: ${item.value}\n`;
+            });
+            content += `\n`;
+        }
+
+        // Si no se encontró información relevante
+        if (!content) {
+            content = `No se encontró información relevante sobre: *${text}*.\n`;
         }
 
         // Crear botones con preguntas frecuentes
@@ -1602,10 +1608,11 @@ if (!text) {
         if (buttons.length > 0) {
             // Enviar el mensaje con los botones
             sendReplyButton(m.chat, buttons, m, {
-                content: resultado // Enviamos la descripción y metadatos en el contenido del botón
-            });
+                content: resultado + content,
+		media: './Media/theme/google.jpg'
+	    });
         } else {
-            await reply(`No se encontraron preguntas relacionadas.`);
+            await reply(`No se encontraron preguntas relacionadas.\n${resultado}${content}`);
         }
 
     } catch (error) {
