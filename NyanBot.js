@@ -1554,6 +1554,15 @@ case 'test':
     });
     break
 
+Gracias por la aclaración. Vamos a realizar las modificaciones necesarias para asegurar que el contenido se envíe correctamente en cualquier caso, ya sea que haya descripción, URL, metadatos o preguntas frecuentes.
+
+### Ajustes Realizados
+
+1. **Siempre mostrar la descripción y la URL**: Si hay una descripción o URL, se incluirá en el contenido.
+2. **No mostrar el mensaje de "No se encontró información relevante" si hay algún dato disponible**: El mensaje solo se mostrará si efectivamente no hay descripción, URL ni metadatos.
+
+Aquí tienes el código ajustado:
+
 case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
@@ -1577,8 +1586,11 @@ case 'buscar': case 'gg': case 'google': {
 
         // Si hay un panel de conocimiento
         if (response.knowledge_panel.description) {
-            content += `*Descripción:* ${response.knowledge_panel.description || 'No disponible'}\n`;
-            content += `*URL:* ${response.knowledge_panel.url || 'No disponible'}\n\n`;
+            content += `*Descripción:* ${response.knowledge_panel.description}\n`;
+        }
+
+        if (response.knowledge_panel.url) {
+            content += `*URL:* ${response.knowledge_panel.url}\n\n`;
         }
 
         // Incluir metadatos si existen
@@ -1588,11 +1600,6 @@ case 'buscar': case 'gg': case 'google': {
                 content += `- ${item.title}: ${item.value}\n`;
             });
             content += `\n`;
-        }
-
-        // Si no se encontró información relevante
-        if (!content) {
-            content = `No se encontró información relevante sobre: *${text}*.\n`;
         }
 
         // Crear botones con preguntas frecuentes
@@ -1608,11 +1615,16 @@ case 'buscar': case 'gg': case 'google': {
         if (buttons.length > 0) {
             // Enviar el mensaje con los botones
             sendReplyButton(m.chat, buttons, m, {
-                content: resultado + content,
-		media: './Media/theme/google.jpg'
-	    });
+                content: resultado + content || `No se encontró información relevante sobre: *${text}*.\n`,
+                media: './Media/theme/google.jpg'
+            });
         } else {
-            await reply(`No se encontraron preguntas relacionadas.\n${resultado}${content}`);
+            // Si no hay preguntas frecuentes, pero hay contenido
+            if (content) {
+                await reply(`${resultado}${content}`);
+            } else {
+                await reply(`No se encontraron preguntas relacionadas.\nNo se encontró información relevante sobre: *${text}*.\n`);
+            }
         }
 
     } catch (error) {
