@@ -1558,7 +1558,7 @@ case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
     }
-
+nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
     const options = {
         page: 0, 
         safe: false, 
@@ -1573,25 +1573,16 @@ case 'buscar': case 'gg': case 'google': {
 
         // Preparar la respuesta con descripción, URL y preguntas frecuentes
         let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
-        let content = ''; // Variable para almacenar el contenido a enviar
+        
+        // Siempre incluir descripción, URL y metadatos
+        const descripcion = response.knowledge_panel.description || 'Descripción no disponible.';
+        const url = response.knowledge_panel.url || 'URL no disponible.';
+        let metadatos = response.knowledge_panel.metadata.length > 0 
+            ? '*Metadatos:*\n' + response.knowledge_panel.metadata.map(item => `- ${item.title}: ${item.value}`).join('\n') 
+            : 'Metadatos no disponibles.';
 
-        // Si hay un panel de conocimiento
-        if (response.knowledge_panel.description) {
-            content += `*Descripción:* ${response.knowledge_panel.description}\n`;
-        }
-
-        if (response.knowledge_panel.url) {
-            content += `*URL:* ${response.knowledge_panel.url}\n\n`;
-        }
-
-        // Incluir metadatos si existen
-        if (response.knowledge_panel.metadata.length > 0) {
-            content += `*Metadatos:*\n`;
-            response.knowledge_panel.metadata.forEach(item => {
-                content += `- ${item.title}: ${item.value}\n`;
-            });
-            content += `\n`;
-        }
+        // Combinar todo en el contenido
+        let content = `*Descripción:* ${descripcion}\n*URL:* ${url}\n${metadatos}\n\n`;
 
         // Crear botones con preguntas frecuentes
         const buttons = response.people_also_ask.map(pregunta => ({
@@ -1606,19 +1597,16 @@ case 'buscar': case 'gg': case 'google': {
         if (buttons.length > 0) {
             // Enviar el mensaje con los botones
             sendReplyButton(m.chat, buttons, m, {
-                content: resultado + content || `No se encontró información relevante sobre: *${text}*.\n`,
+                content: resultado + content,
                 media: './Media/theme/google.jpg'
-            });
+            })
+nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
         } else {
-            // Si no hay preguntas frecuentes, pero hay contenido
-            if (content) {
-                await reply(`${resultado}${content}`);
-            } else {
-                await reply(`No se encontraron preguntas relacionadas.\nNo se encontró información relevante sobre: *${text}*.\n`);
-            }
+            await reply(`${resultado}${content}`);
         }
 
     } catch (error) {
+	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
         console.error('Error en la búsqueda de Google:', error);
         return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error.message}`);
     }
