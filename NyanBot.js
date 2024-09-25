@@ -1537,20 +1537,39 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
     };
 
     try {
+        // Primer intento: búsqueda con la librería de Google
         const response = await google.search(`${text}`, options);
 
-        // Preparar la respuesta con descripción, URL y preguntas frecuentes
-        let resultado = `Resultados de búsqueda para: *${text}*\n\n`;
-        
-        // Siempre incluir descripción, URL y metadatos
-        const descripcion = response.knowledge_panel.description || 'Descripción no disponible.';
-        const url = response.knowledge_panel.url || 'URL no disponible.';
-        let metadatos = response.knowledge_panel.metadata.length > 0 
-            ? '*Metadatos:*\n' + response.knowledge_panel.metadata.map(item => `- ${item.title}: ${item.value}`).join('\n') 
-            : 'Metadatos no disponibles.';
+        // Inicializar variable de contenido
+        let content = '';
 
-        // Combinar todo en el contenido
-        let content = `*Descripción:* ${descripcion}\n*URL:* ${url}\n${metadatos}\n\n`;
+        // Intentar obtener datos de la búsqueda de Google
+        if (response.knowledge_panel.description) {
+            content += `*Descripción:* ${response.knowledge_panel.description}\n`;
+        }
+
+        if (response.knowledge_panel.url) {
+            content += `*URL:* ${response.knowledge_panel.url}\n`;
+        }
+
+        // Incluir metadatos si existen
+        if (response.knowledge_panel.metadata.length > 0) {
+            content += `*Metadatos:*\n`;
+            response.knowledge_panel.metadata.forEach(item => {
+                content += `- ${item.title}: ${item.value}\n`;
+            });
+        }
+
+        // Obtener datos de la nueva función si hay resultados
+        const organicData = await getOrganicData(text);
+        if (organicData.length > 0) {
+            content += `\n*Resultados de búsqueda orgánica:*\n`;
+            organicData.forEach(result => {
+                content += `*Título:* ${result.title}\n*Enlace:* ${result.links}\n*Snippet:* ${result.snippet}\n*Link mostrado:* ${result.displayedLink}\n\n`;
+            });
+        } else {
+            content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
+        }
 
         // Crear botones con preguntas frecuentes
         const buttons = response.people_also_ask.map(pregunta => ({
@@ -1565,12 +1584,12 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         if (buttons.length > 0) {
             // Enviar el mensaje con los botones
             sendReplyButton(m.chat, buttons, m, {
-                content: resultado + content,
+                content: content || 'No se encontró información relevante.',
                 media: './Media/theme/google.jpg'
-            })
-nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+            });
+	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
         } else {
-            await reply(`${resultado}${content}`);
+            await reply(`${content || 'No se encontró información relevante.'}`);
         }
 
     } catch (error) {
