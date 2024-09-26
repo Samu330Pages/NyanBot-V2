@@ -2429,8 +2429,8 @@ case 'xvideos': {
                     buttons: [{
                         name: 'quick_reply', // Cambiar a botón de respuesta rápida
                         buttonParamsJson: JSON.stringify({
-                            title: 'Ver Video',
-                            url: video.url // Enlace directo al video
+                            title: 'Descargar video! 🔥',
+                            id: `${prefix}xvideosdl ${video.url}` // Enlace directo al video
                         })
                     }]
 		},
@@ -2452,6 +2452,16 @@ case 'xvideos': {
 }
 break
 
+case 'xvideosdl': {
+let v = await fg.xvideosdl(text)
+nyanBot2.sendMessage(m.chat, {
+	document: await fetchBuffer(v.url_dl),
+        fileName: `${v.title}.mp4`,
+        mimeType: 'document/mp4',
+        jpegThumbnail: await fetchBuffer(v.thumb),
+        caption: `- *Vistas:* ${v.view}\n- *Comentarios:* ${v.vote}\n- *likes:* ${v.likes}\n- *Deslikes:* ${v.deslikes}\n- *Tamaño:* ${v.size}\n`}, {quoted:m})
+}
+break
 
 
             case 'puntos':
