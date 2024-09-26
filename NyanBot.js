@@ -2397,6 +2397,62 @@ if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\
 break
 
 
+case 'xvideos': {
+
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+
+    try {
+        // Realizar la búsqueda en Xvideos
+        let data = await fg.xvideosSearch("Jovencitas Culonas);
+
+        // Limitar a los primeros 10 resultados
+        const limitedResults = data.slice(0, 10);
+
+        // Crear un array para las cards del carrusel
+        let contents = [];
+        let header = `亗  *X V I D E O S - S E A R C H*\n`;
+
+        // Mapeo de los resultados para crear las cards
+        limitedResults.forEach((video) => {
+            let content = `◦  *Título*: ${video.title}\n`;
+            content += `◦  *Duración*: ${video.duration}`;
+
+            contents.push({
+                header: {
+                    imageMessage: video.thumb, // Usar la miniatura del video
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content // Contenido de la tarjeta
+                },
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: 'quick_reply', // Cambiar a botón de respuesta rápida
+                        buttonParamsJson: JSON.stringify({
+                            title: 'Ver Video',
+                            url: video.url // Enlace directo al video
+                        })
+                    }]
+                ,
+            });
+        });
+
+        // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
+        await sendCarousel(m.chat, {}, {
+            footer: `Resultados de la búsqueda`,
+            cards: contents // Pasar todas las cards
+        });
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error en la búsqueda de Xvideos:', error);
+        return reply(`Ocurrió un error al realizar la búsqueda en Xvideos. Intenta nuevamente más tarde.\n${error.message}`);
+    }
+}
+break
+
+
 
             case 'puntos':
                 reply(`*Total de puntos: ${db.data.users[sender].limit}*
