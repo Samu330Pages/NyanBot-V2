@@ -2433,7 +2433,7 @@ case 'xvideos': {
                             url: video.url // Enlace directo al video
                         })
                     }]
-                ,
+		},
             });
         });
 
