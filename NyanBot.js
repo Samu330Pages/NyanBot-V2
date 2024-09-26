@@ -1759,7 +1759,7 @@ case 'yts': {
         }
 
         // Limitar a los primeros 10 resultados
-        const results = r.all.slice(0, 10);
+        const results = `${r.all.slice(0, 10)}`;
         
         // Crear contenido para cada carrusel
         let contents = results.map(video => {
