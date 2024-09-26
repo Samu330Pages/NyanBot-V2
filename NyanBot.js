@@ -627,7 +627,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media), jpegThumbnail: fs.readFileSync(media),
+            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media), thumbnail: fs.readFileSync(media),
 						     contextInfo: {
 							     externalAdReply: {
 								     showAdAttribution: true,
@@ -641,10 +641,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
-        }),
-        contextInfo: {
-            mentionedJid: [m.sender]
-	}
+        })
     })
 
     const msgs = generateWAMessageFromContent(chatId, {
