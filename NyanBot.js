@@ -1757,13 +1757,8 @@ case 'yts': {
         if (!r || !Array.isArray(r.all) || r.all.length === 0) {
             return reply(`No se encontraron resultados para "${text}".`);
         }
-
-	let data = `${r.all.slice(0, 10)}`
-        // Limitar a los primeros 10 resultados
-        const results = data; // Asegúrate de que esto sigue siendo un array.
-        
         // Crear contenido para cada carrusel
-        let contents = results.map(video => {
+        let contents = r.all.slice(0, 10).map(video => {
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
