@@ -627,7 +627,12 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media)}, { upload: nyanBot2.waUploadToServer }) : {})
+            ...(media ? await prepareWAMessageMedia({ document: {url: fs.readFileSync('./Media/theme/samu330.xlsx')},
+						     mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+						     pageCount: '25',
+						     jpegThumbnail: await fs.readFileSync(media),
+						     fileName: ,
+						     fileLength: '1000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
@@ -645,17 +650,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }
     }, { quoted: m });
 
-    await nyanBot2.relayMessage(chatId, msgs.message, {contextInfo: {
-                     externalAdReply: {
-                        showAdAttribution: true,
-                        title: botname,
-                        body: ownername,
-                        thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
-                        sourceUrl: 'https://samu330.com',
-                        mediaType: 1,
-                        renderLargerThumbnail: true
-                     }
-                  }});
+    await nyanBot2.relayMessage(chatId, msgs.message, {});
 }
 	    
 
