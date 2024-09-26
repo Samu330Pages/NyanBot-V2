@@ -630,7 +630,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync('./Media/theme/samu330.xlsx'),
 						     mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 						     pageCount: '25',
-						     jpegThumbnail: await fs.readFileSync(media),
+						     jpegThumbnail: media,
 						     fileName: runtime(process.uptime()),
 						     fileLength: '1000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
