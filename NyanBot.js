@@ -165,11 +165,13 @@ const categories = {
     "📝 Registro": [
         { command: 'login', description: '' },
         { command: 'reg', description: '' },
-        { command: 'reset', description: '`' },
+        { command: 'reset', description: '' },
         { command: 'logout', description: '' }
     ],
     "🔍 Búsqueda": [
 	{ command: 'google', description: '' },
+	{ command: 'youtubesearch', description: '' },
+	{ command: 'yts', description: '' },
         { command: 'letra', description: '' }
     ],
     "📥 Descargas": [
@@ -680,7 +682,8 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
             message: {
                 interactiveMessage: {
                     body: {
-                        text: `Estos son todos los resultados que he obtenido sobre lo que buscaste:` // Puedes ajustar este texto si lo deseas
+                        text: `*Resultados de búsqueda de YouTube!* 🍟\n
+> _Toca un botón para descargar tu formato preferido!_ 😁`
                     },
                     carouselMessage: {
                         cards: carouselCards, // Asegúrate de que esto sea un array de cards
@@ -1729,7 +1732,7 @@ reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la UR
 }
 break
 
-case 'yts': {
+case 'yts': case 'youtubesearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
@@ -1745,14 +1748,12 @@ case 'yts': {
 
         // Crear un array para las cards del carrusel
         let contents = [];
-        let header = `亗  *Y T - S E A R C H*\n`;
-
         // Mapeo de los resultados para crear las cards
         limitedResults.forEach((video) => {
             let content = `◦  *Nombre*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${video.views}\n`;
+            content += `◦  *Vistas*: ${formatNumber(video.views)}\n`;
             content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
 
             contents.push({
@@ -1765,20 +1766,17 @@ case 'yts': {
                 },
                 nativeFlowMessage: {
                     buttons: [{
-                        name: 'single_select',
-                        buttonParamsJson: JSON.stringify({
-                            title: 'Download',
-                            sections: [{
-                                rows: [{
-                                    title: 'Audio',
-                                    id: 'audio ' + video.videoId
-                                }, {
-                                    title: 'Video',
-                                    id: 'video ' + video.videoId
-                                }]
-                            }]
-                        })
-                    }]
+                        name: "quick_reply",
+			    buttonParamsJson: JSON.stringify({
+				    display_text: `Descargar Audio! 🎧`,
+				    id: `${prefix}yta ${video.url}`
+				})
+		    }, { name: "quick_reply",
+			    buttonParamsJson: JSON.stringify({
+				    display_text: `Descargar Video! 💿`,
+				    id: `${prefix}ytv ${video.url}`
+				})
+		    }]
                 },
             });
         });
