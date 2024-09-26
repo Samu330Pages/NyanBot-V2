@@ -1752,24 +1752,28 @@ case 'yts': {
     try {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
-
-        // Verificar la respuesta y que los resultados sean un array
-        if (!r || !Array.isArray(r.all) || r.all.length === 0) {
+        
+        // Verificar que r es un array y tiene resultados
+        if (!Array.isArray(r) || r.length === 0) {
             return reply(`No se encontraron resultados para "${text}".`);
         }
-        // Crear contenido para cada carrusel
-        let contents = r.all.slice(0, 10).map(video => {
+
+        // Limitar a los primeros 10 resultados
+        const results = r.slice(0, 10) // Aquí tomamos solo los primeros 10
+
+        // Crear un array de carruseles
+        let contents = results.map(video => {
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
             content += `◦  *Vistas*: ${video.views}\n`;
 
             let imgThumb = video.thumbnail; // La URL de la miniatura
-            
+
             return {
                 header: {
                     imageMessage: {
-                        url: imgThumb // Asegúrate de que esto sea un objeto adecuado
+                        url: imgThumb, // Usar la URL de la imagen
                     },
                     hasMediaAttachment: true,
                 },
@@ -1794,12 +1798,14 @@ case 'yts': {
             };
         });
 
-        // Enviar el carrusel con los resultados
-        await sendCarousel(m.chat, contents, {
-            header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
-            content: `*Selecciona la opción de descarga que prefieras.*\n`,
-            footer: `${botname}`
-        });
+        // Enviar cada carrusel con los resultados
+        for (const content of contents) {
+            await sendCarousel(m.chat, [content], {
+                header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
+                content: `*Selecciona una opción de descarga para el video.*\n`,
+                footer: `${botname}`
+            });
+        }
 
         nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
     } catch (error) {
