@@ -1796,7 +1796,7 @@ case 'yts': {
             // Crear la card
             cards.push({
                 header: {
-                    title: `🌟 *Resultados de búsqueda para: ${text}* 🌟`, // Título del carrusel
+                    title: video.title, // Título de la tarjeta
                     imageMessage: parse.imageMessage,
                     hasMediaAttachment: true,
                 },
@@ -1812,7 +1812,7 @@ case 'yts': {
             header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
             content: `*Selecciona una opción de descarga para el video.*\n`,
             footer: `${botname}`,
-            media: video.thumbnail, // Aquí puedes usar una imagen genérica si lo prefieres
+            media: '', // Aquí puedes usar una imagen genérica si lo prefieres, o dejarlo vacío
             cards: cards // Pasar todas las cards
         });
 
