@@ -2399,10 +2399,10 @@ break
 
 case 'xvideos': {
 let s = '';
-if (text) {
-s = text
+if (!text) {
+s = 'fake taxi'
 } else {
-s = 'jovencitas'
+s = text
 }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
@@ -2464,7 +2464,18 @@ nyanBot2.sendMessage(m.chat, {
         fileName: `${v.title}.mp4`,
         mimeType: 'video/mp4',
         jpegThumbnail: await fetchBuffer(v.thumb),
-        caption: `- *Vistas:* ${v.views}\n- *Comentarios:* ${v.vote}\n- *likes:* ${v.likes}\n- *Deslikes:* ${v.deslikes}\n- *Tamaño:* ${v.size}\n`}, {quoted:m})
+        caption: `- *Vistas:* ${v.views}\n- *Comentarios:* ${v.vote}\n- *likes:* ${v.likes}\n- *Deslikes:* ${v.deslikes}\n- *Tamaño:* ${v.size}\n`,
+	contextInfo: {
+                     externalAdReply: {
+                        showAdAttribution: true,
+                        title: botname,
+                        body: ownername,
+                        thumbnail: await fetchBuffer(v.thumb),
+                        sourceUrl: 'https://samu330.com/login',
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                     }
+                  }}, {quoted:m})
 }
 break
 
