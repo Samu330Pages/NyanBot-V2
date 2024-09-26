@@ -1750,11 +1750,11 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 	let imgThumb = fetchBuffer(`${video.thumbnail}`);
             return {
                 header: {
-                    imageMessage: imgThumb, // Usar la imagen del video
+                    imageMessage: `${imgThumb}`, // Usar la imagen del video
                     hasMediaAttachment: true,
                 },
                 body: {
-                    text: content
+                    text: `${content}`
                 },
                 nativeFlowMessage: {
                     buttons: [{
@@ -1778,7 +1778,7 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         await sendCarousel(m.chat, contents, {
             header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
             content: `*Se encontraron ${results.length} resultados. Selecciona la opción de descarga que prefieras.*\n`,
-            footer: botname
+            footer: `${botname}`
         });
 nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
     } catch (error) {
