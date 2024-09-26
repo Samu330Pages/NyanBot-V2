@@ -282,7 +282,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-        /*var body = (m.mtype === 'conversation')
+        var body = ((m.type == 'conversation') && m.message) || (m.type == 'editedMessage' ? m.message.protocolMessage.editedMessage.conversation : '') || ((m.type == 'extendedTextMessage') && m.message.text) || ((m.type == 'imageMessage') && m.message.caption) || ((m.type == 'videoMessage') && m.message.caption) || ((m.type == 'buttonsResponseMessage') && m.message.selectedButtonId) || ((m.type == 'listResponseMessage') && m.message.singleSelectReply) || ((m.type == 'viewOnceMessageV2') && m.message.caption) || ((m.type == 'documentWithCaptionMessage') && m.message.documentMessage.caption)
 		? m.message.conversation : (m.mtype == 'imageMessage')
 		? m.message.imageMessage.caption : (m.mtype == 'videoMessage')
 		? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage')
@@ -291,8 +291,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
 		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
 		? (JSON.parse(m.message.nativeFlowResponseMessage.paramsJson)).id : (m.type === 'interactiveResponseMessage')
-		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''*/
-var body = (m.type == 'editedMessage' ? m.message.protocolMessage.editedMessage.conversation : '') || ((m.type == 'conversation') && m.message) || ((m.type == 'extendedTextMessage') && m.message.text) || ((m.type == 'imageMessage') && m.message.caption) || ((m.type == 'videoMessage') && m.message.caption) || ((m.type == 'buttonsResponseMessage') && m.message.selectedButtonId) || ((m.type == 'listResponseMessage') && m.message.singleSelectReply) || ((m.type == 'viewOnceMessageV2') && m.message.caption) || ((m.type == 'documentWithCaptionMessage') && m.message.documentMessage.caption) || (typeof m.message != 'undefined' ? m.message.text : '') || (typeof m.message != 'undefined' ? m.message.caption : '') || m.message || ''
+		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
