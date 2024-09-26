@@ -1751,52 +1751,47 @@ case 'yts': {
 
     try {
         // Realizar la búsqueda en YouTube
-        const r = await yts(text);
+        const results = await yts(text);
+        
+        // Verificar que los resultados no estén vacíos
+        if (!Array.isArray(results) || results.length === 0) {
+            return reply(`No se encontraron resultados para "${text}".`);
+        }
 
         // Limitar a los primeros 10 resultados
-        const results = r.all.slice(0, 10) // Aquí tomamos solo los primeros 10
+        const limitedResults = results.slice(0, 10);
 
-        // Crear un array de carruseles
-        let contents = results.map(video => {
-            let content = `◦  *Título*: ${video.title}\n`;
-            content += `◦  *Autor*: ${video.author.name}\n`;
-            content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${video.views}\n`;
+        // Enviar cada resultado en un carrusel
+        for (const video of limitedResults) {
+            // Contenido del carrusel
+            const content = `◦  *Título*: ${video.title}\n` +
+                            `◦  *Autor*: ${video.author.name}\n` +
+                            `◦  *Duración*: ${video.timestamp}\n` +
+                            `◦  *Vistas*: ${video.views}\n`;
 
-            let imgThumb = video.thumbnail; // La URL de la miniatura
-
-            return {
-                header: {
-                    imageMessage: await fetchBuffer(imgThumb),
-                    hasMediaAttachment: true,
-                },
-                body: {
-                    text: content
-                },
-                nativeFlowMessage: {
-                    buttons: [{
-                        name: 'quick_reply',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Descargar Video',
-                            id: `${prefix}ytv ${video.videoId}` // ID para descargar video
-                        })
-                    }, {
-                        name: 'quick_reply',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Descargar Audio',
-                            id: `${prefix}yta ${video.videoId}` // ID para descargar audio
-                        })
-                    }]
-                }
+            // Mensaje nativo con botones (opcional)
+            const nativeFlowMessage = {
+                buttons: [{
+                    name: 'quick_reply',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Descargar Video',
+                        id: `${prefix}ytv ${video.videoId}` // ID para descargar video
+                    })
+                }, {
+                    name: 'quick_reply',
+                    buttonParamsJson: JSON.stringify({
+                        display_text: 'Descargar Audio',
+                        id: `${prefix}yta ${video.videoId}` // ID para descargar audio
+                    })
+                }]
             };
-        });
 
-        // Enviar cada carrusel con los resultados
-        for (const content of contents) {
-            await sendCarousel(m.chat, [content], {
+            // Llamada a la función sendCarousel
+            await sendCarousel(m.chat, nativeFlowMessage, {
                 header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
-                content: `*Selecciona una opción de descarga para el video.*\n`,
-                footer: `${botname}`
+                content: content,
+                footer: `${botname}`,
+                media: video.thumbnail // Aquí pasas la URL de la miniatura
             });
         }
 
