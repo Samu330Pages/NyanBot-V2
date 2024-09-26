@@ -1780,7 +1780,7 @@ case 'yts': {
 
             contents.push({
                 header: {
-                    imageMessage: await fetchBuffer(video.thumbnail), // Usar la miniatura del video
+                    imageMessage: video.thumbnail, // Usar la miniatura del video
                     hasMediaAttachment: true,
                 },
                 body: {
