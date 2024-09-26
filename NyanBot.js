@@ -649,29 +649,34 @@ async function sendReplyButton(chatId, buttons, message, options) {
 }
 
 async function sendCarousel(chatId, nativeFlowMessage, options) {
-    const { header, content, footer, media } = options;
-    let cards = [];
-    
-    // Preparar la imagen para el carrusel
-    var parse = await prepareWAMessageMedia({
-        image: {
-            url: media
-        },
-    }, {
-        upload: nyanBot2.waUploadToServer
-    });
+    const { header, content, footer, media, cards } = options; // Asegurarnos de recibir el array de cards
+    let carouselCards = [];
 
-    cards.push({
-        header: {
-            title: header,
-            imageMessage: parse.imageMessage,
-            hasMediaAttachment: true,
-        },
-        body: {
-            text: content // Asegúrate de que el contenido esté bien estructurado
-        },
-        nativeFlowMessage: nativeFlowMessage
-    });
+    // Preparar la imagen para el carrusel (si hay una imagen genérica)
+    if (media) {
+        var parse = await prepareWAMessageMedia({
+            image: {
+                url: media
+            },
+        }, {
+            upload: nyanBot2.waUploadToServer
+        });
+
+        carouselCards.push({
+            header: {
+                title: header,
+                imageMessage: parse.imageMessage,
+                hasMediaAttachment: true,
+            },
+            body: {
+                text: content // Asegúrate de que el contenido esté bien estructurado
+            },
+            nativeFlowMessage: nativeFlowMessage
+        });
+    }
+
+    // Agregar todas las cards pasadas a la función
+    carouselCards = carouselCards.concat(cards);
 
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
@@ -682,7 +687,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
                         text: content
                     },
                     carouselMessage: {
-                        cards: cards, // Asegúrate de que esto sea un array de cards
+                        cards: carouselCards, // Asegúrate de que esto sea un array de cards
                         messageVersion: 1
                     },
                     footer: {
@@ -1747,7 +1752,7 @@ case 'yts': {
         let header = `亗  *Y T - S E A R C H*\n`;
 
         // Mapeo de los resultados para crear las cards
-        limitedResults.map((video) => {
+        limitedResults.forEach((video) => {
             let content = `◦  *Nombre*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
