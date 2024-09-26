@@ -1752,14 +1752,15 @@ case 'yts': {
     try {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
-        
+
         // Verificar la respuesta y que los resultados sean un array
-        if (!Array.isArray(r.all) || r.all.length === 0) {
+        if (!r || !Array.isArray(r.all) || r.all.length === 0) {
             return reply(`No se encontraron resultados para "${text}".`);
         }
 
+	let data = `${r.all.slice(0, 10)}`
         // Limitar a los primeros 10 resultados
-        const results = `${r.all.slice(0, 10)}`;
+        const results = data; // Asegúrate de que esto sigue siendo un array.
         
         // Crear contenido para cada carrusel
         let contents = results.map(video => {
