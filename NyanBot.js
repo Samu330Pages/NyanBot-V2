@@ -1807,12 +1807,11 @@ case 'yts': {
             });
         }
 
-        // Enviar el carrusel con todas las cards
+        // Enviar el carrusel con todas las cards, sin el parámetro media
         await sendCarousel(m.chat, {}, {
             header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
             content: `*Selecciona una opción de descarga para el video.*\n`,
             footer: `${botname}`,
-            media: '', // Puedes usar una imagen genérica si lo prefieres
             cards: cards // Pasar todas las cards
         });
 
