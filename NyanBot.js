@@ -697,30 +697,6 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
     // Enviar el mensaje
     await nyanBot2.relayMessage(chatId, message['message'], {});
 }
-
-    // Crear el mensaje interactivo
-    const message = generateWAMessageFromContent(chatId, {
-        viewOnceMessage: {
-            message: {
-                interactiveMessage: {
-                    body: {
-                        text: content
-                    },
-                    carouselMessage: {
-                        cards: carouselCards, // Asegúrate de que esto sea un array de cards
-                        messageVersion: 1
-                    },
-                    footer: {
-                        text: footer // Pie de página
-                    }
-                }
-            }
-        }
-    }, { quoted: m });
-
-    // Enviar el mensaje
-    await nyanBot2.relayMessage(chatId, message['message'], {});
-}
 	    
 
 async function obfus(query) {
