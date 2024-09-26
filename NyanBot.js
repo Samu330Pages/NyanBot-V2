@@ -627,12 +627,20 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ location: {degreesLatitude: `0`, degreesLongitude: `0`, name: `${runtime(process.uptime())} 🍒`, address : botname, sequenceNumber: '99999', jpegThumbnail: fs.readFileSync(media)} }, { upload: nyanBot2.waUploadToServer }) : {})
+            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media)}, { upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
         }),
         contextInfo: {
+		externalAdReply: {
+                            showAdAttribution: true,
+                            title: botname,
+                            body: ownername,
+                            previewType: "PHOTO",
+                            thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
+                            sourceUrl: 'https://samu330.com'
+                        },
             mentionedJid: [m.sender],
 	    businessMessageForwardInfo: {
 		"businessOwnerJid": '5219984907794@s.whatsapp.net'
