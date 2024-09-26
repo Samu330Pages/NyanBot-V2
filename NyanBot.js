@@ -1746,8 +1746,8 @@ case 'yts': {
         let contents = [];
         let header = `亗  *Y T - S E A R C H*\n`;
 
-        // Recopilar la información en las cards
-        limitedResults.forEach(video => {
+        // Mapeo de los resultados para crear las cards
+        limitedResults.map((video) => {
             let content = `◦  *Nombre*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
@@ -1756,11 +1756,11 @@ case 'yts': {
 
             contents.push({
                 header: {
-                    imageMessage: video.thumbnail, // Usar la miniatura directamente
+                    imageMessage: video.thumbnail, // Usar la miniatura del video
                     hasMediaAttachment: true,
                 },
                 body: {
-                    text: content
+                    text: content // Contenido de la tarjeta
                 },
                 nativeFlowMessage: {
                     buttons: [{
