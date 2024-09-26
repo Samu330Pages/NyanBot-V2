@@ -1144,7 +1144,7 @@ case 'ctest': {
     const chatId = m.chat; // ID del chat
     const header = `🌟 *Ejemplo de Carrusel* 🌟`;
     const footer = `Gracias por usar el bot!`;
-    const media = './Media/theme/NyanBot.jp'; // URL de la imagen que deseas mostrar en el carrusel
+    const media = './Media/theme/NyanBot.jpg'; // URL de la imagen que deseas mostrar en el carrusel
 
     // Contenido del carrusel
     const content = `Este es un carrusel de ejemplo.\n*Texto de prueba*`;
