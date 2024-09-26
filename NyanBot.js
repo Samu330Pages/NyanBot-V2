@@ -2434,7 +2434,7 @@ s = 'jovencitas'
                     buttons: [{
                         name: 'quick_reply', // Cambiar a botón de respuesta rápida
                         buttonParamsJson: JSON.stringify({
-                            title: 'Descargar video! 🔥',
+                            display_text: 'Descargar video! 🔥',
                             id: `${prefix}xvideosdl ${video.url}` // Enlace directo al video
                         })
                     }]
@@ -2460,7 +2460,7 @@ break
 case 'xvideosdl': {
 let v = await fg.xvideosdl(text)
 nyanBot2.sendMessage(m.chat, {
-	document: await fetchBuffer(v.url_dl),
+	video: await fetchBuffer(v.url_dl),
         fileName: `${v.title}.mp4`,
         mimeType: 'video/mp4',
         jpegThumbnail: await fetchBuffer(v.thumb),
