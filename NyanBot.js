@@ -633,14 +633,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             buttons: buttons,
         }),
         contextInfo: {
-		externalAdReply: {
-                            title: botname,
-                            body: ownername,
-                            previewType: "PHOTO",
-                            thumbnail: await fs.readFileSync('./Media/theme/NyanBot.jpg'),
-                            sourceUrl: 'https://samu330.com'
-                        }
-            //mentionedJid: [m.sender]
+            mentionedJid: [m.sender]
 	}
     })
 
@@ -648,7 +641,16 @@ async function sendReplyButton(chatId, buttons, message, options) {
         viewOnceMessage: {
             message: {
                 interactiveMessage: interactiveMessage
-            }
+            }, contextInfo: {
+                     externalAdReply: {
+                        title: botname,
+                        body: ownername,
+                        thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
+                        sourceUrl: 'https://samu330.com',
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                     }
+                  },
         }
     }, { quoted: m });
 
