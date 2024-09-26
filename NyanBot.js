@@ -631,7 +631,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 						     mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 						     pageCount: '25',
 						     jpegThumbnail: await fs.readFileSync(media),
-						     fileName: ,
+						     fileName: runtime(process.uptime()),
 						     fileLength: '1000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
