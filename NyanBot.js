@@ -1756,15 +1756,18 @@ case 'yts': {
         // Limitar a los primeros 10 resultados
         const limitedResults = results.all.slice(0, 10);
 
-        // Enviar cada resultado en un carrusel
+        // Crear un array para las cards del carrusel
+        let cards = [];
+
+        // Recopilar la información en las cards
         for (const video of limitedResults) {
-            // Contenido del carrusel
+            // Contenido de cada tarjeta
             const content = `◦  *Título*: ${video.title}\n` +
                             `◦  *Autor*: ${video.author.name}\n` +
                             `◦  *Duración*: ${video.timestamp}\n` +
-                            `◦  *Vistas*: ${video.views}\n`;
+                            `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`;
 
-            // Mensaje nativo con botones (opcional)
+            // Mensaje nativo con botones
             const nativeFlowMessage = {
                 buttons: [{
                     name: 'quick_reply',
@@ -1781,14 +1784,37 @@ case 'yts': {
                 }]
             };
 
-            // Llamada a la función sendCarousel
-            await sendCarousel(m.chat, nativeFlowMessage, {
-                header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
-                content: content,
-                footer: `${botname}`,
-                media: video.thumbnail // Aquí pasas la URL de la miniatura
+            // Preparar la imagen para el carrusel
+            const parse = await prepareWAMessageMedia({
+                image: {
+                    url: video.thumbnail // URL de la miniatura
+                },
+            }, {
+                upload: nyanBot2.waUploadToServer
+            });
+
+            // Crear la card
+            cards.push({
+                header: {
+                    title: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
+                    imageMessage: parse.imageMessage,
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content // Contenido de la tarjeta
+                },
+                nativeFlowMessage: nativeFlowMessage
             });
         }
+
+        // Enviar el carrusel con todas las cards
+        await sendCarousel(m.chat, {}, {
+            header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
+            content: `*Selecciona una opción de descarga para el video.*\n`,
+            footer: `${botname}`,
+            media: video.thumbnail, // Puedes usar una imagen genérica si lo prefieres
+            cards: cards // Pasar todas las cards
+        });
 
         nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
     } catch (error) {
