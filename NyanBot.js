@@ -2403,7 +2403,7 @@ case 'xvideos': {
 
     try {
         // Realizar la búsqueda en Xvideos
-        let data = await fg.xvideosSearch("Jovencitas Culonas);
+        let data = await fg.xvideosSearch("Jovencitas Culonas");
 
         // Limitar a los primeros 10 resultados
         const limitedResults = data.slice(0, 10);
