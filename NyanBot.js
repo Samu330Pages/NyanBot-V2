@@ -2398,7 +2398,12 @@ break
 
 
 case 'xvideos': {
-
+let s = '';
+if (text) {
+s = text
+} else {
+s = 'jovencitas'
+}
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     try {
