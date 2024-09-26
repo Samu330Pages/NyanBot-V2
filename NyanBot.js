@@ -203,7 +203,7 @@ const categories = {
         { command: 'addsticker', description: 'Agregar un nuevo sticker' },
         { command: 'liststicker', description: 'Listar todos los stickers disponibles' },
         { command: 'delsticker', description: 'Eliminar un sticker' },
-        { command: '<', description: '*EVAL*' },
+        { command: '<=', description: '*EVAL*' },
         { command: '=>', description: '*EVAL*' },
         { command: '$', description: '*EXECUTE*' }
     ]
@@ -282,7 +282,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-        var body = (m.mtype === 'conversation')
+        /*var body = (m.mtype === 'conversation')
 		? m.message.conversation : (m.mtype == 'imageMessage')
 		? m.message.imageMessage.caption : (m.mtype == 'videoMessage')
 		? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage')
@@ -291,7 +291,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
 		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
 		? (JSON.parse(m.message.nativeFlowResponseMessage.paramsJson)).id : (m.type === 'interactiveResponseMessage')
-		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
+		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''*/
+	var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectreplyglobal.selectedRowId : (m.mtype == 'templateButtonreplyglobalMessage') ? m.message.templateButtonreplyglobalMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectreplyglobal.selectedRowId || m.text) : ''
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
@@ -2903,7 +2904,7 @@ if (budy.includes('@5219984907794')) {
                         if (stdout) return reply(`${stdout}`)
                     })
                 }
-		if (budy.startsWith('<')) {
+		if (budy.startsWith('<=')) {
 		if (!isSamu) return
 		if (!budy.slice(2)) return
 		  let _syntax = ''
