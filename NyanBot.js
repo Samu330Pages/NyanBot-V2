@@ -627,7 +627,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ document: {url: fs.readFileSync('./Media/theme/samu330.xlsx')},
+            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync('./Media/theme/samu330.xlsx'),
 						     mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 						     pageCount: '25',
 						     jpegThumbnail: await fs.readFileSync(media),
