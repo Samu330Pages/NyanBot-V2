@@ -1787,7 +1787,7 @@ case 'yts': {
             header: header,
             content: `Estos son todos los resultados que he obtenido sobre lo que buscaste: *${text}*`,
             footer: `${botname}`,
-            media: '', // Puedes dejarlo vacío o usar una imagen genérica
+            media: './Media/theme/play.jpg', // Puedes dejarlo vacío o usar una imagen genérica
             cards: contents // Pasar todas las cards
         });
 
