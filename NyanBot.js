@@ -1168,6 +1168,20 @@ case 'ctest': {
                     }]
                 }]
             })
+        }, {
+            name: 'single_select',
+            buttonParamsJson: JSON.stringify({
+                title: 'Selecciona una opción',
+                sections: [{
+                    rows: [{
+                        title: 'Opción 1',
+                        id: 'opcion1'
+                    }, {
+                        title: 'Opción 2',
+                        id: 'opcion2'
+                    }]
+                }]
+            })
         }]
     };
 
@@ -1738,7 +1752,7 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
         const r = await yts(text);
         
         // Limitar a los primeros 10 resultados
-        const results = r.all.slice(0, 10);
+        const results = `${r.all.slice(0, 10)}`;
         
         // Crear contenido para cada carrusel
         let contents = results.map(video => {
