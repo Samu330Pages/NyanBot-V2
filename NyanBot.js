@@ -1740,7 +1740,7 @@ case 'yts': {
         const results = await yts(text);
 
         // Limitar a los primeros 10 resultados
-        const limitedResults = results.slice(0, 10);
+        const limitedResults = results.all.slice(0, 10);
 
         // Crear un array para las cards del carrusel
         let contents = [];
