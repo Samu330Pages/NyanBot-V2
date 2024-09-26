@@ -1746,9 +1746,8 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
             content += `◦  *Vistas*: ${video.views}\n`;
-            content += `◦  *Publicado*: ${video.publishedAt}`;
 
-	let imgThumb = fetchBuffer(video.thumbnail);
+	let imgThumb = fetchBuffer(`${video.thumbnail}`);
             return {
                 header: {
                     imageMessage: imgThumb, // Usar la imagen del video
