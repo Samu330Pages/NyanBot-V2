@@ -290,8 +290,10 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage')
 		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
 		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
-		? m.message.nativeFlowResponseMessage.paramsJson : (m.type === 'interactiveResponseMessage')
+		? (JSON.parse(m.message.nativeFlowResponseMessage.paramsJson)).id : (m.type === 'interactiveResponseMessage')
 		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
+
+	    (m.type == 'interactiveResponseMessage' ? (JSON.parse(m.msg.nativeFlowResponseMessage.paramsJson)).id : '' )
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
