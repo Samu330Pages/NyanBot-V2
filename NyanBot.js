@@ -634,11 +634,10 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         contextInfo: {
 		externalAdReply: {
-                            showAdAttribution: true,
                             title: botname,
                             body: ownername,
                             previewType: "PHOTO",
-                            thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
+                            thumbnail: './Media/theme/NyanBot.jpg',
                             sourceUrl: 'https://samu330.com'
                         }
             //mentionedJid: [m.sender]
