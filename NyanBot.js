@@ -649,31 +649,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
 }
 
 async function sendCarousel(chatId, nativeFlowMessage, options) {
-    const { header, content, footer, media, cards } = options; // Asegurarnos de recibir el array de cards
+    const { footer, cards } = options; // Eliminamos header, content y media
     let carouselCards = [];
-
-    // Preparar la imagen para el carrusel (si hay una imagen genérica)
-    if (media) {
-        var parse = await prepareWAMessageMedia({
-            image: {
-                url: media
-            },
-        }, {
-            upload: nyanBot2.waUploadToServer
-        });
-
-        carouselCards.push({
-            header: {
-                title: header,
-                imageMessage: parse.imageMessage, // Asegúrate de que `parse.imageMessage` esté correctamente formateado
-                hasMediaAttachment: true,
-            },
-            body: {
-                text: content // Asegúrate de que el contenido esté bien estructurado
-            },
-            nativeFlowMessage: nativeFlowMessage
-        });
-    }
 
     // Agregar todas las cards pasadas a la función
     for (const card of cards) {
@@ -696,6 +673,30 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
             nativeFlowMessage: card.nativeFlowMessage
         });
     }
+
+    // Crear el mensaje interactivo
+    const message = generateWAMessageFromContent(chatId, {
+        viewOnceMessage: {
+            message: {
+                interactiveMessage: {
+                    body: {
+                        text: `Estos son todos los resultados que he obtenido sobre lo que buscaste:` // Puedes ajustar este texto si lo deseas
+                    },
+                    carouselMessage: {
+                        cards: carouselCards, // Asegúrate de que esto sea un array de cards
+                        messageVersion: 1
+                    },
+                    footer: {
+                        text: footer // Pie de página
+                    }
+                }
+            }
+        }
+    }, { quoted: m });
+
+    // Enviar el mensaje
+    await nyanBot2.relayMessage(chatId, message['message'], {});
+}
 
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
@@ -1776,7 +1777,7 @@ case 'yts': {
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
             content += `◦  *Vistas*: ${video.views}\n`;
-            content += `◦  *Publicado*: ${video.publishedAt || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
+            content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
 
             contents.push({
                 header: {
@@ -1808,12 +1809,9 @@ case 'yts': {
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-            header: header,
-            content: `Estos son todos los resultados que he obtenido sobre lo que buscaste: *${text}*`,
-            footer: `${botname}`,
-            media: './Media/theme/play.jpg', // Puedes dejarlo vacío o usar una imagen genérica
-            cards: contents // Pasar todas las cards
-        });
+		footer: `${botname}`,
+		cards: contents // Pasar todas las cards
+			});
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
