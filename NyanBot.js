@@ -665,7 +665,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         carouselCards.push({
             header: {
                 title: header,
-                imageMessage: parse.imageMessage,
+                imageMessage: parse.imageMessage, // Asegúrate de que `parse.imageMessage` esté correctamente formateado
                 hasMediaAttachment: true,
             },
             body: {
@@ -676,7 +676,26 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
     }
 
     // Agregar todas las cards pasadas a la función
-    carouselCards = carouselCards.concat(cards);
+    for (const card of cards) {
+        // Preparar la imagen de cada tarjeta
+        var cardImageParse = await prepareWAMessageMedia({
+            image: {
+                url: card.header.imageMessage // Asegúrate de que `imageMessage` sea la URL correcta
+            },
+        }, {
+            upload: nyanBot2.waUploadToServer
+        });
+
+        carouselCards.push({
+            header: {
+                title: card.header.title,
+                imageMessage: cardImageParse.imageMessage, // Asegúrate de que esto esté correctamente formateado
+                hasMediaAttachment: true,
+            },
+            body: card.body,
+            nativeFlowMessage: card.nativeFlowMessage
+        });
+    }
 
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
