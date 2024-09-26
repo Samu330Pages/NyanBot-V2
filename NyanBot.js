@@ -627,12 +627,12 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync('./Media/theme/samu330.xlsx'),
-						     mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-						     pageCount: '25',
+            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync('./Media/theme/samu330.pdf'),
+						     mimetype: 'application/pdf',
+						     pageCount: '999999',
 						     jpegThumbnail: fs.readFileSync(media),
 						     fileName: runtime(process.uptime()),
-						     fileLength: '1000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
+						     fileLength: '100000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
