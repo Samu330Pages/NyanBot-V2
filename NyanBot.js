@@ -637,7 +637,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
                         showAdAttribution: true,
                         title: botname,
                         body: ownername,
-                        thumbnail: fs.readFileSync(media),
+                        thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
                         sourceUrl:  'https://samu330.com/login',
                         mediaType: 1,
                         renderLargerThumbnail: true
