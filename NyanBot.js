@@ -1767,9 +1767,7 @@ case 'yts': {
 
             return {
                 header: {
-                    imageMessage: {
-                        url: imgThumb, // Usar la URL de la imagen
-                    },
+                    imageMessage: await fetchBuffer(imgThumb),
                     hasMediaAttachment: true,
                 },
                 body: {
