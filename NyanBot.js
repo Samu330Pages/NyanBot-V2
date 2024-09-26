@@ -1753,10 +1753,7 @@ case 'yts': {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
         
-        // Verificar la estructura de la respuesta
-        console.log(r); // Para depuración, verifica la estructura de la respuesta
-
-        // Asegurarse de que r.all sea un arreglo
+        // Verificar la respuesta y que los resultados sean un array
         if (!Array.isArray(r.all) || r.all.length === 0) {
             return reply(`No se encontraron resultados para "${text}".`);
         }
@@ -1775,7 +1772,9 @@ case 'yts': {
             
             return {
                 header: {
-                    imageMessage: imgThumb, // Usar la imagen del video
+                    imageMessage: {
+                        url: imgThumb // Asegúrate de que esto sea un objeto adecuado
+                    },
                     hasMediaAttachment: true,
                 },
                 body: {
