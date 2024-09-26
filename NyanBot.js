@@ -290,7 +290,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage')
 		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
 		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
-		? m.message.nativeFlowResponseMessage.paramsJson.id : (m.type === 'interactiveResponseMessage')
+		? m.message.nativeFlowResponseMessage.paramsJson : (m.type === 'interactiveResponseMessage')
 		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
