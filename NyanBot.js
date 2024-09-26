@@ -1745,13 +1745,13 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`;
+            content += `◦  *Vistas*: ${video.views}\n`;
             content += `◦  *Publicado*: ${video.publishedAt}`;
 
-	//let imgThumb = fetchBuffer(video.thumbnail);
+	let imgThumb = fetchBuffer(video.thumbnail);
             return {
                 header: {
-                    imageMessage: video.thumbnail, // Usar la imagen del video
+                    imageMessage: imgThumb, // Usar la imagen del video
                     hasMediaAttachment: true,
                 },
                 body: {
