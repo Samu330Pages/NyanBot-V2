@@ -1733,14 +1733,14 @@ case 'yts': {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
 
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     try {
         // Realizar la búsqueda en YouTube
         const results = await yts(text);
 
         // Limitar a los primeros 10 resultados
-        const limitedResults = results.all.slice(0, 10);
+        const limitedResults = results.slice(0, 10);
 
         // Crear un array para las cards del carrusel
         let contents = [];
@@ -1791,9 +1791,9 @@ case 'yts': {
             cards: contents // Pasar todas las cards
         });
 
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
-        nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de YouTube:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
     }
