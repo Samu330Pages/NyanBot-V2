@@ -627,12 +627,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync('./Media/theme/samu330.pdf'),
-						     mimetype: 'application/pdf',
-						     pageCount: '999999',
-						     jpegThumbnail: fs.readFileSync(media),
-						     fileName: runtime(process.uptime()),
-						     fileLength: '100000000000000',
+            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media), jpegThumbnail: fs.readFileSync(media),
 						     contextInfo: {
 							     externalAdReply: {
 								     showAdAttribution: true,
