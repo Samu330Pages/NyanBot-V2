@@ -641,8 +641,13 @@ async function sendReplyButton(chatId, buttons, message, options) {
         viewOnceMessage: {
             message: {
                 interactiveMessage: interactiveMessage
-            }, contextInfo: {
+            }
+        }
+    }, { quoted: m });
+
+    await nyanBot2.relayMessage(chatId, msgs.message, {contextInfo: {
                      externalAdReply: {
+                        showAdAttribution: true,
                         title: botname,
                         body: ownername,
                         thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
@@ -650,11 +655,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
                         mediaType: 1,
                         renderLargerThumbnail: true
                      }
-                  },
-        }
-    }, { quoted: m });
-
-    await nyanBot2.relayMessage(chatId, msgs.message, {});
+                  }});
 }
 	    
 
