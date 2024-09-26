@@ -163,39 +163,39 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: '`CORREO`' },
-        { command: 'reg', description: '*+200 PUNTOS*' },
-        { command: 'reset', description: '`CORREO`' },
-        { command: 'logout', description: 'Cerrar sesión' }
+        { command: 'login', description: '' },
+        { command: 'reg', description: '' },
+        { command: 'reset', description: '`' },
+        { command: 'logout', description: '' }
     ],
     "🔍 Búsqueda": [
-	{ command: 'google', description: 'Busqueda en Google' },
-        { command: 'letra', description: 'Buscar letra de canciones' }
+	{ command: 'google', description: '' },
+        { command: 'letra', description: '' }
     ],
     "📥 Descargas": [
-        { command: 'play', description: 'Descargar música de YouTube.' },
-        { command: 'yta', description: '`LINK` *-30 PUNTOS*' },
-        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS*' },
-        { command: 'ytv', description: '`LINK` *-30 PUNTOS*e' },
-        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS*' },
-        { command: 'tiktok', description: '`LINK` *-10 PUNTOS*' },
-        { command: 'tt', description: '`LINK` *-10 PUNTOS*' },
-        { command: 'facebook', description: '`LINK` *-20 PUNTOS*' },
-        { command: 'fb', description: '`LINK` *-20 PUNTOS*' },
-        { command: 'instagram', description: '`LINK` *-20 PUNTOS*' },
-        { command: 'ig', description: '`LINK` *-20 PUNTOS*' },
-        { command: 'mediafire', description: '`LINK` *-50 PUNTOS*' }
+        { command: 'play', description: '' },
+        { command: 'yta', description: '' },
+        { command: 'ytmp3', description: '' },
+        { command: 'ytv', description: '' },
+        { command: 'ytmp4', description: '' },
+        { command: 'tiktok', description: '' },
+        { command: 'tt', description: '' },
+        { command: 'facebook', description: '' },
+        { command: 'fb', description: '' },
+        { command: 'instagram', description: '' },
+        { command: 'ig', description: '' },
+        { command: 'mediafire', description: '' }
     ],
     "🎭 Grupos": [
         { command: 'bienvenida', description: '' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: 'Crear un sticker' },
-        { command: 's', description: 'Alias para el comando de sticker' },
-        { command: 'puntos', description: 'Consultar tus puntos' },
-        { command: 'take', description: '`*-50 PUNTOS*`' },
-        { command: 'wm', description: '`*-50 PUNTOS*`' },
-        { command: 'buscarsticker', description: 'Buscar stickers' }
+        { command: 'sticker', description: '' },
+        { command: 's', description: '' },
+        { command: 'puntos', description: '' },
+        { command: 'take', description: '' },
+        { command: 'wm', description: '' },
+        { command: 'buscarsticker', description: '' }
     ],
     "⚙ Bot": [
         { command: 'actualizar', description: '' },
@@ -627,21 +627,14 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media), thumbnail: fs.readFileSync(media),
-						     contextInfo: {
-							     externalAdReply: {
-								     showAdAttribution: true,
-								     title: botname,
-								     body: ownername,
-								     previewType: "PHOTO",
-								     thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
-								     sourceUrl: 'https://samu330.com',
-							     }
-						     }},{ upload: nyanBot2.waUploadToServer }) : {})
+            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media) },{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
-        })
+        }),
+        contextInfo: {
+            mentionedJid: [m.sender]
+	}
     })
 
     const msgs = generateWAMessageFromContent(chatId, {
@@ -653,6 +646,51 @@ async function sendReplyButton(chatId, buttons, message, options) {
     }, { quoted: m });
 
     await nyanBot2.relayMessage(chatId, msgs.message, {});
+}
+
+async function sendCarousel(chatId, nativeFlowMessage, options) {
+const { header, content, footer, media } = options;
+    let cards = [];
+        var parse = await prepareWAMessageMedia({
+            image: {
+                url: media
+            },
+        }, {
+            upload: nyanBot2.waUploadToServer // Asumiendo que este es el cliente de tu bot
+        });
+
+        cards.push({
+            header: {
+                title: header,
+                imageMessage: parse.imageMessage,
+                hasMediaAttachment: true,
+            },
+            body: content,
+            nativeFlowMessage: nativeFlowMessage
+        });
+
+    // Crear el mensaje interactivo
+    const message = generateWAMessageFromContent(chatId, {
+        viewOnceMessage: {
+            message: {
+                interactiveMessage: {
+                    body: {
+                        text: content
+                    },
+                    carouselMessage: {
+                        cards,
+                        messageVersion: 1
+                    },
+                    footer: {
+                        text: fgooter
+                    }
+                }
+            }
+        }
+    }, { quoted: m });
+
+    // Enviar el mensaje
+    await nyanBot2.relayMessage(chatId, message['message'], {});
 }
 	    
 
@@ -1100,13 +1138,6 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
         switch (isCommand) {
 
-		
-case 'flow': {
-  let data = await getOrganicData(text);
-  let formattedData = data.map(result => JSON.stringify(result, null, 2)).join(',\n');
-  reply(formattedData);
-}
-break
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
