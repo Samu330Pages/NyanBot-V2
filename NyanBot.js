@@ -282,22 +282,15 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-        var body = (m.mtype === 'conversation') 
-    ? m.message.conversation 
-    : (m.mtype === 'imageMessage') 
-    ? m.message.imageMessage.caption 
-    : (m.mtype === 'videoMessage') 
-    ? m.message.videoMessage.caption 
-    : (m.mtype === 'extendedTextMessage') 
-    ? m.message.extendedTextMessage.text 
-    : (m.mtype === 'buttonsResponseMessage') 
-    ? m.message.buttonsResponseMessage.selectedButtonId 
-    : (m.mtype === 'listResponseMessage') 
-    ? m.message.listResponseMessage.singleSelectReply.selectedRowId 
-    : (m.mtype === 'templateButtonReplyMessage') 
-    ? m.message.templateButtonReplyMessage.selectedId 
-    : (m.type === 'interactiveResponseMessage')
-    ? m.message.nativeFlowResponseMessage.paramsJson.id : ''
+        var body = (m.mtype === 'conversation')
+		? m.message.conversation : (m.mtype == 'imageMessage')
+		? m.message.imageMessage.caption : (m.mtype == 'videoMessage')
+		? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage')
+		? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage')
+		? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage')
+		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
+		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
+		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
