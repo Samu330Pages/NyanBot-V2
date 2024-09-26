@@ -1744,61 +1744,50 @@ case 'yts': {
 
         // Crear un array para las cards del carrusel
         let contents = [];
-        let header = `🌟 *Resultados de búsqueda para: ${text}* 🌟`;
+        let header = `亗  *Y T - S E A R C H*\n`;
 
         // Recopilar la información en las cards
         limitedResults.forEach(video => {
-            // Contenido de cada tarjeta
-            const content = `◦  *Título*: ${video.title}\n` +
-                            `◦  *Autor*: ${video.author.name}\n` +
-                            `◦  *Duración*: ${video.timestamp}\n` +
-                            `◦  *Vistas*: ${video.views}\n`;
+            let content = `◦  *Nombre*: ${video.title}\n`;
+            content += `◦  *Autor*: ${video.author.name}\n`;
+            content += `◦  *Duración*: ${video.timestamp}\n`;
+            content += `◦  *Vistas*: ${video.views}\n`;
+            content += `◦  *Publicado*: ${video.publishedAt || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
 
-            // Mensaje nativo con botones
-            const nativeFlowMessage = {
-                buttons: [{
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Descargar Video',
-                        id: `${prefix}ytv ${video.videoId}` // ID para descargar video
-                    })
-                }, {
-                    name: 'quick_reply',
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Descargar Audio',
-                        id: `${prefix}yta ${video.videoId}` // ID para descargar audio
-                    })
-                }]
-            };
-
-            // Preparar la imagen para el carrusel
-            var parse = await prepareWAMessageMedia({
-                image: {
-                    url: video.thumbnail // URL de la miniatura
-                },
-            }, {
-                upload: nyanBot2.waUploadToServer
-            });
-
-            // Crear la card
             contents.push({
                 header: {
-                    imageMessage: parse.imageMessage,
+                    imageMessage: video.thumbnail, // Usar la miniatura directamente
                     hasMediaAttachment: true,
                 },
                 body: {
-                    text: content // Contenido de la tarjeta
+                    text: content
                 },
-                nativeFlowMessage: nativeFlowMessage
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: 'single_select',
+                        buttonParamsJson: JSON.stringify({
+                            title: 'Download',
+                            sections: [{
+                                rows: [{
+                                    title: 'Audio',
+                                    id: 'audio ' + video.videoId
+                                }, {
+                                    title: 'Video',
+                                    id: 'video ' + video.videoId
+                                }]
+                            }]
+                        })
+                    }]
+                },
             });
         });
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
             header: header,
-            content: `*Selecciona una opción de descarga para el video.*\n`,
+            content: `Estos son todos los resultados que he obtenido sobre lo que buscaste: *${text}*`,
             footer: `${botname}`,
-            media: video.thumbnail, // Puedes usar una imagen genérica si lo prefieres
+            media: '', // Puedes dejarlo vacío o usar una imagen genérica
             cards: contents // Pasar todas las cards
         });
 
