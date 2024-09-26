@@ -163,9 +163,9 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: '`CORREO` Iniciar sesión con tu correo. Ejemplo: login tucorreo@gmail.com' },
-        { command: 'reg', description: '*+200 PUNTOS* Registrar usuario' },
-        { command: 'reset', description: '`CORREO` Restablecer contraseña. Ejemplo: reset tucorreo@gmail.com' },
+        { command: 'login', description: '`CORREO`' },
+        { command: 'reg', description: '*+200 PUNTOS*' },
+        { command: 'reset', description: '`CORREO`' },
         { command: 'logout', description: 'Cerrar sesión' }
     ],
     "🔍 Búsqueda": [
@@ -173,36 +173,36 @@ const categories = {
         { command: 'letra', description: 'Buscar letra de canciones' }
     ],
     "📥 Descargas": [
-        { command: 'play', description: 'Descargar música de YouTube. Ejemplo: play canción favorita' },
-        { command: 'yta', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
-        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS* Descargar audio de YouTube' },
-        { command: 'ytv', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
-        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS* Descargar video de YouTube' },
-        { command: 'tiktok', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
-        { command: 'tt', description: '`LINK` *-10 PUNTOS* Descargar videos de TikTok' },
-        { command: 'facebook', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
-        { command: 'fb', description: '`LINK` *-20 PUNTOS* Descargar videos de Facebook' },
-        { command: 'instagram', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
-        { command: 'ig', description: '`LINK` *-20 PUNTOS* Descargar contenido de Instagram' },
-        { command: 'mediafire', description: '`LINK` *-50 PUNTOS* Descargar archivos de Mediafire' }
+        { command: 'play', description: 'Descargar música de YouTube.' },
+        { command: 'yta', description: '`LINK` *-30 PUNTOS*' },
+        { command: 'ytmp3', description: '`LINK` *-30 PUNTOS*' },
+        { command: 'ytv', description: '`LINK` *-30 PUNTOS*e' },
+        { command: 'ytmp4', description: '`LINK` *-30 PUNTOS*' },
+        { command: 'tiktok', description: '`LINK` *-10 PUNTOS*' },
+        { command: 'tt', description: '`LINK` *-10 PUNTOS*' },
+        { command: 'facebook', description: '`LINK` *-20 PUNTOS*' },
+        { command: 'fb', description: '`LINK` *-20 PUNTOS*' },
+        { command: 'instagram', description: '`LINK` *-20 PUNTOS*' },
+        { command: 'ig', description: '`LINK` *-20 PUNTOS*' },
+        { command: 'mediafire', description: '`LINK` *-50 PUNTOS*' }
     ],
     "🎭 Grupos": [
-        { command: 'bienvenida', description: 'Enviar mensaje de bienvenida a los nuevos miembros' }
+        { command: 'bienvenida', description: '' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: 'Crear un sticker a partir de imagen/video/gif' },
+        { command: 'sticker', description: 'Crear un sticker' },
         { command: 's', description: 'Alias para el comando de sticker' },
         { command: 'puntos', description: 'Consultar tus puntos' },
-        { command: 'take', description: '`*-50 PUNTOS*` Tomar puntos de tu cuenta' },
-        { command: 'wm', description: '`*-50 PUNTOS*` Agregar watermark a tus Stickers' },
+        { command: 'take', description: '`*-50 PUNTOS*`' },
+        { command: 'wm', description: '`*-50 PUNTOS*`' },
         { command: 'buscarsticker', description: 'Buscar stickers' }
     ],
     "⚙ Bot": [
-        { command: 'actualizar', description: 'Actualizar el bot' },
-        { command: 'update', description: 'Alias para el comando de actualizar' },
-        { command: 'addsticker', description: 'Agregar un nuevo sticker' },
-        { command: 'liststicker', description: 'Listar todos los stickers disponibles' },
-        { command: 'delsticker', description: 'Eliminar un sticker' },
+        { command: 'actualizar', description: '' },
+        { command: 'update', description: '' },
+        { command: 'addsticker', description: '' },
+        { command: 'liststicker', description: '' },
+        { command: 'delsticker', description: '' },
         { command: '<=', description: '*EVAL*' },
         { command: '=>', description: '*EVAL*' },
         { command: '$', description: '*EXECUTE*' }
@@ -282,8 +282,16 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-        var body = ((m.type == 'conversation') && m.message) || (m.type == 'editedMessage' ? m.message.protocolMessage.editedMessage.conversation : '') || ((m.type == 'extendedTextMessage') && m.message.text) || ((m.type == 'imageMessage') && m.message.caption) || ((m.type == 'videoMessage') && m.message.caption) || ((m.type == 'buttonsResponseMessage') && m.message.selectedButtonId) || ((m.type == 'listResponseMessage') && m.message.singleSelectReply) || ((m.type == 'viewOnceMessageV2') && m.message.caption) || ((m.type == 'documentWithCaptionMessage') && m.message.documentMessage.caption) || m.text : ''
-	var budy = (typeof m.text == 'string' ? m.text : '')
+        var body = (m.mtype === 'conversation')
+		? m.message.conversation : (m.mtype == 'imageMessage')
+		? m.message.imageMessage.caption : (m.mtype == 'videoMessage')
+		? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage')
+		? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage')
+		? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage')
+		? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage')
+		? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo')
+		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
+        var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
         const isCmd = body.startsWith(prefix, '')
