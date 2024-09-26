@@ -1145,30 +1145,16 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 case 'ctest': {
     // Datos de ejemplo
     const chatId = m.chat; // ID del chat
-    const header = `🌟 *Ejemplo de Carrusel* 🌟`;
-    const footer = `Gracias por usar el bot!`;
+    const header = `*test*`;
+    const footer = `test`;
     const media = './Media/theme/NyanBot.jpg'; // URL de la imagen que deseas mostrar en el carrusel
 
     // Contenido del carrusel
-    const content = `Este es un carrusel de ejemplo.\n*Texto de prueba*`;
+    const content = `*test*`;
 
     // Mensaje nativo con botones (opcional)
     const nativeFlowMessage = {
         buttons: [{
-            name: 'single_select',
-            buttonParamsJson: JSON.stringify({
-                title: 'Selecciona una opción',
-                sections: [{
-                    rows: [{
-                        title: 'Opción 1',
-                        id: 'opcion1'
-                    }, {
-                        title: 'Opción 2',
-                        id: 'opcion2'
-                    }]
-                }]
-            })
-        }, {
             name: 'single_select',
             buttonParamsJson: JSON.stringify({
                 title: 'Selecciona una opción',
