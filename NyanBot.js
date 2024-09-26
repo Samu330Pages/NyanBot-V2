@@ -1765,7 +1765,7 @@ case 'yts': {
             const content = `◦  *Título*: ${video.title}\n` +
                             `◦  *Autor*: ${video.author.name}\n` +
                             `◦  *Duración*: ${video.timestamp}\n` +
-                            `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`;
+                            `◦  *Vistas*: ${video.views}\n`;
 
             // Mensaje nativo con botones
             const nativeFlowMessage = {
