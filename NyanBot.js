@@ -1750,7 +1750,7 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
 
             return {
                 header: {
-                    imageMessage: await fetchBuffer(`${video.thumbnail}`), // Usar la imagen del video
+                    imageMessage: await fetchBuffer(video.thumbnail), // Usar la imagen del video
                     hasMediaAttachment: true,
                 },
                 body: {
