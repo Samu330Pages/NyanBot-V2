@@ -652,6 +652,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
     const { header, content, footer, media } = options;
     let cards = [];
     
+    // Preparar la imagen para el carrusel
     var parse = await prepareWAMessageMedia({
         image: {
             url: media
@@ -666,7 +667,9 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
             imageMessage: parse.imageMessage,
             hasMediaAttachment: true,
         },
-        body: content,
+        body: {
+            text: content // Asegúrate de que el contenido esté bien estructurado
+        },
         nativeFlowMessage: nativeFlowMessage
     });
 
@@ -679,11 +682,11 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
                         text: content
                     },
                     carouselMessage: {
-                        cards,
+                        cards: cards, // Asegúrate de que esto sea un array de cards
                         messageVersion: 1
                     },
                     footer: {
-                        text: footer // Asegúrate de utilizar footer
+                        text: footer // Pie de página
                     }
                 }
             }
