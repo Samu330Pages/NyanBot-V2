@@ -282,7 +282,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-        var body = ((m.type == 'conversation') && m.message) || (m.type == 'editedMessage' ? m.message.protocolMessage.editedMessage.conversation : '') || ((m.type == 'extendedTextMessage') && m.message.text) || ((m.type == 'imageMessage') && m.message.caption) || ((m.type == 'videoMessage') && m.message.caption) || ((m.type == 'buttonsResponseMessage') && m.message.selectedButtonId) || ((m.type == 'listResponseMessage') && m.message.singleSelectReply) || ((m.type == 'viewOnceMessageV2') && m.message.caption) || ((m.type == 'documentWithCaptionMessage') && m.message.documentMessage.caption) || m.text) : ''
+        var body = ((m.type == 'conversation') && m.message) || (m.type == 'editedMessage' ? m.message.protocolMessage.editedMessage.conversation : '') || ((m.type == 'extendedTextMessage') && m.message.text) || ((m.type == 'imageMessage') && m.message.caption) || ((m.type == 'videoMessage') && m.message.caption) || ((m.type == 'buttonsResponseMessage') && m.message.selectedButtonId) || ((m.type == 'listResponseMessage') && m.message.singleSelectReply) || ((m.type == 'viewOnceMessageV2') && m.message.caption) || ((m.type == 'documentWithCaptionMessage') && m.message.documentMessage.caption) || m.text : ''
 	var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
