@@ -2457,9 +2457,9 @@ let v = await fg.xvideosdl(text)
 nyanBot2.sendMessage(m.chat, {
 	document: await fetchBuffer(v.url_dl),
         fileName: `${v.title}.mp4`,
-        mimeType: 'document/mp4',
+        mimeType: 'video/mp4',
         jpegThumbnail: await fetchBuffer(v.thumb),
-        caption: `- *Vistas:* ${v.view}\n- *Comentarios:* ${v.vote}\n- *likes:* ${v.likes}\n- *Deslikes:* ${v.deslikes}\n- *Tamaño:* ${v.size}\n`}, {quoted:m})
+        caption: `- *Vistas:* ${v.views}\n- *Comentarios:* ${v.vote}\n- *likes:* ${v.likes}\n- *Deslikes:* ${v.deslikes}\n- *Tamaño:* ${v.size}\n`}, {quoted:m})
 }
 break
 
