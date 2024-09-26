@@ -1750,10 +1750,10 @@ case 'yts': case 'youtubesearch': {
         let contents = [];
         // Mapeo de los resultados para crear las cards
         limitedResults.forEach((video) => {
-            let content = `◦  *Nombre*: ${video.title}\n`;
-            content += `◦  *Autor*: ${video.author.name}\n`;
-            content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${formatNumber(video.views)}\n`;
+            let content = `◦  *Nombre*: ${video.title || 'Desconocido'}\n`;
+            content += `◦  *Autor*: ${video.author.name || 'Desconocido'}\n`;
+            content += `◦  *Duración*: ${video.timestamp || 'Desconocido'}\n`;
+            content += `◦  *Vistas*: ${formatNumber(video.views) || 'Desconocido'}\n`;
             content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
 
             contents.push({
