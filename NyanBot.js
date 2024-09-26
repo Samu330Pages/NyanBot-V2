@@ -1748,9 +1748,10 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
             content += `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`;
             content += `◦  *Publicado*: ${video.publishedAt}`;
 
+	let imgThumb = await fetchBuffer(video.thumbnail);
             return {
                 header: {
-                    imageMessage: await fetchBuffer(video.thumbnail), // Usar la imagen del video
+                    imageMessage: imgThumb, // Usar la imagen del video
                     hasMediaAttachment: true,
                 },
                 body: {
