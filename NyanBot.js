@@ -643,8 +643,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
                         }
             //mentionedJid: [m.sender]
 	}
-        }
-    })
+        })
+    }
 
     const msgs = generateWAMessageFromContent(chatId, {
         viewOnceMessage: {
