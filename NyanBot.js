@@ -1752,11 +1752,6 @@ case 'yts': {
     try {
         // Realizar la búsqueda en YouTube
         const results = await yts(text);
-        
-        // Verificar que los resultados no estén vacíos
-        if (!Array.isArray(results) || results.length === 0) {
-            return reply(`No se encontraron resultados para "${text}".`);
-        }
 
         // Limitar a los primeros 10 resultados
         const limitedResults = results.slice(0, 10);
