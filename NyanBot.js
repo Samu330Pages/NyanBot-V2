@@ -637,7 +637,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
                             title: botname,
                             body: ownername,
                             previewType: "PHOTO",
-                            thumbnail: './Media/theme/NyanBot.jpg',
+                            thumbnail: await fs.readFileSync('./Media/theme/NyanBot.jpg'),
                             sourceUrl: 'https://samu330.com'
                         }
             //mentionedJid: [m.sender]
