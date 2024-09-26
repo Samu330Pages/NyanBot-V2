@@ -632,7 +632,17 @@ async function sendReplyButton(chatId, buttons, message, options) {
 						     pageCount: '999999',
 						     jpegThumbnail: fs.readFileSync(media),
 						     fileName: runtime(process.uptime()),
-						     fileLength: '100000000000000'},{ upload: nyanBot2.waUploadToServer }) : {})
+						     fileLength: '100000000000000',
+						     contextInfo: {
+							     externalAdReply: {
+								     showAdAttribution: true,
+								     title: botname,
+								     body: ownername,
+								     previewType: "PHOTO",
+								     thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
+								     sourceUrl: 'https://samu330.com',
+							     }
+						     }},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
