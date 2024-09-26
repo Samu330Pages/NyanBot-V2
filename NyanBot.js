@@ -1746,42 +1746,46 @@ case 'yts': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+    
+    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    
     try {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
         
         // Limitar a los primeros 10 resultados
-        const results = `${r.all.slice(0, 10)}`;
+        const results = r.all.slice(0, 10); // No usar comillas aquí
         
         // Crear contenido para cada carrusel
         let contents = results.map(video => {
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${video.views}\n`;
-
-	let imgThumb = fetchBuffer(`${video.thumbnail}`);
+            content += `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`; // Asegúrate de que 'waFunc' esté definido
+            
+            // Obtener la miniatura
+            let imgThumb = video.thumbnail; // La URL de la miniatura
+            
             return {
                 header: {
-                    imageMessage: `${imgThumb}`, // Usar la imagen del video
+                    imageMessage: imgThumb, // Usar la imagen del video
                     hasMediaAttachment: true,
                 },
                 body: {
-                    text: `${content}`
+                    text: content
                 },
                 nativeFlowMessage: {
                     buttons: [{
                         name: 'quick_reply',
                         buttonParamsJson: JSON.stringify({
                             display_text: 'Descargar Video',
-                            id: `${prefix}yta ${video.videoId}` // ID para descargar video (puedes dejar en blanco o poner un identificador)
+                            id: `${prefix}ytv ${video.videoId}` // ID para descargar video
                         })
                     }, {
                         name: 'quick_reply',
                         buttonParamsJson: JSON.stringify({
                             display_text: 'Descargar Audio',
-                            id: `${prefix}yta ${video.videoId}` // ID para descargar audio (puedes dejar en blanco o poner un identificador)
+                            id: `${prefix}yta ${video.videoId}` // ID para descargar audio
                         })
                     }]
                 }
@@ -1794,9 +1798,10 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
             content: `*Se encontraron ${results.length} resultados. Selecciona la opción de descarga que prefieras.*\n`,
             footer: `${botname}`
         });
-nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+
+        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+        nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
         console.error('Error en la búsqueda de YouTube:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
     }
