@@ -640,10 +640,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
                             previewType: "PHOTO",
                             thumbnail: fs.readFileSync('./Media/theme/NyanBot.jpg'),
                             sourceUrl: 'https://samu330.com'
-                        },
-            mentionedJid: [m.sender],
-	    businessMessageForwardInfo: {
-		"businessOwnerJid": '5219984907794@s.whatsapp.net'
+                        }
+            //mentionedJid: [m.sender]
 	}
         }
     })
