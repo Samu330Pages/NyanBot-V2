@@ -1785,7 +1785,7 @@ case 'yts': {
             };
 
             // Preparar la imagen para el carrusel
-            const parse = await prepareWAMessageMedia({
+            var parse = await prepareWAMessageMedia({
                 image: {
                     url: video.thumbnail // URL de la miniatura
                 },
@@ -1796,7 +1796,7 @@ case 'yts': {
             // Crear la card
             cards.push({
                 header: {
-                    title: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
+                    title: `🌟 *Resultados de búsqueda para: ${text}* 🌟`, // Título del carrusel
                     imageMessage: parse.imageMessage,
                     hasMediaAttachment: true,
                 },
@@ -1812,7 +1812,7 @@ case 'yts': {
             header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
             content: `*Selecciona una opción de descarga para el video.*\n`,
             footer: `${botname}`,
-            media: video.thumbnail, // Puedes usar una imagen genérica si lo prefieres
+            media: '', // Puedes usar una imagen genérica si lo prefieres
             cards: cards // Pasar todas las cards
         });
 
