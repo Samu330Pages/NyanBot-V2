@@ -1797,7 +1797,7 @@ case 'yts': {
         // Enviar el carrusel con los resultados
         await sendCarousel(m.chat, contents, {
             header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
-            content: `*Se encontraron ${results.length} resultados. Selecciona la opción de descarga que prefieras.*\n`,
+            content: `*Selecciona la opción de descarga que prefieras.*\n`,
             footer: `${botname}`
         });
 
