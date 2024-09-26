@@ -1743,10 +1743,11 @@ case 'yts': {
         const limitedResults = results.all.slice(0, 10);
 
         // Crear un array para las cards del carrusel
-        let cards = [];
+        let contents = [];
+        let header = `🌟 *Resultados de búsqueda para: ${text}* 🌟`;
 
         // Recopilar la información en las cards
-        for (const video of limitedResults) {
+        limitedResults.forEach(video => {
             // Contenido de cada tarjeta
             const content = `◦  *Título*: ${video.title}\n` +
                             `◦  *Autor*: ${video.author.name}\n` +
@@ -1780,9 +1781,8 @@ case 'yts': {
             });
 
             // Crear la card
-            cards.push({
+            contents.push({
                 header: {
-                    title: video.title, // Título de la tarjeta
                     imageMessage: parse.imageMessage,
                     hasMediaAttachment: true,
                 },
@@ -1791,15 +1791,15 @@ case 'yts': {
                 },
                 nativeFlowMessage: nativeFlowMessage
             });
-        }
+        });
 
-        // Enviar el carrusel con todas las cards en un solo mensaje
+        // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-            header: `🌟 *Resultados de búsqueda para: ${text}* 🌟`,
+            header: header,
             content: `*Selecciona una opción de descarga para el video.*\n`,
             footer: `${botname}`,
-            media: '', // Aquí puedes usar una imagen genérica si lo prefieres, o dejarlo vacío
-            cards: cards // Pasar todas las cards
+            media: video.thumbnail, // Puedes usar una imagen genérica si lo prefieres
+            cards: contents // Pasar todas las cards
         });
 
         nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
