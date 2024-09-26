@@ -636,7 +636,15 @@ async function sendReplyButton(chatId, buttons, message, options) {
             mentionedJid: [m.sender],
 	    businessMessageForwardInfo: {
 		"businessOwnerJid": '5219984907794@s.whatsapp.net'
-	}
+	}, externalAdReply: {
+                        showAdAttribution: true,
+                        title: botname,
+                        body: ownername,
+                        thumbnail: fs.readFileSync(media),
+                        sourceUrl:  'https://samu330.com/login',
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                     }
         }
     })
 
