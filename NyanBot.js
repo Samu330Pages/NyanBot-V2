@@ -1753,17 +1753,21 @@ case 'yts': {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
         
+        // Verificar la estructura de la respuesta
+        if (!r || !r.all || r.all.length === 0) {
+            return reply(`No se encontraron resultados para "${text}".`);
+        }
+
         // Limitar a los primeros 10 resultados
-        const results = r.all.slice(0, 10); // No usar comillas aquí
+        const results = r.all.slice(0, 10);
         
         // Crear contenido para cada carrusel
         let contents = results.map(video => {
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${video.views}\n`; // Asegúrate de que 'waFunc' esté definido
-            
-            // Obtener la miniatura
+            content += `◦  *Vistas*: ${video.views}\n`;
+
             let imgThumb = video.thumbnail; // La URL de la miniatura
             
             return {
