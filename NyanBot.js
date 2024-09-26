@@ -649,25 +649,26 @@ async function sendReplyButton(chatId, buttons, message, options) {
 }
 
 async function sendCarousel(chatId, nativeFlowMessage, options) {
-const { header, content, footer, media } = options;
+    const { header, content, footer, media } = options;
     let cards = [];
-        var parse = await prepareWAMessageMedia({
-            image: {
-                url: media
-            },
-        }, {
-            upload: nyanBot2.waUploadToServer // Asumiendo que este es el cliente de tu bot
-        });
+    
+    var parse = await prepareWAMessageMedia({
+        image: {
+            url: media
+        },
+    }, {
+        upload: nyanBot2.waUploadToServer
+    });
 
-        cards.push({
-            header: {
-                title: header,
-                imageMessage: parse.imageMessage,
-                hasMediaAttachment: true,
-            },
-            body: content,
-            nativeFlowMessage: nativeFlowMessage
-        });
+    cards.push({
+        header: {
+            title: header,
+            imageMessage: parse.imageMessage,
+            hasMediaAttachment: true,
+        },
+        body: content,
+        nativeFlowMessage: nativeFlowMessage
+    });
 
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
@@ -682,7 +683,7 @@ const { header, content, footer, media } = options;
                         messageVersion: 1
                     },
                     footer: {
-                        text: fgooter
+                        text: footer // Asegúrate de utilizar footer
                     }
                 }
             }
@@ -1138,6 +1139,45 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
         switch (isCommand) {
 
+case 'ctest': {
+    // Datos de ejemplo
+    const chatId = m.chat; // ID del chat
+    const header = `🌟 *Ejemplo de Carrusel* 🌟`;
+    const footer = `Gracias por usar el bot!`;
+    const media = './Media/theme/NyanBot.jp'; // URL de la imagen que deseas mostrar en el carrusel
+
+    // Contenido del carrusel
+    const content = `Este es un carrusel de ejemplo.\n*Texto de prueba*`;
+
+    // Mensaje nativo con botones (opcional)
+    const nativeFlowMessage = {
+        buttons: [{
+            name: 'single_select',
+            buttonParamsJson: JSON.stringify({
+                title: 'Selecciona una opción',
+                sections: [{
+                    rows: [{
+                        title: 'Opción 1',
+                        id: 'opcion1'
+                    }, {
+                        title: 'Opción 2',
+                        id: 'opcion2'
+                    }]
+                }]
+            })
+        }]
+    };
+
+    // Llamada a la función sendCarousel
+    await sendCarousel(chatId, nativeFlowMessage, {
+        header: header,
+        content: content,
+        footer: footer,
+        media: media // Aquí pasas la URL de la imagen
+    });
+}
+break
+
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
@@ -1147,7 +1187,7 @@ case 'menu': {
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmdObj => {
-            menuMessage += `- \`\`\`${cmdObj.command}\`\`\`: ${cmdObj.description}\n`;
+            menuMessage += `- \`\`\`${cmdObj.command}\`\`\` ${cmdObj.description}\n`;
         });
         menuMessage += '\n';
     }
