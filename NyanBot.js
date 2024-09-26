@@ -1746,15 +1746,18 @@ case 'yts': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
-    
+
     nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
-    
+
     try {
         // Realizar la búsqueda en YouTube
         const r = await yts(text);
         
         // Verificar la estructura de la respuesta
-        if (!r || !r.all || r.all.length === 0) {
+        console.log(r); // Para depuración, verifica la estructura de la respuesta
+
+        // Asegurarse de que r.all sea un arreglo
+        if (!Array.isArray(r.all) || r.all.length === 0) {
             return reply(`No se encontraron resultados para "${text}".`);
         }
 
