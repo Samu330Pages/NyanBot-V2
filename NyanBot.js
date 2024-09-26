@@ -1761,7 +1761,7 @@ case 'yts': {
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.name}\n`;
             content += `◦  *Duración*: ${video.timestamp}\n`;
-            content += `◦  *Vistas*: ${waFunc.formatNumber(video.views)}\n`; // Asegúrate de que 'waFunc' esté definido
+            content += `◦  *Vistas*: ${video.views}\n`; // Asegúrate de que 'waFunc' esté definido
             
             // Obtener la miniatura
             let imgThumb = video.thumbnail; // La URL de la miniatura
