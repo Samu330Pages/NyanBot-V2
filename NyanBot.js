@@ -1754,7 +1754,7 @@ case 'yts': {
         const r = await yts(text);
 
         // Limitar a los primeros 10 resultados
-        const results = r.slice(0, 10) // Aquí tomamos solo los primeros 10
+        const results = r.all.slice(0, 10) // Aquí tomamos solo los primeros 10
 
         // Crear un array de carruseles
         let contents = results.map(video => {
