@@ -173,7 +173,8 @@ const categories = {
 	{ command: 'google', description: '' },
 	{ command: 'youtubesearch', description: '' },
 	{ command: 'yts', description: '' },
-        { command: 'letra', description: '' }
+        { command: 'letra', description: '' },
+	{ command: 'buscarsticker', description: '' }
     ],
     "📥 Descargas": [
         { command: 'play', description: '' },
@@ -200,7 +201,7 @@ const categories = {
         { command: 'puntos', description: '' },
         { command: 'take', description: '' },
         { command: 'wm', description: '' },
-        { command: 'buscarsticker', description: '' }
+        { command: 'perfil', description: '' }
     ],
     "⚙ Bot": [
         { command: 'actualizar', description: '' },
