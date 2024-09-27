@@ -2084,6 +2084,7 @@ case 'tt': case 'tiktok': {
             mimetype: 'video/mp4',
             contextInfo: {
                 externalAdReply: {
+		    showAdAttribution: true,
                     title: title,
                     body: botname,
 		    previewType: "PHOTO",
