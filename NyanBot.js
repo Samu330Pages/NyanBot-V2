@@ -2141,7 +2141,7 @@ break
 case 'perfil': {
     let target = '';
     if (text.includes('@')) {
-        target = `${text}`;
+        target = `${text.replace(/[\@\sA-Za-z]/g, '')}@s.whatsapp.net`;
     } else if (m.quoted?.text) {
         target = `${m.quoted.sender}`;
     } else if (text) {
