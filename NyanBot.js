@@ -2140,14 +2140,6 @@ case 'porcentaje': {
 }
 break
 
-Para agregar la funcionalidad que mencionas y mostrar la biografía del usuario, así como la fecha de su última actualización, puedes hacer lo siguiente:
-
-1. **Obtener la biografía** utilizando `nyanBot2.fetchStatus(target)`.
-2. **Formatear la fecha** de la última actualización para que muestre un mensaje más entendible (por ejemplo, "hace 5 días" o "hace 30 minutos").
-3. **Manejar el caso** en el que la biografía sea privada, mostrando un mensaje alternativo.
-
-Aquí tienes el código modificado que incluye estas características:
-
 case 'perfil': {
     const countryData = require('./src/country.json');
     let target = '';
