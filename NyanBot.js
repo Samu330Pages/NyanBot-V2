@@ -2140,6 +2140,14 @@ case 'porcentaje': {
 }
 break
 
+Para agregar la funcionalidad que mencionas y mostrar la biografía del usuario, así como la fecha de su última actualización, puedes hacer lo siguiente:
+
+1. **Obtener la biografía** utilizando `nyanBot2.fetchStatus(target)`.
+2. **Formatear la fecha** de la última actualización para que muestre un mensaje más entendible (por ejemplo, "hace 5 días" o "hace 30 minutos").
+3. **Manejar el caso** en el que la biografía sea privada, mostrando un mensaje alternativo.
+
+Aquí tienes el código modificado que incluye estas características:
+
 case 'perfil': {
     const countryData = require('./src/country.json');
     let target = '';
@@ -2159,6 +2167,7 @@ case 'perfil': {
 
 - Puedes arrobar a la persona.`);
     }
+  
     const existsResponse = await nyanBot2.onWhatsApp(target);
     if (existsResponse.length > 0 && existsResponse[0].exists) {
         let p;
@@ -2167,6 +2176,7 @@ case 'perfil': {
         } catch (err) {
             p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
         }
+
         const phoneNumber = target.replace(/^\+/, '');
         let countryInfo = null;
         for (const country of countryData) {
@@ -2181,22 +2191,53 @@ case 'perfil': {
             }
             if (countryInfo) break;
         }
+
         let reg = '';
         let nickName = nyanBot2.getName(target);
         let points = '';
         if (db.data.users[target]) {
-	points = `${db.data.users[target].limit}`;
-	reg = `${db.data.users[target].register ? 'Esta registrado ✅' : 'No esta registrado ❌'}`
-	} else {
-	points = '0';
-	reg = 'No está en la base de datos del Bot! 🗑️';
-	}
+            points = `${db.data.users[target].limit}`;
+            reg = `${db.data.users[target].register ? 'Esta registrado ✅' : 'No esta registrado ❌'}`;
+        } else {
+            points = '0';
+            reg = 'No está en la base de datos del Bot! 🗑️';
+        }
+
+        let biography = 'Biografía no disponible.';
+        let lastUpdated = '';
+        try {
+            let status = await nyanBot2.fetchStatus(target);
+            if (status.status) {
+                biography = status.status;
+                const updatedAt = new Date(status.setAt);
+                const now = new Date();
+                const diffInMs = now - updatedAt;
+                const diffInMinutes = Math.floor(diffInMs / 60000);
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                const diffInDays = Math.floor(diffInHours / 24);
+
+                if (diffInMinutes < 60) {
+                    lastUpdated = `Actualizado hace ${diffInMinutes} minuto${diffInMinutes !== 1 ? 's' : ''}`;
+                } else if (diffInHours < 24) {
+                    lastUpdated = `Actualizado hace ${diffInHours} hora${diffInHours !== 1 ? 's' : ''}`;
+                } else {
+                    lastUpdated = `Actualizado hace ${diffInDays} día${diffInDays !== 1 ? 's' : ''}`;
+                }
+            }
+        } catch (err) {
+            // Si no se puede obtener la biografía, se queda con el mensaje por defecto
+            biography = 'No se pudo obtener la biografía; la persona tiene la biografía privada.';
+        }
+
         let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
         if (countryInfo) {
             responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n\n> ${ownername}`;
         } else {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
+
+        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated}`;
+
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
             const response = await fetch(svgUrl);
