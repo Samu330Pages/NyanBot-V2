@@ -194,6 +194,8 @@ const categories = {
     "🛠 Herramientas": [
         { command: 'sticker', description: '' },
         { command: 's', description: '' },
+	{ command: 'calculadora', description: '' },
+	{ command: 'cal', description: '' },
         { command: 'puntos', description: '' },
         { command: 'take', description: '' },
         { command: 'wm', description: '' },
@@ -2098,25 +2100,36 @@ break
 case 'calc':
 case 'calculadora':
 case 'suma':
-case 'restar':
+case 'sumar':
+case 'resta':
 case 'multiplicar':
 case 'dividir':
 case 'porcentaje': {
     // Obtener la ecuación del mensaje
     const equation = text || m.quoted?.text; // Si hay texto o un mensaje citado
     if (!equation) {
-        return reply("Por favor, proporciona una operación matemática. *Ejemplo: `5 + 5 + 20 - 50`*");
+        return reply("Por favor, proporciona una operación matemática. Ejemplo: `5 + 5 + 20 - 50`");
     }
 
     // Reemplazar espacios para una mejor evaluación
     const sanitizedEquation = equation.replace(/\s+/g, '');
+
+    // Expresión regular para validar la ecuación
+    const validCharacters = /^[0-9+\-*/().]+$/;
+    if (!validCharacters.test(sanitizedEquation)) {
+        return reply("La operación contiene caracteres no permitidos. Asegúrate de usar solo los siguientes caracteres:\n\n" +
+                     "* Números: 0-9\n" +
+                     "* Operadores: + (suma), - (resta), * (multiplicación), / (división)\n" +
+                     "* Paréntesis: () para agrupar operaciones\n\n" +
+                     "Ejemplo de uso: `5 + 5 - 2 * 3 / (1 + 1)`");
+    }
 
     try {
         // Evaluar la ecuación usando eval (con precaución)
         let result = eval(sanitizedEquation);
 
         // Formatear la respuesta
-        let response = `El resultado de la operación *${equation}* es igual a\n*${result}*`;
+        let response = `El resultado de la operación:\n- *${equation}*\nEs igual a:\n- *${result}*`;
         reply(response);
     } catch (error) {
         console.error('Error al evaluar la ecuación:', error);
