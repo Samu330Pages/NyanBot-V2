@@ -14,6 +14,7 @@ const os = require('os')
 const fs = require('fs')
 const fsx = require('fs-extra')
 const path = require('path')
+const sharp = require('sharp')
 const util = require('util')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
@@ -2139,8 +2140,9 @@ case 'porcentaje': {
 break
 
 case 'perfil': {
-    const countryData = require('./src/country.json');
+    const countryData = require('./src/country.json'); // Cargar el archivo JSON
     let target = '';
+
     if (text.includes('@')) {
         target = `${text.replace(/[\@\sA-Za-z]/g, '')}@s.whatsapp.net`;
     } else if (m.quoted) {
@@ -2157,7 +2159,9 @@ case 'perfil': {
 
 - Puedes arrobar a la persona.`);
     }
+
     const existsResponse = await nyanBot2.onWhatsApp(target);
+    
     if (existsResponse.length > 0 && existsResponse[0].exists) {
         let p;
         try {
@@ -2165,64 +2169,70 @@ case 'perfil': {
         } catch (err) {
             p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
         }
-        const phoneNumber = target.replace(/^\+/, '');
+
+        // Extraer el número de teléfono
+        const phoneNumber = target.replace(/^\+/, ''); // Elimina el símbolo '+' al inicio si existe.
         let countryInfo = null;
+
+        // Comparar los primeros dígitos del número con los dial codes
         for (const country of countryData) {
-            if (Array.isArray(country.dialCodes)) {
+            if (Array.isArray(country.dialCodes)) { // Verificar si dialCodes es un arreglo
                 for (const code of country.dialCodes) {
-                    const cleanCode = code.replace(/[\+\s]/g, '');
+                    const cleanCode = code.replace(/[\+\s]/g, ''); // Elimina '+' y espacios
                     if (phoneNumber.startsWith(cleanCode)) {
                         countryInfo = country;
                         break;
                     }
                 }
             }
-            if (countryInfo) break;
+            if (countryInfo) break; // Salir si se encontró el país
         }
 
         let reg = db.data.users[sender].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
         let nickName = nyanBot2.getName(target);
-        let responseMessage = `\n*Numero:* @${target.split("@")[0]}\n*Nombre* ${nickName}\n*Puntos:* ${db.data.users[sender].limit}\n> _*${reg}*_`;
+        
+        // Enviar mensaje con la información del país, si se encontró
+        let responseMessage = `\n*Numero:* @${target.split("@")[0]}\n*Nombre* ${nickName}\n*Puntos:* ${db.data.users[target].limit}\n> _*${reg}*_`;
         if (countryInfo) {
             responseMessage += `\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}\nImagen: ${countryInfo.image}`;
         } else {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
+
+        // Convertir SVG a PNG usando sharp
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
-            const svgPath = path.join(__dirname, 'temp.svg');
-            const pngPath = path.join(__dirname, 'temp.png');
             const response = await fetch(svgUrl);
             const buffer = await response.buffer();
-            fs.writeFileSync(svgPath, buffer);
-            exec(`ffmpeg -i ${svgPath} ${pngPath}`, async (err) => {
-                if (err) {
-                    console.error('Error converting SVG to PNG:', err);
-                    return reply('*Error al procesar la imagen del país.*');
-                }
-                nyanBot2.sendMessage(m.chat, {
-                    image: await fetchBuffer(p),
-                    caption: responseMessage,
-                    contextInfo: {
-                        mentionedJid: [target],
-                        "externalAdReply": {
-                            "showAdAttribution": true,
-                            "containsAutoReply": true,
-                            "title": `${global.botname}`,
-                            "body": `${ownername}`,
-                            "previewType": "PHOTO",
-                            "thumbnailUrl": ``,
-                            "thumbnail": await fetchBuffer(pngPath),
-                            "sourceUrl": `${wagc}`
-                        }
+
+            // Convertir SVG a PNG
+            const pngBuffer = await sharp(buffer)
+                .png()
+                .toBuffer();
+
+            // Enviar mensaje con la imagen convertida
+            nyanBot2.sendMessage(m.chat, {
+                image: await getBuffer(p),
+                caption: responseMessage,
+                contextInfo: {
+                    mentionedJid: [target],
+                    "externalAdReply": {
+                        "showAdAttribution": true,
+                        "containsAutoReply": true,
+                        "title": `${global.botname}`,
+                        "body": `${ownername}`,
+                        "previewType": "PHOTO",
+                        "thumbnailUrl": ``,
+                        "thumbnail": pngBuffer, // Usar la imagen PNG convertida
+                        "sourceUrl": `${wagc}`
                     }
-                }, { quoted: m });
-                fs.unlinkSync(svgPath);
-                fs.unlinkSync(pngPath);
-            });
+                }
+            }, { quoted: m });
+
         } else {
             return reply('*No se pudo obtener la imagen del país.*');
         }
+
     } else {
         return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
     }
