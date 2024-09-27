@@ -2142,7 +2142,7 @@ case 'perfil': {
     let target = '';
 
     if (text.includes('@')) {
-        target = `${text.replace('@')}@s.whatsapp.net`;
+        target = `${text.replace(/[\@\sA-Za-z]/g, '')}@s.whatsapp.net`;
     } else if (m.quoted) {
         target = `${m.quoted.sender}`;
     } else if (text) {
