@@ -2192,7 +2192,7 @@ case 'perfil': {
         if (svgUrl) {
             const svgPath = path.join(__dirname, 'temp.svg');
             const pngPath = path.join(__dirname, 'temp.png');
-            const response = await getBuffer(svgUrl);
+            const response = await fetchBuffer(svgUrl);
             const buffer = await response.buffer();
             fs.writeFileSync(svgPath, buffer);
             exec(`ffmpeg -i ${svgPath} ${pngPath}`, async (err) => {
