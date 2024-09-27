@@ -2188,7 +2188,7 @@ case 'perfil': {
 	reg = `${db.data.users[target].register ? 'Esta registrado ✅' : 'No esta registrado ❌'}`
 	} else {
 	points = '0';
-	reg = '*No está en la base de datos del Bot!* 🗑️';
+	reg = 'No está en la base de datos del Bot! 🗑️';
 	}
         let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
         if (countryInfo) {
