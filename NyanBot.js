@@ -2139,7 +2139,7 @@ case 'porcentaje': {
 break
 
 case 'perfil': {
-const countryData = require('./src/country.json');
+const countryData = require('./src/country.json'); // Cargar el archivo JSON
     let target = '';
 
     if (text.includes('@')) {
@@ -2169,36 +2169,48 @@ const countryData = require('./src/country.json');
             p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
         }
 
-        const phoneNumber = target
+        // Extraer el número de teléfono
+        const phoneNumber = target.replace(/^\+/, ''); // Elimina el símbolo '+' al inicio si existe.
         let countryInfo = null;
 
+        // Comparar los primeros dígitos del número con los dial codes
         for (const country of countryData) {
-            for (const code of country.dialCodes) {
-                const cleanCode = code.replace(/[\+\s]/g, '');
-                if (phoneNumber.startsWith(cleanCode)) {
-                    countryInfo = country;
-                    break;
+            if (Array.isArray(country.dialCodes)) { // Verificar si dialCodes es un arreglo
+                for (const code of country.dialCodes) {
+                    const cleanCode = code.replace(/[\+\s]/g, ''); // Elimina '+' y espacios
+                    if (phoneNumber.startsWith(cleanCode)) {
+                        countryInfo = country;
+                        break;
+                    }
                 }
             }
-            if (countryInfo) break;
+            if (countryInfo) break; // Salir si se encontró el país
         }
 
+        // Enviar mensaje con la información del país, si se encontró
+        let responseMessage = `@${target.split("@")[0]}`;
         if (countryInfo) {
-            const responseMessage = `Número: ${target}\nPaís: ${countryInfo.name} ${countryInfo.emoji}\nCódigo: ${countryInfo.code}\nImagen: ${countryInfo.image}`;
-            nyanBot2.sendMessage(m.chat, {
-                text: responseMessage,
-                contextInfo: {
-                    mentionedJid: [target],
-                }
-            });
+            responseMessage += `\nPaís: ${countryInfo.name} ${countryInfo.emoji}\nCódigo: ${countryInfo.code}\nImagen: ${countryInfo.image}`;
         } else {
-            nyanBot2.sendMessage(m.chat, {
-                text: `Número: ${target}\nNo se pudo identificar el país.`,
-                contextInfo: {
-                    mentionedJid: [target],
-                }
-            });
+            responseMessage += `\nNo se pudo identificar el país.`;
         }
+
+        nyanBot2.sendMessage(m.chat, {
+            text: responseMessage,
+            contextInfo: {
+                mentionedJid: [target],
+                "externalAdReply": {
+                    "showAdAttribution": true,
+                    "containsAutoReply": true,
+                    "title": `${global.botname}`,
+                    "body": `${ownername}`,
+                    "previewType": "PHOTO",
+                    "thumbnailUrl": ``,
+                    "thumbnail": await getBuffer(p),
+                    "sourceUrl": `${wagc}`
+                }
+            }
+        });
 
     } else {
         return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
