@@ -2197,6 +2197,7 @@ case 'perfil': {
 
         let biography = 'Biografía no disponible.';
         let lastUpdated = '';
+        let lastUpdatedDate = '';
         try {
             let status = await nyanBot2.fetchStatus(target);
             if (status.status) {
@@ -2208,6 +2209,10 @@ case 'perfil': {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 const diffInDays = Math.floor(diffInHours / 24);
 
+                // Formatear la fecha
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                lastUpdatedDate = updatedAt.toLocaleDateString('es-ES', options); // Cambiar 'es-ES' al idioma que prefieras
+
                 if (diffInMinutes < 60) {
                     lastUpdated = `Actualizado hace ${diffInMinutes} minuto${diffInMinutes !== 1 ? 's' : ''}`;
                 } else if (diffInHours < 24) {
@@ -2217,7 +2222,6 @@ case 'perfil': {
                 }
             }
         } catch (err) {
-            // Si no se puede obtener la biografía, se queda con el mensaje por defecto
             biography = 'No se pudo obtener la biografía; la persona tiene la biografía privada.';
         }
 
@@ -2228,7 +2232,7 @@ case 'perfil': {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
 
-        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated}\n\n> ${ownername}`;
+        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated} (${lastUpdatedDate})\n\n> ${ownername}`;
 
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
