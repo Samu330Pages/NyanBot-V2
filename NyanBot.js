@@ -2180,7 +2180,7 @@ case 'perfil': {
             }
             if (countryInfo) break;
         }
-        let reg = db.data.users[sender].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
+        let reg = db.data.users[target].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
         let nickName = nyanBot2.getName(target);
         let points = '';
         if (db.data.users[target]) {
@@ -2190,7 +2190,7 @@ case 'perfil': {
 	}
         let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
         if (countryInfo) {
-            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n${ownername}`;
+            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n\n> ${ownername}`;
         } else {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
