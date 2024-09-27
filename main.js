@@ -183,94 +183,100 @@ NyanBotUser.ev.on("messages.upsert",  () => { })
 //------------------------------------------------------
 
 //farewell/welcome
-    NyanBotUser.ev.on('group-participants.update', async (anu) => {
-    	if (global.welcome){
-console.log(anu)
-try {
-let metadata = await NyanBotUser.groupMetadata(anu.id)
-let participants = anu.participants
-for (let num of participants) {
-try {
-ppuser = await NyanBotUser.profilePictureUrl(num, 'image')
-} catch (err) {
-ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
-}
-try {
-ppgroup = await NyanBotUser.profilePictureUrl(anu.id, 'image')
-} catch (err) {
-ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
-}
-//welcome\\
-memb = metadata.participants.length
-Wlcm = await getBuffer(ppuser)
-Lft = await getBuffer(ppuser)
-                if (anu.action == 'add') {
-                const buffer = await getBuffer(ppuser)
-                let userNumber = num
-                const time = moment.tz('America/Cancun').format('HH:mm:ss')
-	            const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
-	            const members = metadata.participants.length
-                WlcBody = `> *Hola* @${userNumber.split("@")[0]}
-_*Bienvenido al grupo*_
-${metadata.subject}
+NyanBotUser.ev.on('group-participants.update', async (anu) => {
+    if (global.welcome) {
+        console.log(anu);
+        try {
+            let metadata = await NyanBotUser.groupMetadata(anu.id);
+            let participants = anu.participants;
+            const countryData = require('./src/country.json');
 
-Eres el participante Nº.: ${members}
-Hora/Fecha de ingreso : ${time} ${date}`
-NyanBotUser.sendMessage(anu.id,
- { text: WlcBody,
- contextInfo:{
- mentionedJid:[num],
- "externalAdReply": {"showAdAttribution": true,
- "containsAutoReply": true,
- "title": ` ${global.botname}`,
-"body": `${ownername}`,
- "previewType": "PHOTO",
-"thumbnailUrl": ``,
-"thumbnail": Wlcm,
-"sourceUrl": `${wagc}`}}})
+            for (let num of participants) {
+                try {
+                    ppuser = await NyanBotUser.profilePictureUrl(num, 'image');
+                } catch (err) {
+                    ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+                }
+                
+                try {
+                    ppgroup = await NyanBotUser.profilePictureUrl(anu.id, 'image');
+                } catch (err) {
+                    ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
+                }
+
+                const phoneNumber = num.replace(/^\+/, '');
+                let countryInfo = null;
+
+                for (const country of countryData) {
+                    if (Array.isArray(country.dialCodes)) {
+                        for (const code of country.dialCodes) {
+                            const cleanCode = code.replace(/[\+\s]/g, '');
+                            if (phoneNumber.startsWith(cleanCode)) {
+                                countryInfo = country;
+                                break;
+                            }
+                        }
+                    }
+                    if (countryInfo) break;
+                }
+
+                const members = metadata.participants.length;
+                const time = moment.tz('America/Cancun').format('HH:mm:ss');
+                const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
+
+                if (anu.action == 'add') {
+                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n_*Bienvenido al grupo*_\n${metadata.subject}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
+                    
+                    if (countryInfo) {
+                        WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
+                    }
+
+                    NyanBotUser.sendMessage(anu.id, {
+                        text: WlcBody,
+                        contextInfo: {
+                            mentionedJid: [num],
+                            "externalAdReply": {
+                                "showAdAttribution": true,
+                                "containsAutoReply": true,
+                                "title": `${global.botname}`,
+                                "body": `${ownername}`,
+                                "previewType": "PHOTO",
+                                "thumbnailUrl": ``,
+                                "thumbnail": await getBuffer(ppuser),
+                                "sourceUrl": `${wagc}`
+                            }
+                        }
+                    });
                 } else if (anu.action == 'remove') {
-                	const buffer = await getBuffer(ppuser)
-                    const time = moment.tz('America/Cancun').format('HH:mm:ss')
-	                const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
-                	let userNumber = num
-                    const members = metadata.participants.length
-                    WlcBody = `*Sa ah salido* @${userNumber.split("@")[0]}
-> a las ${time} del ${date}`
-NyanBotUser.sendMessage(anu.id,
- { text: WlcBody,
- contextInfo:{
- mentionedJid:[num],
- "externalAdReply": {"showAdAttribution": true,
- "containsAutoReply": true,
- "title": ` ${global.botname}`,
-"body": `${ownername}`,
- "previewType": "PHOTO",
-"thumbnailUrl": ``,
-"thumbnail": Lft,
-"sourceUrl": `${wagc}`}}})
-}
-}
-} catch (err) {
-console.log(err)
-}
-}
-})
-// Anti Call
-    NyanBotUser.ev.on('call', async (NyanNoCalls) => {
-    	if (global.anticall){
-    console.log(NyanNoCalls)
-    for (let antiCall of NyanNoCalls) {
-    if (antiCall.isGroup == false) {
-    if (antiCall.status == "offer") {
-    let BlokMsg = await NyanBotUser.sendTextWithMentions(antiCall.from, `*${NyanBotUser.user.name}* NO PERMITE LLAMADAS DE ${antiCall.isVideo ? `VIDEO` : `AUDIO` }. Lo siento @${antiCall.from.split('@')[0]} pero seras bloqueado, si deseas ser desbloqueado comunicate de otra manera, gracias!`)
-    NyanBotUser.sendContact(antiCall.from, owner, BlokMsg)
-    await sleep(8000)
-    await NyanBotUser.updateBlockStatus(antiCall.from, "block")
+                    let WlcBody = `*Sa ah salido* @${num.split("@")[0]}\n> a las ${time} del ${date}`;
+                    
+                    if (countryInfo) {
+                        WlcBody += `\n\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
+                    }
+
+                    NyanBotUser.sendMessage(anu.id, {
+                        text: WlcBody,
+                        contextInfo: {
+                            mentionedJid: [num],
+                            "externalAdReply": {
+                                "showAdAttribution": true,
+                                "containsAutoReply": true,
+                                "title": `${global.botname}`,
+                                "body": `${ownername}`,
+                                "previewType": "PHOTO",
+                                "thumbnailUrl": ``,
+                                "thumbnail": await getBuffer(ppuser),
+                                "sourceUrl": `${wagc}`
+                            }
+                        }
+                    });
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
-    }
-    }
-    }
-    })
+});
     //autostatus view
         NyanBotUser.ev.on('messages.upsert', async chatUpdate => {
         	if (global.antiswview){
