@@ -2157,7 +2157,7 @@ case 'perfil': {
 - Puedes arrobar a la persona.`);
     }
 let exist = nyanBot2.onWhatsApp(target)
-if (!exist) return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
+if (exist) {
 try {
 p = await nyanBot2.profilePictureUrl(target, 'image')
 } catch (err) {
@@ -2175,6 +2175,9 @@ nyanBot2.sendMessage(m.chat,
 "thumbnailUrl": ``,
 "thumbnail": await getBuffer(p),
 "sourceUrl": `${wagc}`}}})
+} else {
+return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
+}
 }
 break
 
