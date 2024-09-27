@@ -2182,7 +2182,7 @@ case 'perfil': {
 
         let reg = db.data.users[sender].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
         let nickName = nyanBot2.getName(target);
-        let responseMessage = `\n*Numero:* @${target.split("@")[0]}\n*Nombre* ${nickName}\n> _*${reg}_*`;
+        let responseMessage = `\n*Numero:* @${target.split("@")[0]}\n*Nombre* ${nickName}\n*Puntos:* ${db.data.users[sender].limit}\n> _*${reg}*_`;
         if (countryInfo) {
             responseMessage += `\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}\nImagen: ${countryInfo.image}`;
         } else {
@@ -2192,7 +2192,7 @@ case 'perfil': {
         if (svgUrl) {
             const svgPath = path.join(__dirname, 'temp.svg');
             const pngPath = path.join(__dirname, 'temp.png');
-            const response = await fetch(svgUrl);
+            const response = await getBuffer(svgUrl);
             const buffer = await response.buffer();
             fs.writeFileSync(svgPath, buffer);
             exec(`ffmpeg -i ${svgPath} ${pngPath}`, async (err) => {
