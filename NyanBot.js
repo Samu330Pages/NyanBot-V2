@@ -1783,7 +1783,7 @@ case 'yts': case 'youtubesearch': {
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Desliza entre los resultados y descarga el archivo seleccionado un botón!_`,
+		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Desliza entre los resultados y descarga el archivo seleccionando un botón!_`,
 		footer: `${botname}`,
 		cards: contents // Pasar todas las cards
 			});
@@ -2440,18 +2440,13 @@ if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\
 break
 
 
-case 'xvideos': {
-let s = '';
-if (!text) {
-s = 'fake taxi'
-} else {
-s = text
-}
+case 'xvideos': case 'xxx': {
+if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*')
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     try {
         // Realizar la búsqueda en Xvideos
-        let data = await fg.xvideosSearch(s);
+        let data = await fg.xvideosSearch(text);
 
         // Limitar a los primeros 10 resultados
         const limitedResults = data.slice(0, 10);
