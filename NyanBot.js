@@ -2139,6 +2139,7 @@ case 'porcentaje': {
 break
 
 case 'perfil': {
+const countryData = require('./src/country.json');
     let target = '';
 
     if (text.includes('@')) {
@@ -2168,22 +2169,37 @@ case 'perfil': {
             p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
         }
 
-        nyanBot2.sendMessage(m.chat, {
-            text: `@${target.split("@")[0]}`,
-            contextInfo: {
-                mentionedJid: [target],
-                "externalAdReply": {
-                    "showAdAttribution": true,
-                    "containsAutoReply": true,
-                    "title": `${global.botname}`,
-                    "body": `${ownername}`,
-                    "previewType": "PHOTO",
-                    "thumbnailUrl": ``,
-                    "thumbnail": await getBuffer(p),
-                    "sourceUrl": `${wagc}`
+        const phoneNumber = target
+        let countryInfo = null;
+
+        for (const country of countryData) {
+            for (const code of country.dialCodes) {
+                const cleanCode = code.replace(/[\+\s]/g, '');
+                if (phoneNumber.startsWith(cleanCode)) {
+                    countryInfo = country;
+                    break;
                 }
             }
-        });
+            if (countryInfo) break;
+        }
+
+        if (countryInfo) {
+            const responseMessage = `Número: ${target}\nPaís: ${countryInfo.name} ${countryInfo.emoji}\nCódigo: ${countryInfo.code}\nImagen: ${countryInfo.image}`;
+            nyanBot2.sendMessage(m.chat, {
+                text: responseMessage,
+                contextInfo: {
+                    mentionedJid: [target],
+                }
+            });
+        } else {
+            nyanBot2.sendMessage(m.chat, {
+                text: `Número: ${target}\nNo se pudo identificar el país.`,
+                contextInfo: {
+                    mentionedJid: [target],
+                }
+            });
+        }
+
     } else {
         return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
     }
