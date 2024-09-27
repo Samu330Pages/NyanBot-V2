@@ -2211,9 +2211,9 @@ case 'perfil': {
                 if (diffInMinutes < 60) {
                     lastUpdated = `Actualizado hace ${diffInMinutes} minuto${diffInMinutes !== 1 ? 's' : ''}`;
                 } else if (diffInHours < 24) {
-                    lastUpdated = `Actualizado hace ${diffInHours} hora${diffInHours !== 1 ? 's' : ''}`;
+                    lastUpdated = `Hace ${diffInHours} hora${diffInHours !== 1 ? 's' : ''}`;
                 } else {
-                    lastUpdated = `Actualizado hace ${diffInDays} día${diffInDays !== 1 ? 's' : ''}`;
+                    lastUpdated = `Hace ${diffInDays} día${diffInDays !== 1 ? 's' : ''}`;
                 }
             }
         } catch (err) {
@@ -2223,12 +2223,12 @@ case 'perfil': {
 
         let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
         if (countryInfo) {
-            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n\n> ${ownername}`;
+            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n`;
         } else {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
 
-        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated}`;
+        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated}\n\n> ${ownername}`;
 
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
