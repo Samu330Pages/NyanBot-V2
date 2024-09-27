@@ -2140,13 +2140,14 @@ break
 
 case 'perfil': {
     let target = '';
+
     if (text.includes('@')) {
-        target = `${text.replace(/[\@\sA-Za-z]/g, '')}@s.whatsapp.net`;
-    } else if (m.quoted?.text) {
+        target = `${text.replace('@')}@s.whatsapp.net`;
+    } else if (m.quoted) {
         target = `${m.quoted.sender}`;
     } else if (text) {
-        if (m.quoted?.text) return;
-        target = `${text.replace(/[\+\sA-Za-z]/g, '')}@s.whatsapp.net`;
+        if (m.quoted) return;
+        target = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     } else {
         return reply(`Lo siento, pero no puede obtener el perfil! Por favor asegúrate de incluir un número de WhatsApp, puedes hacerlo de estas maneras:
 
@@ -2156,28 +2157,36 @@ case 'perfil': {
 
 - Puedes arrobar a la persona.`);
     }
-let exist = nyanBot2.onWhatsApp(target)
-if (exist) {
-try {
-p = await nyanBot2.profilePictureUrl(target, 'image')
-} catch (err) {
-p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
-}
-nyanBot2.sendMessage(m.chat,
- { text: `@${target.split("@")[0]}`,
- contextInfo:{
- mentionedJid:[target],
- "externalAdReply": {"showAdAttribution": true,
- "containsAutoReply": true,
- "title": ` ${global.botname}`,
-"body": `${ownername}`,
- "previewType": "PHOTO",
-"thumbnailUrl": ``,
-"thumbnail": await getBuffer(p),
-"sourceUrl": `${wagc}`}}})
-} else {
-return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
-}
+
+    const existsResponse = await nyanBot2.onWhatsApp(target);
+    
+    if (existsResponse.length > 0 && existsResponse[0].exists) {
+        let p;
+        try {
+            p = await nyanBot2.profilePictureUrl(target, 'image');
+        } catch (err) {
+            p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+        }
+
+        nyanBot2.sendMessage(m.chat, {
+            text: `@${target.split("@")[0]}`,
+            contextInfo: {
+                mentionedJid: [target],
+                "externalAdReply": {
+                    "showAdAttribution": true,
+                    "containsAutoReply": true,
+                    "title": `${global.botname}`,
+                    "body": `${ownername}`,
+                    "previewType": "PHOTO",
+                    "thumbnailUrl": ``,
+                    "thumbnail": await getBuffer(p),
+                    "sourceUrl": `${wagc}`
+                }
+            }
+        });
+    } else {
+        return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
+    }
 }
 break
 
