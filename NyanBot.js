@@ -2183,7 +2183,7 @@ case 'perfil': {
         let reg = db.data.users[sender].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
         let nickName = nyanBot2.getName(target);
         let points = '';
-        if (db.data.users[target].limit) {
+        if (db.data.users[target]) {
 	points = `${db.data.users[target].limit}`;
 	} else {
 	points = '0';
