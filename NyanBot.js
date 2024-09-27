@@ -2095,6 +2095,36 @@ case 'tt': case 'tiktok': {
 }
 break
 
+case 'calc':
+case 'calculadora':
+case 'suma':
+case 'restar':
+case 'multiplicar':
+case 'dividir':
+case 'porcentaje': {
+    // Obtener la ecuación del mensaje
+    const equation = text || m.quoted?.text; // Si hay texto o un mensaje citado
+    if (!equation) {
+        return reply("Por favor, proporciona una operación matemática. *Ejemplo: `5 + 5 + 20 - 50`*");
+    }
+
+    // Reemplazar espacios para una mejor evaluación
+    const sanitizedEquation = equation.replace(/\s+/g, '');
+
+    try {
+        // Evaluar la ecuación usando eval (con precaución)
+        let result = eval(sanitizedEquation);
+
+        // Formatear la respuesta
+        let response = `El resultado de la operación *${equation}* es igual a\n*${result}*`;
+        reply(response);
+    } catch (error) {
+        console.error('Error al evaluar la ecuación:', error);
+        return reply("Ocurrió un error al intentar evaluar la operación. Asegúrate de que esté escrita correctamente.");
+    }
+}
+break
+
 case 'clima': {
     if (!text) return reply('¿Qué ubicación?');
     let wdata = await axios.get(
