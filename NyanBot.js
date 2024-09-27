@@ -605,21 +605,31 @@ let { data } = await axios.post("https://en.ephoto360.com/effect/create-image", 
 return build_server + data.image
 }
 
-//bug loading
-async function loading () {
-var NyanOnLoad = [
-"🟠",
-"⚫",
-"🟠",
-"⚫",
-"🟢"
-]
-let { key } = await nyanBot2.sendMessage(from, {text: 'ʟᴏᴀᴅɪɴɢ...'}, m)
+// Función para iniciar la carga de reacciones
+const reactionLoad = (chatId, messageKey) => {
+    const emojis = ['🟠', '⚫'];
+    let emojiIndex = 0;
 
-for (let i = 0; i < NyanOnLoad.length; i++) {
-await nyanBot2.sendMessage(from, {text: NyanOnLoad[i], edit: key })
-}
-}
+    const sendReaction = () => {
+        nyanBot2.sendMessage(chatId, { react: { text: emojis[emojiIndex], key: messageKey } });
+        emojiIndex = (emojiIndex + 1) % emojis.length;
+    };
+    
+    const intervalId = setInterval(sendReaction, 1000);
+    return intervalId;
+};
+
+// Función para finalizar la carga con éxito
+const reactionOk = (chatId, messageKey, intervalId) => {
+    clearInterval(intervalId);
+    nyanBot2.sendMessage(chatId, { react: { text: '🟢', key: messageKey } });
+};
+
+// Función para finalizar la carga con error
+const reactionError = (chatId, messageKey, intervalId) => {
+    clearInterval(intervalId);
+    nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
+};
 
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
@@ -2056,8 +2066,13 @@ case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
-	try {
+
+    let intervalId;
+    try {
+        intervalId = reactionLoad(m.chat, m.key);
+
         let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
+        
         let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`;
         caption += `- *Autor:* ${author}\n`;
         caption += `- *Nombre de usuario:* ${username}\n`;
@@ -2071,7 +2086,6 @@ case 'tt': case 'tiktok': {
         caption += `> ${botname} by ${ownername}`;
 
         let videoTt = await fetchBuffer(video);
-        nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
         
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
@@ -2090,10 +2104,10 @@ case 'tt': case 'tiktok': {
             },
         }, { quoted: m });
 
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        reactionOk(m.chat, m.key, intervalId);
         db.data.users[sender].limit -= 10;
     } catch {
-        nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+        reactionError(m.chat, m.key, intervalId);
         return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
     }
 }
