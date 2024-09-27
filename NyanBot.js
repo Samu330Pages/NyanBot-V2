@@ -1730,7 +1730,7 @@ const buttons = [
         }
     ];
 
-    return await sendReplyButton(m.chat, buttons, m, {
+    await sendReplyButton(m.chat, buttons, m, {
         content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
 _*Titulo:*_ ${lyric.title}
 _*Artista:*_ ${lyric.artist}\n
