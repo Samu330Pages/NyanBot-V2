@@ -2184,7 +2184,7 @@ case 'perfil': {
         let nickName = nyanBot2.getName(target);
         let points = '';
         if (db.data.users[target].limit) {
-	points = ${db.data.users[target].limit};
+	points = `${db.data.users[target].limit}`;
 	} else {
 	points = '0';
 	}
