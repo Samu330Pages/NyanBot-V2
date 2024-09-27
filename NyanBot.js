@@ -2192,7 +2192,7 @@ case 'perfil': {
         if (svgUrl) {
             const svgPath = path.join(__dirname, 'temp.svg');
             const pngPath = path.join(__dirname, 'temp.png');
-            const response = await fetchBuffer(svgUrl);
+            const response = await fetch(svgUrl);
             const buffer = await response.buffer();
             fs.writeFileSync(svgPath, buffer);
             exec(`ffmpeg -i ${svgPath} ${pngPath}`, async (err) => {
@@ -2201,7 +2201,7 @@ case 'perfil': {
                     return reply('*Error al procesar la imagen del país.*');
                 }
                 nyanBot2.sendMessage(m.chat, {
-                    image: await getBuffer(p),
+                    image: await fetchBuffer(p),
                     caption: responseMessage,
                     contextInfo: {
                         mentionedJid: [target],
@@ -2212,7 +2212,7 @@ case 'perfil': {
                             "body": `${ownername}`,
                             "previewType": "PHOTO",
                             "thumbnailUrl": ``,
-                            "thumbnail": await getBuffer(pngPath),
+                            "thumbnail": await fetchBuffer(pngPath),
                             "sourceUrl": `${wagc}`
                         }
                     }
