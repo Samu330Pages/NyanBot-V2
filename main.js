@@ -302,7 +302,7 @@ ppgroup = await NyanBotUser.profilePictureUrl(anu.id, 'image')
 } catch (err) {
 ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
 }
- if (anu.action == 'promote') {
+ if (anu.action === 'promote') {
 const time = moment.tz('America/Cancun').format('HH:mm:ss')
 const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
 let userNumber = num
@@ -319,7 +319,7 @@ WlcBody = `@${userNumber.split("@")[0]}, Has sido promovido a *ADMINISTRADOR*`
 "thumbnailUrl": ``,
 "thumbnail": Wlcm,
 "sourceUrl": `${wagc}`}}})
-} else if (anu.action == 'demote') {
+} else if (anu.action === 'demote') {
 const time = moment.tz('America/Cancun').format('HH:mm:ss')
 const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
 let userNumber = num
