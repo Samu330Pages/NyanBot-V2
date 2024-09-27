@@ -653,7 +653,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 }
 
 async function sendCarousel(chatId, nativeFlowMessage, options) {
-    const { footer, cards } = options; // Eliminamos header, content y media
+    const { header, footer, cards } = options; // Eliminamos header, content y media
     let carouselCards = [];
 
     // Agregar todas las cards pasadas a la función
@@ -684,8 +684,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
             message: {
                 interactiveMessage: {
                     body: {
-                        text: `*Resultados de búsqueda de YouTube!* 🍟\n
-> _Toca un botón para descargar tu formato preferido!_ 😁`
+                        text: header
                     },
                     carouselMessage: {
                         cards: carouselCards, // Asegúrate de que esto sea un array de cards
@@ -1784,6 +1783,7 @@ case 'yts': case 'youtubesearch': {
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
+		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Desliza entre los resultados y descarga el archivo seleccionado un botón!_`,
 		footer: `${botname}`,
 		cards: contents // Pasar todas las cards
 			});
@@ -2451,15 +2451,13 @@ s = text
 
     try {
         // Realizar la búsqueda en Xvideos
-        let data = await fg.xvideosSearch("Jovencitas Culonas");
+        let data = await fg.xvideosSearch(s);
 
         // Limitar a los primeros 10 resultados
         const limitedResults = data.slice(0, 10);
 
         // Crear un array para las cards del carrusel
         let contents = [];
-        let header = `亗  *X V I D E O S - S E A R C H*\n`;
-
         // Mapeo de los resultados para crear las cards
         limitedResults.forEach((video) => {
             let content = `◦  *Título*: ${video.title}\n`;
@@ -2487,6 +2485,7 @@ s = text
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
+	    header: `*🔞 Resultados de búsqueda de xvideos*\n\n> *Busca tu video favorito y descárgalo!! 🍋‍🟩*`,
             footer: `Resultados de la búsqueda`,
             cards: contents // Pasar todas las cards
         });
