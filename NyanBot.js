@@ -2156,7 +2156,25 @@ case 'perfil': {
 
 - Puedes arrobar a la persona.`);
     }
-    reply(target);
+let exist = naynBot2.onWhatsApp(target)
+if (!exist) return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
+try {
+p = await nyanBot2.profilePictureUrl(target, 'image')
+} catch (err) {
+p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
+}
+nyanBot2.sendMessage(m.chat,
+ { text: `@${target.split("@")[0]}`,
+ contextInfo:{
+ mentionedJid:[target],
+ "externalAdReply": {"showAdAttribution": true,
+ "containsAutoReply": true,
+ "title": ` ${global.botname}`,
+"body": `${ownername}`,
+ "previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": await getBuffer(p),
+"sourceUrl": `${wagc}`}}})
 }
 break
 
