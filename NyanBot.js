@@ -615,7 +615,7 @@ const reactionLoad = (chatId, messageKey) => {
         emojiIndex = (emojiIndex + 1) % emojis.length;
     };
     
-    const intervalId = setInterval(sendReaction, 1000);
+    const intervalId = setInterval(sendReaction, 500);
     return intervalId;
 };
 
@@ -1630,7 +1630,8 @@ case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
     }
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+let intervalId;
+intervalId = reactionLoad(m.chat, m.key);
     const options = {
         page: 0, 
         safe: false, 
@@ -1699,13 +1700,13 @@ nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
                 content: content || 'No se encontró información relevante.',
                 media: './Media/theme/google.jpg'
             });
-	nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+	reactionOk(m.chat, m.key, intervalId);
         } else {
             await reply(`${content || 'No se encontró información relevante.'}`);
         }
 
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
+	reactionError(m.chat, m.key, intervalId);
         console.error('Error en la búsqueda de Google:', error);
         return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error.message}`);
     }
@@ -1714,7 +1715,8 @@ break
 
 case 'letra': case 'lyrics': {
 if (!text) return reply(`¡Porfavor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix+command} me olvide de vivir*`)
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+let intervalId;
+intervalId = reactionLoad(m.chat, m.key);
 try {
 let lyric = await fg.lyrics(text)
 const buttons = [
@@ -1736,9 +1738,9 @@ ${lyric.lyrics}\n
 `,
 	media: './Media/theme/lyrics.jpg'
     });
-nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+reactionOk(m.chat, m.key, intervalId);
 } catch (error) {
-nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+reactionError(m.chat, m.key, intervalId);
 console.error('Error al procesar la solicitud:', error);
 reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`);
 }
@@ -1749,8 +1751,8 @@ case 'yts': case 'youtubesearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
-
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    let intervalId;
+    intervalId = reactionLoad(m.chat, m.key);
 
     try {
         // Realizar la búsqueda en YouTube
@@ -1800,9 +1802,9 @@ case 'yts': case 'youtubesearch': {
 		cards: contents // Pasar todas las cards
 			});
 
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        reactionOk(m.chat, m.key, intervalId);
     } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        reactionError(m.chat, m.key, intervalId);
         console.error('Error en la búsqueda de YouTube:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
     }
@@ -1812,9 +1814,11 @@ break
 case 'play': {
 if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}})
+let intervalId;
+intervalId = reactionLoad(m.chat, m.key);
 const r = await yts(text);
 if (!r || !r.videos || r.videos.length === 0) {
+reactionError(m.chat, m.key, intervalId);
 return reply("No se encontraron videos para esa búsqueda.");
 }
 const video = r.videos[0];
@@ -1855,32 +1859,7 @@ await sendReplyButton(m.chat, buttons, m, {
 `,
 	media: './Media/theme/play.jpg'
 })
-}
-break
-case 'args': {
-    // Verificamos si hay al menos un argumento
-    if (args.length < 1) {
-        reply(`*Nadafaffa*`);
-        break;
-    }
-
-    // Convertimos el primer argumento a un número
-    const primerArg = parseInt(args[0], 10);
-
-    // Verificamos si el valor es un número válido
-    if (isNaN(primerArg)) {
-        reply(`${args[0]}\n${args[1]}\n${args[2]}`);
-        break;
-    }
-
-    // Comparamos el primer argumento con 1 y 2
-    if (primerArg === 1) {
-        reply(`🪅`); // Si el primer argumento es 1
-    } else if (primerArg === 2) {
-        reply(`2`); // Si el primer argumento es 2
-    } else {
-        reply(`*Opción no reconocia: ${primerArg}.*`); // Para otros números
-    }
+reactionOk(m.chat, m.key, intervalId);
 }
 break
 
@@ -1888,7 +1867,8 @@ case 'ytmp3': case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    let intervalId;
+    intervalId = reactionLoad(m.chat, m.key);
     reply(`*Esperé un momento, se está procesando su solicitud...*\n
 ${forma1}CONSEJO:${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
 _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*_\nY automáticamente aparecerá en tu reproductor, en dado caso que el audio no aparezca, solamente busca dentro de ese directorio un archivo llamado:
@@ -1925,17 +1905,20 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 	    await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
+	    reactionError(m.chat, m.key, intervalId);
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
+	    reactionError(m.chat, m.key, intervalId);
             reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
         }
     } catch (error) {
+	reactionError(m.chat, m.key, intervalId);
         console.error('Error al procesar la solicitud:', error);
         reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
 
     db.data.users[sender].limit -= 30;
-    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+    reactionOk(m.chat, m.key, intervalId);
 }
 break
 
@@ -1945,14 +1928,15 @@ case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
-nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+let intervalId;
+intervalId = reactionLoad(m.chat, m.key);
 try {
 let res = await fg.ytv(text)
 await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
                 fileName: `${res.title}.mp4`,
                 mimetype: 'video/mp4',
-		jpegThumbnail: await fetchBuffer('https://png.pngitem.com/pimgs/s/509-5099390_check-green-check-list-icon-hd-png-download.png')
+		jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
             }, { quoted: m });
 nyanBot2.sendMessage(m.chat, {
                 video: await fetchBuffer(res.dl_url),
@@ -1961,8 +1945,9 @@ nyanBot2.sendMessage(m.chat, {
                 mimetype: 'video/mp4'
             }, { quoted: m });
 db.data.users[sender].limit -= 30;
-nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+reactionOk(m.chat, m.key, intervalId);
     } catch (error) {
+	reactionError(m.chat, m.key, intervalId);
         console.error('Error al procesar la solicitud:', error)
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`)
     }
@@ -1975,7 +1960,8 @@ case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?(facebook\.com|fb\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....`);
 
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    let intervalId;
+    intervalId = reactionLoad(m.chat, m.key);
     try {
         let res = await fbdl(text);
         let result = res.data;
@@ -1997,10 +1983,10 @@ case 'facebook': case 'fb': {
             mimetype: 'video/mp4',
 	    jpegThumbnail: await fetchBuffer(data.thumbnail)
         }, { quoted: m });
-        nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+        reactionOk(m.chat, m.key, intervalId);
         db.data.users[sender].limit -= 20;
     } catch {
-        nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+        reactionError(m.chat, m.key, intervalId);
         return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
     }
 }
@@ -2010,7 +1996,8 @@ case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
-    nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+    let intervalId;
+    intervalId = reactionLoad(m.chat, m.key);
     reply('> *Esperé un momento, se está procesando su solicitud...*');
     
     const apiUrl = 'https://api.cobalt.tools/';
@@ -2047,17 +2034,20 @@ case 'insta': case 'ig': case 'instagram': {
             }, { quoted: m });
 
         } else if (response.data.status === 'error') {
+	    reactionError(m.chat, m.key, intervalId);
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
+	    reactionError(m.chat, m.key, intervalId);
             reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
         }
     } catch (error) {
+	reactionError(m.chat, m.key, intervalId);
         console.error('Error al procesar la solicitud:', error);
         reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
 
-    db.data.users[sender].limit -= 20; // Deducir 20 puntos por la descarga
-    nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+    db.data.users[sender].limit -= 20;
+    reactionOk(m.chat, m.key, intervalId);
 }
 break
 
@@ -2096,10 +2086,9 @@ case 'tt': case 'tiktok': {
                 externalAdReply: {
                     title: title,
                     body: botname,
+		    previewType: "PHOTO",
                     thumbnail: await fetchBuffer(profilePicture),
-                    sourceUrl: 'https://wa.me/samu330',
-                    mediaType: 2,
-                    mediaUrl: video,
+                    sourceUrl: 'https://wa.me/samu330'
                 }
             },
         }, { quoted: m });
@@ -2326,12 +2315,14 @@ if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comand
     }
 
     try {
-	nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+	let intervalId;
+	intervalId = reactionLoad(m.chat, m.key);
         let data = await require("api-dylux").mediafireDl(text);
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
         if (filesizeMB > 100) {
+	    reactionError(m.chat, m.key, intervalId);
             return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
@@ -2439,8 +2430,7 @@ _*No se encontró extención adecuada al documento, asi que se empaquetó en un 
 *Título:* ${data.filename}
 *Tamaño:* ${data.filesize}
 *Fecha de Publicación:* ${data.upload_date}\n
-> ${botname}
-                    `
+> ${botname}`
                 }, { quoted: m });
 
                 // Elimina los archivos temporales
@@ -2466,10 +2456,10 @@ _*No se encontró extención adecuada al documento, asi que se empaquetó en un 
                 `
             }, { quoted: m });
         }
-nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
+reactionOk(m.chat, m.key, intervalId);
 db.data.users[sender].limit -= 50;
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}});
+	reactionError(m.chat, m.key, intervalId);
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
     }
@@ -2493,8 +2483,8 @@ case 'buscarsticker': {
         // Enviar mensaje con la cantidad de stickers y el título
         reply(`Se están enviando ${totalStickers} stickers\n\n*Título:* ${data.title}`);
 
-        // Enviar reacción de espera
-        nyanBot2.sendMessage(m.chat, {react: {text: '🕒', key: m.key}});
+        let intervalId;
+        intervalId = reactionLoad(m.chat, m.key);
 
         // Procesar cada URL de sticker
         for (const url of stickers) {
@@ -2502,7 +2492,7 @@ case 'buscarsticker': {
                 let media = await fetchBuffer(url)
                 if (!media) {
                     reply(`Error: No se pudo obtener el contenido de la URL: ${url}`)
-                    nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
+                    reactionError(m.chat, m.key, intervalId);
                     continue; // Saltar a la siguiente URL
                 }
 
@@ -2514,15 +2504,15 @@ case 'buscarsticker': {
                 } else if (isVideo) {
                     await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
                 }
-                // Enviar reacción de éxito
-                nyanBot2.sendMessage(m.chat, {react: {text: '✅', key: m.key}})
+                reactionOk(m.chat, m.key, intervalId);
             } catch (error) {
                 // Enviar reacción de error
-                nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
+                reactionError(m.chat, m.key, intervalId);
                 console.error("Error al enviar el sticker:", error)
             }
         }
     } catch (error) {
+	reactionError(m.chat, m.key, intervalId);
         reply(`*Hubo un error al buscar los stickers*\n${error}`)
         console.error("Error en buscarsticker:", error);
     }
@@ -2585,7 +2575,8 @@ break
 
 case 'xvideos': case 'xxx': {
 if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*')
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+let intervalId;
+    intervalId = reactionLoad(m.chat, m.key);
 
     try {
         // Realizar la búsqueda en Xvideos
@@ -2628,9 +2619,9 @@ if (!text) return reply('*Porfavor incluye junto al comando una solicitud a busc
             cards: contents // Pasar todas las cards
         });
 
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        reactionOk(m.chat, m.key, intervalId);
     } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        reactionError(m.chat, m.key, intervalId);
         console.error('Error en la búsqueda de Xvideos:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en Xvideos. Intenta nuevamente más tarde.\n${error.message}`);
     }
@@ -2881,11 +2872,11 @@ case 'ping': case 'botstatus': case 'statusbot': case 'p': {
                     speed: 0,
                     total: 0,
                     times: {
-			            user: 0,
-			            nice: 0,
-			            sys: 0,
-			            idle: 0,
-			            irq: 0
+			user: 0,
+			nice: 0,
+			sys: 0,
+			idle: 0,
+			irq: 0
                 }
                 })
                 let timestamp = speed()
