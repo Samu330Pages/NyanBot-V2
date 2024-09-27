@@ -2140,9 +2140,8 @@ case 'porcentaje': {
 break
 
 case 'perfil': {
-    const countryData = require('./src/country.json'); // Cargar el archivo JSON
+    const countryData = require('./src/country.json');
     let target = '';
-
     if (text.includes('@')) {
         target = `${text.replace(/[\@\sA-Za-z]/g, '')}@s.whatsapp.net`;
     } else if (m.quoted) {
@@ -2159,9 +2158,7 @@ case 'perfil': {
 
 - Puedes arrobar a la persona.`);
     }
-
     const existsResponse = await nyanBot2.onWhatsApp(target);
-    
     if (existsResponse.length > 0 && existsResponse[0].exists) {
         let p;
         try {
@@ -2169,48 +2166,41 @@ case 'perfil': {
         } catch (err) {
             p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
         }
-
-        // Extraer el número de teléfono
-        const phoneNumber = target.replace(/^\+/, ''); // Elimina el símbolo '+' al inicio si existe.
+        const phoneNumber = target.replace(/^\+/, '');
         let countryInfo = null;
-
-        // Comparar los primeros dígitos del número con los dial codes
         for (const country of countryData) {
-            if (Array.isArray(country.dialCodes)) { // Verificar si dialCodes es un arreglo
+            if (Array.isArray(country.dialCodes)) {
                 for (const code of country.dialCodes) {
-                    const cleanCode = code.replace(/[\+\s]/g, ''); // Elimina '+' y espacios
+                    const cleanCode = code.replace(/[\+\s]/g, '');
                     if (phoneNumber.startsWith(cleanCode)) {
                         countryInfo = country;
                         break;
                     }
                 }
             }
-            if (countryInfo) break; // Salir si se encontró el país
+            if (countryInfo) break;
         }
-
         let reg = db.data.users[sender].register ? 'Esta registrado ✅' : 'No esta registrado ❌';
         let nickName = nyanBot2.getName(target);
-        
-        // Enviar mensaje con la información del país, si se encontró
-        let responseMessage = `\n*Numero:* @${target.split("@")[0]}\n*Nombre* ${nickName}\n*Puntos:* ${db.data.users[target].limit}\n> _*${reg}*_`;
+        let points = '';
+        if (db.data.users[target].limit) {
+	points = ${db.data.users[target].limit};
+	} else {
+	points = '0';
+	}
+        let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
         if (countryInfo) {
-            responseMessage += `\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}\nImagen: ${countryInfo.image}`;
+            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n${ownername}`;
         } else {
             responseMessage += `\nNo se pudo identificar el país.`;
         }
-
-        // Convertir SVG a PNG usando sharp
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
             const response = await fetch(svgUrl);
             const buffer = await response.buffer();
-
-            // Convertir SVG a PNG
             const pngBuffer = await sharp(buffer)
                 .png()
                 .toBuffer();
-
-            // Enviar mensaje con la imagen convertida
             nyanBot2.sendMessage(m.chat, {
                 image: await getBuffer(p),
                 caption: responseMessage,
@@ -2223,16 +2213,14 @@ case 'perfil': {
                         "body": `${ownername}`,
                         "previewType": "PHOTO",
                         "thumbnailUrl": ``,
-                        "thumbnail": pngBuffer, // Usar la imagen PNG convertida
+                        "thumbnail": pngBuffer,
                         "sourceUrl": `${wagc}`
                     }
                 }
             }, { quoted: m });
-
         } else {
             return reply('*No se pudo obtener la imagen del país.*');
         }
-
     } else {
         return reply('*El número ingresado no existe en WhatsApp, intenta con otro por favor.*');
     }
