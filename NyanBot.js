@@ -2139,24 +2139,24 @@ case 'porcentaje': {
 break
 
 case 'perfil': {
-let target = '';
-if (text.includes('@')) {
-let target = `${text}`;
-} else if (m.quoted?.text) {
-let target = `${m.quoted.sender}`;
-} else if (text) {
-if (m.quoted?.text) return
-let target = `${text.replace(/[\+\sA-Za-z]/g, '')}@s.whatsapp.net`;
-} else {
-return reply(`Lo siento, pero no puede obtener el perfil! Por favor asegurate de incluir un número de WhatsApp, puede hacerlo de estas maneras:
+    let target = '';
+    if (text.includes('@')) {
+        target = `${text}`;
+    } else if (m.quoted?.text) {
+        target = `${m.quoted.sender}`;
+    } else if (text) {
+        if (m.quoted?.text) return;
+        target = `${text.replace(/[\+\sA-Za-z]/g, '')}@s.whatsapp.net`;
+    } else {
+        return reply(`Lo siento, pero no puede obtener el perfil! Por favor asegúrate de incluir un número de WhatsApp, puedes hacerlo de estas maneras:
 
 - Escribiendo el número de la persona después del comando, *ejemplo: 521***** _(para números de México incluye el "1" después del "52")_.
 
-- puedes responder al mensaje de la persona.
+- Puedes responder al mensaje de la persona.
 
-- puedes arrobar a la persona.`)
-}
-reply(target)
+- Puedes arrobar a la persona.`);
+    }
+    reply(target);
 }
 break
 
