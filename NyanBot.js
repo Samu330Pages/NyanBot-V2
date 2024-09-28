@@ -1605,7 +1605,7 @@ case 'imagenes': {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: `Siguiente Imagen 🗃️`,
-                id: `${prefix}google ${pregunta}`
+                id: `${budy}`
             }),
         };
 	await sendReplyButton(m.chat, buttons, m, {
