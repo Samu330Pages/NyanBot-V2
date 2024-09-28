@@ -1159,45 +1159,6 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
         switch (isCommand) {
 
-case 'ctest': {
-    // Datos de ejemplo
-    const chatId = m.chat; // ID del chat
-    const header = `*test*`;
-    const footer = `test`;
-    const media = './Media/theme/NyanBot.jpg'; // URL de la imagen que deseas mostrar en el carrusel
-
-    // Contenido del carrusel
-    const content = `*test*`;
-
-    // Mensaje nativo con botones (opcional)
-    const nativeFlowMessage = {
-        buttons: [{
-            name: 'single_select',
-            buttonParamsJson: JSON.stringify({
-                title: 'Selecciona una opción',
-                sections: [{
-                    rows: [{
-                        title: 'Opción 1',
-                        id: 'opcion1'
-                    }, {
-                        title: 'Opción 2',
-                        id: 'opcion2'
-                    }]
-                }]
-            })
-        }]
-    };
-
-    // Llamada a la función sendCarousel
-    await sendCarousel(chatId, nativeFlowMessage, {
-        header: header,
-        content: content,
-        footer: footer,
-        media: media // Aquí pasas la URL de la imagen
-    });
-}
-break
-
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
@@ -1920,8 +1881,6 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 }
 break
 
-
-
 case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
@@ -2031,10 +1990,8 @@ case 'insta': case 'ig': case 'instagram': {
             }, { quoted: m });
 
         } else if (response.data.status === 'error') {
-	    reactionError(m.chat, m.key, instalId);
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
-	    reactionError(m.chat, m.key, instalId);
             reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
         }
     } catch (error) {
@@ -2073,39 +2030,23 @@ case 'tt': case 'tiktok': {
         caption += `> ${botname} by ${ownername}`;
 
         let videoTt = await fetchBuffer(video);
-        /*await nyanBot2.sendMessage(m.chat, {
-                image: await getBuffer(p),
-                caption: responseMessage,
+        await nyanBot2.sendMessage(m.chat, {
+                video: await getBuffer(p),
+		fileName: title + '.mp4',
+                caption: caption,
                 contextInfo: {
-                    mentionedJid: [target],
                     "externalAdReply": {
                         "showAdAttribution": true,
                         "containsAutoReply": true,
-                        "title": `${global.botname}`,
+                        "title": title,
                         "body": `${ownername}`,
                         "previewType": "PHOTO",
                         "thumbnailUrl": ``,
-                        "thumbnail": pngBuffer,
-                        "sourceUrl": `${wagc}`
+                        "thumbnail": await fetchBuffer(profilePicture),
+                        "sourceUrl": `${text}`
                     }
                 }
-            }, { quoted: m });*/
-        await nyanBot2.sendMessage(m.chat, {
-            video: videoTt,
-            fileName: title + '.mp4',
-            caption: caption,
-            mimetype: 'video/mp4',
-            contextInfo: {
-                externalAdReply: {
-		    showAdAttribution: true,
-                    title: title,
-                    body: botname,
-		    previewType: "PHOTO",
-                    thumbnail: await fetchBuffer(profilePicture),
-                    sourceUrl: 'https://wa.me/samu330'
-                }
-            },
-        }, { quoted: m });
+            }, { quoted: m });
 
         reactionOk(m.chat, m.key, ttlId);
         db.data.users[sender].limit -= 10;
