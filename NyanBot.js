@@ -1607,7 +1607,7 @@ case 'imagenes': {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Siguiente Imagen 🗃️',
-                id: `${budy}`
+                id: `${prefix+command} ${query}`
             }),
         }
     ];
