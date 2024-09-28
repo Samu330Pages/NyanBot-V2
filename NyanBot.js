@@ -3221,9 +3221,9 @@ if (!isCmd) return
                         }
                     } })
                 }
-if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' || budy === '✂️' || budy === '📄') {
+if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' || budy === '✂️' || budy === '📄' || budy === '🤚') {
     const userChoice = budy;
-    const choices = ['✊', '🪨', '📄', '✌️', '✂️']; // Opciones del juego
+    const choices = ['✊', '🪨', '📄', '✌️', '✂️', '👊', '🤚']; // Opciones del juego, incluyendo emojis de manos
     const botChoice = choices[Math.floor(Math.random() * choices.length)]; // Elección aleatoria del bot
 
     let resultMessage = '';
@@ -3233,7 +3233,7 @@ if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' ||
     if (userChoice === botChoice) {
         resultMessage = "¡Es un empate! 🤝";
     } else if (
-        (userChoice === '🪨' && (botChoice === '✂️' || botChoice === '👊')) || // Piedra gana a tijera y puño
+        (userChoice === '🪨' || userChoice === '👊' && (botChoice === '✂️' || botChoice === '👊')) || // Piedra gana a tijera y puño
         (userChoice === '📄' && (botChoice === '🪨' || botChoice === '✊')) || // Papel gana a piedra y puño
         (userChoice === '✂️' && (botChoice === '📄' || botChoice === '✌️')) // Tijera gana a papel y mano
     ) {
@@ -3244,8 +3244,8 @@ if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' ||
         const lossMessages = [
             `¡Uy! Has perdido 😢. ${botChoice} gana a ${userChoice}.`,
             `¡Qué pena! 😭 Has perdido. ${botChoice} gana a ${userChoice}.`,
-            `¡Ja! Te gano un bot 🤷‍♂️ ${botChoice} gana a ${userChoice}.`,
-            `¡Te Gane xD! 😩 ${botChoice} gana a ${userChoice}.`,
+            `¡Ja! Te ganó un bot 🤷‍♂️ ${botChoice} gana a ${userChoice}.`,
+            `¡Te gané xD! 😩 ${botChoice} gana a ${userChoice}.`,
             `¡Perdiste! 😬 ${botChoice} gana a ${userChoice}.`
         ];
         resultMessage = lossMessages[Math.floor(Math.random() * lossMessages.length)];
@@ -3258,44 +3258,53 @@ if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' ||
     let stickerPath;
     switch (botChoice) {
         case '🪨':
+        case '👊': // Agregar la opción de puño
             stickerPath = './Media/sticker/Game/piedra.webp';
             break;
         case '📄':
+        case '🤚': // Agregar la opción de mano abierta
             stickerPath = './Media/sticker/Game/papel.webp';
             break;
         case '✂️':
             stickerPath = './Media/sticker/Game/tijeras.webp';
             break;
+        default:
+            // Si no hay una opción válida, no enviar sticker
+            stickerPath = null;
     }
 
-    // Enviar el sticker y el mensaje de resultado
-    nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, { quoted: {
-        key: {
-            remoteJid: '0@s.whatsapp.net',
-            fromMe: false,
-            id: `${ownername}`,
-            participant: '0@s.whatsapp.net'
-        },
-        message: {
-            requestPaymentMessage: {
-                currencyCodeIso4217: "USD",
-                amount1000: puntos * 1000,
-                requestFrom: '0@s.whatsapp.net',
-                noteMessage: {
-                    extendedTextMessage: {
-                        text: resultMessage
+    // Enviar el sticker y el mensaje de resultado si hay un sticker válido
+    if (stickerPath) {
+        nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, { quoted: {
+            key: {
+                remoteJid: '0@s.whatsapp.net',
+                fromMe: false,
+                id: `${ownername}`,
+                participant: '0@s.whatsapp.net'
+            },
+            message: {
+                requestPaymentMessage: {
+                    currencyCodeIso4217: "USD",
+                    amount1000: puntos * 1000,
+                    requestFrom: '0@s.whatsapp.net',
+                    noteMessage: {
+                        extendedTextMessage: {
+                            text: resultMessage
+                        }
+                    },
+                    expiryTimestamp: 999999999,
+                    amount: {
+                        value: 5219984907794,
+                        offset: 1000,
+                        currencyCode: "INR"
                     }
-                },
-                expiryTimestamp: 999999999,
-                amount: {
-                    value: 5219984907794,
-                    offset: 1000,
-                    currencyCode: "INR"
                 }
             }
-        }
-    }});
-	}
+        }});
+    } else {
+        console.error("No se pudo enviar el sticker. El path es undefined.");
+    }
+}
 
 if (budy.includes('@5219984907794')) {
     if (isSamu) return;
