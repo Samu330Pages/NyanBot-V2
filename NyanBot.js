@@ -171,6 +171,7 @@ const categories = {
     ],
     "🔍 Búsqueda": [
 	{ command: 'google', description: '' },
+	{ command: 'imagen', description: '' },
 	{ command: 'youtubesearch', description: '' },
 	{ command: 'yts', description: '' },
         { command: 'letra', description: '' },
@@ -1601,13 +1602,15 @@ case 'imagenes': {
         if (!imageUrl) {
             return reply("No se encontraron imágenes para la búsqueda proporcionada.");
         }
-        const buttons = {
-            name: "quick_reply",
+	const buttons = [
+        {
+            name: "cta_copy",
             buttonParamsJson: JSON.stringify({
-                display_text: `Siguiente Imagen 🗃️`,
+                display_text: 'Siguiente Imagen 🗃️',
                 id: `${budy}`
             }),
-        };
+        }
+    ];
 	await sendReplyButton(m.chat, buttons, m, {
         content: `*🍟 Resultado de tu busqueda:*\n
 ${text}\n
@@ -1855,7 +1858,7 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
-	media: fs.readFileSync('./Media/theme/play.jpg')
+	media: await fetchBuffer(${video.thumbnail})
 })
 reactionOk(m.chat, m.key, playId);
 }
