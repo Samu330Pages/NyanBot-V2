@@ -2031,7 +2031,7 @@ case 'tt': case 'tiktok': {
 
         let videoTt = await fetchBuffer(video);
         await nyanBot2.sendMessage(m.chat, {
-                video: await getBuffer(p),
+                video: videoTt,
 		fileName: title + '.mp4',
                 caption: caption,
                 contextInfo: {
