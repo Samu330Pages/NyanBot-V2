@@ -1868,8 +1868,7 @@ case 'ytmp3': case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
-    let mp3Id;
-    mp3Id = reactionLoad(m.chat, m.key);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...*\n
 ${forma1}CONSEJO:${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
 _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*_\nY automáticamente aparecerá en tu reproductor, en dado caso que el audio no aparezca, solamente busca dentro de ese directorio un archivo llamado:
@@ -1906,20 +1905,18 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 	    await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
-	    reactionError(m.chat, m.key, mp3Id);
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
-	    reactionError(m.chat, m.key, mp3Id);
             reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
         }
     } catch (error) {
-	reactionError(m.chat, m.key, mp3Id);
+	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
 
     db.data.users[sender].limit -= 30;
-    reactionOk(m.chat, m.key, mp3Id);
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
 
@@ -1929,8 +1926,7 @@ case 'ytmp4': case 'ytv': {
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
-let mp4Id;
-mp4Id = reactionLoad(m.chat, m.key);
+nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
 try {
 let res = await fg.ytv(text)
 await nyanBot2.sendMessage(m.chat, {
@@ -1946,9 +1942,9 @@ nyanBot2.sendMessage(m.chat, {
                 mimetype: 'video/mp4'
             }, { quoted: m });
 db.data.users[sender].limit -= 30;
-reactionOk(m.chat, m.key, mp4Id);
+nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
-	reactionError(m.chat, m.key, mp4Id);
+	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error)
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`)
     }
@@ -2077,7 +2073,23 @@ case 'tt': case 'tiktok': {
         caption += `> ${botname} by ${ownername}`;
 
         let videoTt = await fetchBuffer(video);
-        
+        /*await nyanBot2.sendMessage(m.chat, {
+                image: await getBuffer(p),
+                caption: responseMessage,
+                contextInfo: {
+                    mentionedJid: [target],
+                    "externalAdReply": {
+                        "showAdAttribution": true,
+                        "containsAutoReply": true,
+                        "title": `${global.botname}`,
+                        "body": `${ownername}`,
+                        "previewType": "PHOTO",
+                        "thumbnailUrl": ``,
+                        "thumbnail": pngBuffer,
+                        "sourceUrl": `${wagc}`
+                    }
+                }
+            }, { quoted: m });*/
         await nyanBot2.sendMessage(m.chat, {
             video: videoTt,
             fileName: title + '.mp4',
