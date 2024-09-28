@@ -2310,8 +2310,8 @@ if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 
     // Lógica para detectar si el link es válido de MediaFire
-    if (!/^https?:\/\/(www\.)?mediafire\.com\/[a-zA-Z0-9]+\/.+/.test(text)) {
-        return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
+    if (!/^https?:\/\/(www\.)?mediafire\.com\/(file|download)\/[a-zA-Z0-9]+/.test(text)) {
+    return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
     }
 
     try {
