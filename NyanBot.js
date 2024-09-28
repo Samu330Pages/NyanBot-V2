@@ -643,7 +643,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ image: fs.readFileSync(media) },{ upload: nyanBot2.waUploadToServer }) : {})
+            ...(media ? await prepareWAMessageMedia({ image: media },{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
