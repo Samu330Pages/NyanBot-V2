@@ -1618,7 +1618,7 @@ ${text}\n
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de imágenes:', error);
-        return reply("Ocurrió un error al realizar la búsqueda de imágenes. Intenta nuevamente más tarde.;
+        return reply("Ocurrió un error al realizar la búsqueda de imágenes. Intenta nuevamente más tarde.");
     }
 }
 break
