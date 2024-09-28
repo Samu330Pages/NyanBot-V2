@@ -1604,7 +1604,7 @@ case 'imagenes': {
         }
 	const buttons = [
         {
-            name: "cta_copy",
+            name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Siguiente Imagen 🗃️',
                 id: `${budy}`
@@ -1720,6 +1720,7 @@ let letraId;
 letraId = reactionLoad(m.chat, m.key);
 try {
 let lyric = await fg.lyrics(text)
+if (lyric.title === 'undefined') return reply(`*Lo siento, pero no se encontró resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`):
 const buttons = [
         {
             name: "cta_copy",
@@ -1737,7 +1738,7 @@ _*Artista:*_ ${lyric.artist}\n
 *Letra:*\n
 ${lyric.lyrics}\n
 `,
-	media: fs.readFileSync('./Media/theme/lyrics.jpg')
+	media: await fetchBuffer(`${lyric.image}`)
     });
 reactionOk(m.chat, m.key, letraId);
 } catch (error) {
