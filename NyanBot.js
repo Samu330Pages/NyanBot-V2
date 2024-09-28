@@ -1725,6 +1725,7 @@ case 'lyrics': {
         let lyric = await fg.lyrics(text);
         
         if (!lyric || !lyric.title || lyric.title === 'undefined' || lyric.lyrics === 'undefined') {
+	    reactionError(m.chat, m.key, letraId);
             return reply(`*Lo siento, pero no se encontraron resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`);
         }
 
