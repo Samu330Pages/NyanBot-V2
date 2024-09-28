@@ -2034,18 +2034,7 @@ case 'tt': case 'tiktok': {
                 video: videoTt,
 		fileName: title + '.mp4',
                 caption: caption,
-                contextInfo: {
-                    "externalAdReply": {
-                        "showAdAttribution": true,
-                        "containsAutoReply": true,
-                        "title": title,
-                        "body": `${ownername}`,
-                        "previewType": "PHOTO",
-                        "thumbnailUrl": ``,
-                        "thumbnail": await fetchBuffer(profilePicture),
-                        "sourceUrl": `${text}`
-                    }
-                }
+		jpegThumbnail: await fetchBuffer(profilePicture)
             }, { quoted: m });
 
         reactionOk(m.chat, m.key, ttlId);
