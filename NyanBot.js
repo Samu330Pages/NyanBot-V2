@@ -1603,16 +1603,17 @@ case 'imagenes': {
         if (r.length === 0) {
             return reply("No se encontraron imágenes para la búsqueda proporcionada.");
         }
-        let currentIndex = 0;
 
-        const sendImage = async (index) => {
-            const imageUrl = r[index];
+        const sendRandomImage = async () => {
+            const randomIndex = Math.floor(Math.random() * r.length);
+            const imageUrl = r[randomIndex];
+
             const buttons = [
                 {
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Siguiente Imagen 🗃️',
-                        id: `${prefix + command} ${query} ${index + 1}`
+                        id: `${prefix + command} ${query}`
                     }),
                 }
             ];
@@ -1622,7 +1623,7 @@ case 'imagenes': {
                 media: await fetchBuffer(imageUrl)
             });
         };
-        await sendImage(currentIndex);
+        await sendRandomImage();
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
