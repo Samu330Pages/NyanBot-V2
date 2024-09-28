@@ -2050,9 +2050,9 @@ case 'tt': case 'tiktok': {
 
         reactionOk(m.chat, m.key, ttlId);
         db.data.users[sender].limit -= 10;
-    } catch {
+    } catch (e) {
         reactionError(m.chat, m.key, ttlId);
-        return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
+        return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${e}`);
     }
 }
 break
