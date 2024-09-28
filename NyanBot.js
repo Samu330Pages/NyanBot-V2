@@ -3221,9 +3221,26 @@ if (!isCmd) return
                         }
                     } })
                 }
-if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' || budy === '✂️' || budy === '📄' || budy === '🤚') {
-    const userChoice = budy;
-    const choices = ['✊', '🪨', '📄', '✌️', '✂️', '👊', '🤚']; // Opciones del juego, incluyendo emojis de manos
+// Definimos los emojis de entrada
+const emojis = {
+    piedra: ['🪨', '✊', '👊'],       // Piedra: roca, puño cerrado
+    papel: ['📄', '🤚'],            // Papel: hoja, mano abierta
+    tijera: ['✂️', '✌️']            // Tijera: tijeras, dos dedos
+};
+
+// Recibir el mensaje del usuario
+if (Object.values(emojis).flat().includes(budy)) {
+    let userChoice;
+    
+    // Determinar la elección del usuario
+    for (const [key, value] of Object.entries(emojis)) {
+        if (value.includes(budy)) {
+            userChoice = key; // 'piedra', 'papel' o 'tijera'
+            break;
+        }
+    }
+
+    const choices = ['piedra', 'papel', 'tijera'];
     const botChoice = choices[Math.floor(Math.random() * choices.length)]; // Elección aleatoria del bot
 
     let resultMessage = '';
@@ -3233,20 +3250,20 @@ if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' ||
     if (userChoice === botChoice) {
         resultMessage = "¡Es un empate! 🤝";
     } else if (
-        (userChoice === '🪨' || userChoice === '👊' && (botChoice === '✂️' || botChoice === '👊')) || // Piedra gana a tijera y puño
-        (userChoice === '📄' && (botChoice === '🪨' || botChoice === '✊')) || // Papel gana a piedra y puño
-        (userChoice === '✂️' && (botChoice === '📄' || botChoice === '✌️')) // Tijera gana a papel y mano
+        (userChoice === 'piedra' && botChoice === 'tijera') || // Piedra gana a tijera
+        (userChoice === 'papel' && botChoice === 'piedra') || // Papel gana a piedra
+        (userChoice === 'tijera' && botChoice === 'papel')    // Tijera gana a papel
     ) {
         puntos = 50; // Ganancia de puntos
         resultMessage = `¡Felicidades! 🎉 Has ganado 50 puntos.`;
     } else {
         // Mensajes de pérdida
         const lossMessages = [
-            `¡Uy! Has perdido 😢. ${botChoice} gana a ${userChoice}.`,
-            `¡Qué pena! 😭 Has perdido. ${botChoice} gana a ${userChoice}.`,
-            `¡Ja! Te ganó un bot 🤷‍♂️ ${botChoice} gana a ${userChoice}.`,
-            `¡Te gané xD! 😩 ${botChoice} gana a ${userChoice}.`,
-            `¡Perdiste! 😬 ${botChoice} gana a ${userChoice}.`
+            `¡Uy! Has perdido 😢. ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
+            `¡Qué pena! 😭 Has perdido. ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
+            `¡Ja! Te ganó un bot 🤷‍♂️ ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
+            `¡Te gané xD! 😩 ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
+            `¡Perdiste! 😬 ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`
         ];
         resultMessage = lossMessages[Math.floor(Math.random() * lossMessages.length)];
     }
@@ -3257,52 +3274,52 @@ if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' ||
     // Enviar el sticker correspondiente al bot
     let stickerPath;
     switch (botChoice) {
-        case '🪨':
-        case '👊': // Agregar la opción de puño
+        case 'piedra':
             stickerPath = './Media/sticker/Game/piedra.webp';
             break;
-        case '📄':
-        case '🤚': // Agregar la opción de mano abierta
+        case 'papel':
             stickerPath = './Media/sticker/Game/papel.webp';
             break;
-        case '✂️':
+        case 'tijera':
             stickerPath = './Media/sticker/Game/tijeras.webp';
             break;
         default:
-            // Si no hay una opción válida, no enviar sticker
-            stickerPath = null;
+            console.error("Elección del bot no válida.");
+            return; // Salir si no hay una elección válida
     }
 
-    // Enviar el sticker y el mensaje de resultado si hay un sticker válido
-    if (stickerPath) {
-        nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, { quoted: {
-            key: {
-                remoteJid: '0@s.whatsapp.net',
-                fromMe: false,
-                id: `${ownername}`,
-                participant: '0@s.whatsapp.net'
-            },
-            message: {
-                requestPaymentMessage: {
-                    currencyCodeIso4217: "USD",
-                    amount1000: puntos * 1000,
-                    requestFrom: '0@s.whatsapp.net',
-                    noteMessage: {
-                        extendedTextMessage: {
-                            text: resultMessage
+    // Enviar el sticker y el mensaje de resultado
+    try {
+        await nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, {
+            quoted: {
+                key: {
+                    remoteJid: '0@s.whatsapp.net',
+                    fromMe: false,
+                    id: `${ownername}`,
+                    participant: '0@s.whatsapp.net'
+                },
+                message: {
+                    requestPaymentMessage: {
+                        currencyCodeIso4217: "USD",
+                        amount1000: puntos * 1000,
+                        requestFrom: '0@s.whatsapp.net',
+                        noteMessage: {
+                            extendedTextMessage: {
+                                text: resultMessage
+                            }
+                        },
+                        expiryTimestamp: 999999999,
+                        amount: {
+                            value: 5219984907794,
+                            offset: 1000,
+                            currencyCode: "INR"
                         }
-                    },
-                    expiryTimestamp: 999999999,
-                    amount: {
-                        value: 5219984907794,
-                        offset: 1000,
-                        currencyCode: "INR"
                     }
                 }
             }
-        }});
-    } else {
-        console.error("No se pudo enviar el sticker. El path es undefined.");
+        });
+    } catch (error) {
+        console.error("Error al enviar el sticker:", error);
     }
 }
 
