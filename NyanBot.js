@@ -1587,6 +1587,42 @@ case 'test':
     });
     break
 
+case 'img':
+case 'imagen':
+case 'imagenes': {
+    const query = text || m.quoted?.text;
+    if (!query) {
+        return reply(`Por favor, proporciona un término de búsqueda de imágenes.\n*Ejemplo:* ${prefix+command} gatos`);
+    }
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    try {
+        let r = await fg.googleImage(query);
+        const imageUrl = r[0];
+        if (!imageUrl) {
+            return reply("No se encontraron imágenes para la búsqueda proporcionada.");
+        }
+        const buttons = {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: `Siguiente Imagen 🗃️`,
+                id: `${prefix}google ${pregunta}`
+            }),
+        };
+	await sendReplyButton(m.chat, buttons, m, {
+        content: `*🍟 Resultado de tu busqueda:*\n
+${text}\n
+`,
+	media: await fetchBuffer(`${imageUrl}`)
+    });
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error en la búsqueda de imágenes:', error);
+        return reply("Ocurrió un error al realizar la búsqueda de imágenes. Intenta nuevamente más tarde.;
+    }
+}
+break
+
 case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
@@ -2847,7 +2883,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (isCmd && budy.startsWith('.')) { // Asegura que se detecte un comando
+if (isCmd && budy.startsWith('.')) {
+if (!isCmd) return
     const allCommands = Object.values(categories)
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
