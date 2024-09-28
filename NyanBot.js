@@ -2655,9 +2655,13 @@ break
                 reply(`*Total de puntos: ${db.data.users[sender].limit}*
 		
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
-*Usa el comando ${forma1}${prefix}juegos${forma1} para ver los juegos disponibles! O bien, puedes simplemente enviar uno de estos emojis:*
+*Para jugar puedes simplemente enviar uno de estos emojis:*
 
 ${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲${forma1}
+
+*O también juegar a piedra, papel o tijera con el bot enviando los emojis:*
+
+${forma1}🪨 | ✊🏻  | 📄 | ✋🏻 | ✂️ | ✌🏻${forma1}
 
 _*Y ganarás puntos de manera más rápida!*_`);
             break
@@ -3223,9 +3227,9 @@ if (!isCmd) return
                 }
 // Definimos los emojis de entrada
 const emojis = {
-    piedra: ['🪨', '✊', '👊'],       // Piedra: roca, puño cerrado
-    papel: ['📄', '🤚'],            // Papel: hoja, mano abierta
-    tijera: ['✂️', '✌️']            // Tijera: tijeras, dos dedos
+    piedra: ['🪨','✊🏻','✊🏼','✊🏽','✊🏾','✊🏿','✊','👊🏻','👊🏼','👊🏽','👊🏾','👊🏿','👊'],
+    papel: ['📄','🤚🏻','🤚🏼','🤚🏽','🤚🏾','🤚🏿','🤚'],
+    tijera: ['✂️','✌🏻','✌🏼','✌🏽','✌🏾','✌🏿','✌️']
 };
 
 // Recibir el mensaje del usuario
