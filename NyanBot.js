@@ -1595,17 +1595,14 @@ case 'imagenes': {
     if (!query) {
         return reply(`Por favor, proporciona un término de búsqueda de imágenes.\n*Ejemplo:* ${prefix + command} gatos`);
     }
-    
+
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     try {
-        // Realizar la búsqueda de imágenes
         let r = await fg.googleImage(query);
         if (r.length === 0) {
             return reply("No se encontraron imágenes para la búsqueda proporcionada.");
         }
-
-        // Almacenamos el índice de la imagen actual en el contexto de la conversación
         let currentIndex = 0;
 
         const sendImage = async (index) => {
@@ -1615,7 +1612,7 @@ case 'imagenes': {
                     name: "quick_reply",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Siguiente Imagen 🗃️',
-                        id: `${prefix + command} ${query} ${index + 1}` // Incrementar el índice para la siguiente imagen
+                        id: `${prefix + command} ${query} ${index + 1}`
                     }),
                 }
             ];
@@ -1625,21 +1622,7 @@ case 'imagenes': {
                 media: await fetchBuffer(imageUrl)
             });
         };
-
-        // Enviar la primera imagen
         await sendImage(currentIndex);
-
-        // Manejar el clic en el botón de "Siguiente Imagen"
-        nyanBot2.on('buttonClick', async (button) => {
-            const buttonData = JSON.parse(button.buttonParamsJson);
-            const nextIndex = parseInt(buttonData.id.split(' ').pop()); // Obtener el índice de la siguiente imagen
-
-            if (nextIndex < r.length) {
-                await sendImage(nextIndex);
-            } else {
-                return reply("No hay más imágenes disponibles.");
-            }
-        });
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
