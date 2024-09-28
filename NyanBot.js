@@ -2661,7 +2661,7 @@ ${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲${forma1}
 
 *O también juegar a piedra, papel o tijera con el bot enviando los emojis:*
 
-${forma1}🪨 | ✊🏻  | 📄 | ✋🏻 | ✂️ | ✌🏻${forma1}
+${forma1}🪨 | ✊🏻 | 📄 | ✋🏻 | ✂️ | ✌🏻${forma1}
 
 _*Y ganarás puntos de manera más rápida!*_`);
             break
