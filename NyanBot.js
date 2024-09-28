@@ -3221,6 +3221,81 @@ if (!isCmd) return
                         }
                     } })
                 }
+if (budy === '✊' || budy === '🪨' || budy === '👊' || budy === '✌️' || budy === '✂️' || budy === '📄') {
+    const userChoice = budy;
+    const choices = ['✊', '🪨', '📄', '✌️', '✂️']; // Opciones del juego
+    const botChoice = choices[Math.floor(Math.random() * choices.length)]; // Elección aleatoria del bot
+
+    let resultMessage = '';
+    let puntos = 0;
+
+    // Determinar el resultado del juego
+    if (userChoice === botChoice) {
+        resultMessage = "¡Es un empate! 🤝";
+    } else if (
+        (userChoice === '🪨' && (botChoice === '✂️' || botChoice === '👊')) || // Piedra gana a tijera y puño
+        (userChoice === '📄' && (botChoice === '🪨' || botChoice === '✊')) || // Papel gana a piedra y puño
+        (userChoice === '✂️' && (botChoice === '📄' || botChoice === '✌️')) // Tijera gana a papel y mano
+    ) {
+        puntos = 50; // Ganancia de puntos
+        resultMessage = `¡Felicidades! 🎉 Has ganado 50 puntos.`;
+    } else {
+        // Mensajes de pérdida
+        const lossMessages = [
+            `¡Uy! Has perdido 😢. ${botChoice} gana a ${userChoice}.`,
+            `¡Qué pena! 😭 Has perdido. ${botChoice} gana a ${userChoice}.`,
+            `¡Ja! Te gano un bot 🤷‍♂️ ${botChoice} gana a ${userChoice}.`,
+            `¡Te Gane xD! 😩 ${botChoice} gana a ${userChoice}.`,
+            `¡Perdiste! 😬 ${botChoice} gana a ${userChoice}.`
+        ];
+        resultMessage = lossMessages[Math.floor(Math.random() * lossMessages.length)];
+    }
+
+    // Sumar puntos al usuario
+    db.data.users[sender].limit += puntos;
+
+    // Enviar el sticker correspondiente al bot
+    let stickerPath;
+    switch (botChoice) {
+        case '🪨':
+            stickerPath = './Media/sticker/Game/piedra.webp';
+            break;
+        case '📄':
+            stickerPath = './Media/sticker/Game/papel.webp';
+            break;
+        case '✂️':
+            stickerPath = './Media/sticker/Game/tijeras.webp';
+            break;
+    }
+
+    // Enviar el sticker y el mensaje de resultado
+    nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, { quoted: {
+        key: {
+            remoteJid: '0@s.whatsapp.net',
+            fromMe: false,
+            id: `${ownername}`,
+            participant: '0@s.whatsapp.net'
+        },
+        message: {
+            requestPaymentMessage: {
+                currencyCodeIso4217: "USD",
+                amount1000: puntos * 1000,
+                requestFrom: '0@s.whatsapp.net',
+                noteMessage: {
+                    extendedTextMessage: {
+                        text: resultMessage
+                    }
+                },
+                expiryTimestamp: 999999999,
+                amount: {
+                    value: 5219984907794,
+                    offset: 1000,
+                    currencyCode: "INR"
+                }
+            }
+        }
+    }});
+	}
 
 if (budy.includes('@5219984907794')) {
     if (isSamu) return;
