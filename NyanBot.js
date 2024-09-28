@@ -1298,7 +1298,7 @@ _*Ya puedes usar las funciones del bot que requieran registro!*_
 		    
 Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
 - *Si te registras mediante WhatsApp ganaras 200 puntos!*`,
-	            media: './Media/theme/login.jpg'
+	            media: fs.readFileSync('./Media/theme/login.jpg')
                 });
             }
         })
@@ -1695,7 +1695,7 @@ gglId = reactionLoad(m.chat, m.key);
             // Enviar el mensaje con los botones
             sendReplyButton(m.chat, buttons, m, {
                 content: content || 'No se encontró información relevante.',
-                media: './Media/theme/google.jpg'
+                media: fs.readFileSync('./Media/theme/google.jpg')
             });
 	reactionOk(m.chat, m.key, gglId);
         } else {
@@ -1734,7 +1734,7 @@ _*Artista:*_ ${lyric.artist}\n
 *Letra:*\n
 ${lyric.lyrics}\n
 `,
-	media: './Media/theme/lyrics.jpg'
+	media: fs.readFileSync('./Media/theme/lyrics.jpg')
     });
 reactionOk(m.chat, m.key, letraId);
 } catch (error) {
@@ -1855,7 +1855,7 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
-	media: './Media/theme/play.jpg'
+	media: fs.readFileSync('./Media/theme/play.jpg')
 })
 reactionOk(m.chat, m.key, playId);
 }
