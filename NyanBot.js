@@ -1720,7 +1720,7 @@ let letraId;
 letraId = reactionLoad(m.chat, m.key);
 try {
 let lyric = await fg.lyrics(text)
-if (lyric.title === 'undefined') return reply(`*Lo siento, pero no se encontró resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`):
+if (lyric.title === 'undefined') return reply(`*Lo siento, pero no se encontró resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`)
 const buttons = [
         {
             name: "cta_copy",
