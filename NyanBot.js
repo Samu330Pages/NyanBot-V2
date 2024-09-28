@@ -1858,7 +1858,7 @@ await sendReplyButton(m.chat, buttons, m, {
 - *Vistas:* ${formatNumber(video.views)}
 
 `,
-	media: await fetchBuffer(${video.thumbnail})
+	media: await fetchBuffer(`${video.thumbnail}`)
 })
 reactionOk(m.chat, m.key, playId);
 }
