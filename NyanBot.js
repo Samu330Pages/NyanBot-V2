@@ -16,6 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
+const bard = require('./lib/bard.js')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const archiver = require('archiver');
@@ -1639,6 +1640,29 @@ case 'test':
         content: 'Selecciona una opción:'
     });
     break
+
+// En tu función de manejo de comandos, cuando necesites usar fetch
+case 'bard': {
+    // Normalizar el texto que se quiere enviar a la función fetch
+    const normalizedText = core.text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+
+    try {
+        // Llamar a la función fetch
+        const json = await bard.fetch(normalizedText);
+        
+        // Verificar si la respuesta es exitosa
+        if (!json.status) {
+            return reply(`*${emoji} Imposible obtener metadatos.*`);
+        }
+
+        // Enviar el mensaje obtenido
+        return await reply(`${json.data.message.trim()}`);
+    } catch (error) {
+        console.error(error);
+        return reply(`*Ocurrió un error al obtener los datos.*\n${error}`);
+    }
+}
+break
 
 case 'img':
 case 'imagen':
