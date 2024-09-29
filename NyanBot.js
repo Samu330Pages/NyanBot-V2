@@ -1330,7 +1330,7 @@ _*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO E
 
 ¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`,
 	sequenceNumber: '99999',
-	jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
+	//jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
 	contextInfo: {
                         externalAdReply: {
                             showAdAttribution: true,
