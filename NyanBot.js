@@ -674,7 +674,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         // Preparar la imagen de cada tarjeta
         var cardImageParse = await prepareWAMessageMedia({
             image: {
-                url: card.header.imageMessage // Asegúrate de que `imageMessage` sea la URL correcta
+                url: card.header.imageMessage
             },
         }, {
             upload: nyanBot2.waUploadToServer
@@ -1315,7 +1315,7 @@ if (isGroup) {
 const cards = [
         {
             header: {
-                imageMessage: fs.readFileSync('./Media/theme/login.jpg'),
+                imageMessage: './Media/theme/login.jpg',
                 hasMediaAttachment: true,
             },
             body: {
@@ -1335,7 +1335,7 @@ const cards = [
         },
         {
             header: {
-                imageMessage: fs.readFileSync('./Media/theme/reg.jpg'),
+                imageMessage: './Media/theme/reg.jpg',
                 hasMediaAttachment: true,
             },
             body: {
