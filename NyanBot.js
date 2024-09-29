@@ -1312,7 +1312,7 @@ break
 case 'reg': {
 if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
 if (isGroup) {
-return await nyanBot2.sendMessage(m.chat, {
+return nyanBot2.sendMessage(m.chat, {
 	location: {
 	degreesLatitude: `0`,
 	degreesLongitude: `0`,
