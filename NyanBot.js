@@ -1646,18 +1646,36 @@ case 'gemini': {
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
     try {
-        // Llamar a la función geminiFetch
-        const json = await geminiFetch(normalizedText);
+        // Implementación directa de geminiFetch
+        const response = await fetch('https://bard.rizzy.eu.org/backend/conversation/gemini', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ask: normalizedText
+            })
+        });
         
-        // Verificar si la respuesta es exitosa
-        if (!json.status) {
-            return reply(`*Imposible obtener metadatos.*`);
+        const data = await response.json();
+        
+        if (data.status !== 200) {
+            throw new Error('Error en la respuesta del servidor');
         }
 
+        const jsonResponse = {
+            creator: '@wts - Devsu',
+            status: true,
+            data: {
+                message: data.content
+            }
+        };
+
         // Enviar el mensaje obtenido
-        return await reply(`${json.data.message.trim()}`);
+        return await reply(`${jsonResponse.data.message.trim()}`);
     } catch (error) {
-        console.error('Error en la llamada a geminiFetch:', error);
+        console.error('Error en la llamada a Gemini:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
 }
