@@ -1642,13 +1642,11 @@ case 'test':
     break
 
 case 'gemini': {
-    const fetch = require('node-fetch');
-
-    // Normalizar el texto que se quiere enviar a la función fetch
+    // Normalizar el texto que se quiere enviar a la función v2
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
     try {
-        // Implementación directa de geminiFetch
+        // Implementación directa del método v2 de la clase Gemini
         const response = await fetch('https://bard.rizzy.eu.org/backend/conversation/gemini', {
             method: 'POST',
             headers: {
@@ -1660,15 +1658,10 @@ case 'gemini': {
             })
         });
 
-        // Imprimir la respuesta cruda para depuración
-        const responseText = await response.text();
-        reply(`${responseText}`);
-
-        // Intentar convertir a JSON
-        const data = JSON.parse(responseText);
+        const data = await response.json();
         
         if (data.status !== 200) {
-            throw new Error('Error en la respuesta del servidor');
+            return reply(`*Imposible obtener metadatos.*`);
         }
 
         const jsonResponse = {
