@@ -1650,7 +1650,7 @@ case 'gemini': {
 
     try {
         // Llamar a la función v2
-        const json = await geminiInstance.v2(normalizedText);
+        const json = await geminiInstance.v1(normalizedText);
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
