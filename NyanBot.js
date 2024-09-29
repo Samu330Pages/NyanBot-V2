@@ -1567,7 +1567,7 @@ case 'test':
 				text: '🪅',
 				title: 'Test',
 				description: 'test 1',
-                                id: '1'
+                                rowId: '.menu'
                             }]
 		}, {
 			title: 'Select 2',
@@ -1575,7 +1575,7 @@ case 'test':
                         rows: [{
                                 title: 'Test',
 				description: 'test 2',
-                                id: '2'
+                                rowId: '.test'
                             }]
                         }]
                     })
