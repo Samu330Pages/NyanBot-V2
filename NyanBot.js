@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
-const Bard = require('./lib/bard.js');
+const Gemini = require('./lib/gemini.js');
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const archiver = require('archiver');
@@ -1641,17 +1641,16 @@ case 'test':
     });
     break
 
-// En tu caso 'bard':
-case 'bard': {
+case 'gemini': {
     // Normalizar el texto que se quiere enviar a la función fetch
-    //const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
-    // Crear una instancia de Bard (puedes pasar un cookie si es necesario)
-    const bardInstance = new Bard(); // Si no necesitas cookie, puedes dejarlo vacío
+    // Crear una instancia de Gemini
+    const geminiInstance = new Gemini();
 
     try {
-        // Llamar a la función fetch
-        const json = await bardInstance.fetch(text);
+        // Llamar a la función v2
+        const json = await geminiInstance.v2(normalizedText);
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
