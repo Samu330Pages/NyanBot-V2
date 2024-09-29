@@ -186,11 +186,11 @@ const categories = {
         { command: 'ytv', description: '_*URL*_' },
         { command: 'ytmp4', description: '_*URL*_' },
         { command: 'tiktok', description: '_*URL*_' },
-        { command: 'tt', description: '*URL*' },
+        { command: 'tt', description: '_*URL*_' },
         { command: 'facebook', description: '_*URL*_' },
-        { command: 'fb', description: '*URL*' },
+        { command: 'fb', description: '_*URL*_' },
         { command: 'instagram', description: '_*URL*_' },
-        { command: 'ig', description: '*URL*' },
+        { command: 'ig', description: '_*URL*_' },
         { command: 'mediafire', description: '_*URL*_' }
     ],
     "🎭 Grupos": [
@@ -2036,7 +2036,8 @@ case 'ytmp3': case 'yta': {
 	    const audioName = response.data.filename;
 
             // Enviar el audio
-            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer('https://ibb.co/GvfBMdF')}, {quoted: m});
+	    let jpg = 'https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1';
+            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer(jpg)}, {quoted: m});
 	    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
