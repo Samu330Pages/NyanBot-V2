@@ -1642,38 +1642,58 @@ case 'test':
     break
 
 case 'gemini': {
+    const fetch = require('node-fetch');
+
     // Normalizar el texto que se quiere enviar a la función v2
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
     try {
         // Implementación directa del método v2 de la clase Gemini
-        const response = await fetch('https://bard.rizzy.eu.org/backend/conversation/gemini', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ask: normalizedText
-            })
+        const response = await new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch('https://bard.rizzy.eu.org/backend/conversation/gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ask: normalizedText
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status !== 200) {
+                    reject({
+                        creator: '@wts - Devsu',
+                        status: false
+                    });
+                }
+
+                resolve({
+                    creator: '@wts - Devsu',
+                    status: true,
+                    data: {
+                        message: data.content
+                    }
+                });
+            } catch (e) {
+                reject({
+                    creator: '@wts - Devsu',
+                    status: false,
+                    msg: e.toString()
+                });
+            }
         });
 
-        const data = await response.json();
-        
-        if (data.status !== 200) {
+        // Verificar si la respuesta es exitosa
+        if (!response.status) {
             return reply(`*Imposible obtener metadatos.*`);
         }
 
-        const jsonResponse = {
-            creator: '@wts - Devsu',
-            status: true,
-            data: {
-                message: data.content
-            }
-        };
-
         // Enviar el mensaje obtenido
-        return await reply(`${jsonResponse.data.message.trim()}`);
+        return await reply(`${response.data.message.trim()}`);
     } catch (error) {
         console.error('Error en la llamada a Gemini:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
