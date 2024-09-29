@@ -1312,13 +1312,7 @@ break
 case 'reg': {
 if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
 if (isGroup) {
-return nyanBot2.sendMessage(m.chat, {
-	location: {
-	degreesLatitude: `0`,
-	degreesLongitude: `0`,
-	name: 'Solo chat privado para registro! ⚠️',
-	address : `INSTRUCCIONES! 📝`,
-	caption: `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
+let caption = `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
 *En ella encontraras un formulario básico de registro, el cual te pedirá crear un usuario, solo necesitaras un correo vigente, crear una contraseña para la página, y un nombre de usuario.*
 *¡una vez creada tu cuenta puedes iniciar sesión en el bot utilizando el comando ${forma1}${prefix}login${forma1} y el correo vinculado a la cuenta que creaste! Mira la ilustración de la primera imagen para basarte de ahí!*
 
@@ -1328,21 +1322,28 @@ return nyanBot2.sendMessage(m.chat, {
 
 _*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO EL REGISTRO, Y SOLO SERA UTILIZADO PARA DARTE DE ALTA EN EL BOT, SOLO ASEGURATE DE CREAR UNA CONTRASEÑA QUE NO UTILICES EN NINGÚN OTRO SITIO!! 🛑*_
 
-¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`,
-	sequenceNumber: '99999',
-	//jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
-	contextInfo: {
-                        externalAdReply: {
-                            showAdAttribution: true,
-                            title: botname,
-                            body: ownername,
-                            previewType: "PHOTO",
-                            thumbnail: fs.readFileSync('./Media/theme/login.jpg'),
-                            sourceUrl: 'https://samu330.com/login'
-                        }
-                    }
-		}
-		}, {quoted: m})
+¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`
+return await nyanBot2.relayMessage(m.chat, 
+{ liveLocationMessage: {
+  degreesLatitude: 1111111,
+  degreesLongitude: 00000,
+  accuracyInMeters: 0,
+degreesClockwiseFromMagneticNorth: 2,
+caption: caption,
+jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
+sequenceNumber: 2,
+timeOffset: 3,
+contextInfo: {
+	externalAdReply: {
+		showAdAttribution: true,
+		title: botname,
+		body: ownername,
+		previewType: "PHOTO",
+		thumbnail: fs.readFileSync('./Media/theme/login.jpg'),
+		sourceUrl: 'https://samu330.com/login'
+	}
+}
+}}, {quoted: m})
 
 	}
     const args = text.split(' '); // Separar los argumentos por espacios
