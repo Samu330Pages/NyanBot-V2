@@ -1644,14 +1644,14 @@ case 'test':
 // En tu caso 'bard':
 case 'bard': {
     // Normalizar el texto que se quiere enviar a la función fetch
-    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+    //const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
     // Crear una instancia de Bard (puedes pasar un cookie si es necesario)
     const bardInstance = new Bard(); // Si no necesitas cookie, puedes dejarlo vacío
 
     try {
         // Llamar a la función fetch
-        const json = await bardInstance.fetch(normalizedText);
+        const json = await bardInstance.fetch(text);
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
