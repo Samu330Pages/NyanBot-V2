@@ -1323,16 +1323,10 @@ let caption = `*Puedes registrarte de 2 maneras! La primera seria desde la pági
 _*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO EL REGISTRO, Y SOLO SERA UTILIZADO PARA DARTE DE ALTA EN EL BOT, SOLO ASEGURATE DE CREAR UNA CONTRASEÑA QUE NO UTILICES EN NINGÚN OTRO SITIO!! 🛑*_
 
 ¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`
-return await nyanBot2.relayMessage(m.chat, 
-{ liveLocationMessage: {
-  degreesLatitude: 1111111,
-  degreesLongitude: 00000,
-  accuracyInMeters: 0,
-degreesClockwiseFromMagneticNorth: 2,
+return await nyanBot2.sendMessage(m.chat, 
+{ image: fs.readFileSync('./Media/theme/reg.jpg'),
 caption: caption,
 jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
-sequenceNumber: 2,
-timeOffset: 3,
 contextInfo: {
 	externalAdReply: {
 		showAdAttribution: true,
@@ -1342,7 +1336,6 @@ contextInfo: {
 		thumbnail: fs.readFileSync('./Media/theme/login.jpg'),
 		sourceUrl: 'https://samu330.com/login'
 	}
-}
 }}, {quoted: m})
 
 	}
