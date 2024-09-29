@@ -1650,6 +1650,7 @@ case 'gemini': {
     const input = `Tu idioma predeterminado es el espanol.\n\n Lo que te piden es lo siguiente:`;
 
     const payload = {
+        model: "gpt-3.5-turbo",
         messages: [{
             role: "system",
             content: "Hi, I am ChatGPTz"
@@ -1657,26 +1658,23 @@ case 'gemini': {
             role: "user",
             content: input + normalizedText
         }],
-        model: "gpt-3.5-turbo",
-        presence_penalty: 0,
-        stream: true,
         temperature: 0.7
     };
 
     try {
         // Hacer la solicitud POST a la API de OpenAI
-        const response = await axios.post('https://openai.lbbai.cc/v1/chat/completions', payload);
-        let data = response.data.trim().split`\n`;
-        data.pop();
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', payload, {
+            headers: {
+                'Authorization': `Bearer YOUR_API_KEY`, // Reemplaza con tu clave de API
+                'Content-Type': 'application/json'
+            }
+        });
 
         // Procesar la respuesta
-        const messages = data.filter(v => v).map(v => v.split`data:`)
-                             .map(x => JSON.parse(x[1].trim()))
-                             .map(v => v.choices[0].delta.content)
-                             .filter(v => v).join('');
-
+        const messages = response.data.choices[0].message.content.trim();
+        
         // Enviar el mensaje obtenido
-        return await reply(`${messages.trim()}`);
+        return await reply(`${messages}`);
     } catch (error) {
         console.error('Error en la llamada a ChatGPT:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
