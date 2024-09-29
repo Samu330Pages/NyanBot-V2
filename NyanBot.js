@@ -1642,8 +1642,6 @@ case 'test':
     break
 
 case 'gemini': {
-    const fetch = require('node-fetch');
-
     // Normalizar el texto que se quiere enviar a la función v2
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
@@ -1658,7 +1656,7 @@ case 'gemini': {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        ask: normalizedText
+                        ask: text
                     })
                 });
 
@@ -1667,7 +1665,8 @@ case 'gemini': {
                 if (data.status !== 200) {
                     reject({
                         creator: '@wts - Devsu',
-                        status: false
+                        status: false,
+                        msg: 'Error en la respuesta del servidor: ' + JSON.stringify(data)
                     });
                 }
 
@@ -1696,7 +1695,7 @@ case 'gemini': {
         return await reply(`${response.data.message.trim()}`);
     } catch (error) {
         console.error('Error en la llamada a Gemini:', error);
-        return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
+        return reply(`*Ocurrió un error al obtener los datos.*\n${error.msg || error.message || error}`);
     }
 }
 break
