@@ -1660,8 +1660,8 @@ case 'gemini': {
         // Enviar el mensaje obtenido
         return await reply(`${json.data.message.trim()}`);
     } catch (error) {
-        console.error(error);
-        return reply(`*Ocurrió un error al obtener los datos.*\n${error}`);
+        console.error('Error en la llamada a Gemini:', error); // Agregar este log
+        return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
 }
 break
