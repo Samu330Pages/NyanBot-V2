@@ -1312,32 +1312,56 @@ break
 case 'reg': {
 if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
 if (isGroup) {
-let caption = `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
-*En ella encontraras un formulario básico de registro, el cual te pedirá crear un usuario, solo necesitaras un correo vigente, crear una contraseña para la página, y un nombre de usuario.*
-*¡una vez creada tu cuenta puedes iniciar sesión en el bot utilizando el comando ${forma1}${prefix}login${forma1} y el correo vinculado a la cuenta que creaste! Mira la ilustración de la primera imagen para basarte de ahí!*
+const cards = [
+        {
+            header: {
+                imageMessage: fs.readFileSync('./Media/theme/login.jpg'),
+                hasMediaAttachment: true,
+            },
+            body: {
+                text: `◦  *El primer método seria acceder a la página oficial, En ella encontraras un formulario básico de registro, el cual te pedirá crear un usuario, solo necesitaras un correo vigente, crear una contraseña para la página, y un nombre de usuario.*\n
+*¡una vez creada tu cuenta puedes iniciar sesión en el bot utilizando el comando ${forma1}${prefix}login${forma1} y el correo vinculado a la cuenta que creaste! Mira la ilustración de la imagen para basarte de ahí!*`,
+            },
+            nativeFlowMessage: {
+                buttons: [{
+                    name: "cta_url",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: `Acceder a la página oficial! 🍟`,
+                        url: `https://samu330.com/login`,
+                        merchant_url: `https://samu330.com/login`
+                    })
+                }]
+            }
+        },
+        {
+            header: {
+                imageMessage: fs.readFileSync('./Media/theme/reg.jpg'),
+                hasMediaAttachment: true,
+            },
+            body: {
+                text: `◦  *¡la segunda manera de registrarte, es a través del chat privado del bot, sigue la ilustración que se muestra en la imagen para tener un registro exitoso! Al completar tu registro en WhatsApp obtendrás 200 puntos de regalo!*\n
+*¡El correo que vayas a ingresar es necesario que esté vigente, no se te pedirá código de verificación, pero si requieres cambiar tu contraseña se te enviara un link de restablecimiento al correo vinculado a tu cuenta!*`,
+            },
+            nativeFlowMessage: {
+                buttons: [{
+                    name: "cta_url",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: `Registro en WhatsApp 🪀`,
+                        url: `https://wa.me/samu330`,
+                        merchant_url: `https://wa.me/samu330`
+                    })
+                }]
+            }
+        }
+    ];
 
-- ¡la segunda manera de registrarte, es a través del chat privado del bot, sigue la ilustración que se muestra en la segunda imagen para tener un registro exitoso! Al completar tu registro en WhatsApp obtendrás 200 puntos de regalo!
-
-¡El correo que vayas a ingresar es necesario que esté vigente, no se te pedirá código de verificación, pero si requieres cambiar tu contraseña se te enviara un link de restablecimiento al correo vinculado a tu cuenta!
-
-_*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO EL REGISTRO, Y SOLO SERA UTILIZADO PARA DARTE DE ALTA EN EL BOT, SOLO ASEGURATE DE CREAR UNA CONTRASEÑA QUE NO UTILICES EN NINGÚN OTRO SITIO!! 🛑*_
-
-¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`
-return await nyanBot2.sendMessage(m.chat, 
-{ image: fs.readFileSync('./Media/theme/reg.jpg'),
-caption: caption,
-jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
-contextInfo: {
-	externalAdReply: {
-		showAdAttribution: true,
-		title: botname,
-		body: ownername,
-		previewType: "PHOTO",
-		thumbnail: fs.readFileSync('./Media/theme/login.jpg'),
-		sourceUrl: 'https://samu330.com/login'
-	}
-}}, {quoted: m})
-
+    return await sendCarousel(m.chat, {}, {
+        header: `*Puedes registrarte de 2 maneras! 📌*\n\n> _*🔵 Sigue las instrucciones detalladas en las imágenes de abajo:*_\n
+> _*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO EL REGISTRO, Y SOLO SERA UTILIZADO PARA DARTE DE ALTA EN EL BOT, SOLO ASEGURATE DE CREAR UNA CONTRASEÑA QUE NO UTILICES EN NINGÚN OTRO SITIO!! 🛑*_\n
+> ¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`,
+        footer: `${botname}`,
+        cards: cards
+    }); 
 	}
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
