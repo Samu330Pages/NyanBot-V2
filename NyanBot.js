@@ -2036,7 +2036,7 @@ case 'ytmp3': case 'yta': {
 	    const audioName = response.data.filename;
 
             // Enviar el audio
-            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer('https://ibb.co/GvfBMdF'))}, {quoted: m});
+            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer('https://ibb.co/GvfBMdF')}, {quoted: m});
 	    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
