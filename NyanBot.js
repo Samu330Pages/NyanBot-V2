@@ -38,7 +38,7 @@ const fg = require('api-dylux')
 const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
-const scp2 = require('./lib/scraper2') 
+const scp = require('./lib/scraper') 
 const { Rapi } = require('./lib/rapi.js')
 const { getOrganicData } = require('./lib/gg.js')
 /*const pkg = require('imgur')
@@ -1815,60 +1815,57 @@ ${lyric.lyrics}\n`,
 }
 break
 
-case 'yts': case 'youtubesearch': {
+case 'yts':
+case 'youtubesearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    
+
     try {
-        // Realizar la búsqueda en YouTube
         const results = await yts(text);
-
-        // Limitar a los primeros 10 resultados
-        const limitedResults = results.all.slice(0, 10);
-
-        // Crear un array para las cards del carrusel
+        const videoResults = results.all.filter(video => video.type === 'video');
+        const limitedResults = videoResults.slice(0, 10);
         let contents = [];
-        // Mapeo de los resultados para crear las cards
         limitedResults.forEach((video) => {
             let content = `◦  *Nombre*: ${video.title || 'Desconocido'}\n`;
+            content += `◦  *Descripción*: ${video.description || 'Desconocido'}\n`;
             content += `◦  *Duración*: ${video.timestamp || 'Desconocido'}\n`;
             content += `◦  *Vistas*: ${formatNumber(video.views) || 'Desconocido'}\n`;
-            content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`; // Si no hay fecha, mostrar 'Desconocido'
+            content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`;
+	    content += `◦  *Autor*: ${video.author.name || 'Desconocido'}`;
 
             contents.push({
                 header: {
-                    imageMessage: video.thumbnail, // Usar la miniatura del video
+                    imageMessage: video.thumbnail,
                     hasMediaAttachment: true,
                 },
                 body: {
-                    text: content // Contenido de la tarjeta
+                    text: content
                 },
                 nativeFlowMessage: {
                     buttons: [{
                         name: "cta_copy",
-			    buttonParamsJson: JSON.stringify({
-				    display_text: `Descargar Audio! 🎧`,
-				    copy_code: `${prefix}yta ${video.url}`
-				})
-		    }, {
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar Audio! 🎧`,
+                            copy_code: `${prefix}yta ${video.url}`
+                        })
+                    }, {
                         name: "cta_copy",
-			    buttonParamsJson: JSON.stringify({
-				    display_text: `Descargar video! 📽️`,
-				    copy_code: `${prefix}ytv ${video.url}`
-				})
-		    }]
-		},
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar video! 📽️`,
+                            copy_code: `${prefix}ytv ${video.url}`
+                        })
+                    }]
+                },
             });
         });
 
-        // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados y toca el botón para copiar, y copiaras el comando, solo envialo, y listo! 😁_`,
-		footer: `${botname}`,
-		cards: contents // Pasar todas las cards
-			});
+            header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados y toca el botón para copiar, y copiaras el comando, solo envialo, y listo! 😁_`,
+            footer: `${botname}`,
+            cards: contents
+        });
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
@@ -1936,10 +1933,7 @@ case 'ytmp3': case 'yta': {
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`*Esperé un momento, se está procesando su solicitud...*\n
-${forma1}CONSEJO:${forma1}\nEl archivo de audio se descarga en la ruta de tu dispositivo:
-_*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*_\nY automáticamente aparecerá en tu reproductor, en dado caso que el audio no aparezca, solamente busca dentro de ese directorio un archivo llamado:
-*.nomedia* y elimínalo, ya qué este archivo no permite la visualización de archivos en el dispositivo! 😙`);
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     const axios = require('axios'); // Asegúrate de tener axios instalado
     const apiUrl = 'https://api.cobalt.tools/';
@@ -1968,8 +1962,8 @@ _*/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Audio/*
 	    const audioName = response.data.filename;
 
             // Enviar el audio
-            //await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fs.readFileSync("./Media/theme/NyanBot.jpg")}, {quoted: m});
-	    await nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
+            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fs.readFileSync("./Media/theme/play.jpg")}, {quoted: m});
+	    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
             reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
@@ -2050,32 +2044,6 @@ case 'facebook': case 'fb': {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
     }
-}
-break
-
-case 'insta2': {
-	  if (!text) return reply(`You need to give the URL of Any Instagram video, post, reel, image`)
-  let res
-  try {
-    res = await fetch(`https://www.guruapi.tech/api/igdlv1?url=${text}`)
-  } catch (error) {
-    return reply(`An error occurred: ${error.message}`)
-  }
-  let api_response = await res.json()
-  if (!api_response || !api_response.data) {
-    return reply(`No video or image found or Invalid response from API.`)
-  }
-  const mediaArray = api_response.data;
-  for (const mediaData of mediaArray) {
-    const mediaType = mediaData.type
-    const mediaURL = mediaData.url_download
-    let cap = `HERE IS THE ${mediaType.toUpperCase()}`
-    if (mediaType === 'video') {
-      nyanBot2.sendMessage(m.chat, {video: {url: mediaURL}, caption: cap}, {quoted: m})
-    } else if (mediaType === 'image') {
-      nyanBot2.sendMessage(m.chat, { image: {url: mediaURL}, caption: cap}, {quoted: m})
-    }
-  }
 }
 break
 
