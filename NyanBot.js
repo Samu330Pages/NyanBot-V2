@@ -164,10 +164,10 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: 'CORREO' },
+        { command: 'login', description: '_*CORREO*_' },
         { command: 'reg', description: '' },
-        { command: 'reset', description: 'CORREO' },
-        { command: 'logout', description: 'CORREO' }
+        { command: 'reset', description: '_*CORREO*_' },
+        { command: 'logout', description: '_*CORREO*_' }
     ],
     "🔍 Búsqueda": [
 	{ command: 'google', description: '' },
@@ -181,17 +181,17 @@ const categories = {
     ],
     "📥 Descargas": [
         { command: 'play', description: '' },
-        { command: 'yta', description: 'URL' },
-        { command: 'ytmp3', description: 'URL' },
-        { command: 'ytv', description: 'URL' },
-        { command: 'ytmp4', description: 'URL' },
-        { command: 'tiktok', description: 'URL' },
-        { command: 'tt', description: 'URL' },
-        { command: 'facebook', description: 'URL' },
-        { command: 'fb', description: 'URL' },
-        { command: 'instagram', description: 'URL' },
-        { command: 'ig', description: 'URL' },
-        { command: 'mediafire', description: 'URL' }
+        { command: 'yta', description: '_*URL*_' },
+        { command: 'ytmp3', description: '_*URL*_' },
+        { command: 'ytv', description: '_*URL*_' },
+        { command: 'ytmp4', description: '_*URL*_' },
+        { command: 'tiktok', description: '_*URL*_' },
+        { command: 'tt', description: '*URL*' },
+        { command: 'facebook', description: '_*URL*_' },
+        { command: 'fb', description: '*URL*' },
+        { command: 'instagram', description: '_*URL*_' },
+        { command: 'ig', description: '*URL*' },
+        { command: 'mediafire', description: '_*URL*_' }
     ],
     "🎭 Grupos": [
         { command: 'bienvenida', description: '' }
@@ -212,9 +212,9 @@ const categories = {
         { command: 'addsticker', description: '' },
         { command: 'liststicker', description: '' },
         { command: 'delsticker', description: '' },
-        { command: '<=', description: '*EVAL*' },
-        { command: '=>', description: '*EVAL*' },
-        { command: '$', description: '*EXECUTE*' }
+        { command: '<=', description: '_*EVAL*_' },
+        { command: '=>', description: '_*EVAL*_' },
+        { command: '$', description: '_*EXECUTE*_' }
     ]
 };
 //data
@@ -1171,7 +1171,7 @@ case 'menu': {
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmdObj => {
-            menuMessage += `- ${forma1}${cmdObj.command}${forma1} _*${cmdObj.description}*_\n`;
+            menuMessage += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
         });
         menuMessage += '\n';
     }
@@ -1879,7 +1879,7 @@ break
 
 case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
     if (!text || isUrl(text)) {
-        return reply(`*Por favor, proporciona el nombre de la playlist. Ejemplo:*\n\n${prefix + command} [nombre de la playlist]`);
+        return reply(`*Por favor, solo proporciona el nombre de la playlist, no incluyas links. Ejemplo:*\n\n${prefix + command} _*nombre de la playlist*_`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
@@ -2036,7 +2036,7 @@ case 'ytmp3': case 'yta': {
 	    const audioName = response.data.filename;
 
             // Enviar el audio
-            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fs.readFileSync("./Media/theme/play.jpg")}, {quoted: m});
+            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer('https://ibb.co/GvfBMdF'))}, {quoted: m});
 	    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
 		
         } else if (response.data.status === 'error') {
