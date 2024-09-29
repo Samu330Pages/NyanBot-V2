@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
-const { fetchBard } = require('./lib/bard.js')
+const Bard = require('./lib/bard.js');
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const archiver = require('archiver');
@@ -1641,17 +1641,21 @@ case 'test':
     });
     break
 
+// En tu caso 'bard':
 case 'bard': {
     // Normalizar el texto que se quiere enviar a la función fetch
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
+    // Crear una instancia de Bard (puedes pasar un cookie si es necesario)
+    const bardInstance = new Bard(); // Si no necesitas cookie, puedes dejarlo vacío
+
     try {
         // Llamar a la función fetch
-        const json = await fetchBard(normalizedText);
+        const json = await bardInstance.fetch(normalizedText);
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
-            return reply(`*${emoji} Imposible obtener metadatos.*`);
+            return reply(`*Imposible obtener metadatos.*`);
         }
 
         // Enviar el mensaje obtenido
