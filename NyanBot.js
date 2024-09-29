@@ -1642,60 +1642,44 @@ case 'test':
     break
 
 case 'gemini': {
-    // Normalizar el texto que se quiere enviar a la función v2
+    const axios = require('axios');
+
+    // Normalizar el texto que se quiere enviar a la función ask
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
+    const input = `Tu idioma predeterminado es el espanol.\n\n Lo que te piden es lo siguiente:`;
+
+    const payload = {
+        messages: [{
+            role: "system",
+            content: "Hi, I am ChatGPTz"
+        }, {
+            role: "user",
+            content: input + normalizedText
+        }],
+        model: "gpt-3.5-turbo",
+        presence_penalty: 0,
+        stream: true,
+        temperature: 0.7
+    };
+
     try {
-        // Implementación directa del método v2 de la clase Gemini
-        const response = await new Promise(async (resolve, reject) => {
-            try {
-                const response = await fetch('https://bard.rizzy.eu.org/backend/conversation/gemini', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ask: text
-                    })
-                });
+        // Hacer la solicitud POST a la API de OpenAI
+        const response = await axios.post('https://openai.lbbai.cc/v1/chat/completions', payload);
+        let data = response.data.trim().split`\n`;
+        data.pop();
 
-                const data = await response.json();
-
-                if (data.status !== 200) {
-                    reject({
-                        creator: '@wts - Devsu',
-                        status: false,
-                        msg: 'Error en la respuesta del servidor: ' + JSON.stringify(data)
-                    });
-                }
-
-                resolve({
-                    creator: '@wts - Devsu',
-                    status: true,
-                    data: {
-                        message: data.content
-                    }
-                });
-            } catch (e) {
-                reject({
-                    creator: '@wts - Devsu',
-                    status: false,
-                    msg: e.toString()
-                });
-            }
-        });
-
-        // Verificar si la respuesta es exitosa
-        if (!response.status) {
-            return reply(`*Imposible obtener metadatos.*`);
-        }
+        // Procesar la respuesta
+        const messages = data.filter(v => v).map(v => v.split`data:`)
+                             .map(x => JSON.parse(x[1].trim()))
+                             .map(v => v.choices[0].delta.content)
+                             .filter(v => v).join('');
 
         // Enviar el mensaje obtenido
-        return await reply(`${response.data.message.trim()}`);
+        return await reply(`${messages.trim()}`);
     } catch (error) {
-        console.error('Error en la llamada a Gemini:', error);
-        return reply(`*Ocurrió un error al obtener los datos.*\n${error.msg || error.message || error}`);
+        console.error('Error en la llamada a ChatGPT:', error);
+        return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
 }
 break
