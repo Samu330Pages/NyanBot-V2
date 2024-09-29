@@ -1644,7 +1644,7 @@ case 'test':
 // En tu función de manejo de comandos, cuando necesites usar fetch
 case 'bard': {
     // Normalizar el texto que se quiere enviar a la función fetch
-    const normalizedText = core.text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
     try {
         // Llamar a la función fetch
