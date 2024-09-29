@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
-const { geminiFetch } = require('./lib/gemini.js')// Ajusta la ruta según tu estructura de archivos
+const { geminiFetch } = require('./lib/gemini.js'); // Asegúrate de que la ruta sea correcta
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const archiver = require('archiver');
@@ -1651,7 +1651,7 @@ case 'gemini': {
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
-            return reply(`*${emoji} Imposible obtener metadatos.*`);
+            return reply(`*Imposible obtener metadatos.*`);
         }
 
         // Enviar el mensaje obtenido
