@@ -1318,7 +1318,7 @@ return nyanBot2.sendMessage(m.chat, {
 	degreesLongitude: `0`,
 	name: 'Solo chat privado para registro! ⚠️',
 	address : `INSTRUCCIONES! 📝`,
-	captioN: `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
+	caption: `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
 *En ella encontraras un formulario básico de registro, el cual te pedirá crear un usuario, solo necesitaras un correo vigente, crear una contraseña para la página, y un nombre de usuario.*
 *¡una vez creada tu cuenta puedes iniciar sesión en el bot utilizando el comando ${forma1}${prefix}login${forma1} y el correo vinculado a la cuenta que creaste! Mira la ilustración de la primera imagen para basarte de ahí!*
 
