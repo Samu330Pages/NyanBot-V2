@@ -16,7 +16,7 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
-const Gemini = require('./lib/gemini.js');
+const { geminiFetch } = require('./lib/gemini.js')// Ajusta la ruta según tu estructura de archivos
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
 const archiver = require('archiver');
@@ -1645,22 +1645,19 @@ case 'gemini': {
     // Normalizar el texto que se quiere enviar a la función fetch
     const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
-    // Crear una instancia de Gemini
-    const geminiInstance = new Gemini();
-
     try {
-        // Llamar a la función v2
-        const json = await geminiInstance.v1(normalizedText);
+        // Llamar a la función geminiFetch
+        const json = await geminiFetch(normalizedText);
         
         // Verificar si la respuesta es exitosa
         if (!json.status) {
-            return reply(`*Imposible obtener metadatos.*`);
+            return reply(`*${emoji} Imposible obtener metadatos.*`);
         }
 
         // Enviar el mensaje obtenido
         return await reply(`${json.data.message.trim()}`);
     } catch (error) {
-        console.error('Error en la llamada a Gemini:', error); // Agregar este log
+        console.error('Error en la llamada a geminiFetch:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
 }
