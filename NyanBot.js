@@ -2020,10 +2020,9 @@ break
 case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(facebook\.com|fb\.watch)\/.+$/.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....\n\n*Asegúrate de que no se encuentren espacios entre el prefijo y el comando!* 🟠`);
+    if (args.length < 1 || !/^(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|fb\.watch)\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....\n\n*Asegúrate de que no se encuentren espacios entre el prefijo y el comando!* 🟠`);
 
-    let fbId;
-    fbId = reactionLoad(m.chat, m.key);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     try {
         let res = await fbdl(text);
         let result = res.data;
@@ -2045,12 +2044,38 @@ case 'facebook': case 'fb': {
             mimetype: 'video/mp4',
 	    jpegThumbnail: await fetchBuffer(data.thumbnail)
         }, { quoted: m });
-        reactionOk(m.chat, m.key, fbId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         db.data.users[sender].limit -= 20;
     } catch {
-        reactionError(m.chat, m.key, fbId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
     }
+}
+break
+
+case 'insta2': {
+	  if (!text) return reply(`You need to give the URL of Any Instagram video, post, reel, image`)
+  let res
+  try {
+    res = await fetch(`https://www.guruapi.tech/api/igdlv1?url=${text}`)
+  } catch (error) {
+    return reply(`An error occurred: ${error.message}`)
+  }
+  let api_response = await res.json()
+  if (!api_response || !api_response.data) {
+    return reply(`No video or image found or Invalid response from API.`)
+  }
+  const mediaArray = api_response.data;
+  for (const mediaData of mediaArray) {
+    const mediaType = mediaData.type
+    const mediaURL = mediaData.url_download
+    let cap = `HERE IS THE ${mediaType.toUpperCase()}`
+    if (mediaType === 'video') {
+      nyanBot2.sendMessage(m.chat, {video: {url: mediaURL}, caption: cap}, {quoted: m})
+    } else if (mediaType === 'image') {
+      nyanBot2.sendMessage(m.chat, { image: {url: mediaURL}, caption: cap}, {quoted: m})
+    }
+  }
 }
 break
 
