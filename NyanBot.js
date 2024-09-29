@@ -1769,9 +1769,8 @@ case 'yts': case 'youtubesearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
-    let ytslId;
-    ytslId = reactionLoad(m.chat, m.key);
-
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    
     try {
         // Realizar la búsqueda en YouTube
         const results = await yts(text);
@@ -1798,31 +1797,32 @@ case 'yts': case 'youtubesearch': {
                 },
                 nativeFlowMessage: {
                     buttons: [{
-                        name: "quick_reply",
+                        name: "quick_copy",
 			    buttonParamsJson: JSON.stringify({
 				    display_text: `Descargar Audio! 🎧`,
-				    id: `${prefix}yta ${video.url}`
+				    copy_code: `${prefix}yta ${video.url}`
 				})
-		    }, { name: "quick_reply",
+		    }, {
+                        name: "quick_copy",
 			    buttonParamsJson: JSON.stringify({
-				    display_text: `Descargar Video! 💿`,
-				    id: `${prefix}ytv ${video.url}`
+				    display_text: `Descargar video! 📽️`,
+				    copy_code: `${prefix}ytv ${video.url}`
 				})
 		    }]
-                },
+		},
             });
         });
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Desliza entre los resultados y descarga el archivo seleccionando un botón!_`,
+		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Para descargar, solo desliza sobre los resultados y toca el botón para copiar, y copiaras el comando, solo envialo, y listo! 😁_`,
 		footer: `${botname}`,
 		cards: contents // Pasar todas las cards
 			});
 
-        reactionOk(m.chat, m.key, ytslId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
-        reactionError(m.chat, m.key, ytslId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de YouTube:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
     }
