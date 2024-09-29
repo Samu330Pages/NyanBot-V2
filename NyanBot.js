@@ -1311,7 +1311,40 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
 break
 case 'reg': {
 if (db.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
-if (isGroup) return reply('*Para continuar con tu registro, por favor ve a chat privado con el bot, ya que se te pedirá la creación de una contraseña privada!*')
+if (isGroup) {
+nyanBot2.sendMessage(m.chat, {
+	location: {
+	degreesLatitude: `0`,
+	degreesLongitude: `0`,
+	name: 'Solo chat privado para registro! ⚠️',
+	address : `INSTRUCCIONES! 📝`,
+	captioN: `*Puedes registrarte de 2 maneras! La primera seria desde la página oficial que la encuentras tocando la imagen superior.*
+*En ella encontraras un formulario básico de registro, el cual te pedirá crear un usuario, solo necesitaras un correo vigente, crear una contraseña para la página, y un nombre de usuario.*
+*¡una vez creada tu cuenta puedes iniciar sesión en el bot utilizando el comando ${forma1}${prefix}login${forma1} y el correo vinculado a la cuenta que creaste! Mira la ilustración de la primera imagen para basarte de ahí!*
+
+- ¡la segunda manera de registrarte, es a través del chat privado del bot, sigue la ilustración que se muestra en la segunda imagen para tener un registro exitoso! Al completar tu registro en WhatsApp obtendrás 200 puntos de regalo!
+
+¡El correo que vayas a ingresar es necesario que esté vigente, no se te pedirá código de verificación, pero si requieres cambiar tu contraseña se te enviara un link de restablecimiento al correo vinculado a tu cuenta!
+
+_*¡LA INFORMACIÓN QUE PROPORCIONARAS SE ELIMINA AUTOMÁTICAMENTE CONCLUYENDO EL REGISTRO, Y SOLO SERA UTILIZADO PARA DARTE DE ALTA EN EL BOT, SOLO ASEGURATE DE CREAR UNA CONTRASEÑA QUE NO UTILICES EN NINGÚN OTRO SITIO!! 🛑*_
+
+¡RECUERDA QUE SOLO PUEDES REGISTRARTE EN EL CHAT PRIVADO DEL BOT!! ⚠️`,
+	sequenceNumber: '99999',
+	jpegThumbnail: fs.readFileSync('./Media/theme/reg.jpg'),
+	contextInfo: {
+                        externalAdReply: {
+                            showAdAttribution: true,
+                            title: botname,
+                            body: ownername,
+                            previewType: "PHOTO",
+                            thumbnail: fs.readFileSync('./Media/theme/login.jpg'),
+                            sourceUrl: 'https://samu330.com/login'
+                        }
+                    }
+		}
+		}, {quoted: m})
+
+	}
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const password = args[1]; // Contraseña
@@ -1564,10 +1597,9 @@ case 'test':
 			title: 'Select 1',
 			highlight_label: 'test 📂',
                         rows: [{
-				text: '🪅',
 				title: 'Test',
 				description: 'test 1',
-                                rowId: '.menu'
+                                id: '.menu'
                             }]
 		}, {
 			title: 'Select 2',
@@ -1575,7 +1607,7 @@ case 'test':
                         rows: [{
                                 title: 'Test',
 				description: 'test 2',
-                                rowId: '.test'
+                                id: '.test'
                             }]
                         }]
                     })
