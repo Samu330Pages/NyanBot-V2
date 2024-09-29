@@ -1797,13 +1797,13 @@ case 'yts': case 'youtubesearch': {
                 },
                 nativeFlowMessage: {
                     buttons: [{
-                        name: "quick_copy",
+                        name: "cta_copy",
 			    buttonParamsJson: JSON.stringify({
 				    display_text: `Descargar Audio! 🎧`,
 				    copy_code: `${prefix}yta ${video.url}`
 				})
 		    }, {
-                        name: "quick_copy",
+                        name: "cta_copy",
 			    buttonParamsJson: JSON.stringify({
 				    display_text: `Descargar video! 📽️`,
 				    copy_code: `${prefix}ytv ${video.url}`
@@ -1815,7 +1815,7 @@ case 'yts': case 'youtubesearch': {
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n> _Para descargar, solo desliza sobre los resultados y toca el botón para copiar, y copiaras el comando, solo envialo, y listo! 😁_`,
+		header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados y toca el botón para copiar, y copiaras el comando, solo envialo, y listo! 😁_`,
 		footer: `${botname}`,
 		cards: contents // Pasar todas las cards
 			});
