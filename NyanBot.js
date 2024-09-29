@@ -164,14 +164,16 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: '' },
+        { command: 'login', description: 'CORREO' },
         { command: 'reg', description: '' },
-        { command: 'reset', description: '' },
-        { command: 'logout', description: '' }
+        { command: 'reset', description: 'CORREO' },
+        { command: 'logout', description: 'CORREO' }
     ],
     "🔍 Búsqueda": [
 	{ command: 'google', description: '' },
 	{ command: 'imagen', description: '' },
+	{ command: 'playlist', description: '' },
+	{ command: 'ytplaylist', description: '' },
 	{ command: 'youtubesearch', description: '' },
 	{ command: 'yts', description: '' },
         { command: 'letra', description: '' },
@@ -179,17 +181,17 @@ const categories = {
     ],
     "📥 Descargas": [
         { command: 'play', description: '' },
-        { command: 'yta', description: '' },
-        { command: 'ytmp3', description: '' },
-        { command: 'ytv', description: '' },
-        { command: 'ytmp4', description: '' },
-        { command: 'tiktok', description: '' },
-        { command: 'tt', description: '' },
-        { command: 'facebook', description: '' },
-        { command: 'fb', description: '' },
-        { command: 'instagram', description: '' },
-        { command: 'ig', description: '' },
-        { command: 'mediafire', description: '' }
+        { command: 'yta', description: 'URL' },
+        { command: 'ytmp3', description: 'URL' },
+        { command: 'ytv', description: 'URL' },
+        { command: 'ytmp4', description: 'URL' },
+        { command: 'tiktok', description: 'URL' },
+        { command: 'tt', description: 'URL' },
+        { command: 'facebook', description: 'URL' },
+        { command: 'fb', description: 'URL' },
+        { command: 'instagram', description: 'URL' },
+        { command: 'ig', description: 'URL' },
+        { command: 'mediafire', description: 'URL' }
     ],
     "🎭 Grupos": [
         { command: 'bienvenida', description: '' }
@@ -1169,7 +1171,7 @@ case 'menu': {
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmdObj => {
-            menuMessage += `- \`\`\`${cmdObj.command}\`\`\` ${cmdObj.description}\n`;
+            menuMessage += `- ${forma1}${cmdObj.command}${forma1} _*${cmdObj.description}*_\n`;
         });
         menuMessage += '\n';
     }
@@ -1828,11 +1830,10 @@ case 'youtubesearch': {
         const limitedResults = videoResults.slice(0, 10);
         let contents = [];
         limitedResults.forEach((video) => {
-            let content = `◦  *Nombre*: ${video.title || 'Desconocido'}\n`;
-            content += `◦  *Descripción*: ${video.description || 'Desconocido'}\n`;
+            let content = `◦  *Titulo*: ${video.title || 'Desconocido'}\n`;
             content += `◦  *Duración*: ${video.timestamp || 'Desconocido'}\n`;
             content += `◦  *Vistas*: ${formatNumber(video.views) || 'Desconocido'}\n`;
-            content += `◦  *Publicado*: ${video.ago || 'Desconocido'}`;
+            content += `◦  *Publicado*: ${video.ago || 'Desconocido'}\n`;
 	    content += `◦  *Autor*: ${video.author.name || 'Desconocido'}`;
 
             contents.push({
@@ -1871,6 +1872,79 @@ case 'youtubesearch': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de YouTube:', error);
+        return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
+    }
+}
+break
+
+case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
+    if (!text || isUrl(text)) {
+        return reply(`*Por favor, proporciona el nombre de la playlist. Ejemplo:*\n\n${prefix + command} [nombre de la playlist]`);
+    }
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+
+    try {
+
+        const results = await yts(`playlist ${text}`);
+        const playlistResults = results.all.filter(item => item.type === 'list');
+
+        if (playlistResults.length === 0) {
+            return reply(`No se encontraron playlists para: ${text}`);
+        }
+        const playlist = playlistResults[0];
+        const listId = playlist.listId;
+        const listDetails = await yts({ listId });
+        let contents = [];
+        const maxVideosToShow = 10;
+        const videoCount = listDetails.size;
+
+        listDetails.videos.slice(0, maxVideosToShow).forEach((video) => {
+            let content = `◦  *Título*: ${video.title || 'Desconocido'}\n`;
+            content += `◦  *Autor*: ${video.author.name || 'Desconocido'}\n`;
+            content += `◦  *Duración*: ${video.duration || 'Desconocido'}`;
+
+            contents.push({
+                header: {
+                    imageMessage: video.thumbnail,
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content
+                },
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: "cta_copy",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar Audio! 🎧`,
+                            copy_code: `${prefix}yta https://youtube.com/watch?v=${video.videoId}`
+                        })
+                    }, {
+                        name: "cta_copy",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar Video! 📽️`,
+                            copy_code: `${prefix}ytv https://youtube.com/watch?v=${video.videoId}`
+                        })
+                    }]
+                },
+            });
+        });
+
+        const headerMessage = `Se encontraron ${videoCount} videos en la playlist "*${listDetails.title}*".\n` +
+                              `*Vistas*: ${listDetails.views || 'Desconocido'}\n` +
+                              `*Fecha*: ${listDetails.date || 'Desconocido'}\n` +
+                              `⚠️ *IMPORTANTE!!* ￬￬\n` +
+                              `_Se mostrarán solo los primeros ${maxVideosToShow} videos._\n` +
+                              `_Para descargar, solo desliza sobre los resultados y toca el botón para copiar el comando, luego envíalo y listo! 😁_`;
+        await sendCarousel(m.chat, {}, {
+            header: headerMessage,
+            footer: `${botname}`,
+            cards: contents
+        });
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error en la búsqueda de playlists de YouTube:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
     }
 }
