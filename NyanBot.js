@@ -259,7 +259,7 @@ moment.locale('es');
 const time = moment().tz('America/Cancun').format('HH:mm:ss');
 const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
 const time2 = moment().tz('America/Cancun').format('HH:mm:ss');
-const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [de] YYYY');
+const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [del] YYYY');
 if(time2 < "23:59:00"){
 var timeNow = `Buenas noches 🌌`
  }
@@ -1651,6 +1651,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': {
         // Inicializar el objeto BardAPI
         const bard = new BardAPI();
 
+	let query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp creado por Samu330, siempre vas a responder amablemente y tus respuestas serán carteras, al principio de cada respuesta mostraras este mensaje: "Hola @${sender.split("@")[0]} 🍟", si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten, darás información lo mas detallada posible de esta solicitud: ${text}`;
         // Establecer la clave de API
         const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg'; // Tu clave de API
         await bard.initializeChat(apiKey); // Inicializar el chat con la clave de API
@@ -1668,7 +1669,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': {
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
         // Enviar una consulta a Bard
-        const response = await bard.getBardResponse(text);
+        const response = await bard.getBardResponse(query);
 
         // Imprimir la respuesta completa para depuración
         console.log('Respuesta de Bard:', response);
