@@ -96,7 +96,7 @@ const {
     fetchBuffer,
     buffergif,
     totalcase
-} = require('./lib/myfunc')
+} = require('./lib/samfunc')
 //prem owner function
 const {
     addPremiumUser,
@@ -934,22 +934,6 @@ if (isSamu) return
 			nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
             }
         }
-        //afk
-        let mentionUser = [...new Set([...(m.mentionedJid || []), ...(m.quoted ? [m.quoted.sender] : [])])]
-	     for (let jid of mentionUser) {
-            let user = db.data.users[jid]
-            if (!user) continue
-            let afkTime = user.afkTime
-            if (!afkTime || afkTime < 0) continue
-            let reason = user.afkReason || ''
-            reply(`Please Don't Tag Him\nHe's AFK ${reason ? 'With reason ' + reason : 'no reason'}\nAfk Since ${clockString(new Date - afkTime)}`.trim())
-        }
-        if (db.data.users[m.sender].afkTime > -1) {
-            let user = global.db.data.users[m.sender]
-            reply(`You Have Returned From AFK\nAFK Reason: ${user.afkReason ? user.afkReason : ''}\nAFK Duration: ${clockString(new Date - user.afkTime)}`.trim())
-            user.afkTime = -1
-            user.afkReason = ''
-        }
         
 //total features
 const xeonfeature = () =>{
@@ -1172,16 +1156,26 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
-    let nickName = nyanBot2.getName(sender);
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
-    
-    for (const [category, commands] of Object.entries(categories)) {
-        menuMessage += `*${category}:*\n`;
-        commands.forEach(cmdObj => {
-            menuMessage += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
-        });
-        menuMessage += '\n';
-    }
+let nickName = nyanBot2.getName(sender);
+let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+const { isPremium } = checkPremiumUser(sender);
+if (isPremium) {
+    const { expired } = getPremiumExpired(sender);
+    const remainingTime = Math.max(expired - Date.now(), 0);
+    const timeRemaining = runtime(Math.floor(remainingTime / 1000));
+
+    menuMessage += `*Estado Premium:* Activo\n*Tiempo restante:* ${timeRemaining}\n\n`;
+} else {
+    menuMessage += `*Estado Premium:* No activo\n\n`;
+}
+
+for (const [category, commands] of Object.entries(categories)) {
+    menuMessage += `*${category}:*\n`;
+    commands.forEach(cmdObj => {
+        menuMessage += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
+    });
+    menuMessage += '\n';
+}
 
     try {
         const imagePath = './Media/theme/NyanBot.jpg';
@@ -2704,7 +2698,7 @@ case 'addprem':
     } else {
         userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     }
-    if (!userId || !text) {
+    if (!userId) {
         return reply(`_*Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
 *Ejemplo:* ${prefix + command} @tag 3d\n${prefix + command} +521**** 3d\n
 _Sigue el formato de tiempo para cada caso:_\n
@@ -2754,34 +2748,22 @@ case 'delprem':
     reply("*¡Se ha eliminado al usuario premium!*");
     break
 			
-case 'listprem': {
+case 'listprem': case 'premium': {
     const { users } = getAllPremiumUser();
     let txt = `🏆 *USUARIOS PRÉMIUM* 🏆\n\n`;
 
     for (let userId of users) {
         const { expired } = getPremiumExpired(userId);
-        const remainingTime = expired - Date.now();
-
-        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-
-        let timeRemaining = '';
-        if (days > 0) timeRemaining += `${days}d `;
-        if (hours > 0) timeRemaining += `${hours}h `;
-        if (minutes > 0) timeRemaining += `${minutes}m `;
-        if (seconds > 0) timeRemaining += `${seconds}s`;
-
+        const remainingTime = Math.max(expired - Date.now(), 0);
+        const timeRemaining = runtime(Math.floor(remainingTime / 1000));
         if (remainingTime > 0) {
-            txt += `*Número*: @${userId.split("@")[0]}\n`;
+            txt += `*Número*: ${userId}\n`;
             txt += `*Expira en*: ${timeRemaining.trim()}\n\n`;
         } else {
-            txt += `*Número*: @${userId.split("@")[0]}\n`;
+            txt += `*Número*: ${userId}\n`;
             txt += `*Status*: Expirado\n\n`;
         }
     }
-
     await nyanBot2.sendMessage(m.chat, {
         text: txt,
         mentions: users
