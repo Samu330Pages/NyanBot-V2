@@ -106,7 +106,7 @@ const {
     checkPremiumUser,
     getAllPremiumUser,
     deletePremiumUser
-} = require('./lib/premiumData')
+} = require('./lib/premiumD')
 
 const forma1 = '`'
 
@@ -2741,13 +2741,11 @@ case 'delprem':
 *Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
     }
 
-    // Verificar si el usuario es premium
     const { isPremium: isUserPremium } = checkPremiumUser(userToDeleteId);
     if (!isUserPremium) {
         return reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
     }
 
-    // Llamar a la función para eliminar al usuario premium
     const deleteResponse = deletePremiumUser(userToDeleteId);
     if (deleteResponse.error) {
         return reply(deleteResponse.error);
@@ -2755,6 +2753,7 @@ case 'delprem':
 
     reply("*¡Se ha eliminado al usuario premium!*");
     break
+			
 case 'listprem': case 'premium': {
     const data = require('./src/data/role/premium.json');
     let txt = `🏆 *USUARIOS PRÉMIUM* 🏆\n\n`;
