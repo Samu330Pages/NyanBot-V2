@@ -1642,7 +1642,7 @@ case 'test':
     break
 
 case 'bard': {
-    const { BardAPI, HarmCategory, HarmBlockThreshold } = require('bard-api-node');
+    const { BardAPI } = require('bard-api-node');
 
     try {
         // Inicializar el objeto BardAPI
@@ -1660,28 +1660,6 @@ case 'bard': {
             maxOutputTokens: 1024, // Máximo de tokens
         };
         bard.setResponseGenerationConfig(generationConfig);
-
-        // Configurar ajustes de seguridad para permitir contenido sexual
-        const safetySettings = [
-            {
-                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
-            },
-            {
-                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
-            },
-            // Puedes agregar más configuraciones de seguridad si es necesario
-        ];
-        bard.setSafetySettings(safetySettings);
 
         // Normalizar el texto que se quiere enviar
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
