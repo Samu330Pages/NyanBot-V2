@@ -2636,15 +2636,22 @@ break
 
 case 'addprem':
     if (!isSamu) return reply(mess.bot);
+    
     let userId;
+    let timePremium;
+
     if (m.mentionedJid.length !== 0) {
         userId = m.mentionedJid[0];
+        timePremium = args[1];
     } else if (m.quoted) {
         userId = `${m.quoted.sender}`;
+        timePremium = args[0];
     } else {
         userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+        timePremium = args[1];
     }
-    if (!userId) {
+
+    if (!userId || !timePremium) {
         return reply(`_*Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
 *Ejemplo:* ${prefix + command} @tag 3d\n${prefix + command} +521**** 3d\n
 _Sigue el formato de tiempo para cada caso:_\n
@@ -2654,13 +2661,12 @@ _Sigue el formato de tiempo para cada caso:_\n
 - Días: *#d*`);
     }
 
-    // Verificar si el usuario ya es premium
     const { isPremium } = checkPremiumUser(userId);
     if (isPremium) {
         return reply("*El usuario ya es premium y no se puede añadir nuevamente.*");
     }
 
-    addPremiumUser(userId, args[1]);
+    addPremiumUser(userId, timePremium);
     reply("*Se ha añadido al usuario premium!*");
     break
 
