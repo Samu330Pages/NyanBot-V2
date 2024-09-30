@@ -105,7 +105,7 @@ const {
     expiredPremiumCheck,
     checkPremiumUser,
     getAllPremiumUser,
-} = require('./lib/premiun')
+} = require('./lib/premium')
 
 const forma1 = '`'
 
