@@ -95,8 +95,9 @@ const {
     pickRandom,
     fetchBuffer,
     buffergif,
-    totalcase
-} = require('./lib/samfunc')
+    totalcase,
+    WAVersion
+} = require('./lib/samufunc')
 //prem owner function
 const {
     addPremiumUser,
@@ -1157,17 +1158,18 @@ case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
 let nickName = nyanBot2.getName(sender);
-let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_Hora actual: ${time}_\n_Fecha actual: ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n_ *Tus puntos:* ${db.data.users[sender].limit}\n`;
 const { isPremium } = checkPremiumUser(sender);
 if (isPremium) {
     const { expired } = getPremiumExpired(sender);
     const remainingTime = Math.max(expired - Date.now(), 0);
     const timeRemaining = runtime(Math.floor(remainingTime / 1000));
 
-    menuMessage += `*Estado Premium:* Activo\n*Tiempo restante:* ${timeRemaining}\n\n`;
+    menuMessage += `- *Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
 } else {
-    menuMessage += `*Estado Premium:* No activo\n\n`;
+    menuMessage += `- *Estado Premium:* No activo\n\n`;
 }
+    menuMessage += `*Estado del Bot:*\n\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`
 
 for (const [category, commands] of Object.entries(categories)) {
     menuMessage += `*${category}:*\n`;
