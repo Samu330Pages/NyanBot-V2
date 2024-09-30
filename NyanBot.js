@@ -2494,8 +2494,8 @@ case 'mediafire': {
         
         let data = await require("api-dylux").mediafireDl(text);
         const filesizeMB = parseFloat(data.filesize);
-        if (filesizeMB > 100) {
-            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
+        if (filesizeMB > 1000) {
+            return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
 
         let mimeType;
