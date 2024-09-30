@@ -2709,10 +2709,10 @@ case 'listprem': case 'premium': {
         const remainingTime = Math.max(expired - Date.now(), 0);
         const timeRemaining = runtime(Math.floor(remainingTime / 1000));
         if (remainingTime > 0) {
-            txt += `*Número*: ${userId}\n`;
+            txt += `*Número*: @${userId.split("@")[0]}\n`;
             txt += `*Expira en*: ${timeRemaining.trim()}\n\n`;
         } else {
-            txt += `*Número*: ${userId}\n`;
+            txt += `*Número*: @${userId.split("@")[0]}\n`;
             txt += `*Status*: Expirado\n\n`;
         }
     }
