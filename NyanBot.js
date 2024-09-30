@@ -1656,9 +1656,12 @@ case 'gemini': {
         // Enviar una consulta a Bard
         const response = await bard.getBardResponse(normalizedText);
 
+        // Imprimir la respuesta completa para depuración
+        console.log('Respuesta de Bard:', response);
+
         // Verificar la respuesta y enviar el mensaje
         if (response) {
-            return await reply(`${response}`);
+            return await reply(`Respuesta de Bard: ${JSON.stringify(response)}`); // Enviar la respuesta completa
         } else {
             return await reply(`*Imposible obtener metadatos.*`);
         }
