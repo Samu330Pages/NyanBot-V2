@@ -1641,9 +1641,7 @@ case 'test':
     });
     break
 
-case 'bard': {
-    const { BardAPI } = require('bard-api-node');
-
+case 'gemini': {
     try {
         // Inicializar el objeto BardAPI
         const bard = new BardAPI();
@@ -1674,12 +1672,15 @@ case 'bard': {
         if (response && response.response && response.response.candidates.length > 0) {
             const message = response.response.candidates[0].content.parts[0].text;
 
+            // Formatear la respuesta de manera más atractiva
+            const formattedMessage = formatResponse(message);
+
             // Si se le pregunta sobre el bot, responder como Nyan
             if (normalizedText.toLowerCase().includes("quién eres") || normalizedText.toLowerCase().includes("presentate")) {
-                return await reply("¡Hola! Soy Nyan, un bot de WhatsApp creado por samu330. Estoy aquí para ayudarte con lo que necesites.");
+                return await reply("✨ ¡Hola! Soy Nyan, un bot de WhatsApp creado por samu330. Estoy aquí para ayudarte con lo que necesites. 😊");
             }
 
-            return await reply(`${message}`);
+            return await reply(formattedMessage);
         } else {
             return await reply(`*Imposible obtener metadatos.*`);
         }
@@ -1687,6 +1688,11 @@ case 'bard': {
         console.error('Error en la llamada a Bard:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
+}
+
+// Función para formatear la respuesta
+function formatResponse(message) {
+    return `🌟 Respuesta de Bard: \n\n💬 "${message}" \n\n✨ ¡Espero que esto te ayude! Si tienes más preguntas, ¡pregúntame! 😊`;
 }
 break
 
