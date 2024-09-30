@@ -2703,8 +2703,8 @@ case 'addprem':
     } else {
         userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     }
-    if (userId) {
-        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
+    if (!userId) {
+        return reply(`_*Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
 *Ejemplo:* ${prefix + command} @tag 3d\n${prefix + command} +521**** 3d\n
 _Sigue el formato de tiempo para cada caso:_\n
 - Segundos: *#s*
@@ -2733,8 +2733,8 @@ case 'delprem':
     } else {
         userToDeleteId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     }
-    if (userToDeleteId) {
-        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
+    if (!userToDeleteId) {
+        return reply(`_*Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
 *Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
     }
 
