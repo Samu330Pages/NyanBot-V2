@@ -2479,116 +2479,59 @@ break
 
 
 case 'mediafire': {
-if (!text) return reply("*Porfavor asegurate de incluir el link de mediafire después del comando*");
-if (db.data.users[sender].limit < 1) return reply(mess.limit);
-if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (!text) return reply("*Por favor, asegúrate de incluir el link de MediaFire después del comando*");
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 50) {
+        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    }
 
-    // Lógica para detectar si el link es válido de MediaFire
     if (!/mediafire\.com/.test(text)) {
-    return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
+        return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
     }
 
     try {
-	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-	let data = await require("api-dylux").mediafireDl(text);
-
-        // Verifica si el tamaño del archivo es mayor a 100 MB
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        
+        let data = await require("api-dylux").mediafireDl(text);
         const filesizeMB = parseFloat(data.filesize);
         if (filesizeMB > 100) {
-	    return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
+            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
-        // Determina el mimetype según la extensión del archivo
         let mimeType;
         switch (data.ext.toLowerCase()) {
-            case 'pdf':
-                mimeType = 'application/pdf';
-                break;
-            case 'doc':
-            case 'docx':
-                mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-                break;
-            case 'xls':
-            case 'xlsx':
-                mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                break;
-            case 'ppt':
-            case 'pptx':
-                mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-                break;
-            case 'zip':
-                mimeType = 'application/zip';
-                break;
-            case 'rar':
-                mimeType = 'application/x-rar-compressed';
-                break;
-            case '7z':
-                mimeType = 'application/x-7z-compressed';
-                break;
-            case 'mp4':
-                mimeType = 'video/mp4';
-                break;
-            case 'mp3':
-                mimeType = 'audio/mpeg';
-                break;
-            case 'jpg':
-            case 'jpeg':
-                mimeType = 'image/jpeg';
-                break;
-            case 'png':
-                mimeType = 'image/png';
-                break;
-            case 'gif':
-                mimeType = 'image/gif';
-                break;
-            case 'bmp':
-                mimeType = 'image/bmp';
-                break;
-            case 'svg':
-                mimeType = 'image/svg+xml';
-                break;
-            case 'txt':
-                mimeType = 'text/plain';
-                break;
-            case 'html':
-            case 'htm':
-                mimeType = 'text/html';
-                break;
-            case 'csv':
-                mimeType = 'text/csv';
-                break;
-            case 'apk':
-                mimeType = 'application/vnd.android.package-archive';
-                break;
-            case 'exe':
-                mimeType = 'application/vnd.microsoft.portable-executable';
-                break;
-            case 'mcp':
-            case 'mcpack':
-                mimeType = 'application/octet-stream'; // Para archivos MCPACK
-                break;
-            case 'json':
-                mimeType = 'application/json';
-                break;
-            case 'xml':
-                mimeType = 'application/xml';
-                break;
-            // Agrega más tipos de archivos según sea necesario
-            default:
-                mimeType = 'application/octet-stream'; // Tipo genérico para otros documentos
-                break;
+            case 'pdf': mimeType = 'application/pdf'; break;
+            case 'doc': case 'docx': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+            case 'xls': case 'xlsx': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+            case 'ppt': case 'pptx': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
+            case 'zip': mimeType = 'application/zip'; break;
+            case 'rar': mimeType = 'application/x-rar-compressed'; break;
+            case '7z': mimeType = 'application/x-7z-compressed'; break;
+            case 'mp4': mimeType = 'video/mp4'; break;
+            case 'mp3': mimeType = 'audio/mpeg'; break;
+            case 'jpg': case 'jpeg': mimeType = 'image/jpeg'; break;
+            case 'png': mimeType = 'image/png'; break;
+            case 'gif': mimeType = 'image/gif'; break;
+            case 'bmp': mimeType = 'image/bmp'; break;
+            case 'svg': mimeType = 'image/svg+xml'; break;
+            case 'txt': mimeType = 'text/plain'; break;
+            case 'html': case 'htm': mimeType = 'text/html'; break;
+            case 'csv': mimeType = 'text/csv'; break;
+            case 'apk': mimeType = 'application/vnd.android.package-archive'; break;
+            case 'exe': mimeType = 'application/vnd.microsoft.portable-executable'; break;
+            case 'mcp': case 'mcpack': mimeType = 'application/octet-stream'; break;
+            case 'json': mimeType = 'application/json'; break;
+            case 'xml': mimeType = 'application/xml'; break;
+            default: mimeType = 'application/octet-stream'; break;
         }
 
-        // Si el mimetype es 'application/octet-stream', comprime el archivo en un ZIP
         if (mimeType === 'application/octet-stream') {
-            const tempFilePath = path.join(__dirname, data.filename); // Crear una ruta temporal para el archivo
+            const tempFilePath = path.join(__dirname, data.filename);
             const zipFilePath = path.join(__dirname, `${data.filename}.zip`);
 
-            // Descarga el archivo primero
             const fileBuffer = await fetchBuffer(data.url);
             fs.writeFileSync(tempFilePath, fileBuffer);
 
-            // Crear un archivo ZIP
             const output = fs.createWriteStream(zipFilePath);
             const archive = archiver('zip', { zlib: { level: 9 } });
 
@@ -2598,40 +2541,40 @@ if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comand
                     fileName: `${data.filename}.zip`,
                     mimetype: 'application/zip',
                     caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
-_*No se encontró extención adecuada al documento, asi que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
+_*No se encontró extensión adecuada al documento, así que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
 *Título:* ${data.filename}
 *Tamaño:* ${data.filesize}
 *Fecha de Publicación:* ${data.upload_date}\n
 > ${botname}`
                 }, { quoted: m });
 
-                // Elimina los archivos temporales
+                // Eliminar archivos temporales
                 fs.unlinkSync(tempFilePath);
                 fs.unlinkSync(zipFilePath);
             });
 
+            // Empaquetar en ZIP
             archive.pipe(output);
             archive.file(tempFilePath, { name: data.filename });
             archive.finalize();
 
         } else {
-            // Envía el documento directamente si tiene un mimetype reconocido
             await nyanBot2.sendMessage(m.chat, {
-                document: await fetchBuffer(data.url), // URL 1 de la respuesta
+                document: await fetchBuffer(data.url),
                 fileName: `${data.filename}`,
                 mimetype: `${mimeType}`,
                 caption: `
 *Título:* ${data.filename}
 *Tamaño:* ${data.filesize}
 *Fecha de Publicación:* ${data.upload_date}\n
-> ${botname}
-                `
+> ${botname}`
             }, { quoted: m });
         }
-nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-db.data.users[sender].limit -= 50;
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        db.data.users[sender].limit -= 50;
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
     }
