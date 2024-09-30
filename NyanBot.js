@@ -1172,7 +1172,7 @@ case 'menu': {
         menuMessage += `- *Estado Premium:* No activo\n\n`;
     }
     
-    menuMessage += `*Estado del Bot:*\n\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${WAVersion()}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
 
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
