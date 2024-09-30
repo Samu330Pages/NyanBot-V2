@@ -2489,15 +2489,14 @@ if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comand
     }
 
     try {
-	let mfId;
-	mfId = reactionLoad(m.chat, m.key);
-        let data = await require("api-dylux").mediafireDl(text);
+	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+	let data = await require("api-dylux").mediafireDl(text);
 
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
         if (filesizeMB > 100) {
-	    reactionError(m.chat, m.key, mfId);
-            return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
+	    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+	    return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
         // Determina el mimetype según la extensión del archivo
@@ -2630,10 +2629,10 @@ _*No se encontró extención adecuada al documento, asi que se empaquetó en un 
                 `
             }, { quoted: m });
         }
-reactionOk(m.chat, m.key, mfId);
+nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 db.data.users[sender].limit -= 50;
     } catch (error) {
-	reactionError(m.chat, m.key, mfId);
+	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
     }
