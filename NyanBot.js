@@ -2695,7 +2695,15 @@ break
 
 case 'addprem':
     if (!isSamu) return reply(mess.bot);
-    if (args.length < 2) {
+    let userId;
+    if (m.mentionedJid.length !== 0) {
+        userId = m.mentionedJid[0];
+    } else if (m.quoted) {
+        userId = `${m.quoted.sender}`;
+    } else {
+        userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+    }
+    if (userId) {
         return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
 *Ejemplo:* ${prefix + command} @tag 3d\n${prefix + command} +521**** 3d\n
 _Sigue el formato de tiempo para cada caso:_\n
@@ -2703,15 +2711,6 @@ _Sigue el formato de tiempo para cada caso:_\n
 - Minutos: *#m*
 - Horas: *#h*
 - Días: *#d*`);
-    }
-
-    let userId;
-    if (m.mentionedJid.length !== 0) {
-        userId = m.mentionedJid[0];
-    } else if {
-        userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
-    } else if (m.quoted) {
-        userId = `${m.quoted.sender}`;
     }
 
     // Verificar si el usuario ya es premium
@@ -2726,18 +2725,17 @@ _Sigue el formato de tiempo para cada caso:_\n
 
 case 'delprem':
     if (!isSamu) return reply(mess.bot);
-    if (args.length < 1) {
-        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
-*Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
-    }
-
     let userToDeleteId;
     if (m.mentionedJid.length !== 0) {
         userToDeleteId = m.mentionedJid[0];
-    } else if {
-        userToDeleteId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     } else if (m.quoted) {
         userToDeleteId = `${m.quoted.sender}`;
+    } else {
+        userToDeleteId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+    }
+    if (userToDeleteId) {
+        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
+*Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
     }
 
     // Verificar si el usuario es premium
