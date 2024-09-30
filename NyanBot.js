@@ -104,8 +104,7 @@ const {
     getPremiumPosition,
     expiredPremiumCheck,
     checkPremiumUser,
-    getAllPremiumUser,
-    loadPremiumData
+    getAllPremiumUser
 } = require('./lib/premium')
 
 const forma1 = '`'
@@ -2745,7 +2744,7 @@ case 'delprem':
         return reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
     }
 
-    const premiumData = loadPremiumData();
+    const premiumData = require('./src/data/role/premium.json');
     const position = getPremiumPosition(userToDeleteId);
     if (position !== null) {
         premiumData.splice(position, 1);
