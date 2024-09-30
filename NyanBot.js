@@ -1641,7 +1641,9 @@ case 'test':
     });
     break
 
-case 'gemini': {
+case 'bard': {
+    const { BardAPI, HarmCategory, HarmBlockThreshold } = require('bard-api-node');
+
     try {
         // Inicializar el objeto BardAPI
         const bard = new BardAPI();
@@ -1649,6 +1651,37 @@ case 'gemini': {
         // Establecer la clave de API
         const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg'; // Tu clave de API
         await bard.initializeChat(apiKey); // Inicializar el chat con la clave de API
+
+        // Configurar generación de respuestas (sin límites)
+        const generationConfig = {
+            temperature: 0.9, // Mayor variabilidad en las respuestas
+            topK: 5,
+            topP: 0.9,
+            maxOutputTokens: 1024, // Máximo de tokens
+        };
+        bard.setResponseGenerationConfig(generationConfig);
+
+        // Configurar ajustes de seguridad para permitir contenido sexual
+        const safetySettings = [
+            {
+                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
+            },
+            {
+                category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                threshold: HarmBlockThreshold.BLOCK_LOW, // Permitir bajo umbral
+            },
+            // Puedes agregar más configuraciones de seguridad si es necesario
+        ];
+        bard.setSafetySettings(safetySettings);
 
         // Normalizar el texto que se quiere enviar
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
@@ -1659,9 +1692,16 @@ case 'gemini': {
         // Imprimir la respuesta completa para depuración
         console.log('Respuesta de Bard:', response);
 
-        // Verificar la respuesta y enviar el mensaje
-        if (response) {
-            return await reply(`Respuesta de Bard: ${JSON.stringify(response)}`); // Enviar la respuesta completa
+        // Procesar la respuesta para que se muestre correctamente
+        if (response && response.response && response.response.candidates.length > 0) {
+            const message = response.response.candidates[0].content.parts[0].text;
+
+            // Si se le pregunta sobre el bot, responder como Nyan
+            if (normalizedText.toLowerCase().includes("quién eres") || normalizedText.toLowerCase().includes("presentate")) {
+                return await reply("¡Hola! Soy Nyan, un bot de WhatsApp creado por samu330. Estoy aquí para ayudarte con lo que necesites.");
+            }
+
+            return await reply(`${message}`);
         } else {
             return await reply(`*Imposible obtener metadatos.*`);
         }
