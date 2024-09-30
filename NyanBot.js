@@ -1156,7 +1156,8 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
-    let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
+let version = WAVersion()‎
+let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
 let nickName = nyanBot2.getName(sender);
 let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n`;
 const { isPremium } = checkPremiumUser(sender);
@@ -1169,7 +1170,7 @@ if (isPremium) {
 } else {
     menuMessage += `- *Estado Premium:* No activo\n\n`;
 }
-    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${WAVersion‎}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`
+    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${version‎}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`
 
 for (const [category, commands] of Object.entries(categories)) {
     menuMessage += `*${category}:*\n`;
