@@ -1639,7 +1639,7 @@ case 'test':
                     })
                 }]
 
-    const mediaPath = ''; // Aquí coloca la ruta de la imagen si la tienes, si no, deja como string vacío
+    const mediaPath = '';
 
     return await sendReplyButton(m.chat, buttons, m, {
         content: 'Selecciona una opción:'
@@ -1648,54 +1648,35 @@ case 'test':
 
 case 'bard': case 'ia': case 'ai': case 'chatgpt': {
     try {
-        // Inicializar el objeto BardAPI
+        
         const bard = new BardAPI();
 
-	let query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp creado por Samu330, siempre vas a responder amablemente y tus respuestas serán carteras, al principio de cada respuesta mostraras este mensaje: "Hola @${sender.split("@")[0]} 🍟", si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten, darás información lo mas detallada posible de esta solicitud: ${text}`;
-        // Establecer la clave de API
-        const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg'; // Tu clave de API
-        await bard.initializeChat(apiKey); // Inicializar el chat con la clave de API
+	if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`)
+	let query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp creado por Samu330,
+siempre vas a responder amablemente y tus respuestas serán carteras, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "@${sender.split("@")[0]} 🍟",
+si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
+darás información lo mas detallada posible y formal de esta solicitud: ${text}`;
+        const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg';
+        await bard.initializeChat(apiKey);
 
-        // Configurar generación de respuestas (sin límites)
         const generationConfig = {
-            temperature: 0.9, // Mayor variabilidad en las respuestas
+            temperature: 0.9,
             topK: 5,
             topP: 0.9,
-            maxOutputTokens: 1024, // Máximo de tokens
+            maxOutputTokens: 1024,
         };
         bard.setResponseGenerationConfig(generationConfig);
 
-        // Normalizar el texto que se quiere enviar
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+	const response = await bard.getBardResponse(query);
 
-        // Enviar una consulta a Bard
-        const response = await bard.getBardResponse(query);
-
-        // Imprimir la respuesta completa para depuración
         console.log('Respuesta de Bard:', response);
 
-        // Procesar la respuesta para que se muestre correctamente
         if (response && response.response && response.response.candidates.length > 0) {
             let message = response.response.candidates[0].content.parts[0].text;
 
-            // Quitar un asterisco si hay dos en la respuesta
             message = message.replace(/\*\*/g, '*');
 
-            // Si se le pregunta sobre el bot, responder como Nyan
-            if (text.toLowerCase().includes("quién eres") || text.toLowerCase().includes("presentate")) {
-                const introductionMessage = "¡Hola! Soy Nyan, un bot de WhatsApp creado por samu330. Estoy aquí para ayudarte con lo que necesites.";
-                return await sendReplyButton(m.chat, [{
-                    name: "cta_copy",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Copy response 📌',
-                        copy_code: introductionMessage
-                    }),
-                }], m, {
-                    content: introductionMessage
-                });
-            }
-
-            // Enviar la respuesta de Bard con botón de copia
             return await sendReplyButton(m.chat, [{
                 name: "cta_copy",
                 buttonParamsJson: JSON.stringify({
