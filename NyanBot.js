@@ -2693,6 +2693,102 @@ case 'buscarsticker': {
 }
 break
 
+case 'addprem':
+    if (!isSamu) return reply(mess.bot);
+    if (args.length < 2) {
+        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le darás prémium y por cuánto tiempo...*_
+*Ejemplo:* ${prefix + command} @tag 3d\n${prefix + command} +521**** 3d\n
+_Sigue el formato de tiempo para cada caso:_\n
+- Segundos: *#s*
+- Minutos: *#m*
+- Horas: *#h*
+- Días: *#d*`);
+    }
+
+    let userId;
+    if (m.mentionedJid.length !== 0) {
+        userId = m.mentionedJid[0];
+    } else if {
+        userId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+    } else if (m.quoted) {
+        userId = `${m.quoted.sender}`;
+    }
+
+    // Verificar si el usuario ya es premium
+    const { isPremium } = checkPremiumUser(userId);
+    if (isPremium) {
+        return reply("*El usuario ya es premium y no se puede añadir nuevamente.*");
+    }
+
+    addPremiumUser(userId, args[1]);
+    reply("*Se ha añadido al usuario premium!*");
+    break
+
+case 'delprem':
+    if (!isSamu) return reply(mess.bot);
+    if (args.length < 1) {
+        return reply(`*_Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
+*Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
+    }
+
+    let userToDeleteId;
+    if (m.mentionedJid.length !== 0) {
+        userToDeleteId = m.mentionedJid[0];
+    } else if {
+        userToDeleteId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+    } else if (m.quoted) {
+        userToDeleteId = `${m.quoted.sender}`;
+    }
+
+    // Verificar si el usuario es premium
+    const { isPremium: isUserPremium } = checkPremiumUser(userToDeleteId);
+    if (!isUserPremium) {
+        return reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
+    }
+
+    const premiumData = loadPremiumData();
+    const position = getPremiumPosition(userToDeleteId);
+    if (position !== null) {
+        premiumData.splice(position, 1);
+        savePremiumData(premiumData);
+        reply("*¡Se ha eliminado al usuario premium!*");
+    } else {
+        reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
+    }
+    break
+case 'listprem': case 'premium': {
+    const data = require('./src/data/role/premium.json');
+    let txt = `🏆 *USUARIOS PRÉMIUM* 🏆\n\n`;
+
+    for (let x of data) {
+        const remainingTime = x.expired - Date.now();
+        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+        let timeRemaining = '';
+        if (days > 0) timeRemaining += `${days}d `;
+        if (hours > 0) timeRemaining += `${hours}h `;
+        if (minutes > 0) timeRemaining += `${minutes}m `;
+        if (seconds > 0) timeRemaining += `${seconds}s`;
+        if (remainingTime > 0) {
+            txt += `*Número*: ${x.id}\n`;
+            txt += `*Expira en*: ${timeRemaining.trim()}\n\n`;
+        } else {
+            txt += `*Número*: ${x.id}\n`;
+            txt += `*Status*: Expirado\n\n`;
+        }
+    }
+
+    await nyanBot2.sendMessage(m.chat, {
+        text: txt,
+        mentions: data.map(user => user.id)
+    }, {
+        quoted: m
+    });
+}
+break
+
 
 case 'wn': case 'stickerwm': case 'take':{
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
