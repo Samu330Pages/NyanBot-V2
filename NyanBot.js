@@ -104,7 +104,8 @@ const {
     getPremiumPosition,
     expiredPremiumCheck,
     checkPremiumUser,
-    getAllPremiumUser
+    getAllPremiumUser,
+    deletePremiumUser
 } = require('./lib/premium')
 
 const forma1 = '`'
@@ -2725,6 +2726,7 @@ _Sigue el formato de tiempo para cada caso:_\n
 
 case 'delprem':
     if (!isSamu) return reply(mess.bot);
+    
     let userToDeleteId;
     if (m.mentionedJid.length !== 0) {
         userToDeleteId = m.mentionedJid[0];
@@ -2733,6 +2735,7 @@ case 'delprem':
     } else {
         userToDeleteId = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
     }
+    
     if (!userToDeleteId) {
         return reply(`_*Uso incorrecto, asegúrate de incluir el tag/número de la persona a quien le quitarás prémium...*_
 *Ejemplo:* ${prefix + command} @tag\n${prefix + command} +521****`);
@@ -2744,15 +2747,13 @@ case 'delprem':
         return reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
     }
 
-    const premiumData = require('./src/data/role/premium.json');
-    const position = getPremiumPosition(userToDeleteId);
-    if (position !== null) {
-        premiumData.splice(position, 1);
-        savePremiumData(premiumData);
-        reply("*¡Se ha eliminado al usuario premium!*");
-    } else {
-        reply("*No se puede eliminar, el usuario no está en la lista de premium.*");
+    // Llamar a la función para eliminar al usuario premium
+    const deleteResponse = deletePremiumUser(userToDeleteId);
+    if (deleteResponse.error) {
+        return reply(deleteResponse.error);
     }
+
+    reply("*¡Se ha eliminado al usuario premium!*");
     break
 case 'listprem': case 'premium': {
     const data = require('./src/data/role/premium.json');
