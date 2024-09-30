@@ -2754,33 +2754,37 @@ case 'delprem':
     reply("*¡Se ha eliminado al usuario premium!*");
     break
 			
-case 'listprem': case 'premium': {
-    const data = require('./src/data/role/premium.json');
+case 'listprem': {
+    const { users } = getAllPremiumUser();
     let txt = `🏆 *USUARIOS PRÉMIUM* 🏆\n\n`;
 
-    for (let x of data) {
-        const remainingTime = x.expired - Date.now();
+    for (let userId of users) {
+        const { expired } = getPremiumExpired(userId);
+        const remainingTime = expired - Date.now();
+
         const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
         const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
         let timeRemaining = '';
         if (days > 0) timeRemaining += `${days}d `;
         if (hours > 0) timeRemaining += `${hours}h `;
         if (minutes > 0) timeRemaining += `${minutes}m `;
         if (seconds > 0) timeRemaining += `${seconds}s`;
+
         if (remainingTime > 0) {
-            txt += `*Número*: ${x.id}\n`;
+            txt += `*Número*: @${userId.split("@")[0]}\n`;
             txt += `*Expira en*: ${timeRemaining.trim()}\n\n`;
         } else {
-            txt += `*Número*: ${x.id}\n`;
+            txt += `*Número*: @${userId.split("@")[0]}\n`;
             txt += `*Status*: Expirado\n\n`;
         }
     }
 
     await nyanBot2.sendMessage(m.chat, {
         text: txt,
-        mentions: data.map(user => user.id)
+        mentions: users
     }, {
         quoted: m
     });
