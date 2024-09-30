@@ -194,6 +194,11 @@ const categories = {
         { command: 'ig', description: '_*URL*_' },
         { command: 'mediafire', description: '_*URL*_' }
     ],
+    "🧠 Ia": [
+	{ command: 'bard', description: '' },
+	{ command: 'ia', description: '' },
+	{ command: 'chatgpt', description: '' }
+    ],
     "🎭 Grupos": [
         { command: 'bienvenida', description: '' }
     ],
@@ -1663,22 +1668,25 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': {
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 
         // Enviar una consulta a Bard
-        const response = await bard.getBardResponse(normalizedText);
+        const response = await bard.getBardResponse(text);
 
         // Imprimir la respuesta completa para depuración
         console.log('Respuesta de Bard:', response);
 
         // Procesar la respuesta para que se muestre correctamente
         if (response && response.response && response.response.candidates.length > 0) {
-            const message = response.response.candidates[0].content.parts[0].text;
+            let message = response.response.candidates[0].content.parts[0].text;
+
+            // Quitar un asterisco si hay dos en la respuesta
+            message = message.replace(/\*\*/g, '*');
 
             // Si se le pregunta sobre el bot, responder como Nyan
-            if (normalizedText.toLowerCase().includes("quién eres") || normalizedText.toLowerCase().includes("presentate")) {
+            if (text.toLowerCase().includes("quién eres") || text.toLowerCase().includes("presentate")) {
                 const introductionMessage = "¡Hola! Soy Nyan, un bot de WhatsApp creado por samu330. Estoy aquí para ayudarte con lo que necesites.";
                 return await sendReplyButton(m.chat, [{
                     name: "cta_copy",
                     buttonParamsJson: JSON.stringify({
-                        display_text: 'Copy',
+                        display_text: 'Copy response 📌',
                         copy_code: introductionMessage
                     }),
                 }], m, {
@@ -1690,7 +1698,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': {
             return await sendReplyButton(m.chat, [{
                 name: "cta_copy",
                 buttonParamsJson: JSON.stringify({
-                    display_text: 'Copy',
+                    display_text: 'Copy response 📌',
                     copy_code: message
                 }),
             }], m, {
