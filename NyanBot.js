@@ -16,10 +16,10 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const util = require('util')
-const { geminiFetch}  = require('./lib/gemini1.js'); // Asegúrate de que la ruta sea correcta
+const { BardAPI } = require('bard-api-node')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
-const archiver = require('archiver');
+const archiver = require('archiver')
 const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
@@ -1642,41 +1642,28 @@ case 'test':
     break
 
 case 'gemini': {
-    const axios = require('axios');
-
-    // Normalizar el texto que se quiere enviar a la función ask
-    const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
-
-    const input = `Tu idioma predeterminado es el espanol.\n\n Lo que te piden es lo siguiente:`;
-
-    const payload = {
-        model: "gpt-3.5-turbo",
-        messages: [{
-            role: "system",
-            content: "Hi, I am ChatGPTz"
-        }, {
-            role: "user",
-            content: input + normalizedText
-        }],
-        temperature: 0.7
-    };
-
     try {
-        // Hacer la solicitud POST a la API de OpenAI
-        const response = await axios.post('https://api.openai.com/v1/chat/completions', payload, {
-            headers: {
-                'Authorization': `Bearer YOUR_API_KEY`, // Reemplaza con tu clave de API
-                'Content-Type': 'application/json'
-            }
-        });
+        // Inicializar el objeto BardAPI
+        const bard = new BardAPI();
 
-        // Procesar la respuesta
-        const messages = response.data.choices[0].message.content.trim();
-        
-        // Enviar el mensaje obtenido
-        return await reply(`${messages}`);
+        // Establecer la clave de API
+        const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg'; // Tu clave de API
+        await bard.initializeChat(apiKey); // Inicializar el chat con la clave de API
+
+        // Normalizar el texto que se quiere enviar
+        const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
+
+        // Enviar una consulta a Bard
+        const response = await bard.getBardResponse(normalizedText);
+
+        // Verificar la respuesta y enviar el mensaje
+        if (response) {
+            return await reply(`${response}`);
+        } else {
+            return await reply(`*Imposible obtener metadatos.*`);
+        }
     } catch (error) {
-        console.error('Error en la llamada a ChatGPT:', error);
+        console.error('Error en la llamada a Bard:', error);
         return reply(`*Ocurrió un error al obtener los datos.*\n${error.message || error}`);
     }
 }
