@@ -106,7 +106,7 @@ const {
     checkPremiumUser,
     getAllPremiumUser,
     deletePremiumUser
-} = require('./lib/premium')
+} = require('./lib/premiumData')
 
 const forma1 = '`'
 
