@@ -228,7 +228,7 @@ const categories = {
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
-//let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
+let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 //media
 const VoiceNoteNyan = JSON.parse(fs.readFileSync('./Media/database/vn.json'))
