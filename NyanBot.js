@@ -2495,7 +2495,6 @@ if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comand
         // Verifica si el tamaño del archivo es mayor a 100 MB
         const filesizeMB = parseFloat(data.filesize);
         if (filesizeMB > 100) {
-	    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
 	    return reply("😔 El tamaño del archivo es mayor a 100 MB y no se puede enviar.");
         }
 
