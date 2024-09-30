@@ -1155,7 +1155,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
         switch (isCommand) {
 
 case 'menu': {
-    nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});‎
+nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});‎
 let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
 let nickName = nyanBot2.getName(sender);
 let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n`;
