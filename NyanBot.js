@@ -2819,12 +2819,11 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
-                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker cuadrado
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
+                        .outputOptions('-vf', 'scale=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
@@ -2833,7 +2832,6 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
-                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker circular
             }
         } else if (/video/.test(quoted.mimetype)) {
             if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
@@ -2851,12 +2849,11 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
-                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker cuadrado
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
+                        .outputOptions('-vf', 'scale=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
@@ -2865,9 +2862,11 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
-                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker circular
             }
         }
+
+        // Leer el archivo procesado
+        encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
 
     } catch (err) {
         console.error('Error al procesar el medio:', err);
