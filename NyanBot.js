@@ -2815,7 +2815,7 @@ case 't': {
                 // Opción 2: Recortar la imagen en forma circular sin bordes
                 const circleImage = new Jimp(512, 512, 0x00000000); // Crear un lienzo transparente
                 await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
-                circleImage.composite(image, 0, 0); // Superponer la imagen en el lienzo transparente
+                circleImage.composite(image, 0, 0); // Superponer la imagen en el lienzo
 
                 // Aplicar la máscara circular
                 const mask = new Jimp(512, 512, 0xFFFFFFFF); // Crear una máscara blanca
@@ -2840,7 +2840,7 @@ case 't': {
                 // Opción 1: Procesar video con ffmpeg para hacerlo cuadrado
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
+                        .outputOptions('-vf', 'scale=512:512,setsar=1') // Cambiar tamaño a 512x512 y establecer relación de aspecto
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
