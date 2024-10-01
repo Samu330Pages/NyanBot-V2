@@ -2784,7 +2784,7 @@ break
                 break
 
 case 't': {
-    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
+    if (!m.quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
@@ -2804,49 +2804,31 @@ case 't': {
 
     let encmedia;
     const outputFilePath = 'output.webp'; // Archivo de salida
-    const maskFilePath = 'mask.png'; // Archivo de máscara
-
-    // Crear la máscara circular si no existe
-    const createMask = async () => {
-        const width = 512;
-        const height = 512;
-
-        // Crear una imagen transparente
-        const mask = new Jimp(width, height, 0x00000000);
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const dx = x - width / 2;
-                const dy = y - height / 2;
-                if (dx * dx + dy * dy <= (width / 2) * (width / 2)) {
-                    mask.setPixelColor(0xFFFFFFFF, x, y); // Establecer el color blanco
-                }
-            }
-        }
-
-        await mask.writeAsync(maskFilePath); // Guardar la máscara como mask.png
-        console.log('Máscara circular creada como mask.png');
-    };
 
     try {
-        // Verificar si la máscara ya existe, si no, crearla
-        if (!fs.existsSync(maskFilePath)) {
-            await createMask();
-        }
-
         if (/image/.test(quoted.mimetype)) {
-            // Procesar imagen con Jimp
-            const image = await Jimp.read(mediaPath);
-            const mask = await Jimp.read(maskFilePath); // Cargar la máscara circular
-
-            // Redimensionar la imagen a 512x512 antes de aplicar la máscara
-            await image.resize(512, 512); 
-
+            // Procesar imagen con sharp
             if (option === '1') {
-                // Opción 1: Enviar la imagen cuadrada
-                await image.writeAsync(outputFilePath);
+                // Opción 1: Redimensionar a 512x512
+                await sharp(mediaPath)
+                    .resize(512, 512)
+                    .toFile(outputFilePath);
             } else if (option === '2') {
-                // Opción 2: Aplicar la máscara circular
-                await image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
+                // Opción 2: Recortar a circular
+                const image = sharp(mediaPath);
+                const { width, height } = await image.metadata();
+
+                // Crear un buffer para la máscara circular
+                const mask = Buffer.from(`
+                    <svg>
+                        <circle cx="${width / 2}" cy="${height / 2}" r="${Math.min(width, height) / 2}" fill="white" />
+                    </svg>
+                `);
+
+                await image
+                    .resize(512, 512)
+                    .composite([{ input: mask, blend: 'dest-in' }]) // Aplicar la máscara
+                    .toFile(outputFilePath);
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
