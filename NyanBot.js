@@ -2771,7 +2771,7 @@ if (!/webp/.test(mime)) return reply(`*Porfavor etiqueta un sticker animado con 
 if (!m.quoted.isAnimated) return reply('*Eh...* _asegurate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁')
 await reply('_*Tu solicitud se esta procesando, espera un momento porfavor!*_')
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-let media = await nyanBot2.downloadAndSaveMediaMessage(qmsg)
+let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
 let webpToMp4 = await webp2mp4File(media)
 await nyanBot2.sendMessage(m.chat, {
         video: {
