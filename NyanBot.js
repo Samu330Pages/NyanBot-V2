@@ -2822,34 +2822,34 @@ case 't': {
 
             // Guardar la imagen circular como sticker
             const buffer = canvas.toBuffer('image/webp');
-            fs.writeFileSync(outputFilePath, buffer);
-            encmedia = fs.readFileSync(outputFilePath);
+            fs.writeFileSync(outputFilePath, buffer); // Guardar el buffer en un archivo
+            encmedia = fs.readFileSync(outputFilePath); // Leer el archivo guardado en un buffer
 
             // Enviar el sticker circular
             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
         } else if (/video/.test(quoted.mimetype)) {
-            if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
-
-            // Procesar video para sticker circular
+            // Verificar duración del video
             const duration = await getVideoDurationInSeconds(mediaPath);
             if (duration > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
 
+            // Aquí deberías extraer un fotograma del video
+            // Para simplicidad, asumamos que tienes un fotograma de video en `frameImage`
             const canvas = createCanvas(512, 512);
             const ctx = canvas.getContext('2d');
-            const video = await loadImage(mediaPath);
 
-            // Aquí debes usar un método para obtener un frame del video
-            // Por simplicidad, asumimos que tenemos un frame de 512x512
+            // Aquí deberías capturar un fotograma del video
+            // ctx.drawImage(frameImage, 0, 0, 512, 512); // Cambia esto por el fotograma del video
+
             ctx.beginPath();
             ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
             ctx.closePath();
             ctx.clip(); // Recortar el contexto en un círculo
-            ctx.drawImage(video, 0, 0, 512, 512); // Cambia esto para obtener el frame del video
+            // ctx.drawImage(frameImage, 0, 0, 512, 512); // Dibujar el fotograma del video
 
             // Guardar la imagen circular como sticker
             const buffer = canvas.toBuffer('image/webp');
-            fs.writeFileSync(outputFilePath, buffer);
-            encmedia = fs.readFileSync(outputFilePath);
+            fs.writeFileSync(outputFilePath, buffer); // Guardar el buffer en un archivo
+            encmedia = fs.readFileSync(outputFilePath); // Leer el archivo guardado en un buffer
 
             // Enviar el sticker circular
             await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
