@@ -2800,11 +2800,10 @@ case 't': {
     if (!mediaPath) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
 
     let encmedia;
+    const outputFilePath = 'output.webp'; // Asegúrate de definir el nombre del archivo de salida aquí
 
     // Procesar imagen o video
     try {
-        const outputFilePath = 'output.webp'; // Nombre del archivo de salida
-
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen
             if (option === '-1') {
@@ -2814,17 +2813,23 @@ case 't': {
                         .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => reject(err))
+                        .on('error', (err) => {
+                            console.error('Error al procesar la imagen cuadrada:', err);
+                            reject(err);
+                        })
                         .save(outputFilePath); // Guardar archivo
                 });
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0')
+                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba') // Cambiar tamaño y recortar
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => reject(err))
+                        .on('error', (err) => {
+                            console.error('Error al procesar la imagen circular:', err);
+                            reject(err);
+                        })
                         .save(outputFilePath); // Guardar archivo
                 });
             }
@@ -2838,17 +2843,23 @@ case 't': {
                         .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => reject(err))
+                        .on('error', (err) => {
+                            console.error('Error al procesar el video cuadrado:', err);
+                            reject(err);
+                        })
                         .save(outputFilePath); // Guardar archivo
                 });
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0')
+                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba') // Cambiar tamaño y recortar
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => reject(err))
+                        .on('error', (err) => {
+                            console.error('Error al procesar el video circular:', err);
+                            reject(err);
+                        })
                         .save(outputFilePath); // Guardar archivo
                 });
             }
