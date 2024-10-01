@@ -2784,8 +2784,8 @@ break
                 break
 
 case 't': {
-    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
-    
+    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
+
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
@@ -2812,14 +2812,22 @@ case 't': {
                 // Opción 1: Estirar la imagen a 512x512
                 await image.resize(512, 512).writeAsync(outputFilePath);
             } else if (option === '2') {
-                // Opción 2: Recortar la imagen en forma circular
-                await image.resize(512, 512);
-                const circleImage = image.clone();
-                circleImage.circle(); // Recortar en forma de círculo
+                // Opción 2: Recortar la imagen en forma circular sin bordes
+                const circleImage = new Jimp(512, 512, 0x00000000); // Crear un lienzo transparente
+                await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
+                circleImage.composite(image, 0, 0); // Superponer la imagen en el lienzo transparente
+
+                // Aplicar la máscara circular
+                const mask = new Jimp(512, 512, 0xFFFFFFFF); // Crear una máscara blanca
+                mask.circle(); // Hacer circular la máscara
+                circleImage.mask(mask, 0, 0); // Aplicar la máscara circular
+
                 await circleImage.writeAsync(outputFilePath);
             } else {
                 // Sin opción: enviar la imagen original como sticker
-                await image.resize(512, 512).writeAsync(outputFilePath);
+                encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
+                await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                return; // Salir después de enviar sin procesar
             }
 
             // Leer el archivo procesado
@@ -2828,12 +2836,8 @@ case 't': {
             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
 
         } else if (/video/.test(quoted.mimetype)) {
-            // Verificar duración del video
-            const duration = await getVideoDurationInSeconds(mediaPath);
-            if (duration > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
-
             if (option === '1') {
-                // Opción 1: Procesar video con ffmpeg
+                // Opción 1: Procesar video con ffmpeg para hacerlo cuadrado
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
                         .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
