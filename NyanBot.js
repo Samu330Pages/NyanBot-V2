@@ -2812,7 +2812,8 @@ case 't': {
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
                 processedImage.resize(512, 512); // Redimensionar a 512x512
-                encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
+                const circularImage = await processedImage.clone().circle();
+                encmedia = await circularImage.getBufferAsync(Jimp.MIME_WEBP);
             } else {
                 // Enviar sticker normal
                 encmedia = await nyanBot2.sendImageAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
