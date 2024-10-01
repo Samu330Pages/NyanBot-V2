@@ -2782,28 +2782,29 @@ break
                 }
                 break
 
-case 't': {
+case 's': {
     if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
     
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[1]; // Obtener la opción del texto
-    let media;
+    let mediaPath;
 
     try {
-        media = await quoted.download(); // Descargar el medio
+        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted); // Descargar y guardar la media
     } catch (err) {
         console.error('Error al descargar el medio:', err);
-        return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
+        return reply(`No se pudo descargar el medio: ${err.message}`); // Enviar el error en el reply
     }
 
-    if (!media) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
+    if (!mediaPath) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
 
     let encmedia;
 
+    // Procesar imagen
     if (/image/.test(quoted.mimetype)) {
         try {
-            const processedImage = await Jimp.read(media); // Procesar la imagen
+            const processedImage = await Jimp.read(mediaPath); // Procesar la imagen
             if (option === '-1') {
                 // Procesar imagen para sticker cuadrado
                 processedImage.resize(512, 512); // Redimensionar a 512x512
@@ -2814,21 +2815,21 @@ case 't': {
                 encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
             } else {
                 // Enviar sticker normal
-                encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                encmedia = await nyanBot2.sendImageAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
             }
         } catch (err) {
             console.error('Error al procesar la imagen:', err);
-            return reply('Ocurrió un error al procesar la imagen.');
+            return reply(`Ocurrió un error al procesar la imagen: ${err.message}`);
         }
     } else if (/video/.test(quoted.mimetype)) {
         if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
-        
+
         const outputFilePath = 'output.webp'; // Nombre del archivo de salida
         try {
             if (option === '-1') {
                 // Procesar video para sticker cuadrado
                 await new Promise((resolve, reject) => {
-                    ffmpeg(media)
+                    ffmpeg(mediaPath)
                         .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                         .toFormat('webp')
                         .on('end', () => resolve())
@@ -2839,7 +2840,7 @@ case 't': {
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
-                    ffmpeg(media)
+                    ffmpeg(mediaPath)
                         .outputOptions('-vf', 'scale=512:512, crop=512:512') // Cambiar tamaño y recortar
                         .toFormat('webp')
                         .on('end', () => resolve())
@@ -2849,11 +2850,11 @@ case 't': {
                 encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
             } else {
                 // Enviar sticker normal
-                encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+                encmedia = await nyanBot2.sendVideoAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
             }
         } catch (err) {
             console.error('Error al procesar el video:', err);
-            return reply('Ocurrió un error al procesar el video.');
+            return reply(`Ocurrió un error al procesar el video: ${err.message}`);
         }
     } else {
         return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
@@ -2862,6 +2863,11 @@ case 't': {
     // Enviar el sticker procesado
     if (encmedia) {
         await nyanBot2.sendMessage(m.chat, { sticker: encmedia }, { quoted: m });
+    }
+
+    // Eliminar la media descargada después de enviar el sticker
+    if (fs.existsSync(mediaPath)) {
+        fs.unlinkSync(mediaPath); // Eliminar el archivo
     }
 }
 break
