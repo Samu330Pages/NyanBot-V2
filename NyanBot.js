@@ -230,7 +230,7 @@ const categories = {
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
-//let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
+let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 //media
 const VoiceNoteNyan = JSON.parse(fs.readFileSync('./Media/database/vn.json'))
@@ -2765,28 +2765,11 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 }
 break
-			
-			
-            case 's': case 'sticker': case 'stiker': {
-                if (!quoted) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos.`)
-		nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}})
-                if (/image/.test(mime)) {
-                let media = await quoted.download()
-                let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
-                } else if (/video/.test(mime)) {
-                if ((quoted.msg || quoted).seconds > 11) return reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos`)
-                let media = await quoted.download()
-                let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
-                } else {
-                reply(`Envia o etiqueta una Imagen/Video/gif con el comando ${prefix+command}\nDuración del video de 1-9 Segundos`)
-                }
-                }
-                break
 
-case 't': {
-//case 'sticker':
-//case 'stiker': {
-    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} 3 (para imagen en forma de corazón)\n- ${prefix + command} (sin opciones para enviar como está)`);
+case 's':
+case 'sticker':
+case 'stiker': {
+    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
@@ -2797,7 +2780,7 @@ case 't': {
         mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted); // Descargar y guardar la media
     } catch (err) {
         console.error('Error al descargar el medio:', err);
-        return reply(`No se pudo descargar el medio: ${err.message}`); // Enviar el error en el reply
+        return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
     }
 
     if (!mediaPath) {
@@ -2840,7 +2823,8 @@ case 't': {
                 // Opción 3: Recortar a forma de corazón
                 const heartMask = Buffer.from(`
                     <svg width="512" height="512">
-                        <path d="M256 464l-33-30C100 318 0 224 0 128 0 57 57 0 128 0c39 0 77 15 105 42C299 15 337 0 376 0c71 0 128 57 128 128 0 96-100 190-256 336l-18 17z" fill="white"/>
+                        <path d="M256 462c-8.5 0-17-3.2-23.5-9.5l-33.5-33c-6.5-6.5-6.5-17 0-23.5C218.5 388 256 354.5 256 354.5s37.5 33.5 56.5 46.5c6.5 6.5 6.5 17 0 23.5l-33.5 33C273 458.8 264.5 462 256 462z" fill="white"/>
+                        <path d="M256 464c-8.5 0-17-3.2-23.5-9.5l-33.5-33c-6.5-6.5-6.5-17 0-23.5C218.5 388 256 354.5 256 354.5s37.5 33.5 56.5 46.5c6.5 6.5 6.5 17 0 23.5l-33.5 33C273 458.8 264.5 462 256 462z" fill="white"/>
                     </svg>
                 `);
                 await sharp(mediaPath)
@@ -2866,39 +2850,15 @@ case 't': {
         } else if (/video/.test(quoted.mimetype)) {
             if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
 
-            try {
-                if (option === '1') {
-                    // Procesar video para sticker cuadrado
-                    await new Promise((resolve, reject) => {
-                        ffmpeg(mediaPath)
-                            .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
-                            .toFormat('webp')
-                            .on('end', () => resolve())
-                            .on('error', (err) => reject(err))
-                            .save(outputFilePath); // Guardar archivo cuadrado
-                    });
-                    encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
-                } else if (option === '2') {
-                    // Opción 2: Mostrar mensaje que no se pueden recortar videos en forma circular
-                    return reply(`No se pueden recortar videos en forma circular. Solo imágenes.`);
-                } else if (option === '3') {
-                    // Opción 3: Mostrar mensaje que no se pueden recortar videos en forma de corazón
-                    return reply(`No se pueden recortar videos en forma de corazón. Solo imágenes.`);
-                } else {
-                    // Enviar sticker normal
-                    encmedia = await nyanBot2.sendVideoAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
-                }
-            } catch (err) {
-                console.error('Error al procesar el video:', err);
-                return reply(`Ocurrió un error al procesar el video: ${err.message}`);
-            }
+            // Solo se envían videos en su forma original
+            return reply(`No se pueden editar o recortar videos. Solo se pueden enviar en su forma original.`);
         } else {
             return reply(`Tipo de archivo no reconocido. Asegúrate de enviar una imagen o un video.`);
         }
 
     } catch (err) {
         console.error('Error al procesar el medio:', err);
-        return reply(`Ocurrió un error al procesar el medio: ${err.message}`);
+        return reply(`Ocurrió un error al procesar el medio: ${err.message}. Intenta de nuevo.`);
     }
 
     // Eliminar el archivo descargado y el archivo procesado después de enviar el sticker
