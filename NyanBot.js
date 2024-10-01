@@ -2819,6 +2819,7 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker cuadrado
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
@@ -2832,6 +2833,7 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker circular
             }
         } else if (/video/.test(quoted.mimetype)) {
             if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
@@ -2849,6 +2851,7 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker cuadrado
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
@@ -2862,11 +2865,9 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado para sticker circular
             }
         }
-
-        // Leer el archivo procesado
-        encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
 
     } catch (err) {
         console.error('Error al procesar el medio:', err);
