@@ -2794,7 +2794,7 @@ case 'togif': {
         }
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply('Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.');
+        return reply(`Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.\n${err}`);
     } finally {
         await fs.unlinkSync(media); // Asegúrate de eliminar el archivo descargado
     }
