@@ -2783,7 +2783,7 @@ break
                 }
                 break
 
-case 't':
+case 't': {
 //case 'sticker':
 //case 'stiker': {
     if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} 3 (para imagen en forma de corazón)\n- ${prefix + command} (sin opciones para enviar como está)`);
