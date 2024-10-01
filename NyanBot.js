@@ -2809,7 +2809,14 @@ case 't': {
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen con Jimp
             const image = await Jimp.read(mediaPath);
-            const mask = await Jimp.read('mask.png'); // Cargar la máscara circular
+            let mask;
+
+            try {
+                mask = await Jimp.read('mask.png'); // Cargar la máscara circular
+            } catch (err) {
+                console.error('Error al cargar la máscara:', err);
+                return reply('No se encontró la máscara circular. Asegúrate de que mask.png esté en la misma carpeta que el script.');
+            }
 
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
