@@ -99,7 +99,7 @@ const {
     buffergif,
     totalcase,
     WAVersion
-} = require('./lib/samufunc')
+} = require('./lib/samufuncs')
 //prem owner function
 const {
     addPremiumUser,
@@ -2769,19 +2769,19 @@ break
 case 'togif': {
     if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
     if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
-    
+
     await reply('_*Tu solicitud se está procesando, espera un momento por favor!*_');
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    
+
     let media = await nyanBot2.downloadAndSaveMediaMessage(quoted);
-    
+
     try {
         let webpToMp4 = await webp2mp4File(media);
-        
+
         if (webpToMp4.status) {
             await nyanBot2.sendMessage(m.chat, {
                 video: {
-                    url: webpToMp4.result,
+                    url: webpToMp4.data.url,
                     caption: '"Conversión exitosa!*'
                 },
                 gifPlayback: true
@@ -2790,11 +2790,11 @@ case 'togif': {
             });
             nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         } else {
-            return reply('Ocurrió un error al convertir el sticker a video.');
+            return reply(webpToMp4.msg);
         }
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply(`Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.\n${err}`);
+        return reply('Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.');
     } finally {
         await fs.unlinkSync(media); // Asegúrate de eliminar el archivo descargado
     }
