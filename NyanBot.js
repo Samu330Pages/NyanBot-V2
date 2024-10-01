@@ -2821,7 +2821,7 @@ case 't': {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=white:t=fill, format=rgba, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0, format=webp') // Cambiar tamaño y recortar a circular
+                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => reject(err))
@@ -2845,7 +2845,7 @@ case 't': {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=white:t=fill, format=rgba, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0, format=webp') // Cambiar tamaño y recortar a circular
+                        .outputOptions('-vf', 'scale=512:512, crop=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=' + '255*' + '(if(between(X,0,512),1,0))' + ':g=' + '255*' + '(if(between(X,0,512),1,0))' + ':b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => reject(err))
@@ -2864,7 +2864,7 @@ case 't': {
 
     // Enviar el sticker procesado
     if (encmedia) {
-        await nyanBot2.sendMessage(m.chat, { sticker: encmedia }, { quoted: m });
+        await nyanBot2.sendMessage(m.chat, { sticker: encmedia, packname: global.packname, author: global.author }, { quoted: m });
     }
 
     // Eliminar la media descargada después de enviar el sticker
