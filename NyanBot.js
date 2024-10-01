@@ -2784,7 +2784,7 @@ break
                 break
 
 case 't': {
-    if (!m.quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
+    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
@@ -2838,13 +2838,15 @@ case 't': {
             const image = await Jimp.read(mediaPath);
             const mask = await Jimp.read(maskFilePath); // Cargar la máscara circular
 
+            // Asegurarse de que la imagen se redimensione a 512x512 antes de enmascarar
+            await image.resize(512, 512); 
+
             if (option === '1') {
-                // Opción 1: Estirar la imagen a 512x512
-                await image.resize(512, 512).writeAsync(outputFilePath);
+                // Opción 1: Enviar la imagen cuadrada
+                await image.writeAsync(outputFilePath);
             } else if (option === '2') {
                 // Opción 2: Aplicar la máscara circular
-                await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
-                await image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
+                image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
@@ -2866,7 +2868,7 @@ case 't': {
                 // Opción 1: Procesar video con ffmpeg para hacerlo cuadrado
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512:force_original_aspect_ratio=decrease') // Cambiar tamaño a 512x512 y mantener la relación de aspecto
+                        .outputOptions('-vf', 'scale=512:512:force_original_aspect_ratio=none') // Cambiar tamaño a 512x512 sin mantener la relación de aspecto
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
