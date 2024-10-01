@@ -17,7 +17,6 @@ const path = require('path')
 const sharp = require('sharp')
 const Jimp = require('jimp')
 const { createCanvas, loadImage } = require('canvas')
-const { getVideoDurationInSeconds } = require('get-video-duration')
 const util = require('util')
 const { BardAPI } = require('bard-api-node')
 const { color } = require('./lib/color')
@@ -2806,53 +2805,62 @@ case 't': {
 
     try {
         if (/image/.test(quoted.mimetype)) {
-            // Procesar imagen
-            const image = await loadImage(mediaPath);
-            const canvas = createCanvas(512, 512);
-            const ctx = canvas.getContext('2d');
+            // Procesar imagen con Jimp
+            const image = await Jimp.read(mediaPath);
 
-            // Dibujar un círculo
-            ctx.beginPath();
-            ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.clip(); // Recortar el contexto en un círculo
+            if (option === '1') {
+                // Opción 1: Estirar la imagen a 512x512
+                await image.resize(512, 512).writeAsync(outputFilePath);
+            } else if (option === '2') {
+                // Opción 2: Recortar la imagen en forma circular
+                await image.resize(512, 512);
+                const circleImage = image.clone();
+                circleImage.circle(); // Recortar en forma de círculo
+                await circleImage.writeAsync(outputFilePath);
+            } else {
+                // Sin opción: enviar la imagen original como sticker
+                await image.resize(512, 512).writeAsync(outputFilePath);
+            }
 
-            // Dibujar la imagen
-            ctx.drawImage(image, 0, 0, 512, 512);
-
-            // Guardar la imagen circular como sticker
-            const buffer = canvas.toBuffer('image/webp');
-            fs.writeFileSync(outputFilePath, buffer); // Guardar el buffer en un archivo
-            encmedia = fs.readFileSync(outputFilePath); // Leer el archivo guardado en un buffer
-
-            // Enviar el sticker circular
+            // Leer el archivo procesado
+            encmedia = fs.readFileSync(outputFilePath);
+            // Enviar el sticker
             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+
         } else if (/video/.test(quoted.mimetype)) {
             // Verificar duración del video
             const duration = await getVideoDurationInSeconds(mediaPath);
             if (duration > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
 
-            // Aquí deberías extraer un fotograma del video
-            // Para simplicidad, asumamos que tienes un fotograma de video en `frameImage`
-            const canvas = createCanvas(512, 512);
-            const ctx = canvas.getContext('2d');
+            if (option === '1') {
+                // Opción 1: Procesar video con ffmpeg
+                await new Promise((resolve, reject) => {
+                    ffmpeg(mediaPath)
+                        .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
+                        .toFormat('webp')
+                        .on('end', () => resolve())
+                        .on('error', (err) => {
+                            console.error('Error al procesar el video:', err);
+                            reject(err);
+                        })
+                        .save(outputFilePath); // Guardar archivo cuadrado
+                });
 
-            // Aquí deberías capturar un fotograma del video
-            // ctx.drawImage(frameImage, 0, 0, 512, 512); // Cambia esto por el fotograma del video
+                // Leer el archivo procesado
+                encmedia = fs.readFileSync(outputFilePath);
+                // Enviar el sticker del video
+                await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+            } else if (option === '2') {
+                // Opción 2: Mostrar mensaje que no se pueden recortar videos en forma circular
+                return reply(`No se pueden recortar videos en forma circular. Solo imágenes.`);
+            } else {
+                // Sin opción: enviar el video original como sticker
+                encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
+                await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+            }
 
-            ctx.beginPath();
-            ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.clip(); // Recortar el contexto en un círculo
-            // ctx.drawImage(frameImage, 0, 0, 512, 512); // Dibujar el fotograma del video
-
-            // Guardar la imagen circular como sticker
-            const buffer = canvas.toBuffer('image/webp');
-            fs.writeFileSync(outputFilePath, buffer); // Guardar el buffer en un archivo
-            encmedia = fs.readFileSync(outputFilePath); // Leer el archivo guardado en un buffer
-
-            // Enviar el sticker circular
-            await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+        } else {
+            return reply(`Tipo de archivo no reconocido. Asegúrate de enviar una imagen o un video.`);
         }
 
     } catch (err) {
