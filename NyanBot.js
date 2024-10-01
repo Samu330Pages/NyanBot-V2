@@ -2868,30 +2868,16 @@ case 't': {
 
             try {
                 if (option === '1') {
-                    // Opción 1: Procesar video para sticker cuadrado
+                    // Procesar video para sticker cuadrado
                     await new Promise((resolve, reject) => {
                         ffmpeg(mediaPath)
-                            .outputOptions('-vf', 'scale=512:512:force_original_aspect_ratio=none') // Cambiar tamaño a 512x512 sin mantener la relación de aspecto
+                            .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                             .toFormat('webp')
-                            .on('end', () => {
-                                console.log('Video procesado correctamente');
-                                resolve();
-                            })
-                            .on('error', (err) => {
-                                console.error('Error al procesar el video:', err);
-                                reject(err);
-                            })
+                            .on('end', () => resolve())
+                            .on('error', (err) => reject(err))
                             .save(outputFilePath); // Guardar archivo cuadrado
                     });
-
-                    // Asegurarse de que el archivo de salida exista antes de leerlo
-                    if (fs.existsSync(outputFilePath)) {
-                        encmedia = fs.readFileSync(outputFilePath);
-                        // Enviar el sticker del video
-                        await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
-                    } else {
-                        return reply('Error al procesar el video. No se generó el archivo de salida.');
-                    }
+                    encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
                 } else if (option === '2') {
                     // Opción 2: Mostrar mensaje que no se pueden recortar videos en forma circular
                     return reply(`No se pueden recortar videos en forma circular. Solo imágenes.`);
@@ -2899,9 +2885,8 @@ case 't': {
                     // Opción 3: Mostrar mensaje que no se pueden recortar videos en forma de corazón
                     return reply(`No se pueden recortar videos en forma de corazón. Solo imágenes.`);
                 } else {
-                    // Sin opción: enviar el video original como sticker
-                    encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
-                    await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                    // Enviar sticker normal
+                    encmedia = await nyanBot2.sendVideoAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
                 }
             } catch (err) {
                 console.error('Error al procesar el video:', err);
