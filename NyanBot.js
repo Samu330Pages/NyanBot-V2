@@ -2838,7 +2838,7 @@ case 't': {
             const image = await Jimp.read(mediaPath);
             const mask = await Jimp.read(maskFilePath); // Cargar la máscara circular
 
-            // Asegurarse de que la imagen se redimensione a 512x512 antes de enmascarar
+            // Redimensionar la imagen a 512x512 antes de aplicar la máscara
             await image.resize(512, 512); 
 
             if (option === '1') {
@@ -2846,7 +2846,7 @@ case 't': {
                 await image.writeAsync(outputFilePath);
             } else if (option === '2') {
                 // Opción 2: Aplicar la máscara circular
-                image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
+                await image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
@@ -2870,7 +2870,10 @@ case 't': {
                     ffmpeg(mediaPath)
                         .outputOptions('-vf', 'scale=512:512:force_original_aspect_ratio=none') // Cambiar tamaño a 512x512 sin mantener la relación de aspecto
                         .toFormat('webp')
-                        .on('end', () => resolve())
+                        .on('end', () => {
+                            console.log('Video procesado correctamente');
+                            resolve();
+                        })
                         .on('error', (err) => {
                             console.error('Error al procesar el video:', err);
                             reject(err);
