@@ -2785,7 +2785,7 @@ break
 
 case 't': {
     if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
-
+    
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
@@ -2801,46 +2801,46 @@ case 't': {
     if (!mediaPath) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
 
     let encmedia;
-    const outputFilePath = 'output.webp'; // Archivo de salida
 
-    // Procesar imagen o video
-    try {
-        if (/image/.test(quoted.mimetype)) {
-            // Procesar imagen
+    // Procesar imagen
+    if (/image/.test(quoted.mimetype)) {
+        try {
+            const processedImage = await Jimp.read(mediaPath); // Procesar la imagen
             if (option === '-1') {
                 // Procesar imagen para sticker cuadrado
-                await sharp(mediaPath)
-                    .resize(512, 512, {
-                        fit: sharp.fit.fill // Estira la imagen para que ocupe el cuadro
-                    })
-                    .toFile(outputFilePath);
-                
-                // Enviar el sticker cuadrado
-                const squareSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendImageAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
+                processedImage.resize(512, 512); // Redimensionar a 512x512
+                encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
-                const image = sharp(mediaPath);
-
-                // Crear un buffer para la máscara circular
-                const mask = Buffer.from(`
+                processedImage.resize(512, 512); // Redimensionar a 512x512
+                encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
+            } else if (option === '-3') {
+                // Procesar imagen para sticker en forma de corazón
+                const heartMask = Buffer.from(`
                     <svg width="512" height="512">
-                        <circle cx="256" cy="256" r="256" fill="white" />
+                        <path d="M256 448l-18-17C100 292 0 224 0 128 0 57 57 0 128 0c39 0 77 15 105 42C299 15 337 0 376 0c71 0 128 57 128 128 0 96-100 164-238 303l-18 17z" fill="white"/>
                     </svg>
                 `);
-
-                await image
-                    .resize(512, 512) // Redimensionar la imagen
-                    .composite([{ input: mask, blend: 'dest-in' }]) // Aplicar la máscara
-                    .toFile(outputFilePath);
-                
-                // Enviar el sticker circular
-                const circularSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendImageAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
+                await processedImage
+                    .resize(512, 512) // Redimensionar a 512x512
+                    .composite([{ input: heartMask, blend: 'dest-in' }]) // Aplicar la máscara en forma de corazón
+                    .getBufferAsync(Jimp.MIME_WEBP)
+                    .then(buffer => {
+                        encmedia = buffer;
+                    });
+            } else {
+                // Enviar sticker normal
+                encmedia = await nyanBot2.sendImageAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
             }
-        } else if (/video/.test(quoted.mimetype)) {
-            if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
+        } catch (err) {
+            console.error('Error al procesar la imagen:', err);
+            return reply(`Ocurrió un error al procesar la imagen: ${err.message}`);
+        }
+    } else if (/video/.test(quoted.mimetype)) {
+        if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
 
+        const outputFilePath = 'output.webp'; // Nombre del archivo de salida
+        try {
             if (option === '-1') {
                 // Procesar video para sticker cuadrado
                 await new Promise((resolve, reject) => {
@@ -2848,47 +2848,41 @@ case 't': {
                         .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar el video cuadrado:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo cuadrado
+                        .on('error', (err) => reject(err))
+                        .save(outputFilePath); // Guardar archivo
                 });
-
-                // Enviar el sticker cuadrado
-                const squareSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendVideoAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
+                        .outputOptions('-vf', 'scale=512:512, crop=512:512') // Cambiar tamaño y recortar
                         .toFormat('webp')
                         .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar el video circular:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo circular
+                        .on('error', (err) => reject(err))
+                        .save(outputFilePath); // Guardar archivo
                 });
-
-                // Enviar el sticker circular
-                const circularSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendVideoAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
+                encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
+            } else {
+                // Enviar sticker normal
+                encmedia = await nyanBot2.sendVideoAsSticker(m.chat, mediaPath, m, { packname: global.packname, author: global.author });
             }
+        } catch (err) {
+            console.error('Error al procesar el video:', err);
+            return reply(`Ocurrió un error al procesar el video: ${err.message}`);
         }
-
-    } catch (err) {
-        console.error('Error al procesar el medio:', err);
-        return reply(`Ocurrió un error al procesar el medio: ${err.message}`);
+    } else {
+        return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
     }
 
-    // Eliminar el archivo descargado y el archivo procesado después de enviar el sticker
+    // Enviar el sticker procesado
+    if (encmedia) {
+        await nyanBot2.sendMessage(m.chat, { sticker: encmedia }, { quoted: m });
+    }
+
+    // Eliminar la media descargada después de enviar el sticker
     if (fs.existsSync(mediaPath)) {
-        fs.unlinkSync(mediaPath); // Eliminar el archivo original
-    }
-    if (fs.existsSync(outputFilePath)) {
-        fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
+        fs.unlinkSync(mediaPath); // Eliminar el archivo
     }
 }
 break
