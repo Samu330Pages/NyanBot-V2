@@ -2798,7 +2798,9 @@ case 't': {
         return reply(`No se pudo descargar el medio: ${err.message}`); // Enviar el error en el reply
     }
 
-    if (!mediaPath) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
+    if (!mediaPath) {
+        return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
+    }
 
     let encmedia;
     const outputFilePath = 'output.webp'; // Archivo de salida
@@ -2812,12 +2814,12 @@ case 't': {
                 // Opción 1: Estirar la imagen a 512x512
                 await image.resize(512, 512).writeAsync(outputFilePath);
             } else if (option === '2') {
-                // Opción 2: Recortar la imagen en forma circular sin bordes
+                // Opción 2: Recortar la imagen en forma circular
                 const circleImage = new Jimp(512, 512, 0x00000000); // Crear un lienzo transparente
                 await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
                 circleImage.composite(image, 0, 0); // Superponer la imagen en el lienzo
 
-                // Aplicar la máscara circular
+                // Crear una máscara circular
                 const mask = new Jimp(512, 512, 0xFFFFFFFF); // Crear una máscara blanca
                 mask.circle(); // Hacer circular la máscara
                 circleImage.mask(mask, 0, 0); // Aplicar la máscara circular
@@ -2840,7 +2842,7 @@ case 't': {
                 // Opción 1: Procesar video con ffmpeg para hacerlo cuadrado
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512,setsar=1') // Cambiar tamaño a 512x512 y establecer relación de aspecto
+                        .outputOptions('-vf', 'scale=512:512:force_original_aspect_ratio=decrease') // Cambiar tamaño a 512x512 y mantener la relación de aspecto
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
@@ -2864,6 +2866,7 @@ case 't': {
             }
 
         } else {
+            // Mensaje de ayuda si no se detecta imagen o video
             return reply(`Tipo de archivo no reconocido. Asegúrate de enviar una imagen o un video.`);
         }
 
