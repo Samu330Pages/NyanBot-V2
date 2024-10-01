@@ -2409,7 +2409,7 @@ if (countryInfo) {
     responseMessage += `\nNo se pudo identificar el país.`;
 }
 
-responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated} (${lastUpdatedDate})\n\n> ${ownername}`;
+responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated} (${lastUpdatedDate})\n\n`;
 
 const { isPremium } = checkPremiumUser(target);
 if (isPremium) {
