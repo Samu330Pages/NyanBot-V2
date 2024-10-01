@@ -2826,7 +2826,7 @@ case 't': {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
+                        .outputOptions('-vf', 'scale=512:512, format=rgba, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, format=rgba, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
@@ -2862,7 +2862,7 @@ case 't': {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
                     ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, format=rgba, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
+                        .outputOptions('-vf', 'scale=512:512, format=rgba, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, format=rgba, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
                         .toFormat('webp')
                         .on('end', () => resolve())
                         .on('error', (err) => {
