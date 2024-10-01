@@ -2402,15 +2402,25 @@ case 'perfil': {
             biography = 'No se pudo obtener la biografía; la persona tiene la biografía privada.';
         }
 
-        let responseMessage = `\n*◦ Numero:* @${target.split("@")[0]}\n*◦ Nombre* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
-        if (countryInfo) {
-            responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n`;
-        } else {
-            responseMessage += `\nNo se pudo identificar el país.`;
-        }
+let responseMessage = `\n*◦ Número:* @${target.split("@")[0]}\n*◦ Nombre:* ${nickName}\n*◦ Puntos:* ${points}\n> _*${reg}*_`;
+if (countryInfo) {
+    responseMessage += `\n*◦ País:* ${countryInfo.name} ${countryInfo.emoji}\n*◦ Código:* ${countryInfo.code}\n`;
+} else {
+    responseMessage += `\nNo se pudo identificar el país.`;
+}
 
-        responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated} (${lastUpdatedDate})\n\n> ${ownername}`;
+responseMessage += `\n*◦ Biografía:* ${biography}\n*◦ Última actualización:* ${lastUpdated} (${lastUpdatedDate})\n\n> ${ownername}`;
 
+const { isPremium } = checkPremiumUser(target);
+if (isPremium) {
+    const { expired } = getPremiumExpired(target);
+    const remainingTime = Math.max(expired - Date.now(), 0); // Asegúrate de que no sea negativo
+    const timeRemaining = runtime(Math.floor(remainingTime / 1000)); // Convertir milisegundos a segundos
+
+    responseMessage += `\n*◦ Estado Premium:* Activo 👑\n*◦ Tiempo restante:* ${timeRemaining}`;
+} else {
+    responseMessage += `\n*◦ Estado Premium:* No activo`;
+}
         const svgUrl = countryInfo ? countryInfo.image : null;
         if (svgUrl) {
             const response = await fetch(svgUrl);
@@ -2667,6 +2677,7 @@ _Sigue el formato de tiempo para cada caso:_\n
     }
 
     addPremiumUser(userId, timePremium);
+    db.data.users[userId].premium = true
     reply("*Se ha añadido al usuario premium!*");
     break
 
@@ -2696,7 +2707,7 @@ case 'delprem':
     if (deleteResponse.error) {
         return reply(deleteResponse.error);
     }
-
+    db.data.users[userToDeleteId].premium = false
     reply("*¡Se ha eliminado al usuario premium!*");
     break
 			
