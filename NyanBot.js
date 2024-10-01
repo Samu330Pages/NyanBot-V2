@@ -2800,7 +2800,7 @@ case 't': {
     if (!mediaPath) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
 
     let encmedia;
-    const outputFilePath = 'output.webp'; // Asegúrate de definir el nombre del archivo de salida aquí
+    const outputFilePath = 'output.webp'; // Archivo de salida
 
     // Procesar imagen o video
     try {
@@ -2817,7 +2817,7 @@ case 't': {
                             console.error('Error al procesar la imagen cuadrada:', err);
                             reject(err);
                         })
-                        .save(outputFilePath); // Guardar archivo
+                        .save(outputFilePath); // Guardar archivo cuadrado
                 });
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
@@ -2830,7 +2830,7 @@ case 't': {
                             console.error('Error al procesar la imagen circular:', err);
                             reject(err);
                         })
-                        .save(outputFilePath); // Guardar archivo
+                        .save(outputFilePath); // Guardar archivo circular
                 });
             }
         } else if (/video/.test(quoted.mimetype)) {
@@ -2847,7 +2847,7 @@ case 't': {
                             console.error('Error al procesar el video cuadrado:', err);
                             reject(err);
                         })
-                        .save(outputFilePath); // Guardar archivo
+                        .save(outputFilePath); // Guardar archivo cuadrado
                 });
             } else if (option === '-2') {
                 // Procesar video para sticker circular
@@ -2860,7 +2860,7 @@ case 't': {
                             console.error('Error al procesar el video circular:', err);
                             reject(err);
                         })
-                        .save(outputFilePath); // Guardar archivo
+                        .save(outputFilePath); // Guardar archivo circular
                 });
             }
         }
@@ -2878,11 +2878,10 @@ case 't': {
         await nyanBot2.sendMessage(m.chat, { sticker: encmedia, packname: global.packname, author: global.author }, { quoted: m });
     }
 
-    // Eliminar la media descargada después de enviar el sticker
+    // Eliminar el archivo descargado y el archivo procesado después de enviar el sticker
     if (fs.existsSync(mediaPath)) {
-        fs.unlinkSync(mediaPath); // Eliminar el archivo
+        fs.unlinkSync(mediaPath); // Eliminar el archivo original
     }
-    // Eliminar el archivo de salida después de enviar el sticker
     if (fs.existsSync(outputFilePath)) {
         fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
     }
