@@ -2784,7 +2784,7 @@ break
                 break
 
 case 't': {
-    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
+    if (!m.quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
@@ -2804,19 +2804,39 @@ case 't': {
 
     let encmedia;
     const outputFilePath = 'output.webp'; // Archivo de salida
+    const maskFilePath = 'mask.png'; // Archivo de máscara
+
+    // Crear la máscara circular si no existe
+    const createMask = async () => {
+        const width = 512;
+        const height = 512;
+
+        // Crear una imagen transparente
+        const mask = new Jimp(width, height, 0x00000000);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const dx = x - width / 2;
+                const dy = y - height / 2;
+                if (dx * dx + dy * dy <= (width / 2) * (width / 2)) {
+                    mask.setPixelColor(0xFFFFFFFF, x, y); // Establecer el color blanco
+                }
+            }
+        }
+
+        await mask.writeAsync(maskFilePath); // Guardar la máscara como mask.png
+        console.log('Máscara circular creada como mask.png');
+    };
 
     try {
+        // Verificar si la máscara ya existe, si no, crearla
+        if (!fs.existsSync(maskFilePath)) {
+            await createMask();
+        }
+
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen con Jimp
             const image = await Jimp.read(mediaPath);
-            let mask;
-
-            try {
-                mask = await Jimp.read('mask.png'); // Cargar la máscara circular
-            } catch (err) {
-                console.error('Error al cargar la máscara:', err);
-                return reply('No se encontró la máscara circular. Asegúrate de que mask.png esté en la misma carpeta que el script.');
-            }
+            const mask = await Jimp.read(maskFilePath); // Cargar la máscara circular
 
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
