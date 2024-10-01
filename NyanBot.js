@@ -2819,6 +2819,9 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
+                // Enviar el sticker cuadrado
+                const squareSticker = fs.readFileSync(outputFilePath);
+                await nyanBot2.sendImageAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
             } else if (option === '-2') {
                 // Procesar imagen para sticker circular
                 await new Promise((resolve, reject) => {
@@ -2832,6 +2835,9 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
+                // Enviar el sticker circular
+                const circularSticker = fs.readFileSync(outputFilePath);
+                await nyanBot2.sendImageAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
             }
         } else if (/video/.test(quoted.mimetype)) {
             if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
@@ -2849,6 +2855,9 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
+                // Enviar el sticker cuadrado
+                const squareSticker = fs.readFileSync(outputFilePath);
+                await nyanBot2.sendVideoAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
             } else if (option === '-2') {
                 // Procesar video para sticker circular
                 await new Promise((resolve, reject) => {
@@ -2862,20 +2871,15 @@ case 't': {
                         })
                         .save(outputFilePath); // Guardar archivo circular
                 });
+                // Enviar el sticker circular
+                const circularSticker = fs.readFileSync(outputFilePath);
+                await nyanBot2.sendVideoAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
             }
         }
-
-        // Leer el archivo procesado
-        encmedia = fs.readFileSync(outputFilePath); // Leer el archivo procesado
 
     } catch (err) {
         console.error('Error al procesar el medio:', err);
         return reply(`Ocurrió un error al procesar el medio: ${err.message}`);
-    }
-
-    // Enviar el sticker procesado
-    if (encmedia) {
-        await nyanBot2.sendMessage(m.chat, { sticker: encmedia, packname: global.packname, author: global.author }, { quoted: m });
     }
 
     // Eliminar el archivo descargado y el archivo procesado después de enviar el sticker
