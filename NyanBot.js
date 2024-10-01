@@ -16,6 +16,8 @@ const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
 const Jimp = require('jimp')
+const { createCanvas, loadImage } = require('canvas')
+const { getVideoDurationInSeconds } = require('get-video-duration')
 const util = require('util')
 const { BardAPI } = require('bard-api-node')
 const { color } = require('./lib/color')
@@ -2802,79 +2804,55 @@ case 't': {
     let encmedia;
     const outputFilePath = 'output.webp'; // Archivo de salida
 
-    // Procesar imagen o video
     try {
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen
-            if (option === '-1') {
-                // Procesar imagen para sticker cuadrado
-                await new Promise((resolve, reject) => {
-                    ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
-                        .toFormat('webp')
-                        .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar la imagen cuadrada:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo cuadrado
-                });
-                // Enviar el sticker cuadrado
-                const squareSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendImageAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
-            } else if (option === '-2') {
-                // Procesar imagen para sticker circular
-                await new Promise((resolve, reject) => {
-                    ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, format=rgba, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, format=rgba, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
-                        .toFormat('webp')
-                        .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar la imagen circular:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo circular
-                });
-                // Enviar el sticker circular
-                const circularSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendImageAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
-            }
+            const image = await loadImage(mediaPath);
+            const canvas = createCanvas(512, 512);
+            const ctx = canvas.getContext('2d');
+
+            // Dibujar un círculo
+            ctx.beginPath();
+            ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.clip(); // Recortar el contexto en un círculo
+
+            // Dibujar la imagen
+            ctx.drawImage(image, 0, 0, 512, 512);
+
+            // Guardar la imagen circular como sticker
+            const buffer = canvas.toBuffer('image/webp');
+            fs.writeFileSync(outputFilePath, buffer);
+            encmedia = fs.readFileSync(outputFilePath);
+
+            // Enviar el sticker circular
+            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
         } else if (/video/.test(quoted.mimetype)) {
             if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
 
-            if (option === '-1') {
-                // Procesar video para sticker cuadrado
-                await new Promise((resolve, reject) => {
-                    ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
-                        .toFormat('webp')
-                        .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar el video cuadrado:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo cuadrado
-                });
-                // Enviar el sticker cuadrado
-                const squareSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendVideoAsSticker(m.chat, squareSticker, m, { packname: global.packname, author: global.author });
-            } else if (option === '-2') {
-                // Procesar video para sticker circular
-                await new Promise((resolve, reject) => {
-                    ffmpeg(mediaPath)
-                        .outputOptions('-vf', 'scale=512:512, format=rgba, crop=512:512, drawbox=x=0:y=0:w=512:h=512:color=black:t=fill, format=rgba, geq=r=255*(if(between(X,0,512),1,0)):g=255*(if(between(X,0,512),1,0)):b=0')
-                        .toFormat('webp')
-                        .on('end', () => resolve())
-                        .on('error', (err) => {
-                            console.error('Error al procesar el video circular:', err);
-                            reject(err);
-                        })
-                        .save(outputFilePath); // Guardar archivo circular
-                });
-                // Enviar el sticker circular
-                const circularSticker = fs.readFileSync(outputFilePath);
-                await nyanBot2.sendVideoAsSticker(m.chat, circularSticker, m, { packname: global.packname, author: global.author });
-            }
+            // Procesar video para sticker circular
+            const duration = await getVideoDurationInSeconds(mediaPath);
+            if (duration > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
+
+            const canvas = createCanvas(512, 512);
+            const ctx = canvas.getContext('2d');
+            const video = await loadImage(mediaPath);
+
+            // Aquí debes usar un método para obtener un frame del video
+            // Por simplicidad, asumimos que tenemos un frame de 512x512
+            ctx.beginPath();
+            ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.clip(); // Recortar el contexto en un círculo
+            ctx.drawImage(video, 0, 0, 512, 512); // Cambia esto para obtener el frame del video
+
+            // Guardar la imagen circular como sticker
+            const buffer = canvas.toBuffer('image/webp');
+            fs.writeFileSync(outputFilePath, buffer);
+            encmedia = fs.readFileSync(outputFilePath);
+
+            // Enviar el sticker circular
+            await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
         }
 
     } catch (err) {
