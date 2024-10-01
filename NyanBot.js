@@ -2809,22 +2809,15 @@ case 't': {
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen con Jimp
             const image = await Jimp.read(mediaPath);
+            const mask = await Jimp.read('mask.png'); // Cargar la máscara circular
 
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
                 await image.resize(512, 512).writeAsync(outputFilePath);
             } else if (option === '2') {
-                // Opción 2: Recortar la imagen en forma circular
-                const circleImage = new Jimp(512, 512, 0x00000000); // Crear un lienzo transparente
+                // Opción 2: Aplicar la máscara circular
                 await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
-                circleImage.composite(image, 0, 0); // Superponer la imagen en el lienzo
-
-                // Crear una máscara circular
-                const mask = new Jimp(512, 512, 0xFFFFFFFF); // Crear una máscara blanca
-                mask.circle(); // Hacer circular la máscara
-                circleImage.mask(mask, 0, 0); // Aplicar la máscara circular
-
-                await circleImage.writeAsync(outputFilePath);
+                image.mask(mask, 0, 0).write(outputFilePath); // Aplicar la máscara circular
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
