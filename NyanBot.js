@@ -2781,18 +2781,27 @@ break
                 }
                 break
 
-case 's': {
+case 't': {
     if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
     
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const args = text.trim().split(' '); // Obtener los argumentos del comando
     let option = args[1]; // Obtener la opción (si existe)
-    
-    let media = await quoted.download(); // Descargar el medio
+
+    // Validar que quoted tenga el tipo de medio correcto
+    if (!quoted || !quoted.mimetype) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
+
+    let media = await quoted.download().catch(err => {
+        console.error('Error al descargar el medio:', err);
+        return null; // Si hay un error, devolver null
+    });
+
+    if (!media) return reply('No se pudo descargar el medio. Asegúrate de que sea una imagen o video válido.');
+
     let encmedia;
 
-    if (/image/.test(mime)) {
+    if (/image/.test(quoted.mimetype)) {
         if (option === '-1') {
             // Procesar imagen para sticker cuadrado
             const processedImage = await Jimp.read(media);
@@ -2808,7 +2817,7 @@ case 's': {
             // Enviar sticker normal
             encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
         }
-    } else if (/video/.test(mime)) {
+    } else if (/video/.test(quoted.mimetype)) {
         if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
         
         if (option === '-1') {
@@ -2817,9 +2826,9 @@ case 's': {
                 ffmpeg(media)
                     .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
                     .toFormat('webp')
-                    .on('end', () => resolve(media))
+                    .on('end', () => resolve('output.webp')) // Cambiar a el nombre del archivo procesado
                     .on('error', (err) => reject(err))
-                    .saveToFile('output.webp'); // Guardar archivo
+                    .save('output.webp'); // Guardar archivo
             });
         } else if (option === '-2') {
             // Procesar video para sticker circular
@@ -2827,9 +2836,9 @@ case 's': {
                 ffmpeg(media)
                     .outputOptions('-vf', 'scale=512:512, crop=512:512') // Cambiar tamaño y recortar
                     .toFormat('webp')
-                    .on('end', () => resolve(media))
+                    .on('end', () => resolve('output.webp')) // Cambiar a el nombre del archivo procesado
                     .on('error', (err) => reject(err))
-                    .saveToFile('output.webp'); // Guardar archivo
+                    .save('output.webp'); // Guardar archivo
             });
         } else {
             // Enviar sticker normal
