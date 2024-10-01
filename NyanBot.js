@@ -2766,6 +2766,28 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
+case 'togif': {
+if (!/webp/.test(mime)) return reply(`*Porfavor etiqueta un sticker animado con el comando:* ${prefix + command}`)
+if (!m.quoted.isAnimated) return reply('*Eh...* _asegurate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁')
+await reply('_*Tu solicitud se esta procesando, espera un momento porfavor!*_')
+nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+let media = await nyanBot2.downloadAndSaveMediaMessage(qmsg)
+let webpToMp4 = await webp2mp4File(media)
+await nyanBot2.sendMessage(m.chat, {
+        video: {
+        url: webpToMp4.result,
+        caption: '"Conversión exitosa!*'
+        },
+        gifPlayback: true
+}, {
+        quoted: m
+})
+nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+await fs.unlinkSync(media)
+
+}
+break
+
 case 's':
 case 'sticker':
 case 'stiker': {
