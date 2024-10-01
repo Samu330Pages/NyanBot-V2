@@ -2809,24 +2809,29 @@ case 't': {
         if (/image/.test(quoted.mimetype)) {
             // Procesar imagen con sharp
             if (option === '1') {
-                // Opción 1: Redimensionar a 512x512
+                // Opción 1: Estirar la imagen a 512x512
                 await sharp(mediaPath)
-                    .resize(512, 512)
+                    .resize(512, 512, {
+                        fit: sharp.fit.fill // Estirar la imagen para que ocupe el cuadro
+                    })
                     .toFile(outputFilePath);
             } else if (option === '2') {
                 // Opción 2: Recortar a circular
                 const image = sharp(mediaPath);
+
+                // Redimensionar la imagen a un tamaño mínimo de 512x512
                 const { width, height } = await image.metadata();
+                const size = Math.max(width, height); // Obtener el tamaño máximo
 
                 // Crear un buffer para la máscara circular
                 const mask = Buffer.from(`
-                    <svg>
-                        <circle cx="${width / 2}" cy="${height / 2}" r="${Math.min(width, height) / 2}" fill="white" />
+                    <svg width="${size}" height="${size}">
+                        <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="white" />
                     </svg>
                 `);
 
                 await image
-                    .resize(512, 512)
+                    .resize(size, size) // Redimensionar la imagen para que tenga el mismo tamaño que la máscara
                     .composite([{ input: mask, blend: 'dest-in' }]) // Aplicar la máscara
                     .toFile(outputFilePath);
             } else {
