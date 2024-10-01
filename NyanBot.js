@@ -2783,7 +2783,7 @@ break
                 }
                 break
 
-case 't': {
+case 's': {
     if (!m.quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
@@ -2844,7 +2844,7 @@ case 't': {
             } else if (option === '2') {
                 // Opción 2: Aplicar la máscara circular
                 await image.resize(512, 512); // Asegurarse de que la imagen esté en el tamaño correcto
-                image.mask(mask, 0, 0).write(outputFilePath); // Aplicar la máscara circular
+                await image.mask(mask, 0, 0).writeAsync(outputFilePath); // Aplicar la máscara circular y escribir el archivo de salida
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
@@ -2852,10 +2852,14 @@ case 't': {
                 return; // Salir después de enviar sin procesar
             }
 
-            // Leer el archivo procesado
-            encmedia = fs.readFileSync(outputFilePath);
-            // Enviar el sticker
-            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+            // Asegurarse de que el archivo de salida exista antes de leerlo
+            if (fs.existsSync(outputFilePath)) {
+                encmedia = fs.readFileSync(outputFilePath);
+                // Enviar el sticker
+                await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+            } else {
+                return reply('Error al procesar la imagen. No se generó el archivo de salida.');
+            }
 
         } else if (/video/.test(quoted.mimetype)) {
             if (option === '1') {
@@ -2872,10 +2876,14 @@ case 't': {
                         .save(outputFilePath); // Guardar archivo cuadrado
                 });
 
-                // Leer el archivo procesado
-                encmedia = fs.readFileSync(outputFilePath);
-                // Enviar el sticker del video
-                await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                // Asegurarse de que el archivo de salida exista antes de leerlo
+                if (fs.existsSync(outputFilePath)) {
+                    encmedia = fs.readFileSync(outputFilePath);
+                    // Enviar el sticker del video
+                    await nyanBot2.sendVideoAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                } else {
+                    return reply('Error al procesar el video. No se generó el archivo de salida.');
+                }
             } else if (option === '2') {
                 // Opción 2: Mostrar mensaje que no se pueden recortar videos en forma circular
                 return reply(`No se pueden recortar videos en forma circular. Solo imágenes.`);
