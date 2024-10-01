@@ -2781,6 +2781,71 @@ break
                 }
                 break
 
+case 's': {
+    if (!quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
+    
+    nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
+
+    const args = text.trim().split(' '); // Obtener los argumentos del comando
+    let option = args[1]; // Obtener la opción (si existe)
+    
+    let media = await quoted.download(); // Descargar el medio
+    let encmedia;
+
+    if (/image/.test(mime)) {
+        if (option === '-1') {
+            // Procesar imagen para sticker cuadrado
+            const processedImage = await Jimp.read(media);
+            processedImage.resize(512, 512); // Redimensionar a 512x512
+            encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
+        } else if (option === '-2') {
+            // Procesar imagen para sticker circular
+            const processedImage = await Jimp.read(media);
+            processedImage.resize(512, 512); // Redimensionar a 512x512
+            processedImage.circle(); // Recortar en forma circular
+            encmedia = await processedImage.getBufferAsync(Jimp.MIME_WEBP);
+        } else {
+            // Enviar sticker normal
+            encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+        }
+    } else if (/video/.test(mime)) {
+        if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
+        
+        if (option === '-1') {
+            // Procesar video para sticker cuadrado
+            encmedia = await new Promise((resolve, reject) => {
+                ffmpeg(media)
+                    .outputOptions('-vf', 'scale=512:512') // Cambiar tamaño a 512x512
+                    .toFormat('webp')
+                    .on('end', () => resolve(media))
+                    .on('error', (err) => reject(err))
+                    .saveToFile('output.webp'); // Guardar archivo
+            });
+        } else if (option === '-2') {
+            // Procesar video para sticker circular
+            encmedia = await new Promise((resolve, reject) => {
+                ffmpeg(media)
+                    .outputOptions('-vf', 'scale=512:512, crop=512:512') // Cambiar tamaño y recortar
+                    .toFormat('webp')
+                    .on('end', () => resolve(media))
+                    .on('error', (err) => reject(err))
+                    .saveToFile('output.webp'); // Guardar archivo
+            });
+        } else {
+            // Enviar sticker normal
+            encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author });
+        }
+    } else {
+        return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.`);
+    }
+
+    // Enviar el sticker procesado
+    if (encmedia) {
+        await nyanBot2.sendMessage(m.chat, { sticker: encmedia }, { quoted: m });
+    }
+}
+break
+
 case 'actualizar':
 case 'update':
 if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
