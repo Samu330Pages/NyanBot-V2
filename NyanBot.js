@@ -2783,7 +2783,7 @@ break
                 }
                 break
 
-case 's': {
+case 't': {
     if (!m.quoted) return reply(`Envía o etiqueta una Imagen/Video/gif con el comando ${prefix + command}\nDuración del video de 1-9 Segundos.\n\nUso:\n- ${prefix + command} 1 (para imagen cuadrada)\n- ${prefix + command} 2 (para imagen circular)\n- ${prefix + command} (sin opciones para enviar como está)`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
