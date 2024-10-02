@@ -2768,7 +2768,10 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 break
 
 case 'togif':
-case 'tovideo': {
+case 'agif':
+case 'tovideo':
+case 'tovid':
+case 'avideo': {
     if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
     if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
 
@@ -2790,21 +2793,21 @@ case 'tovideo': {
     }
 
     // Enviar el resultado según el comando
-    if (command === 'togif') {
+    if (command.includes('gif')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url,
-                caption: '"Conversión exitosa!*'
+                caption: '*Conversión exitosa!*'
             },
             gifPlayback: true
         }, {
             quoted: m
         });
-    } else if (command === 'tovideo') {
+    } else if (command.includes('vide')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url,
-                caption: '"Conversión exitosa!*'
+                caption: '*Conversión exitosa!*'
             }
         }, {
             quoted: m
@@ -2901,12 +2904,11 @@ case 'stiker': {
                 return reply('Error al procesar la imagen. No se generó el archivo de salida.');
             }
 
-        } else if (/video/.test(quoted.mimetype)) {
-            if ((quoted.msg || quoted).seconds > 9) return reply(`Duración del video debe estar entre 1-9 Segundos.`);
-
-            // Solo se envían videos en su forma original
-            return reply(`No se pueden editar o recortar videos. Solo se pueden enviar en su forma original.`);
-        } else {
+        } else if (/video/.test(mime)) {
+if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
+let media = await quoted.download()
+let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+} else {
             return reply(`Tipo de archivo no reconocido. Asegúrate de enviar una imagen o un video.`);
         }
 
