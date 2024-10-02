@@ -3200,7 +3200,7 @@ case 'vwon': {
 if (!m.isGroup) return reply(mess.group)
 if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
-if (db.data.chats[from].badword === true) return reply('¡la opción de badwords está ya activa!')
+if (db.data.chats[from].antiviewonce === true) return reply('¡la opción de badwords está ya activa!')
 db.data.chats[from].antiviewonce = true
 reply(`La opción de *AntiViewOnce* sé ha activado en este chat.`)
 }
@@ -3209,7 +3209,7 @@ case 'vwoff': {
 if (!m.isGroup) return reply(mess.group)
 if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
-if (db.data.chats[from].badword === false) return reply('¡la opción de badwords está ya desactivada!')
+if (db.data.chats[from].antiviewonce === false) return reply('¡la opción de badwords está ya desactivada!')
 db.data.chats[from].antiviewonce = false
 reply(`La opción de *AntiViewOnce* sé ha desactivado en este chat.`)
 }
