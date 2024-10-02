@@ -2502,6 +2502,109 @@ case 'clima': {
 }
 break
 
+case 'gdrive': {
+    if (!text) return reply("*Por favor, asegúrate de incluir el link de Google Drive después del comando*");
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 50) {
+        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    }
+
+    if (!/drive\.google\.com/.test(text)) {
+        return reply("🛑 El enlace proporcionado no es un enlace válido de Google Drive.");
+    }
+
+    try {
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        
+        let data = await require("api-dylux").GDriveDl(text);
+        const filesizeMB = parseFloat(data.fileSizeB / (1024 * 1024));
+        if (filesizeMB > 1000) {
+            return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
+        }
+
+        let mimeType;
+        switch (data.mimetype.toLowerCase()) {
+            case 'application/pdf': mimeType = 'application/pdf'; break;
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
+            case 'application/zip': mimeType = 'application/zip'; break;
+            case 'application/x-rar-compressed': mimeType = 'application/x-rar-compressed'; break;
+            case 'application/x-7z-compressed': mimeType = 'application/x-7z-compressed'; break;
+            case 'video/mp4': mimeType = 'video/mp4'; break;
+            case 'audio/mpeg': mimeType = 'audio/mpeg'; break;
+            case 'image/jpeg': mimeType = 'image/jpeg'; break;
+            case 'image/png': mimeType = 'image/png'; break;
+            case 'image/gif': mimeType = 'image/gif'; break;
+            case 'image/bmp': mimeType = 'image/bmp'; break;
+            case 'image/svg+xml': mimeType = 'image/svg+xml'; break;
+            case 'text/plain': mimeType = 'text/plain'; break;
+            case 'text/html': mimeType = 'text/html'; break;
+            case 'text/csv': mimeType = 'text/csv'; break;
+            case 'application/vnd.android.package-archive': mimeType = 'application/vnd.android.package-archive'; break;
+            case 'application/vnd.microsoft.portable-executable': mimeType = 'application/vnd.microsoft.portable-executable'; break;
+            case 'application/octet-stream': mimeType = 'application/octet-stream'; break;
+            case 'application/json': mimeType = 'application/json'; break;
+            case 'application/xml': mimeType = 'application/xml'; break;
+            default: mimeType = 'application/octet-stream'; break;
+        }
+
+        if (mimeType === 'application/octet-stream') {
+            const tempFilePath = path.join(__dirname, data.fileName);
+            const zipFilePath = path.join(__dirname, `${data.fileName}.zip`);
+
+            const fileBuffer = await fetchBuffer(data.downloadUrl);
+            fs.writeFileSync(tempFilePath, fileBuffer);
+
+            const output = fs.createWriteStream(zipFilePath);
+            const archive = archiver('zip', { zlib: { level: 9 } });
+
+            output.on('close', async () => {
+                await nyanBot2.sendMessage(m.chat, {
+                    document: fs.readFileSync(zipFilePath),
+                    fileName: `${data.fileName}.zip`,
+                    mimetype: 'application/zip',
+                    caption: `${forma1}GOOGLE DRIVE DL 🗳️${forma1}\n
+_*No se encontró extensión adecuada al documento, así que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
+*Título:* ${data.fileName}
+*Tamaño:* ${data.fileSize}
+*Descarga:* ${data.downloadUrl}\n
+> ${botname}`
+                }, { quoted: m });
+
+                // Eliminar archivos temporales
+                fs.unlinkSync(tempFilePath);
+                fs.unlinkSync(zipFilePath);
+            });
+
+            // Empaquetar en ZIP
+            archive.pipe(output);
+            archive.file(tempFilePath, { name: data.fileName });
+            archive.finalize();
+
+        } else {
+            await nyanBot2.sendMessage(m.chat, {
+                document: await fetchBuffer(data.downloadUrl),
+                fileName: `${data.fileName}`,
+                mimetype: `${mimeType}`,
+                caption: `
+*Título:* ${data.fileName}
+*Tamaño:* ${data.fileSize}
+*Descarga:* ${data.downloadUrl}\n
+> ${botname}`
+            }, { quoted: m });
+        }
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        db.data.users[sender].limit -= 50;
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
+    }
+}
+break
+
 
 case 'mediafire': {
     if (!text) return reply("*Por favor, asegúrate de incluir el link de MediaFire después del comando*");
