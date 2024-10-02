@@ -701,9 +701,9 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         });
     }
 
-async function thumB(source) {
-      let jimp = await read(file)
-      let buff = await jimp
+const thumB(source) {
+      let jimp = read(file)
+      let buff = jimp
          .quality(100)
          .resize(200, AUTO, RESIZE_BILINEAR)
          .getBufferAsync(MIME_JPEG)
