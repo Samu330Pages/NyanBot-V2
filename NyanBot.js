@@ -2786,7 +2786,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt");
     if (!fs.existsSync(media)) {
-        return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
+        return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker.');
     }
     let metadata = await extractMetadata(media)
     const conversionResult = await webp2mp4File(media);
@@ -2796,7 +2796,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
     }
     try {
     if(command.includes('gif')) {
-	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
+        if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
@@ -2807,7 +2807,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
             quoted: m
         });
     } else if (command.includes('vid')) {
-	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
+        if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
@@ -2817,21 +2817,15 @@ case 'aimg': case 'aimagen': case 'toimg': {
             quoted: m
         });
     } else if (command.includes('img')) {
-	if (m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker no sea animado!!_ 😁');
-	let ran = await getRandom('.png')
-                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
-                    fs.unlinkSync(media)
-                    if (err) return reply(`${err}`)
-                    let buffer = fs.readFileSync(ran)
-                    nyanBot2.sendMessage(m.chat, {
-			    image: buffer,
-			    caption: `*Conversión exitosa! 🍋‍🟩*\n\n- _*Información del sticker:*_\n\n*🧩 Pack mame:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
-		    }, { quoted: m });
-                    fs.unlinkSync(ran)
-                })
+        if (m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker no sea animado!!_ 😁');
+        let buffer = await fs.readFileSync(media)
+        nyanBot2.sendMessage(m.chat, {
+            image: buffer,
+            caption: `*Conversión exitosa! 🍋‍🟩*\n\n- _*Información del sticker:*_\n\n*🧩 Pack mame:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
+        }, { quoted: m });
     }
     } catch (err) {
-	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`)
+        return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`)
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
