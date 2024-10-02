@@ -2775,6 +2775,12 @@ case 'tovideo': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     let media = await nyanBot2.downloadAndSaveMediaMessage(quoted);
+    
+    // Verificar si el archivo se descargó correctamente
+    if (!fs.existsSync(media)) {
+        return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
+    }
+
     const outputFilePath = 'output.mp4'; // Archivo de salida para el video
 
     try {
@@ -2796,14 +2802,21 @@ case 'tovideo': {
         // Enviar el resultado según el comando
         if (command === 'togif') {
             await nyanBot2.sendMessage(m.chat, {
-                video: outputFilePath, caption: '"Conversión exitosa!*', gifPlayback: true
+                video: {
+                    url: outputFilePath,
+                    caption: '"Conversión exitosa!*'
+                },
+                gifPlayback: true
             }, {
                 quoted: m
             });
         } else if (command === 'tovideo') {
             await nyanBot2.sendMessage(m.chat, {
-                video: outputFilePath, caption: '"Conversión exitosa!*'
-	    }, {
+                video: {
+                    url: outputFilePath,
+                    caption: '"Conversión exitosa!*'
+                }
+            }, {
                 quoted: m
             });
         }
@@ -2811,7 +2824,7 @@ case 'tovideo': {
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply(`Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.${err}`);
+        return reply(`Ocurrió un error durante el procesamiento. Asegúrate de que el sticker sea válido y animado.\n${err}`);
     } finally {
         // Eliminar los archivos descargados y procesados
         if (fs.existsSync(media)) {
