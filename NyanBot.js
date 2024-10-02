@@ -2766,6 +2766,9 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+
 case 'togif':
 case 'tovideo': {
     if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
@@ -2774,21 +2777,22 @@ case 'tovideo': {
     await reply('_*Tu solicitud se está procesando, espera un momento por favor!*_');
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted);
-    
+    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif.webp");
+    let webp = await fs.readFileSync("samugif.webp")
     // Verificar si el archivo se descargó correctamente
-    if (!fs.existsSync(media)) {
+    if (!fs.existsSync(webp)) {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
 
-    const outputFilePath = 'output.mp4'; // Archivo de salida para el video
+    const outputFilePath = 'videoT.mp4'; // Archivo de salida para el video
 
     try {
         await new Promise((resolve, reject) => {
-            ffmpeg(media)
-                .outputOptions('-movflags', 'faststart') // Opciones para optimizar el video
-                .toFormat('mp4') // Convertir a formato mp4
-                .save(outputFilePath) // Guardar archivo de salida
+            ffmpeg(webp)
+                .inputFormat('webp') // Asegurarse de que el formato de entrada sea webp
+                .outputOptions('-movflags', 'faststart')
+                .toFormat('mp4')
+                .save(outputFilePath)
                 .on('end', () => {
                     console.log('Conversión completada.');
                     resolve();
@@ -2824,11 +2828,11 @@ case 'tovideo': {
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply(`Ocurrió un error durante el procesamiento. Asegúrate de que el sticker sea válido y animado.\n${err}`);
+        return reply('Ocurrió un error durante el procesamiento. Asegúrate de que el sticker sea válido y animado.');
     } finally {
         // Eliminar los archivos descargados y procesados
-        if (fs.existsSync(media)) {
-            fs.unlinkSync(media); // Eliminar el archivo original
+        if (fs.existsSync(webp)) {
+            fs.unlinkSync(webp); // Eliminar el archivo original
         }
         if (fs.existsSync(outputFilePath)) {
             fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
