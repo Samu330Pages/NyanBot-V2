@@ -61,9 +61,9 @@ const readmore = more.repeat(4001)
 const {
     TelegraPh,
     UploadFileUgu,
-    //webp2mp4File,
+    webp2mp4File,
     floNime
-} = require('./lib/uploader')
+} = require('./lib/uploader2')
 const {
     toAudio,
     toPTT,
@@ -2782,61 +2782,6 @@ case 'tovideo': {
     if (!fs.existsSync(media)) {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
-
-    // Función para convertir WebP a MP4 usando ezgif
-    const webp2mp4File = async (path) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const form = new FormData();
-                form.append('new-image-url', '');
-                form.append('new-image', fs.createReadStream(path));
-
-                const response = await axios.post('https://ezgif.com/webp-to-mp4', form, {
-                    headers: {
-                        ...form.getHeaders(),
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                    }
-                });
-
-                const $ = cheerio.load(response.data);
-                const file = $('input[name="file"]').attr('value');
-
-                if (!file) return resolve({
-                    status: false,
-                    msg: 'Failed to get conversion file!'
-                });
-
-                const procResponse = await axios.post(`https://ezgif.com/webp-to-mp4/${file}`, new URLSearchParams({ file }), {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                });
-
-                const proc$ = cheerio.load(procResponse.data);
-                const link = proc$('#output > p.outfile > video > source').attr('src');
-
-                if (!link) return resolve({
-                    status: false,
-                    msg: 'Failed to convert!'
-                });
-
-                resolve({
-                    status: true,
-                    data: {
-                        url: 'https:' + link
-                    }
-                });
-            } catch (e) {
-                console.error(e);
-                resolve({
-                    status: false,
-                    msg: e.message
-                });
-            }
-        });
-    };
-
     // Llamar a la función de conversión
     const conversionResult = await webp2mp4File(media);
 
