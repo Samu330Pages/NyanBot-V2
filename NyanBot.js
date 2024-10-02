@@ -701,6 +701,15 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         });
     }
 
+async function thumb(source) {
+      let jimp = await read(file)
+      let buff = await jimp
+         .quality(100)
+         .resize(200, AUTO, RESIZE_BILINEAR)
+         .getBufferAsync(MIME_JPEG)
+      return buff
+}
+
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
         viewOnceMessage: {
