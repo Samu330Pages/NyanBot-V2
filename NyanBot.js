@@ -877,7 +877,7 @@ list.push({
         //antiviewonce
     if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
         let val = { ...m }
-        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message
+        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || val.message?.viewOnceMessageV2Extension?.message
         delete msg[Object.keys(msg)[0]].viewOnce
         val.message = msg
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
@@ -2829,15 +2829,20 @@ break
 case 's':
 case 'sticker':
 case 'stiker': {
-    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
-
+    let media;
+    if (isImage) {
+	    media = isImage;
+    } else if (isQuotedImage) {
+	    media = isQuotedImage;
+    }
+    if (!media) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
     let mediaPath;
 
     try {
-        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted); // Descargar y guardar la media
+        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(media); // Descargar y guardar la media
     } catch (err) {
         console.error('Error al descargar el medio:', err);
         return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
@@ -2851,7 +2856,7 @@ case 'stiker': {
     const outputFilePath = 'output.webp'; // Archivo de salida
 
     try {
-        if (/image/.test(quoted.mimetype)) {
+        if (/image/.test(media.mimetype)) {
             // Procesar imagen con sharp
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
