@@ -875,15 +875,15 @@ list.push({
         }
     
         //antiviewonce
-   /* if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
+   if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2' || m.mtype == 'viewOnceMessageV2Extension') {
         let val = { ...m }
-        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || (/audio/.test(m.type))val.message?.viewOnceMessageV2?.message
+        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || val.message?.viewOnceMessageV2Extension?.message
         delete msg[Object.keys(msg)[0]].viewOnce
         val.message = msg
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
-    }*/
+    }
 
-	    if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
+	    /*if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
               let val = { ...m }
 	      let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message
               delete msg[Object.keys(msg)[0]].viewOnce
@@ -895,7 +895,7 @@ list.push({
               } else if (/audio/.test(m.type)) {
                   return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
               }
-          }
+          }*/
  
  if (db.data.chats[m.chat].antibot) {
     if (m.isBaileys && m.fromMe == false){
