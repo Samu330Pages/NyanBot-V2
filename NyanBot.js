@@ -216,6 +216,7 @@ const categories = {
         { command: 's', description: '_*Opciones: 1, 2 y 3*_' },
 	{ command: 'avideo', description: '' },
 	{ command: 'agif', description: '' },
+	{ command: 'aimagen', description: '' },
 	{ command: 'calculadora', description: '' },
 	{ command: 'cal', description: '' },
         { command: 'puntos', description: '' },
@@ -2777,11 +2778,9 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
-case 'togif':
-case 'agif':
-case 'tovideo':
-case 'tovid':
-case 'avideo': {
+case 'togif': case 'agif':
+case 'tovideo': case 'tovid': case 'avideo':
+case 'aimg': case 'aimagen': case 'toimg': {
     if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
     if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
 
@@ -2817,6 +2816,19 @@ case 'avideo': {
         }, {
             quoted: m
         });
+    } else if (command.includes('img')) {
+	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker no sea animado!!_ 😁');
+	let ran = await getRandom('.png')
+                exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+                    fs.unlinkSync(media)
+                    if (err) return err
+                    let buffer = fs.readFileSync(ran)
+                    nyanBot2.sendMessage(m.chat, {
+			    image: buffer,
+			    caption: `*Conversión exitosa! 🍋‍🟩*\n\n- _*Información del sticker:*_\n\n*🧩 Pack mame:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
+		    }, { quoted: m });
+                    fs.unlinkSync(ran)
+                })
     }
     } catch (err) {
 	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`)
