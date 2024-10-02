@@ -2775,36 +2775,27 @@ case 'tovideo': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     // Descargar y guardar el archivo como "samugif.webp"
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif.webp");
+    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
 
     // Verificar si el archivo se descargó correctamente
     if (!fs.existsSync(media)) {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
 
-    const outputFilePath = 'videoT.mp4'; // Archivo de salida para el video
+    const outputGifPath = 'output.gif'; // Archivo de salida para el GIF
 
-    try {
-        await new Promise((resolve, reject) => {
-            ffmpeg(media) // Usar el nombre del archivo guardado
-                .outputOptions('-movflags', 'faststart')
-                .toFormat('mp4')
-                .save(outputFilePath)
-                .on('end', () => {
-                    console.log('Conversión completada.');
-                    resolve();
-                })
-                .on('error', (err) => {
-                    console.error('Error durante la conversión:', err);
-                    reject(err);
-                });
-        });
+    // Convertir WebP a GIF usando gifsicle
+    exec(`gifsicle --colors 256 --no-warnings --optimize=3 --resize-fit 500x500 "${media}" > "${outputGifPath}"`, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error durante la conversión a GIF: ${stderr}`);
+            return reply('Ocurrió un error durante la conversión a GIF.');
+        }
 
         // Enviar el resultado según el comando
         if (command === 'togif') {
-            await nyanBot2.sendMessage(m.chat, {
+            nyanBot2.sendMessage(m.chat, {
                 video: {
-                    url: outputFilePath,
+                    url: outputGifPath,
                     caption: '"Conversión exitosa!*'
                 },
                 gifPlayback: true
@@ -2812,9 +2803,9 @@ case 'tovideo': {
                 quoted: m
             });
         } else if (command === 'tovideo') {
-            await nyanBot2.sendMessage(m.chat, {
+            nyanBot2.sendMessage(m.chat, {
                 video: {
-                    url: outputFilePath,
+                    url: outputGifPath,
                     caption: '"Conversión exitosa!*'
                 }
             }, {
@@ -2823,18 +2814,15 @@ case 'tovideo': {
         }
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-    } catch (err) {
-        console.error('Error durante la conversión:', err);
-        return reply(`${err.message}`);
-    } finally {
-        // Eliminar los archivos descargados y procesados
+
+        // Eliminar archivos usados
         if (fs.existsSync(media)) {
             fs.unlinkSync(media); // Eliminar el archivo original
         }
-        if (fs.existsSync(outputFilePath)) {
-            fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
+        if (fs.existsSync(outputGifPath)) {
+            fs.unlinkSync(outputGifPath); // Eliminar el archivo GIF procesado
         }
-    }
+    });
 }
 break
 
