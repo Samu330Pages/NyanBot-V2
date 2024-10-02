@@ -2806,7 +2806,7 @@ case 'avideo': {
         });
     }
     } catch (err) {
-	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`}
+	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`)
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
