@@ -701,7 +701,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         });
     }
 
-function thumb(source) {
+async function thumB(source) {
       let jimp = await read(file)
       let buff = await jimp
          .quality(100)
