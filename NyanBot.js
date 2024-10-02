@@ -2821,7 +2821,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
 	let ran = await getRandom('.png')
                 exec(`ffmpeg -i ${media} ${ran}`, (err) => {
                     fs.unlinkSync(media)
-                    if (err) return err
+                    if (err) return reply(`${err}`)
                     let buffer = fs.readFileSync(ran)
                     nyanBot2.sendMessage(m.chat, {
 			    image: buffer,
