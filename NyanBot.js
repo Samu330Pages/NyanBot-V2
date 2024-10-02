@@ -206,7 +206,10 @@ const categories = {
 	{ command: 'chatgpt', description: '' }
     ],
     "🎭 Grupos": [
-        { command: 'bienvenida', description: '' }
+	{ command: 'añadir', description: '_*NUM*_' },
+	{ command: 'eliminar', description: '_*NUM/@tag*_' },
+	{ command: 'unavista', description: '' },
+	{ command: 'antiviewonce', description: '' }
     ],
     "🛠 Herramientas": [
         { command: 'sticker', description: '_*Opciones: 1, 2 y 3*_' },
@@ -3164,6 +3167,54 @@ reply(teks)
 }
 break
 
+case 'antiviewonce': case 'unavista': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (!db.data.chats[from].antiviewonce === true) {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Activar ✔',
+            id: `${prefix}vwon`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*AntiViewOnce esta desactivado, Si deseas activar esta opción toca el botón.*'
+})	
+} else {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desactivar ❌',
+            id: `${prefix}vwoff`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*AntiViewOnce esta activado, Si deseas desactivar esta opción toca el botón.*'
+})
+}
+}
+break
+case 'vwon': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (db.data.chats[from].badword === true) return reply('¡la opción de badwords está ya activa!')
+db.data.chats[from].antiviewonce = true
+reply(`La opción de *AntiViewOnce* sé ha activado en este chat.`)
+}
+break
+case 'vwoff': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (db.data.chats[from].badword === false) return reply('¡la opción de badwords está ya desactivada!')
+db.data.chats[from].antiviewonce = false
+reply(`La opción de *AntiViewOnce* sé ha desactivado en este chat.`)
+}
+break
+      
 case 'anti': {
 if (!m.isGroup) return reply(mess.group)
 if (!isBotAdmins) return reply(mess.adminBot)
