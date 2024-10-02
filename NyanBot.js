@@ -2790,7 +2790,7 @@ case 'avideo': {
             video: {
                 url: conversionResult.data.url
             },
-            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n*Pack name:* ${metadata['sticker-pack-name']}\n*Pack publisher:* ${metadata['sticker-pack-publisher']}`,
+            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*Pack name:* ${metadata['sticker-pack-name']}\n\n*Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`,
             gifPlayback: true
         }, {
             quoted: m
@@ -2800,7 +2800,7 @@ case 'avideo': {
             video: {
                 url: conversionResult.data.url
             },
-            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n*Pack mame:* ${metadata['sticker-pack-name']}\n*Pack publisher:* ${metadata['sticker-pack-publisher']}`
+            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*Pack mame:* ${metadata['sticker-pack-name']}\n\n*Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
         }, {
             quoted: m
         });
