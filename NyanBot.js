@@ -2784,26 +2784,29 @@ case 'avideo': {
     if (!conversionResult.status) {
         return reply(`Error: ${conversionResult.msg}`);
     }
-
+    try {
     if(command.includes('gif')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
             },
-            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*Pack name:* ${metadata['sticker-pack-name']}\n\n*Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`,
+            caption: `*Conversión exitosa! 🍋‍🟩*\n\n_*Información del sticker:*_\n\n*🧩 Pack name:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`,
             gifPlayback: true
         }, {
             quoted: m
         });
-    } else if (command.includes('vide')) {
+    } else if (command.includes('vid')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
             },
-            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*Pack mame:* ${metadata['sticker-pack-name']}\n\n*Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
+            caption: `*Conversión exitosa! 🍋‍🟩*\n\n- _*Información del sticker:*_\n\n*🧩 Pack mame:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
         }, {
             quoted: m
         });
+    }
+    } catch (err) {
+	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`}
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
