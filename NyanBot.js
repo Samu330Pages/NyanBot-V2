@@ -29,6 +29,7 @@ const speed = require('performance-now')
 const ffmpeg = require('fluent-ffmpeg')
 const ms = toMs = require('ms')
 const axios = require('axios')
+const FormData = require('form-data')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
@@ -60,7 +61,7 @@ const readmore = more.repeat(4001)
 const {
     TelegraPh,
     UploadFileUgu,
-    webp2mp4File,
+    //webp2mp4File,
     floNime
 } = require('./lib/uploader')
 const {
@@ -2782,47 +2783,95 @@ case 'tovideo': {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
 
-    const outputGifPath = 'output.gif'; // Archivo de salida para el GIF
+    // Función para convertir WebP a MP4 usando ezgif
+    const webp2mp4File = async (path) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const form = new FormData();
+                form.append('new-image-url', '');
+                form.append('new-image', fs.createReadStream(path));
 
-    // Convertir WebP a GIF usando ffmpeg
-    exec(`ffmpeg -i "${media}" "${outputGifPath}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error durante la conversión a GIF: ${stderr}`);
-            return reply('Ocurrió un error durante la conversión a GIF: ' + stderr);
-        }
+                const response = await axios.post('https://ezgif.com/webp-to-mp4', form, {
+                    headers: {
+                        ...form.getHeaders(),
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                    }
+                });
 
-        // Enviar el resultado según el comando
-        if (command === 'togif') {
-            nyanBot2.sendMessage(m.chat, {
-                video: {
-                    url: outputGifPath,
-                    caption: '"Conversión exitosa!*'
-                },
-                gifPlayback: true
-            }, {
-                quoted: m
-            });
-        } else if (command === 'tovideo') {
-            nyanBot2.sendMessage(m.chat, {
-                video: {
-                    url: outputGifPath,
-                    caption: '"Conversión exitosa!*'
-                }
-            }, {
-                quoted: m
-            });
-        }
+                const $ = cheerio.load(response.data);
+                const file = $('input[name="file"]').attr('value');
 
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+                if (!file) return resolve({
+                    status: false,
+                    msg: 'Failed to get conversion file!'
+                });
 
-        // Eliminar archivos usados
-        if (fs.existsSync(media)) {
-            fs.unlinkSync(media); // Eliminar el archivo original
-        }
-        if (fs.existsSync(outputGifPath)) {
-            fs.unlinkSync(outputGifPath); // Eliminar el archivo GIF procesado
-        }
-    });
+                const procResponse = await axios.post(`https://ezgif.com/webp-to-mp4/${file}`, new URLSearchParams({ file }), {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+
+                const proc$ = cheerio.load(procResponse.data);
+                const link = proc$('#output > p.outfile > video > source').attr('src');
+
+                if (!link) return resolve({
+                    status: false,
+                    msg: 'Failed to convert!'
+                });
+
+                resolve({
+                    status: true,
+                    data: {
+                        url: 'https:' + link
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+                resolve({
+                    status: false,
+                    msg: e.message
+                });
+            }
+        });
+    };
+
+    // Llamar a la función de conversión
+    const conversionResult = await webp2mp4File(media);
+
+    if (!conversionResult.status) {
+        return reply(`Error: ${conversionResult.msg}`);
+    }
+
+    // Enviar el resultado según el comando
+    if (command === 'togif') {
+        await nyanBot2.sendMessage(m.chat, {
+            video: {
+                url: conversionResult.data.url,
+                caption: '"Conversión exitosa!*'
+            },
+            gifPlayback: true
+        }, {
+            quoted: m
+        });
+    } else if (command === 'tovideo') {
+        await nyanBot2.sendMessage(m.chat, {
+            video: {
+                url: conversionResult.data.url,
+                caption: '"Conversión exitosa!*'
+            }
+        }, {
+            quoted: m
+        });
+    }
+
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+
+    // Eliminar el archivo descargado
+    if (fs.existsSync(media)) {
+        fs.unlinkSync(media); // Eliminar el archivo original
+    }
 }
 break
 
