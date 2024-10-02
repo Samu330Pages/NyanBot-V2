@@ -2781,12 +2781,10 @@ break
 case 'togif': case 'agif':
 case 'tovideo': case 'tovid': case 'avideo':
 case 'aimg': case 'aimagen': case 'toimg': {
-    if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
-    if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
-
+    if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker con el comando:* ${prefix + command}`);
     await reply('_*Tu solicitud se está procesando, espera un momento por favor!*_');
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
+    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt");
     if (!fs.existsSync(media)) {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
@@ -2798,6 +2796,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
     }
     try {
     if(command.includes('gif')) {
+	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
@@ -2808,6 +2807,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
             quoted: m
         });
     } else if (command.includes('vid')) {
+	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
@@ -2817,7 +2817,7 @@ case 'aimg': case 'aimagen': case 'toimg': {
             quoted: m
         });
     } else if (command.includes('img')) {
-	if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker no sea animado!!_ 😁');
+	if (m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker no sea animado!!_ 😁');
 	let ran = await getRandom('.png')
                 exec(`ffmpeg -i ${media} ${ran}`, (err) => {
                     fs.unlinkSync(media)
@@ -2836,8 +2836,8 @@ case 'aimg': case 'aimagen': case 'toimg': {
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 
-    if (fs.existsSync("samugif.webp")) {
-        fs.unlinkSync("samugif.webp");
+    if (fs.existsSync("samuSt.webp")) {
+        fs.unlinkSync("samuSt.webp");
     }
 }
 break
