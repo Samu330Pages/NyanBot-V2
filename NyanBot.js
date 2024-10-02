@@ -2831,9 +2831,9 @@ case 'sticker':
 case 'stiker': {
     let media;
     if (isImage) {
-	    media = isImage;
+	    media = m;
     } else if (isQuotedImage) {
-	    media = isQuotedImage;
+	    media = m.quoted;
     }
     if (!media) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
