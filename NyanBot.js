@@ -234,7 +234,7 @@ const categories = {
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
-let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
+//let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 //media
 const VoiceNoteNyan = JSON.parse(fs.readFileSync('./Media/database/vn.json'))
@@ -2764,58 +2764,7 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
-case 'togif':
-case 'agif':
-case 'tovideo':
-case 'tovid':
-case 'avideo': {
-    if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
-    if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
 
-    await reply('_*Tu solicitud se está procesando, espera un momento por favor!*_');
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
-    if (!fs.existsSync(media)) {
-        return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
-    }
-    let metadata = await extractMetadata(media)
-    const conversionResult = await webp2mp4File(media);
-
-    if (!conversionResult.status) {
-        return reply(`Error: ${conversionResult.msg}`);
-    }
-    try {
-    if(command.includes('gif')) {
-        await nyanBot2.sendMessage(m.chat, {
-            video: {
-                url: conversionResult.data.url
-            },
-            caption: `*Conversión exitosa! 🍋‍🟩*\n\n_*Información del sticker:*_\n\n*🧩 Pack name:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`,
-            gifPlayback: true
-        }, {
-            quoted: m
-        });
-    } else if (command.includes('vid')) {
-        await nyanBot2.sendMessage(m.chat, {
-            video: {
-                url: conversionResult.data.url
-            },
-            caption: `*Conversión exitosa! 🍋‍🟩*\n\n- _*Información del sticker:*_\n\n*🧩 Pack mame:* ${metadata['sticker-pack-name']}\n\n*👤 Pack publisher:* ${metadata['sticker-pack-publisher']}\n\n*🔗 ID del paquete:* ${metadata['sticker-pack-id']}\n> ${botname}`
-        }, {
-            quoted: m
-        });
-    }
-    } catch (err) {
-	return reply(`*Lo siento, ocurrió un error! intenta de nuevo.*\n${err}`}
-    }
-
-    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-
-    if (fs.existsSync("samugif.webp")) {
-        fs.unlinkSync("samugif.webp");
-    }
-}
-break
 
 case 's':
 case 'sticker':
