@@ -2784,11 +2784,11 @@ case 'tovideo': {
 
     const outputGifPath = 'output.gif'; // Archivo de salida para el GIF
 
-    // Convertir WebP a GIF usando gifsicle
-    exec(`gifsicle --colors 256 --no-warnings --optimize=3 --resize-fit 500x500 "${media}" > "${outputGifPath}"`, (error, stdout, stderr) => {
+    // Convertir WebP a GIF usando ffmpeg
+    exec(`ffmpeg -i "${media}" "${outputGifPath}"`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error durante la conversión a GIF: ${stderr}`);
-            return reply(`Ocurrió un error durante la conversión a GIF.\n${stderr}`);
+            return reply('Ocurrió un error durante la conversión a GIF: ' + stderr);
         }
 
         // Enviar el resultado según el comando
