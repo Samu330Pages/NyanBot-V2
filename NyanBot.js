@@ -2796,9 +2796,9 @@ case 'avideo': {
     if (command.includes('gif')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
-                url: conversionResult.data.url,
-                caption: '*Conversión exitosa!*'
+                url: conversionResult.data.url
             },
+	    caption: '*Conversión exitosa!*',
             gifPlayback: true
         }, {
             quoted: m
@@ -2806,9 +2806,9 @@ case 'avideo': {
     } else if (command.includes('vide')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
-                url: conversionResult.data.url,
-                caption: '*Conversión exitosa!*'
-            }
+                url: conversionResult.data.url
+            },
+	    caption: '*Conversión exitosa!*'
         }, {
             quoted: m
         });
@@ -2879,9 +2879,8 @@ case 'stiker': {
             } else if (option === '3') {
                 // Opción 3: Recortar a forma de corazón
                 const heartMask = Buffer.from(`
-                    <svg width="512" height="512">
-                        <path d="M256 462c-8.5 0-17-3.2-23.5-9.5l-33.5-33c-6.5-6.5-6.5-17 0-23.5C218.5 388 256 354.5 256 354.5s37.5 33.5 56.5 46.5c6.5 6.5 6.5 17 0 23.5l-33.5 33C273 458.8 264.5 462 256 462z" fill="white"/>
-                        <path d="M256 464c-8.5 0-17-3.2-23.5-9.5l-33.5-33c-6.5-6.5-6.5-17 0-23.5C218.5 388 256 354.5 256 354.5s37.5 33.5 56.5 46.5c6.5 6.5 6.5 17 0 23.5l-33.5 33C273 458.8 264.5 462 256 462z" fill="white"/>
+                    <svg width="512" height="512" viewBox="0 0 24 24" fill="none">
+		    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="white"/>
                     </svg>
                 `);
                 await sharp(mediaPath)
