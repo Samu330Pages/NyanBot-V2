@@ -875,7 +875,7 @@ list.push({
         }
     
         //antiviewonce
-   if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2' || m.mtype == 'viewOnceMessageV2Extension') {
+   if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2' || m.mtype == 'viewOnceMessageV2Extension') {
         let val = { ...m }
         let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || val.message?.viewOnceMessageV2Extension?.message
         delete msg[Object.keys(msg)[0]].viewOnce
@@ -883,19 +883,6 @@ list.push({
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
     }
 
-	    /*if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
-              let val = { ...m }
-	      let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message
-              delete msg[Object.keys(msg)[0]].viewOnce
-              val.message = msg
-              if (/image/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
-              } else if (/video/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
-              } else if (/audio/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
-              }
-          }*/
  
  if (db.data.chats[m.chat].antibot) {
     if (m.isBaileys && m.fromMe == false){
@@ -3091,6 +3078,31 @@ _*Y ganarás puntos de manera más rápida!*_`);
                fs.writeFileSync('./src/data/function/badword.json', JSON.stringify(bad))
                reply(`> *${q} Se ha eliminado de la lista correctamente!*\n_Para ver la lista de malas palabras usa el comando:_\n${prefix}listbadword`)
             break
+
+case 'add': case 'añadir':
+if (!m.isGroup) return reply(mess.group)
+if(!isAdmins) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!text) return reply(`*¡No has proporcionado el número de la persona a agregar al grupo! Asegurate de incluir el número después del comando!*`)
+let addNum = `${text.replace(/[\@\+\s\-\(\)\[\]\{\}]/g, '')}@s.whatsapp.net`;
+const existsAdd = await nyanBot2.onWhatsApp(addNum);
+if (existsAdd.length > 0 && existsAdd[0].exists) {
+try {
+await nyanBot2.groupParticipantsUpdate(m.chat, [addNum], 'add')
+} catch (err) {
+reply(`Ah ocurrido un error:\n${err}`)
+}} else {
+return reply(`_*El número ingresado no existe en WhatsApp, por tal motivo no se puede agregar al grupo! Asegurate de escribir bien el número.*_`)
+}
+break
+			
+case 'kick': case 'eliminar':
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+let blockNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+await nyanBot2.groupParticipantsUpdate(m.chat, [blockNum], 'remove')
+break
 
 
 case 'bienvenida': {
