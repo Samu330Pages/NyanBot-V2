@@ -2775,7 +2775,7 @@ case 'tovideo': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     // Descargar y guardar el archivo como "samugif.webp"
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif.webp");
+    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
 
     // Verificar si el archivo se descargó correctamente
     if (!fs.existsSync(media)) {
@@ -2826,7 +2826,7 @@ case 'tovideo': {
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply('Ocurrió un error durante el procesamiento. Asegúrate de que el sticker sea válido y animado.');
+        return reply(`${err}`);
     } finally {
         // Eliminar los archivos descargados y procesados
         if (fs.existsSync(media)) {
