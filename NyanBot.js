@@ -883,7 +883,7 @@ list.push({
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
     }*/
 
-	    if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.msg.viewOnce) {
+	    if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
               let val = { ...m }
 	      let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message
               delete msg[Object.keys(msg)[0]].viewOnce
