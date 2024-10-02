@@ -2775,7 +2775,7 @@ case 'tovideo': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     // Descargar y guardar el archivo como "samugif.webp"
-    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
+    let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif.webp");
 
     // Verificar si el archivo se descargó correctamente
     if (!fs.existsSync(media)) {
@@ -2787,7 +2787,6 @@ case 'tovideo': {
     try {
         await new Promise((resolve, reject) => {
             ffmpeg(media) // Usar el nombre del archivo guardado
-                .inputFormat('webp') // Asegurarse de que el formato de entrada sea webp
                 .outputOptions('-movflags', 'faststart')
                 .toFormat('mp4')
                 .save(outputFilePath)
@@ -2826,7 +2825,7 @@ case 'tovideo': {
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply(`${err}`);
+        return reply(`${err.message}`);
     } finally {
         // Eliminar los archivos descargados y procesados
         if (fs.existsSync(media)) {
