@@ -234,7 +234,7 @@ const categories = {
 //data
 let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
-//let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
+let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 //media
 const VoiceNoteNyan = JSON.parse(fs.readFileSync('./Media/database/vn.json'))
@@ -478,7 +478,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                   if (!('badword' in chats)) chats.badword = false
                   if (!('antiforeignnum' in chats)) chats.antiforeignnum = false
                   if (!('antibot' in chats)) chats.antibot = false
-                  if (!('antiviewonce' in chats)) chats.antiviewonce = false
+                  if (!('antiviewonce' in chats)) chats.antiviewonce = true
                   if (!('antimedia' in chats)) chats.media = false
                   if (!('antiimage' in chats)) chats.antiimage = false
                   if (!('antivideo' in chats)) chats.video = false
@@ -494,7 +494,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                   badword: false,
                   antiforeignnum: false,
                   antibot: false,
-                  antiviewonce: false,
+                  antiviewonce: true,
                   antimedia: false,
                   antiimage: false,
                   antivideo: false,
