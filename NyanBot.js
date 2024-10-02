@@ -42,7 +42,8 @@ const fg = require('api-dylux')
 const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
-const scp = require('./lib/scraper') 
+const scp = require('./lib/scraper')
+const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
 const { getOrganicData } = require('./lib/gg.js')
 /*const pkg = require('imgur')
@@ -2773,28 +2774,23 @@ case 'avideo': {
 
     await reply('_*Tu solicitud se está procesando, espera un momento por favor!*_');
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-
-    // Descargar y guardar el archivo como "samugif.webp"
     let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samugif");
-
-    // Verificar si el archivo se descargó correctamente
     if (!fs.existsSync(media)) {
         return reply('Error: No se pudo descargar el archivo. Asegúrate de que sea un sticker animado.');
     }
-    // Llamar a la función de conversión
+    let metadata = await extractMetadata(media)
     const conversionResult = await webp2mp4File(media);
 
     if (!conversionResult.status) {
         return reply(`Error: ${conversionResult.msg}`);
     }
 
-    // Enviar el resultado según el comando
-    if (command.includes('gif')) {
+    if(command.includes('gif')) {
         await nyanBot2.sendMessage(m.chat, {
             video: {
                 url: conversionResult.data.url
             },
-	    caption: '*Conversión exitosa!*',
+            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n*Pack name:* ${metadata['sticker-pack-name']}\n*Pack publisher:* ${metadata['sticker-pack-publisher']}`,
             gifPlayback: true
         }, {
             quoted: m
@@ -2804,7 +2800,7 @@ case 'avideo': {
             video: {
                 url: conversionResult.data.url
             },
-	    caption: '*Conversión exitosa!*'
+            caption: `*Conversión exitosa!*\n\n_*Información del sticker:*_\n\n*ID del paquete:* ${metadata['sticker-pack-id']}\n*Pack mame:* ${metadata['sticker-pack-name']}\n*Pack publisher:* ${metadata['sticker-pack-publisher']}`
         }, {
             quoted: m
         });
@@ -2812,9 +2808,8 @@ case 'avideo': {
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 
-    // Eliminar el archivo descargado
-    if (fs.existsSync(media)) {
-        fs.unlinkSync(media); // Eliminar el archivo original
+    if (fs.existsSync("samugif.webp")) {
+        fs.unlinkSync("samugif.webp");
     }
 }
 break
