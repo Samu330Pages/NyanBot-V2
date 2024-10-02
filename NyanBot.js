@@ -2788,7 +2788,7 @@ case 'tovideo': {
     exec(`gifsicle --colors 256 --no-warnings --optimize=3 --resize-fit 500x500 "${media}" > "${outputGifPath}"`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error durante la conversión a GIF: ${stderr}`);
-            return reply('Ocurrió un error durante la conversión a GIF.');
+            return reply(`Ocurrió un error durante la conversión a GIF.\n${stderr}`);
         }
 
         // Enviar el resultado según el comando
