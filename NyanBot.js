@@ -889,11 +889,11 @@ list.push({
               delete msg[Object.keys(msg)[0]].viewOnce
               val.message = msg
               if (/image/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
               } else if (/video/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
               } else if (/audio/.test(m.type)) {
-                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m});
               }
           }
  
