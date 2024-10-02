@@ -875,13 +875,27 @@ list.push({
         }
     
         //antiviewonce
-    if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
+   /* if ( db.data.chats[m.chat].antiviewonce && m.isGroup && m.mtype == 'viewOnceMessageV2') {
         let val = { ...m }
-        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || val.message?.viewOnceMessageV2Extension?.message
+        let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message || (/audio/.test(m.type))val.message?.viewOnceMessageV2?.message
         delete msg[Object.keys(msg)[0]].viewOnce
         val.message = msg
         await nyanBot2.sendMessage(m.chat, { forward: val }, { quoted: m })
-    }
+    }*/
+
+	    if (db.data.chats[m.chat].antiviewonce && m.isGroup && m.msg.viewOnce) {
+              let val = { ...m }
+	      let msg = val.message?.viewOnceMessage?.message || val.message?.viewOnceMessageV2?.message
+              delete msg[Object.keys(msg)[0]].viewOnce
+              val.message = msg
+              if (/image/.test(m.type)) {
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+              } else if (/video/.test(m.type)) {
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+              } else if (/audio/.test(m.type)) {
+                  return await nyanBot2.sendMessage(m.chat, { forward: val }, {quoted: m}).then(() => nyanBot2.sendReceipt(m.chat, m.sender, [m.id], 'played'));
+              }
+          }
  
  if (db.data.chats[m.chat].antibot) {
     if (m.isBaileys && m.fromMe == false){
@@ -2829,20 +2843,14 @@ break
 case 's':
 case 'sticker':
 case 'stiker': {
-    let media;
-    if (isImage) {
-	    media = m;
-    } else if (isQuotedImage) {
-	    media = m.quoted;
-    }
-    if (!media) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
+    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
     let mediaPath;
 
     try {
-        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(media); // Descargar y guardar la media
+        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted); // Descargar y guardar la media
     } catch (err) {
         console.error('Error al descargar el medio:', err);
         return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
@@ -2856,7 +2864,7 @@ case 'stiker': {
     const outputFilePath = 'output.webp'; // Archivo de salida
 
     try {
-        if (/image/.test(media.mimetype)) {
+        if (/image/.test(quoted.mimetype)) {
             // Procesar imagen con sharp
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
