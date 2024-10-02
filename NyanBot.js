@@ -208,8 +208,10 @@ const categories = {
         { command: 'bienvenida', description: '' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: '' },
-        { command: 's', description: '' },
+        { command: 'sticker', description: '_*Opciones: 1, 2 y 3*_' },
+        { command: 's', description: '_*Opciones: 1, 2 y 3*_' },
+	{ command: 'avideo', description: '' },
+	{ command: 'agif', description: '' },
 	{ command: 'calculadora', description: '' },
 	{ command: 'cal', description: '' },
         { command: 'puntos', description: '' },
@@ -450,12 +452,10 @@ return arr[Math.floor(Math.random() * arr.length)]
             let user = global.db.data.users[sender]
             if (typeof user !== 'object') global.db.data.users[sender] = {}
             if (user) {
-                if (!isNumber(user.afkTime)) user.afkTime = -1
                 if (!('badword' in user)) user.badword = 0
 		if (!('register' in user)) user.register = false
                 if (!('title' in user)) user.title = ''
                 if (!('serialNumber' in user)) user.serialNumber = randomBytes(16).toString('hex') 
-                if (!('afkReason' in user)) user.afkReason = ''
                 if (!('nick' in user)) user.nick = nyanBot2.getName(sender)
                 if (!isPremium) user.premium = false
                 if (!('totalLimit' in user)) user.totalLimit = 0
@@ -464,9 +464,7 @@ return arr[Math.floor(Math.random() * arr.length)]
 	       register: false,
                serialNumber: randomBytes(16).toString('hex'),
                title: `${isPremium ? 'Premium' : 'User'}`,
-               afkTime: -1,
                badword: 0,
-               afkReason: '',
                nick: nyanBot2.getName(sender),
                premium: `${isPremium ? 'true' : 'false'}`,
                limit: limitUser,
@@ -522,8 +520,6 @@ return arr[Math.floor(Math.random() * arr.length)]
                if (!('autorecord' in setting)) setting.autorecord = false
                if (!('autotype' in setting)) setting.autotype = false
                if (!('autoblocknum' in setting)) setting.autoblocknum = false
-               if (!('onlyindia' in setting)) setting.onlyindia = false
-               if (!('onlyindo' in setting)) setting.onlyindo = false
                if (!('onlygrub' in setting)) setting.onlygrub = false
                if (!('onlypc' in setting)) setting.onlypc = false
                if (!('watermark' in setting)) setting.watermark = { packname , author }
