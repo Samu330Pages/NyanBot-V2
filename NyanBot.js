@@ -2766,7 +2766,8 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
-case 'togif': {
+case 'togif':
+case 'tovideo': {
     if (!/webp/.test(mime)) return reply(`*Por favor etiqueta un sticker animado con el comando:* ${prefix + command}`);
     if (!m.quoted.isAnimated) return reply('*Eh...* _asegúrate de que el sticker sea animado, porque no se puede convertir un estático a gif!!_ 😁');
 
@@ -2774,29 +2775,58 @@ case 'togif': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
     let media = await nyanBot2.downloadAndSaveMediaMessage(quoted);
+    const outputFilePath = 'output.mp4'; // Archivo de salida para el video
 
     try {
-        let webpToMp4 = await webp2mp4File(media);
+        await new Promise((resolve, reject) => {
+            ffmpeg(media)
+                .outputOptions('-movflags', 'faststart') // Opciones para optimizar el video
+                .toFormat('mp4') // Convertir a formato mp4
+                .save(outputFilePath) // Guardar archivo de salida
+                .on('end', () => {
+                    console.log('Conversión completada.');
+                    resolve();
+                })
+                .on('error', (err) => {
+                    console.error('Error durante la conversión:', err);
+                    reject(err);
+                });
+        });
 
-        if (webpToMp4.status) {
+        // Enviar el resultado según el comando
+        if (command === 'togif') {
             await nyanBot2.sendMessage(m.chat, {
                 video: {
-                    url: webpToMp4.data.url,
+                    url: outputFilePath,
                     caption: '"Conversión exitosa!*'
                 },
                 gifPlayback: true
             }, {
                 quoted: m
             });
-            nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        } else {
-            return reply(webpToMp4.msg);
+        } else if (command === 'tovideo') {
+            await nyanBot2.sendMessage(m.chat, {
+                video: {
+                    url: outputFilePath,
+                    caption: '"Conversión exitosa!*'
+                }
+            }, {
+                quoted: m
+            });
         }
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (err) {
         console.error('Error durante la conversión:', err);
-        return reply(`Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.\n${err}`);
+        return reply('Ocurrió un error durante el procesamiento. Por favor intenta de nuevo.');
     } finally {
-        await fs.unlinkSync(media); // Asegúrate de eliminar el archivo descargado
+        // Eliminar los archivos descargados y procesados
+        if (fs.existsSync(media)) {
+            fs.unlinkSync(media); // Eliminar el archivo original
+        }
+        if (fs.existsSync(outputFilePath)) {
+            fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
+        }
     }
 }
 break
