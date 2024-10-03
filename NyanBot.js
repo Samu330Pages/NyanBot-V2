@@ -1264,6 +1264,8 @@ case 'menu': {
     
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
     let nickName = nyanBot2.getName(sender);
+    let userNumber = sender.split("@")[0];
+    let userPoints = db.data.users[sender].limit;
     let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n`;
     
     const { isPremium } = checkPremiumUser(sender);
