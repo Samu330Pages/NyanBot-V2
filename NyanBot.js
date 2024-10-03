@@ -2895,8 +2895,8 @@ case 'nobg': {
         let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuNoBg");
         const { removeBackground } = require('@imgly/background-removal-node');
         
-        const dataURL = await removeBackground(media);
-        const buffer = Buffer.from(dataURL.split(',')[1], 'base64');
+        const blob = await removeBackground(media);
+        const buffer = Buffer.from(await blob.arrayBuffer());
 
         await nyanBot2.sendMessage(m.chat, {
             image: buffer,
