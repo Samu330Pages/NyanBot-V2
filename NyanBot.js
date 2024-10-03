@@ -1339,7 +1339,7 @@ case 'menu': {
 
         await nyanBot2.relayMessage(m.chat, msgs.message, {});
     } catch (e) {
-        return m.reply("`*Error*`");
+        return m.reply("`*Error*`"+e);
     }
 }
 break
