@@ -907,7 +907,7 @@ if (db.data.chats[m.chat].badword) {
     let isBadWord = false;
     for (let bak of bad) {
         // Convertir el mensaje y la palabra prohibida a minúsculas para comparación
-        if (new RegExp(`\\b${bak.toLowerCase()}\\b)`.test(budy.toLowerCase())) {
+        if (new RegExp(`\\b${bak.toLowerCase()}\\b`).test(budy.toLowerCase())) {
             isBadWord = true;
             break;
         }
