@@ -1280,7 +1280,7 @@ case 'menu': {
 	    } catch (err) {
 		    p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
 	    }
-	    const canvasImageD = await createCanvasImage(nickName, userNumber, userPoints, p);
+	    let canvasImageD = await createCanvasImage(nickName, userNumber, userPoints, p);
 
         menuMessage += `- *Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
     } else {
