@@ -1272,6 +1272,16 @@ case 'menu': {
         const remainingTime = Math.max(expired - Date.now(), 0);
         const timeRemaining = runtime(Math.floor(remainingTime / 1000));
 
+	let p;
+	    try {
+		    p = await nyanBot2.profilePictureUrl(sender, 'image');
+	    } catch (err) {
+		    p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+	    }
+
+    // Crear el canvas y la imagen base
+    const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
+
         menuMessage += `- *Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
     } else {
         menuMessage += `- *Estado Premium:* No activo\n\n`;
@@ -1306,7 +1316,7 @@ case 'menu': {
                         header: proto.Message.InteractiveMessage.Header.create({
                             text: 'test header',
                             hasMediaAttachment: true,
-                            ...await prepareWAMessageMedia({ image: fs.readFileSync(imagePath) }, { upload: nyanBot2.waUploadToServer })
+                            ...await prepareWAMessageMedia({ image: canvasImage }, { upload: nyanBot2.waUploadToServer })
                         }),
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
