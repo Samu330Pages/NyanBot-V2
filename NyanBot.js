@@ -18,6 +18,7 @@ const sharp = require('sharp')
 const Jimp = require('jimp')
 const { createCanvas, loadImage } = require('canvas')
 const util = require('util')
+const { removeBackground } = require('@imgly/background-removal-node')
 const { BardAPI } = require('bard-api-node')
 const { color } = require('./lib/color')
 const {y2mateA, y2mateV} = require('./lib/y2mate.js')
@@ -213,8 +214,9 @@ const categories = {
 	{ command: 'antiviewonce', description: '' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: '_*Opciones: 1, 2 y 3*_' },
-        { command: 's', description: '_*Opciones: 1, 2 y 3*_' },
+        { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_' },
+        { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_' },
+	{ command: 'sinfondo', description: '' },
 	{ command: 'avideo', description: '' },
 	{ command: 'agif', description: '' },
 	{ command: 'aimagen', description: '' },
@@ -2882,7 +2884,7 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
-case 'nobg': {
+case 'nobg': case 'sinfondo': {
     if (!quoted) return reply("*Por favor, responde a una imagen para eliminar el fondo*");
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) {
@@ -2902,7 +2904,7 @@ case 'nobg': {
             image: buffer,
             caption: `${forma1}IMAGEN CON FONDO ELIMINADO 🖼️${forma1}\n\n> ${botname}`
         }, { quoted: m });
-
+	fs.unlinkSync(media);
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         db.data.users[sender].limit -= 50;
     } catch (error) {
@@ -2974,7 +2976,7 @@ break
 case 's':
 case 'sticker':
 case 'stiker': {
-    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
+    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} 4 _*(para sticker sin fondo)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
@@ -3034,10 +3036,25 @@ case 'stiker': {
                     .resize(512, 512) // Redimensionar a 512x512
                     .composite([{ input: heartMask, blend: 'dest-in' }]) // Aplicar la máscara en forma de corazón
                     .toFile(outputFilePath);
+            } else if (option === '4') {
+                // Opción 4: Eliminar el fondo de la imagen
+                const dataURL = await removeBackground(mediaPath);
+                const buffer = Buffer.from(dataURL.split(',')[1], 'base64');
+                encmedia = buffer;
+                await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                // Eliminar el archivo original
+                if (fs.existsSync(mediaPath)) {
+                    fs.unlinkSync(mediaPath);
+                }
+                return;
             } else {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                // Eliminar el archivo original
+                if (fs.existsSync(mediaPath)) {
+                    fs.unlinkSync(mediaPath);
+                }
                 return; // Salir después de enviar sin procesar
             }
 
@@ -3046,29 +3063,32 @@ case 'stiker': {
                 encmedia = fs.readFileSync(outputFilePath);
                 // Enviar el sticker
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                // Eliminar el archivo original y el archivo procesado
+                if (fs.existsSync(mediaPath)) {
+                    fs.unlinkSync(mediaPath);
+                }
+                if (fs.existsSync(outputFilePath)) {
+                    fs.unlinkSync(outputFilePath);
+                }
             } else {
                 return reply('Error al procesar la imagen. No se generó el archivo de salida.');
             }
 
         } else if (/video/.test(mime)) {
-if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
-let media = await quoted.download()
-let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
-} else {
+            if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
+            let media = await quoted.download()
+            let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+            // Eliminar el archivo original
+            if (fs.existsSync(mediaPath)) {
+                fs.unlinkSync(mediaPath);
+            }
+        } else {
             return reply(`Tipo de archivo no reconocido. Asegúrate de enviar una imagen o un video.`);
         }
 
     } catch (err) {
         console.error('Error al procesar el medio:', err);
         return reply(`Ocurrió un error al procesar el medio: ${err.message}. Intenta de nuevo.`);
-    }
-
-    // Eliminar el archivo descargado y el archivo procesado después de enviar el sticker
-    if (fs.existsSync(mediaPath)) {
-        fs.unlinkSync(mediaPath); // Eliminar el archivo original
-    }
-    if (fs.existsSync(outputFilePath)) {
-        fs.unlinkSync(outputFilePath); // Eliminar el archivo procesado
     }
 }
 break
