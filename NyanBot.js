@@ -1172,7 +1172,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 
         switch (isCommand) {
 
-case 'menu2': {
+case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
 
     let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
@@ -1259,88 +1259,6 @@ case 'menu2': {
 }
 break
 
-case 'menu': {
-    nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
-    
-    let registrado = db.data.users[sender].register ? 'Usuario registrado 📌' : 'Usuario no registrado ⚠';
-    let nickName = nyanBot2.getName(sender);
-    let userNumber = sender.split("@")[0];
-    let userPoints = db.data.users[sender].limit;
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${db.data.users[sender].limit}\n`;
-    
-    const { isPremium } = checkPremiumUser(sender);
-    if (isPremium) {
-        const { expired } = getPremiumExpired(sender);
-        const remainingTime = Math.max(expired - Date.now(), 0);
-        const timeRemaining = runtime(Math.floor(remainingTime / 1000));
-
-	let p;
-	    try {
-		    p = await nyanBot2.profilePictureUrl(sender, 'image');
-	    } catch (err) {
-		    p = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
-	    }
-	    let canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
-	    
-        menuMessage += `- *Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
-    } else {
-        menuMessage += `- *Estado Premium:* No activo\n\n`;
-    }
-    
-    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${WAVersion()}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
-
-    for (const [category, commands] of Object.entries(categories)) {
-        menuMessage += `*${category}:*\n`;
-        commands.forEach(cmdObj => {
-            menuMessage += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
-        });
-        menuMessage += '\n';
-    }
-
-    try {
-        const imagePath = './Media/theme/NyanBot.jpg';
-        const msgs = generateWAMessageFromContent(m.chat, {
-            viewOnceMessage: {
-                message: {
-                    "messageContextInfo": {
-                        "deviceListMetadata": {},
-                        "deviceListMetadataVersion": 2
-                    },
-                    interactiveMessage: proto.Message.InteractiveMessage.create({
-                        body: proto.Message.InteractiveMessage.Body.create({
-                            text: menuMessage
-                        }),
-                        footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: botname
-                        }),
-                        header: proto.Message.InteractiveMessage.Header.create({
-                            text: 'test header',
-                            hasMediaAttachment: true,
-                            ...await prepareWAMessageMedia({ image: canvasImage }, { upload: nyanBot2.waUploadToServer })
-                        }),
-                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                            buttons: [{
-                                "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg\"}`
-                            }, {
-                                "name": "cta_url",
-                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
-                            }],
-                        }),
-                        contextInfo: {
-                            mentionedJid: [m.sender],
-                        }
-                    })
-                }
-            }
-        }, { quoted: m });
-
-        await nyanBot2.relayMessage(m.chat, msgs.message, {});
-    } catch (e) {
-        return m.reply("`*Error*`"+e);
-    }
-}
-break
 case 'lg': {
 if (text === sender) {
 db.data.users[sender].register = false
