@@ -211,8 +211,10 @@ const categories = {
     "🎭 Grupos": [
 	{ command: 'añadir', description: '_*NUM*_' },
 	{ command: 'eliminar', description: '_*NUM/@tag*_' },
+	{ command: 'anti', description: '' },
 	{ command: 'unavista', description: '' },
-	{ command: 'antiviewonce', description: '' }
+	{ command: 'antiviewonce', description: '' },
+	{ command: 'gpimg', description: '' }
     ],
     "🛠 Herramientas": [
         { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_' },
@@ -226,11 +228,13 @@ const categories = {
         { command: 'puntos', description: '' },
         { command: 'take', description: '' },
         { command: 'wm', description: '' },
-        { command: 'perfil', description: '' }
+        { command: 'perfil', description: '' },
+	{ command: 'speed', description: '' }
     ],
     "⚙ Bot": [
         { command: 'actualizar', description: '' },
         { command: 'update', description: '' },
+	{ command: 'limpiar', description: '' },
         { command: 'addsticker', description: '' },
         { command: 'liststicker', description: '' },
         { command: 'delsticker', description: '' },
@@ -2981,7 +2985,7 @@ case 'update':
 if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
 exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
-if (stdout) reply(`*El bot se ah actualizado!*\nInforme de la actualización:\n\n${stdout}\n\n> *NyanBot-V2*`)
+if (stdout) reply(`🍟 | ${stdout}\n\n> *NyanBot-V2*`)
 })
 break
 
@@ -3151,6 +3155,95 @@ let blockNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sende
 await nyanBot2.groupParticipantsUpdate(m.chat, [blockNum], 'remove')
 break
 
+case 'limpiar': {
+if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
+fs.readdir("./session", async function(err, files) {
+if (err) {
+console.log('Unable to scan directory: ' + err);
+return reply('Unable to scan directory: ' + err);
+}
+let filteredArray = await files.filter(item => item.startsWith("pre-key") ||
+item.startsWith("sender-key") || item.startsWith("session-") || item.startsWith("app-state")
+)
+console.log(filteredArray.length);
+let teks = `Se detectó ${filteredArray.length} archivos innecesarios!\n\n`
+if (filteredArray.length == 0) return reply(teks)
+filteredArray.map(function(e, i) {
+teks += (i + 1) + `. ${e}\n`
+})
+reply(teks)
+await sleep(2000)
+reply("Fuera basura... 👨🏻‍🦯")
+await filteredArray.forEach(function(file) {
+fs.unlinkSync(`./session/${file}`)
+});
+await sleep(2000)
+reply("*Sé ha limpiado la session!* ♻️")
+});
+}
+break
+
+case 'speedtest': {
+reply('_*Realizando Prueba de velocidad!...*_ 🏃🏻‍♂️💨')
+let cp = require('child_process')
+let {
+promisify
+} = require('util')
+let exec = promisify(cp.exec).bind(cp)
+let o
+try {
+o = await exec('python speed.py')
+} catch (e) {
+o = e
+} finally {
+let {
+stdout,
+stderr
+} = o
+if (stdout.trim()) reply(`${stdout}`)
+if (stderr.trim()) reply(`${stderr}`)
+}
+}
+break
+			
+case 'gpimg': case 'setppgruop' {
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!quoted) return reply(`*Porfavor etiqueta con el comando la imagen que desees establecer para el grupo!*`)
+if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
+if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
+var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
+if (args[0] == 'full') {
+                    var {
+                        img
+                    } = await generateProfilePicture(medis)
+                    await nyanBot2.query({
+                        tag: 'iq',
+                        attrs: {
+                            to: m.chat,
+                            type: 'set',
+                            xmlns: 'w:profile:picture'
+                        },
+                        content: [{
+                            tag: 'picture',
+                            attrs: {
+                                type: 'image'
+                            },
+                            content: img
+                        }]
+                    })
+                    fs.unlinkSync(medis)
+                    reply(mess.done)
+                } else {
+                    var memeg = await nyanBot2.updateProfilePicture(m.chat, {
+                        url: medis
+                    })
+                    fs.unlinkSync(medis)
+                    reply('*Liiiiisto!! 😁*')
+                }
+}
+break
 
 case 'bienvenida': {
 if (!m.isGroup) return reply(mess.group)
