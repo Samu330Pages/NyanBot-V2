@@ -2895,7 +2895,6 @@ case 'nobg': case 'sinfondo': {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
         
         let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuNoBg");
-        const { removeBackground } = require('@imgly/background-removal-node');
         
         const blob = await removeBackground(media);
         const buffer = Buffer.from(await blob.arrayBuffer());
@@ -2983,7 +2982,7 @@ case 'stiker': {
     let mediaPath;
 
     try {
-        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted); // Descargar y guardar la media
+        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt"); // Descargar y guardar la media
     } catch (err) {
         console.error('Error al descargar el medio:', err);
         return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
@@ -3029,7 +3028,7 @@ case 'stiker': {
                 // Opción 3: Recortar a forma de corazón
                 const heartMask = Buffer.from(`
                     <svg width="512" height="512" viewBox="0 0 24 24" fill="none">
-		    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="white"/>
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="white"/>
                     </svg>
                 `);
                 await sharp(mediaPath)
@@ -3038,10 +3037,11 @@ case 'stiker': {
                     .toFile(outputFilePath);
             } else if (option === '4') {
                 // Opción 4: Eliminar el fondo de la imagen
-                const dataURL = await removeBackground(mediaPath);
-                const buffer = Buffer.from(dataURL.split(',')[1], 'base64');
+                const blob = await removeBackground(mediaPath);
+                const buffer = Buffer.from(await blob.arrayBuffer());
                 encmedia = buffer;
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                
                 // Eliminar el archivo original
                 if (fs.existsSync(mediaPath)) {
                     fs.unlinkSync(mediaPath);
@@ -3051,6 +3051,7 @@ case 'stiker': {
                 // Sin opción: enviar la imagen original como sticker
                 encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                
                 // Eliminar el archivo original
                 if (fs.existsSync(mediaPath)) {
                     fs.unlinkSync(mediaPath);
@@ -3063,6 +3064,7 @@ case 'stiker': {
                 encmedia = fs.readFileSync(outputFilePath);
                 // Enviar el sticker
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                
                 // Eliminar el archivo original y el archivo procesado
                 if (fs.existsSync(mediaPath)) {
                     fs.unlinkSync(mediaPath);
@@ -3078,6 +3080,7 @@ case 'stiker': {
             if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
             let media = await quoted.download()
             let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+            
             // Eliminar el archivo original
             if (fs.existsSync(mediaPath)) {
                 fs.unlinkSync(mediaPath);
