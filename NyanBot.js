@@ -1189,7 +1189,7 @@ case 'menu2': {
     }
 
     // Crear el canvas y la imagen base
-    //const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
+    const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
     
     // Configurar el mensaje del menú
     let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${userPoints}\n`;
@@ -1200,9 +1200,9 @@ case 'menu2': {
         const remainingTime = Math.max(expired - Date.now(), 0);
         const timeRemaining = runtime(Math.floor(remainingTime / 1000));
 
-        menuMessage += - `*Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
+        menuMessage += `- *Estado Premium:* Activo 👑\n- *Tiempo restante:* ${timeRemaining}\n\n`;
     } else {
-        menuMessage += - `*Estado Premium:* No activo\n\n`;
+        menuMessage += `- *Estado Premium:* No activo\n\n`;
     }
     
     menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${WAVersion()}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
@@ -1210,7 +1210,7 @@ case 'menu2': {
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
         commands.forEach(cmdObj => {
-            menuMessage += - `${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
+            menuMessage += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.description}\n`;
         });
         menuMessage += '\n';
     }
