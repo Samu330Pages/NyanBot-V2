@@ -2882,6 +2882,37 @@ reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
+case 'nobg': {
+    if (!quoted) return reply("*Por favor, responde a una imagen para eliminar el fondo*");
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 50) {
+        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    }
+
+    try {
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        
+        let media = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuNoBg");
+        const { removeBackground } = require('@imgly/background-removal-node');
+        
+        const dataURL = await removeBackground(media);
+        const buffer = Buffer.from(dataURL.split(',')[1], 'base64');
+
+        await nyanBot2.sendMessage(m.chat, {
+            image: buffer,
+            caption: `${forma1}IMAGEN CON FONDO ELIMINADO 🖼️${forma1}\n\n> ${botname}`
+        }, { quoted: m });
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        db.data.users[sender].limit -= 50;
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        reply(`Ocurrió un error al intentar eliminar el fondo de la imagen. Por favor, inténtalo de nuevo.\n${error}`);
+    }
+}
+break
+
 case 'togif': case 'agif':
 case 'tovideo': case 'tovid': case 'avideo':
 case 'aimg': case 'aimagen': case 'toimg': {
