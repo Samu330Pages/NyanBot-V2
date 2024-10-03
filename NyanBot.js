@@ -198,7 +198,8 @@ const categories = {
         { command: 'fb', description: '_*URL*_' },
         { command: 'instagram', description: '_*URL*_' },
         { command: 'ig', description: '_*URL*_' },
-        { command: 'mediafire', description: '_*URL*_' }
+        { command: 'mediafire', description: '_*URL*_' },
+	{ command: 'gdrive', description: '_*URL*_' }
     ],
     "🧠 Ia": [
 	{ command: 'bard', description: '' },
