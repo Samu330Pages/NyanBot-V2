@@ -3183,7 +3183,7 @@ reply("*Sé ha limpiado la session!* ♻️")
 }
 break
 
-case 'speedtest': {
+case 'speed': {
 reply('_*Realizando Prueba de velocidad!...*_ 🏃🏻‍♂️💨')
 let cp = require('child_process')
 let {
@@ -3192,7 +3192,7 @@ promisify
 let exec = promisify(cp.exec).bind(cp)
 let o
 try {
-o = await exec('python speed.py')
+o = await exec('python3 speed.py')
 } catch (e) {
 o = e
 } finally {
