@@ -1238,10 +1238,10 @@ case 'menu2': {
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
                                 "name": "quick_reply",
-                                "buttonParamsJson": {\"display_text\":\"Registrarse 📂\",\"id\":\".reg\"}
+                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg\"}`
                             }, {
                                 "name": "cta_url",
-                                "buttonParamsJson": {\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}
+                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
                             }],
                         }),
                         contextInfo: {
