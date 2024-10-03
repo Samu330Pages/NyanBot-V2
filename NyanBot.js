@@ -2523,29 +2523,29 @@ case 'gdrive': {
         }
 
         let mimeType;
-        switch (data.mimetype.toLowerCase()) {
-            case 'application/pdf': mimeType = 'application/pdf'; break;
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
-            case 'application/zip': mimeType = 'application/zip'; break;
-            case 'application/x-rar-compressed': mimeType = 'application/x-rar-compressed'; break;
-            case 'application/x-7z-compressed': mimeType = 'application/x-7z-compressed'; break;
-            case 'video/mp4': mimeType = 'video/mp4'; break;
-            case 'audio/mpeg': mimeType = 'audio/mpeg'; break;
-            case 'image/jpeg': mimeType = 'image/jpeg'; break;
-            case 'image/png': mimeType = 'image/png'; break;
-            case 'image/gif': mimeType = 'image/gif'; break;
-            case 'image/bmp': mimeType = 'image/bmp'; break;
-            case 'image/svg+xml': mimeType = 'image/svg+xml'; break;
-            case 'text/plain': mimeType = 'text/plain'; break;
-            case 'text/html': mimeType = 'text/html'; break;
-            case 'text/csv': mimeType = 'text/csv'; break;
-            case 'application/vnd.android.package-archive': mimeType = 'application/vnd.android.package-archive'; break;
-            case 'application/vnd.microsoft.portable-executable': mimeType = 'application/vnd.microsoft.portable-executable'; break;
-            case 'application/octet-stream': mimeType = 'application/octet-stream'; break;
-            case 'application/json': mimeType = 'application/json'; break;
-            case 'application/xml': mimeType = 'application/xml'; break;
+        const fileExtension = path.extname(data.fileName).slice(1).toLowerCase();
+        switch (fileExtension) {
+            case 'pdf': mimeType = 'application/pdf'; break;
+            case 'doc': case 'docx': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+            case 'xls': case 'xlsx': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+            case 'ppt': case 'pptx': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
+            case 'zip': mimeType = 'application/zip'; break;
+            case 'rar': mimeType = 'application/x-rar-compressed'; break;
+            case '7z': mimeType = 'application/x-7z-compressed'; break;
+            case 'mp4': mimeType = 'video/mp4'; break;
+            case 'mp3': mimeType = 'audio/mpeg'; break;
+            case 'jpg': case 'jpeg': mimeType = 'image/jpeg'; break;
+            case 'png': mimeType = 'image/png'; break;
+            case 'gif': mimeType = 'image/gif'; break;
+            case 'bmp': mimeType = 'image/bmp'; break;
+            case 'svg': mimeType = 'image/svg+xml'; break;
+            case 'txt': mimeType = 'text/plain'; break;
+            case 'html': case 'htm': mimeType = 'text/html'; break;
+            case 'csv': mimeType = 'text/csv'; break;
+            case 'apk': mimeType = 'application/vnd.android.package-archive'; break;
+            case 'exe': mimeType = 'application/vnd.microsoft.portable-executable'; break;
+            case 'json': mimeType = 'application/json'; break;
+            case 'xml': mimeType = 'application/xml'; break;
             default: mimeType = 'application/octet-stream'; break;
         }
 
