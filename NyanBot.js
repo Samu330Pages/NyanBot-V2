@@ -3206,7 +3206,7 @@ if (stderr.trim()) reply(`${stderr}`)
 }
 break
 			
-case 'gpimg': case 'setppgruop' {
+case 'gpimg': case 'setppgruop': {
 if (!m.isGroup) return reply(mess.group)
 if (!isAdmins) return reply(mess.admin)
 if (!isBotAdmins) return reply(mess.adminBot)
