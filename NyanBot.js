@@ -904,21 +904,27 @@ list.push({
  
         //respond
 if (db.data.chats[m.chat].badword) {
+    let isBadWord = false;
     for (let bak of bad) {
         // Convertir el mensaje y la palabra prohibida a minúsculas para comparación
-        if (budy.toLowerCase().includes(bak.toLowerCase())) {
-            let baduser = await db.data.users[sender].badword;
-            nyanBot2.sendMessage(m.chat,
-            {
-                delete: {
-                    remoteJid: m.chat,
-                    fromMe: false,
-                    id: m.key.id,
-                    participant: m.key.participant
-                }
-            });
-            nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m});
+        if (new RegExp(`\\b${bak.toLowerCase()}\\b)`.test(budy.toLowerCase())) {
+            isBadWord = true;
+            break;
         }
+    }
+
+    if (isBadWord) {
+        let baduser = await db.data.users[sender].badword;
+        nyanBot2.sendMessage(m.chat,
+        {
+            delete: {
+                remoteJid: m.chat,
+                fromMe: false,
+                id: m.key.id,
+                participant: m.key.participant
+            }
+        });
+        nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m});
     }
 }
         //autosticker
@@ -1021,148 +1027,6 @@ if (quizmath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
                 delete quizmath[m.sender.split('@')[0]]
             } else reply('*Wrong Answer!*')
         }
-        
-        //game
-        this.game = this.game ? this.game : {}
-        let room = Object.values(this.game).find(room => room.id && room.game && room.state && room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender) && room.state == 'PLAYING')
-        if (room) {
-            let ok
-            let isWin = !1
-            let isTie = !1
-            let isSurrender = !1
-            // reply(`[DEBUG]\n${parseInt(m.text)}`)
-            if (!/^([1-9]|(me)?giveup|surr?ender|off|skip)$/i.test(m.text)) return
-            isSurrender = !/^[1-9]$/.test(m.text)
-            if (m.sender !== room.game.currentTurn) {
-                if (!isSurrender) return !0
-            }
-            if (!isSurrender && 1 > (ok = room.game.turn(m.sender === room.game.playerO, parseInt(m.text) - 1))) {
-                reply({
-                    '-3': 'The game is over',
-                    '-2': 'Invalid',
-                    '-1': 'Invalid Position',
-                    0: 'Invalid Position',
-                } [ok])
-                return !0
-            }
-            if (m.sender === room.game.winner) isWin = true
-            else if (room.game.board === 511) isTie = true
-            let arr = room.game.render().map(v => {
-                return {
-                    X: '❌',
-                    O: '⭕',
-                    1: '1️⃣',
-                    2: '2️⃣',
-                    3: '3️⃣',
-                    4: '4️⃣',
-                    5: '5️⃣',
-                    6: '6️⃣',
-                    7: '7️⃣',
-                    8: '8️⃣',
-                    9: '9️⃣',
-                } [v]
-            })
-            if (isSurrender) {
-                room.game._currentTurn = m.sender === room.game.playerX
-                isWin = true
-            }
-            let winner = isSurrender ? room.game.currentTurn : room.game.winner
-            let str = `Room ID: ${room.id}
-
-${arr.slice(0, 3).join('')}
-${arr.slice(3, 6).join('')}
-${arr.slice(6).join('')}
-
-${isWin ? `@${winner.split('@')[0]} Won!` : isTie ? `Game over` : `Turn ${['❌', '⭕'][1 * room.game._currentTurn]} (@${room.game.currentTurn.split('@')[0]})`}
-❌: @${room.game.playerX.split('@')[0]}
-⭕: @${room.game.playerO.split('@')[0]}
-
-Type *surrender* to surrender and admit defeat`
-            if ((room.game._currentTurn ^ isSurrender ? room.x : room.o) !== m.chat)
-                room[room.game._currentTurn ^ isSurrender ? 'x' : 'o'] = m.chat
-            if (room.x !== room.o) nyanBot2.sendText(room.x, str, m, {
-                mentions: parseMention(str)
-            })
-            nyanBot2.sendText(room.o, str, m, {
-                mentions: parseMention(str)
-            })
-            if (isTie || isWin) {
-                delete this.game[room.id]
-            }
-        }
-        
-        //Suit PvP
-	    this.suit = this.suit ? this.suit : {}
-	    let roof = Object.values(this.suit).find(roof => roof.id && roof.status && [roof.p, roof.p2].includes(m.sender))
-	    if (roof) {
-	    let win = ''
-	    let tie = false
-	    if (m.sender == roof.p2 && /^(acc(ept)?|accept|yes|okay?|reject|no|later|nop(e.)?yes|y)/i.test(m.text) && m.isGroup && roof.status == 'wait') {
-	    if (/^(reject|no|later|n|nop(e.)?yes)/i.test(m.text)) {
-	    nyanBot2.sendTextWithMentions(m.chat, `@${roof.p2.split`@`[0]} rejected the suit, the suit is canceled`, m)
-	    delete this.suit[roof.id]
-	    return !0
-	    }
-	    roof.status = 'play'
-	    roof.asal = m.chat
-	    clearTimeout(roof.waktu)
-	    //delete roof[roof.id].waktu
-	    nyanBot2.sendText(m.chat, `Suit has been sent to chat
-
-@${roof.p.split`@`[0]} and 
-@${roof.p2.split`@`[0]}
-
-Please choose a suit in the respective chat"
-click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] })
-	    if (!roof.pilih) nyanBot2.sendText(roof.p, `Please Select \n\Rock🗿\nPaper📄\nScissors✂️`, m)
-	    if (!roof.pilih2) nyanBot2.sendText(roof.p2, `Please Select \n\nRock🗿\nPaper📄\nScissors✂️`, m)
-	    roof.waktu_milih = setTimeout(() => {
-	    if (!roof.pilih && !roof.pilih2) nyanBot2.sendText(m.chat, `Both Players Don't Want To Play,\nSuit Canceled`)
-	    else if (!roof.pilih || !roof.pilih2) {
-	    win = !roof.pilih ? roof.p2 : roof.p
-	    nyanBot2.sendTextWithMentions(m.chat, `@${(roof.pilih ? roof.p2 : roof.p).split`@`[0]} Didn't Choose Suit, Game Over!`, m)
-	    }
-	    delete this.suit[roof.id]
-	    return !0
-	    }, roof.timeout)
-	    }
-	    let jwb = m.sender == roof.p
-	    let jwb2 = m.sender == roof.p2
-	    let g = /scissors/i
-	    let b = /rock/i
-	    let k = /paper/i
-	    let reg = /^(scissors|rock|paper)/i
-	    if (jwb && reg.test(m.text) && !roof.pilih && !m.isGroup) {
-	    roof.pilih = reg.exec(m.text.toLowerCase())[0]
-	    roof.text = m.text
-	    reply(`You have chosen ${m.text} ${!roof.pilih2 ? `\n\nWaiting for the opponent to choose` : ''}`)
-	    if (!roof.pilih2) nyanBot2.sendText(roof.p2, '_The opponent has chosen_\nNow it is your turn', 0)
-	    }
-	    if (jwb2 && reg.test(m.text) && !roof.pilih2 && !m.isGroup) {
-	    roof.pilih2 = reg.exec(m.text.toLowerCase())[0]
-	    roof.text2 = m.text
-	    reply(`You have chosen ${m.text} ${!roof.pilih ? `\n\nWaiting for the opponent to choose` : ''}`)
-	    if (!roof.pilih) nyanBot2.sendText(roof.p, '_The opponent has chosen_\nNow it is your turn', 0)
-	    }
-	    let stage = roof.pilih
-	    let stage2 = roof.pilih2
-	    if (roof.pilih && roof.pilih2) {
-	    clearTimeout(roof.waktu_milih)
-	    if (b.test(stage) && g.test(stage2)) win = roof.p
-	    else if (b.test(stage) && k.test(stage2)) win = roof.p2
-	    else if (g.test(stage) && k.test(stage2)) win = roof.p
-	    else if (g.test(stage) && b.test(stage2)) win = roof.p2
-	    else if (k.test(stage) && b.test(stage2)) win = roof.p
-	    else if (k.test(stage) && g.test(stage2)) win = roof.p2
-	    else if (stage == stage2) tie = true
-	    nyanBot2.sendText(roof.asal, `_*Suit Results*_${tie ? '\nSERIES' : ''}
-
-@${roof.p.split`@`[0]} (${roof.text}) ${tie ? '' : roof.p == win ? ` Win \n` : ` Lost \n`}
-@${roof.p2.split`@`[0]} (${roof.text2}) ${tie ? '' : roof.p2 == win ? ` Win \n` : ` Lost  \n`}
-`.trim(), m, { mentions: [roof.p, roof.p2] })
-	    delete this.suit[roof.id]
-	    }
-	    } //end
         
         //user db
         if (isCommand && !isUser) {
