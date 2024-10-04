@@ -47,7 +47,7 @@ const scp = require('./lib/scraper')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
-const { recognizeSong } = require('./lib/ApiM.js')
+const { recognizeSong } = require('./lib/ApiMsc.js')
 const { getOrganicData } = require('./lib/gg.js')
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -2044,7 +2044,7 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
 
-case 'shazam': {
+case 'song': {
     if (!quoted) return reply("*Por favor, responde a un audio para reconocer la canción*");
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) {
@@ -2079,6 +2079,7 @@ case 'shazam': {
     }
 }
 break
+			
 // Case para Facebook
 case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
