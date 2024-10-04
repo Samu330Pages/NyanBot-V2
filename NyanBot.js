@@ -47,6 +47,7 @@ const scp = require('./lib/scraper')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
+const { recognizeSong } = require('./lib/shazam')
 const { getOrganicData } = require('./lib/gg.js')
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -2039,6 +2040,42 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error)
         reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`)
+    }
+}
+break
+
+case 'shazam': {
+    if (!quoted) return reply("*Por favor, responde a un audio para reconocer la canción*");
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 50) {
+        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    }
+
+    try {
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        
+        let audioPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "shazamAudio");
+        const songData = await recognizeSong(audioPath);
+
+        if (songData.matches.length > 0) {
+            const song = songData.matches[0];
+            const songInfo = `
+*Título:* ${song.track.title}
+*Artista:* ${song.track.subtitle}
+*Album:* ${song.track.albumadamid}
+`;
+
+            await nyanBot2.sendMessage(m.chat, { text: songInfo }, { quoted: m });
+        } else {
+            await nyanBot2.sendMessage(m.chat, { text: '*No se pudo reconocer la canción*' }, { quoted: m });
+        }
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        db.data.users[sender].limit -= 50;
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al reconocer la canción:', error);
+        reply(`Ocurrió un error al intentar reconocer la canción. Por favor, inténtalo de nuevo.\n${error}`);
     }
 }
 break
