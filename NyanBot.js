@@ -2057,7 +2057,7 @@ case 'shazam': {
         let audioPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "shazamAudio");
         const songData = await recognizeSong(audioPath);
 
-        if (songData.matches.length > 0) {
+        if (songData.matches && songData.matches.length > 0) {
             const song = songData.matches[0];
             const songInfo = `
 *Título:* ${song.track.title}
