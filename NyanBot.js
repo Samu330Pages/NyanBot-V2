@@ -2057,12 +2057,12 @@ case 'shazam': {
         let audioPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "shazamAudio");
         const songData = await recognizeSong(audioPath);
 
-        if (songData.matches && songData.matches.length > 0) {
-            const song = songData.matches[0];
+        if (songData.track) {
+            const song = songData.track;
             const songInfo = `
-*Título:* ${song.track.title}
-*Artista:* ${song.track.subtitle}
-*Album:* ${song.track.albumadamid}
+*Título:* ${song.title}
+*Artista:* ${song.subtitle}
+*Album:* ${song.images.coverart}
 `;
 
             await nyanBot2.sendMessage(m.chat, { text: songInfo }, { quoted: m });
@@ -2079,7 +2079,6 @@ case 'shazam': {
     }
 }
 break
-
 // Case para Facebook
 case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
