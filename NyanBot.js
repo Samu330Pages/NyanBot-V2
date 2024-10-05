@@ -2132,50 +2132,31 @@ case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
+
     let instalId;
     instalId = reactionLoad(m.chat, m.key);
     reply('> *Esperé un momento, se está procesando su solicitud...*');
-    
-    const apiUrl = 'https://api.cobalt.tools/';
-    const requestBody = {
-        url: text,
-        videoQuality: '720', // Puedes ajustar esto según tus necesidades
-        downloadMode: 'auto', // Descarga el video completo
-        disableMetadata: false,
-        filenameStyle: 'basic'
-    };
 
     try {
-        const response = await axios.post(apiUrl, requestBody, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        });
+        const { result } = await fg.igdl(text);
 
-        // Manejo de la respuesta
-        if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
-            const downloadUrl = response.data.url;
-            const originalFilename = response.data.filename;
-
-            // Obtener el video
-            const videoBuffer = await fetchBuffer(downloadUrl);
-
-            // Enviar video al usuario
+        if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) {
+            const imageBuffer = await fetchBuffer(result[0].url);
             await nyanBot2.sendMessage(m.chat, {
-                video: videoBuffer, // Enviar el video
-                caption: `_Encontrarás el vídeo con el siguiente nombre:_\n\n*${originalFilename}*\n\n> ${ownername}`,
-                fileName: originalFilename,
-                mimetype: 'video/mp4', // Asegúrate de que sea el tipo correcto
+                image: imageBuffer,
+                caption: `> ${botname} by ${ownername}`
             }, { quoted: m });
-
-        } else if (response.data.status === 'error') {
-            reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
         } else {
-            reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+            const videoBuffer = await fetchBuffer(result[0].url);
+            await nyanBot2.sendMessage(m.chat, {
+                video: videoBuffer,
+                caption: `> ${botname} by ${ownername}`,
+                fileName: `instagram_video-${date}.mp4`,
+                mimetype: 'video/mp4'
+            }, { quoted: m });
         }
     } catch (error) {
-	reactionError(m.chat, m.key, instalId);
+        reactionError(m.chat, m.key, instalId);
         console.error('Error al procesar la solicitud:', error);
         reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
