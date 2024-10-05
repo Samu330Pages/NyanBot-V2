@@ -2142,9 +2142,9 @@ case 'insta': case 'ig': case 'instagram': {
 
         if (result.length > 1) {
             const numImages = Math.sqrt(result.length);
-            await reply(`_*Esperé un momento... sus imágenes se están enviando..._*\n> ${botname} by ${ownername}`)
+            await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`)
             for (let i = 0; i < numImages; i++) {
-                if (result[i].thumbnail.includes('.jpg') || result[i].thumbnail.includes('.png')) {
+                if (result[i].url.includes('.jpg') || result[i].url.includes('.png')) {
                     const imageBuffer = await fetchBuffer(result[i].url);
                     await nyanBot2.sendMessage(m.chat, {
                         image: imageBuffer,
