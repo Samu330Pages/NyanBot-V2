@@ -629,7 +629,6 @@ let { data } = await axios.post("https://en.ephoto360.com/effect/create-image", 
 return build_server + data.image
 }
 
-// Función para iniciar la carga de reacciones
 const reactionLoad = (chatId, messageKey) => {
     const emojis = ['🟠', '⚫'];
     let emojiIndex = 0;
@@ -638,20 +637,26 @@ const reactionLoad = (chatId, messageKey) => {
         nyanBot2.sendMessage(chatId, { react: { text: emojis[emojiIndex], key: messageKey } });
         emojiIndex = (emojiIndex + 1) % emojis.length;
     };
-    
+
     const intervalId = setInterval(sendReaction, 500);
-    return intervalId;
+
+    const timeoutId = setTimeout(() => {
+        clearInterval(intervalId);
+        nyanBot2.sendMessage(chatId, { react: { text: '⏱️', key: messageKey } });
+    }, 5000);
+
+    return { intervalId, timeoutId };
 };
 
-// Función para finalizar la carga con éxito
-const reactionOk = (chatId, messageKey, intervalId) => {
+const reactionOk = (chatId, messageKey, { intervalId, timeoutId }) => {
     clearInterval(intervalId);
+    clearTimeout(timeoutId);
     nyanBot2.sendMessage(chatId, { react: { text: '🟢', key: messageKey } });
 };
 
-// Función para finalizar la carga con error
-const reactionError = (chatId, messageKey, intervalId) => {
+const reactionError = (chatId, messageKey, { intervalId, timeoutId }) => {
     clearInterval(intervalId);
+    clearTimeout(timeoutId);
     nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
 };
 
