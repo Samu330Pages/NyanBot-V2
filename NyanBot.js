@@ -2918,7 +2918,7 @@ case 'stiker': {
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
 
     try {
-        if (isQuotedImage || isQuotedVideo) {
+        if (quoted) {
             mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt"); // Descargar y guardar la media etiquetada
         } else {
             mediaPath = await nyanBot2.downloadAndSaveMediaMessage(m, "samuSt"); // Descargar y guardar la media del mensaje
@@ -2936,7 +2936,7 @@ case 'stiker': {
     const outputFilePath = 'output.webp'; // Archivo de salida
 
     try {
-        if (isQuotedImage) {
+        if (/image/.test(quoted.mimetype || /image/.test(isMedia))) {
             // Procesar imagen con sharp
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
@@ -3010,7 +3010,7 @@ case 'stiker': {
                 return reply('Error al procesar la imagen. No se generó el archivo de salida.');
             }
 
-        } else if (isQuotedVideo) {
+        } else if (/video/.test(mime) || /video/.test(isMedia)) {
             if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
             let media = await quoted.download()
             let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
