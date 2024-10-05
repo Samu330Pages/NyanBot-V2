@@ -2226,6 +2226,70 @@ case 'tt': case 'tiktok': {
 }
 break
 
+case 'tt2': case 'tiktok2': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
+
+    let ttlId;
+    try {
+        ttlId = reactionLoad(m.chat, m.key);
+
+        const { result } = await fg.tiktok(text);
+        
+        let infoTt = `
+*Información del contenido:*
+${result.duration ? `- Duración: ${result.duration} segundos` : ''}
+${result.size ? `- Tamaño: ${result.size} bytes` : ''}
+${result.wm_size ? `- Tamaño con marca de agua: ${result.wm_size} bytes` : ''}
+${result.play_count ? `- Reproducciones: ${result.play_count}` : ''}
+${result.digg_count ? `- Me gusta: ${result.digg_count}` : ''}
+${result.comment_count ? `- Comentarios: ${result.comment_count}` : ''}
+${result.share_count ? `- Compartidos: ${result.share_count}` : ''}
+${result.download_count ? `- Descargas: ${result.download_count}` : ''}
+${result.collect_count ? `- Guardados: ${result.collect_count}` : ''}
+${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
+${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
+
+*Información del audio:*
+${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
+${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
+${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
+${result.music_info.original ? `- ¿Original? Sí` : result.music_info.original === false ? `- ¿Original? No` : ''}
+${result.music_info.duration ? `- Duración: ${result.music_info.duration} segundos` : ''}
+${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
+
+> ${botname} by ${ownername}
+`;
+
+        if (result.duration) {
+            let videoTt = await fetchBuffer(result.play);
+            await nyanBot2.sendMessage(m.chat, {
+                video: videoTt,
+                fileName: result.title + '.mp4',
+                caption: infoTt,
+                jpegThumbnail: await fetchBuffer(result.author.avatar)
+            }, { quoted: m });
+        } else {
+            await reply(`${infoTt}`);
+            for (let i = 0; i < result.images.length; i++) {
+                let imageTt = await fetchBuffer(result.images[i]);
+                await nyanBot2.sendMessage(m.chat, {
+                    image: imageTt,
+                    caption: `*Imagen ${i + 1} de ${result.images.length}*`
+                }, { quoted: m });
+            }
+        }
+
+        reactionOk(m.chat, m.key, ttlId);
+        db.data.users[sender].limit -= 10;
+    } catch (e) {
+        reactionError(m.chat, m.key, ttlId);
+        return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${e}`);
+    }
+}
+break
+
 case 'calc':
 case 'calculadora':
 case 'suma':
