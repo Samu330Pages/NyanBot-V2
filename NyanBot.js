@@ -1968,44 +1968,25 @@ case 'ytmp3': case 'yta': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const axios = require('axios'); // Asegúrate de tener axios instalado
-    const apiUrl = 'https://api.cobalt.tools/';
-
-    // Configuración de la solicitud POST
-    const requestBody = {
-        url: text,
-        videoQuality: '480', // Puedes ajustar esto según tus necesidades
-        audioFormat: 'mp3', // Formato de audio
-        downloadMode: 'audio', // Modo de descarga
-        disableMetadata: false, // Asegúrate de que esto esté en false para obtener metadatos
-        filenameStyle: 'basic' // Estilo de nombre de archivo básico
-    };
-
     try {
-        const response = await axios.post(apiUrl, requestBody, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        });
+        const res = await fg.yta(text);
 
-        // Manejo de la respuesta
-        if (response.data.status === 'tunnel' || response.data.status === 'redirect') {
-            const downloadUrl = response.data.url;
-	    const audioName = response.data.filename;
+        const audioBuffer = await fetchBuffer(res.dl_url);
+        await nyanBot2.sendMessage(m.chat, {
+            document: audioBuffer,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${res.title}\n- *Peso:* ${res.size}\n- *Calidad:* ${res.quality}`,
+            mimetype: "audio/mpeg",
+            fileName: `${res.title}.mp3`,
+            jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
+        }, { quoted: m });
 
-            // Enviar el audio
-	    let jpg = 'https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1';
-            await nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(downloadUrl), caption: '*Descarga este archivo para guardar el audio en tu reproductor! 📀*', mimetype: "audio/mpeg", fileName: audioName, jpegThumbnail: await fetchBuffer(jpg)}, {quoted: m});
-	    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(downloadUrl), mimetype: "audio/mpeg", fileName: audioName}, {quoted: m});
-		
-        } else if (response.data.status === 'error') {
-            reply(`Error: ${response.data.error.code} - ${response.data.error.context ? response.data.error.context.service : 'Sin contexto'}`);
-        } else {
-            reply('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
-        }
+        await nyanBot2.sendMessage(m.chat, {
+            audio: audioBuffer,
+            mimetype: "audio/mpeg",
+            fileName: `${res.title}.mp3`
+        }, { quoted: m });
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
     }
