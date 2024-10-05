@@ -2907,14 +2907,22 @@ break
 case 's':
 case 'sticker':
 case 'stiker': {
-    if (!m.quoted) return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} 4 _*(para sticker sin fondo)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
+    let mediaPath;
+    
+    if (!isQuotedVideo && !isQuotedImage || !isMedia) {
+        return reply(`*Por favor, envía o etiqueta una imagen/video/gif usando el comando ${prefix + command}*\n_La duración del video debe estar entre 1-9 segundos._\n\n*Puedes incluir algunas opciones para envio de stickers:*\n- ${prefix + command} 1 _*(para estirar el sticker de forma cuadrada)*_\n- ${prefix + command} 2 _*(para sticker circular)*_\n- ${prefix + command} 3 _*(para sticker en forma de corazón)*_\n- ${prefix + command} 4 _*(para sticker sin fondo)*_\n- ${prefix + command} _*(sin opciones para enviar como está)*_`);
+    }
+
     nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
     const option = text.trim().split(' ')[0]; // Obtener la opción del texto
-    let mediaPath;
 
     try {
-        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt"); // Descargar y guardar la media
+        if (isQuotedImage || isQuotedVideo) {
+            mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt"); // Descargar y guardar la media etiquetada
+        } else {
+            mediaPath = await nyanBot2.downloadAndSaveMediaMessage(m, "samuSt"); // Descargar y guardar la media del mensaje
+        }
     } catch (err) {
         console.error('Error al descargar el medio:', err);
         return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
@@ -2928,7 +2936,7 @@ case 'stiker': {
     const outputFilePath = 'output.webp'; // Archivo de salida
 
     try {
-        if (/image/.test(quoted.mimetype)) {
+        if (isQuotedImage) {
             // Procesar imagen con sharp
             if (option === '1') {
                 // Opción 1: Estirar la imagen a 512x512
@@ -2940,21 +2948,16 @@ case 'stiker': {
             } else if (option === '2') {
                 // Opción 2: Recortar a circular
                 const image = sharp(mediaPath);
-
-                // Redimensionar la imagen a un tamaño mínimo de 512x512
                 const { width, height } = await image.metadata();
-                const size = Math.max(width, height); // Obtener el tamaño máximo
-
-                // Crear un buffer para la máscara circular
+                const size = Math.max(width, height);
                 const mask = Buffer.from(`
                     <svg width="${size}" height="${size}">
                         <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="white" />
                     </svg>
                 `);
-
                 await image
-                    .resize(size, size) // Redimensionar la imagen para que tenga el mismo tamaño que la máscara
-                    .composite([{ input: mask, blend: 'dest-in' }]) // Aplicar la máscara
+                    .resize(size, size)
+                    .composite([{ input: mask, blend: 'dest-in' }])
                     .toFile(outputFilePath);
             } else if (option === '3') {
                 // Opción 3: Recortar a forma de corazón
@@ -2964,8 +2967,8 @@ case 'stiker': {
                     </svg>
                 `);
                 await sharp(mediaPath)
-                    .resize(512, 512) // Redimensionar a 512x512
-                    .composite([{ input: heartMask, blend: 'dest-in' }]) // Aplicar la máscara en forma de corazón
+                    .resize(512, 512)
+                    .composite([{ input: heartMask, blend: 'dest-in' }])
                     .toFile(outputFilePath);
             } else if (option === '4') {
                 // Opción 4: Eliminar el fondo de la imagen
@@ -2981,20 +2984,19 @@ case 'stiker': {
                 return;
             } else {
                 // Sin opción: enviar la imagen original como sticker
-                encmedia = fs.readFileSync(mediaPath); // Leer el archivo original
+                encmedia = fs.readFileSync(mediaPath);
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
                 
                 // Eliminar el archivo original
                 if (fs.existsSync(mediaPath)) {
                     fs.unlinkSync(mediaPath);
                 }
-                return; // Salir después de enviar sin procesar
+                return;
             }
 
             // Asegurarse de que el archivo de salida exista antes de leerlo
             if (fs.existsSync(outputFilePath)) {
                 encmedia = fs.readFileSync(outputFilePath);
-                // Enviar el sticker
                 await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
                 
                 // Eliminar el archivo original y el archivo procesado
@@ -3008,7 +3010,7 @@ case 'stiker': {
                 return reply('Error al procesar la imagen. No se generó el archivo de salida.');
             }
 
-        } else if (/video/.test(mime)) {
+        } else if (isQuotedVideo) {
             if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
             let media = await quoted.download()
             let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
