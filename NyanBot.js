@@ -2195,59 +2195,20 @@ case 'tt': case 'tiktok': {
     try {
         ttlId = reactionLoad(m.chat, m.key);
 
-        let { title, author, username, published, like, comment, share, views, bookmark, video, cover: picture, duration, music, profilePicture } = await ttdl(text);
-        
-        let caption = `${forma1}Tiktok Download 🎰${forma1}\n\n`;
-        caption += `- *Autor:* ${author}\n`;
-        caption += `- *Nombre de usuario:* ${username}\n`;
-        caption += `- *Descripción:* ${title}\n`;
-        caption += `- *Publicado:* ${published}\n`;
-        caption += `- *Likes:* ${like}\n`;
-        caption += `- *Comentarios:* ${comment}\n`;
-        caption += `- *Vistas:* ${views}\n`;
-        caption += `- *Bookmark:* ${bookmark}\n`;
-        caption += `- *Duración:* ${duration}\n\n`;
-        caption += `> ${botname} by ${ownername}`;
-
-        let videoTt = await fetchBuffer(video);
-        await nyanBot2.sendMessage(m.chat, {
-                video: videoTt,
-		fileName: title + '.mp4',
-                caption: caption,
-		jpegThumbnail: await fetchBuffer(profilePicture)
-            }, { quoted: m });
-
-        reactionOk(m.chat, m.key, ttlId);
-        db.data.users[sender].limit -= 10;
-    } catch (e) {
-        reactionError(m.chat, m.key, ttlId);
-        return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${e}`);
-    }
-}
-break
-
-case 'tt2': case 'tiktok2': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
-
-    let ttlId;
-    try {
-        ttlId = reactionLoad(m.chat, m.key);
-
         const { result } = await fg.tiktok(text);
         
         let infoTt = `
 *Información del contenido:*
+${result.title}\n
 ${result.duration ? `- Duración: ${result.duration} segundos` : ''}
-${result.size ? `- Tamaño: ${result.size} bytes` : ''}
-${result.wm_size ? `- Tamaño con marca de agua: ${result.wm_size} bytes` : ''}
-${result.play_count ? `- Reproducciones: ${result.play_count}` : ''}
-${result.digg_count ? `- Me gusta: ${result.digg_count}` : ''}
-${result.comment_count ? `- Comentarios: ${result.comment_count}` : ''}
-${result.share_count ? `- Compartidos: ${result.share_count}` : ''}
-${result.download_count ? `- Descargas: ${result.download_count}` : ''}
-${result.collect_count ? `- Guardados: ${result.collect_count}` : ''}
+${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
+${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}
+${result.play_count ? `- Reproducciones: ${formatNumber(result.play_count)}` : ''}
+${result.digg_count ? `- Me gusta: ${formatNumber(result.digg_count)}` : ''}
+${result.comment_count ? `- Comentarios: ${formatNumber(result.comment_count)}` : ''}
+${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''}
+${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
+${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
 ${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
 ${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
 
@@ -2271,7 +2232,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
         } else {
-            await reply(`${infoTt}`);
+            await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
                 let imageTt = await fetchBuffer(result.images[i]);
                 await nyanBot2.sendMessage(m.chat, {
