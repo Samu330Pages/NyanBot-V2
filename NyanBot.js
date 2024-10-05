@@ -2045,6 +2045,7 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 break
 
 case 'song': {
+if (!isSamu) return reply('Esta función esta en desarrollo, aun no esta disponible! 🔴');
     if (!quoted) return reply("*Por favor, responde a un audio para reconocer la canción*");
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) {
@@ -2059,23 +2060,33 @@ case 'song': {
 
         if (songData.track) {
             const song = songData.track;
-            const songInfo = `
-*Título:* ${song.title}
-*Artista:* ${song.subtitle}
-*Album:* ${song.images.coverart}
-`;
+            const songInfo = `${forma1}Eh encontrado este resultado 🙂${forma1}
+*Segun mi búsqueda 🔎... el nombre de la canción es:*\n${song.title}\n
+*El artista de dicha canción es:*\n${song.subtitle}\n
 
-            await nyanBot2.sendMessage(m.chat, { text: songInfo }, { quoted: m });
-        } else {
-            await nyanBot2.sendMessage(m.chat, { text: '*No se pudo reconocer la canción*' }, { quoted: m });
+_*Si es correcto o aun no estas seguro de si es... toca el botón de abajo para verificar! 😁*_
+`;
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Buscar en Youtube 🔴',
+            id: `${prefix}yts ${song.title}`
+          }),
+}]
+await sendReplyButton(m.chat, buttons, m, {
+	content: `${songInfo}`,
+	media: await fetchBuffer(`${song.images.coverart}`)
+})
+	} else {
+            await reply(`*No se pudo reconocer la canción*\n_*Intenta etiquetar un audio que contenga la canción que deseás reconocer, y si es una grabación asegurate de que no se escuche mucho ruido*_ 😁`);
         }
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         db.data.users[sender].limit -= 50;
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error al reconocer la canción:', error);
-        reply(`Ocurrió un error al intentar reconocer la canción. Por favor, inténtalo de nuevo.\n${error}`);
+        console.error('*Error al reconocer la canción:*', error);
+        reply(`*Ocurrió un error al intentar reconocer la canción. Por favor, inténtalo de nuevo.*\n${error}`);
     }
 }
 break
