@@ -2140,18 +2140,30 @@ case 'insta': case 'ig': case 'instagram': {
     try {
         const { result } = await fg.igdl(text);
 
-        if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) {
+        if (result.length > 1) {
+            const numImages = Math.sqrt(result.length);
+            await reply(`_*Esperé un momento... sus imágenes se están enviando..._*\n> ${botname} by ${ownername}`})
+            for (let i = 0; i < numImages; i++) {
+                if (result[i].thumbnail.includes('.jpg') || result[i].thumbnail.includes('.png')) {
+                    const imageBuffer = await fetchBuffer(result[i].url);
+                    await nyanBot2.sendMessage(m.chat, {
+                        image: imageBuffer,
+                        caption: `*Imagen ${i + 1} de ${numImages}*`
+                    }, { quoted: m });
+                }
+            }
+        } else if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) { // Si es una sola imagen
             const imageBuffer = await fetchBuffer(result[0].url);
             await nyanBot2.sendMessage(m.chat, {
                 image: imageBuffer,
                 caption: `> ${botname} by ${ownername}`
             }, { quoted: m });
-        } else {
+        } else { // Si es un video
             const videoBuffer = await fetchBuffer(result[0].url);
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer,
                 caption: `> ${botname} by ${ownername}`,
-                fileName: `instagram_video-${date}.mp4`,
+                fileName: 'instagram_video.mp4',
                 mimetype: 'video/mp4'
             }, { quoted: m });
         }
