@@ -1369,7 +1369,7 @@ function isValidPassword(password) {
 		    
 _*Felicidades, has ganado 200 puntos! 🎁*_
 
-_Tu sesión sé ha guardado e la base de datos del bot! 😸_`
+_Tu sesión sé ha guardado en la base de datos del bot! 😸_`
                 });
 		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m.key}})
 		db.data.users[sender].limit += 200
