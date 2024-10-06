@@ -44,12 +44,12 @@ const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
 const scp = require('./lib/scraper')
+const { auth } = require('./lib/firebase.js')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
-const { recognizeSong } = require('./lib/test1.js')
 const { getOrganicData } = require('./lib/gg.js')
-const { Audd } = require("audd.io")
+const { Audd } = require('audd.io')
 const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -1390,13 +1390,8 @@ const auth = getAuth(app);
         })
         .then(data => {
             if (data) {
+		db.data.users[sender].register = true
 		const buttons = [{
-                    name: "quick_reply",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Iniciar sesión! 🔐',
-                        id: `${prefix}login ${data.Result}`
-                    }),
-                }, {
                     name: "cta_url",
                     buttonParamsJson: JSON.stringify({
                         display_text: 'Ya puedes iniciar sesión en la página! 🏷',
@@ -1409,7 +1404,7 @@ const auth = getAuth(app);
 		    
 _*Felicidades, has ganado 200 puntos! 🎁*_
 
-_Para completar tu registro en el bot, solo da clic en el primer botón, y tu sesión se guardará en la base de datos._`
+_Tu sesión sé ha guardado e la base de datos del bot! 😸_`
                 });
 		nyanBot2.sendMessage(m.chat, {react: {text: '💚', key: m.key}})
 		db.data.users[sender].limit += 200
@@ -1426,21 +1421,8 @@ case 'reset': {
     const args = text.split(' '); // Separar los argumentos por espacios
     const email = args[0]; // Correo
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// firebaseConfig.js
-const { initializeApp } = require('firebase/app');
-const { getAuth, sendPasswordResetEmail } = require('firebase/auth');
-const firebaseConfig = {
-    apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
-    authDomain: "number-ac729.firebaseapp.com",
-    projectId: "number-ac729",
-    storageBucket: "number-ac729.appspot.com",
-    messagingSenderId: "36610055964",
-    appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
-    measurementId: "G-0BTNK7VNM3"
-};
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); // Obtiene la instancia de autenticación
+
+	//
 
     // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
