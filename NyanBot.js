@@ -2037,12 +2037,9 @@ case 'music': case 'song': {
     if (!m.quoted) return reply('*Responde a un audio para reconocer la canción.*');
 
     const mediaMsg = await m.getQuotedObj();
-    if (!mediaMsg || !mediaMsg.isMedia) return reply('*Responde a un audio para reconocer la canción.*');
+    if (!quoted) return reply('*Responde a un audio para reconocer la canción.*');
 
-    const mediaType = Object.keys(mediaMsg.message)[0];
-    if (mediaType !== 'audioMessage') return reply('*Responde a un audio para reconocer la canción.*');
-
-    const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(mediaMsg, 'music');
+    const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
 
     try {
         const recognitionResult = await recognizeMusic(tempFilePath);
