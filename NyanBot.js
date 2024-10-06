@@ -188,6 +188,7 @@ const categories = {
 	{ command: 'ytplaylist', description: '' },
 	{ command: 'youtubesearch', description: '' },
 	{ command: 'yts', description: '' },
+	{ command: 'song', description: '_*RECONOCE CANCIONES*_' },
         { command: 'letra', description: '' },
 	{ command: 'buscarsticker', description: '' }
     ],
@@ -226,8 +227,6 @@ const categories = {
 	{ command: 'avideo', description: '' },
 	{ command: 'agif', description: '' },
 	{ command: 'aimagen', description: '' },
-	{ command: 'calculadora', description: '' },
-	{ command: 'cal', description: '' },
         { command: 'puntos', description: '' },
         { command: 'take', description: '' },
         { command: 'wm', description: '' },
@@ -2035,7 +2034,7 @@ break
 case 'music': case 'song': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (!m.quoted) return reply('Responde a un audio para reconocer la canción.');
+    if (!m.quoted) return reply('Responde a un audio con el comando para reconocer la canción.');
 
     if (!/audio/.test(mime)) return reply('*No as etiquetado un audio, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
 
@@ -2055,10 +2054,21 @@ case 'music': case 'song': {
             responseMessage += `*› Sello:* ${result.label}\n\n`;
             responseMessage += `*› Duración:* ${result.timecode}\n\n`;
             responseMessage += `*› Enlace de la canción:* ${result.song_link}\n\n`;
+const buttons = [{
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Buscar en YouTube 🔴',
+                id: `${prefix}yts ${result.title}`
+            }),
+	}]
 
-            await nyanBot2.sendMessage(m.chat, { text: responseMessage }, { quoted: m });
+    const mediaPath = '';
+
+    return await sendReplyButton(m.chat, buttons, m, {
+        content: responseMessage
+    });
         } else {
-            await nyanBot2.sendMessage(m.chat, { text: `Error en el reconocimiento: ${recognitionResult.status}` }, { quoted: m });
+            await reply(`Error en el reconocimiento: ${recognitionResult.status}`);
         }
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
@@ -2072,53 +2082,6 @@ case 'music': case 'song': {
     }
 
     db.data.users[sender].limit -= 50;
-}
-break
-
-case 'song': {
-if (!isSamu) return reply('Esta función esta en desarrollo, aun no esta disponible! 🔴');
-    if (!quoted) return reply("*Por favor, responde a un audio para reconocer la canción*");
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 50) {
-        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
-    }
-
-    try {
-        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-        
-        let audioPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "shazamAudio");
-        const songData = await recognizeSong(audioPath);
-
-        if (songData.track) {
-            const song = songData.track;
-            const songInfo = `${forma1}Eh encontrado este resultado 🙂${forma1}
-*Segun mi búsqueda 🔎... el nombre de la canción es:*\n${song.title}\n
-*El artista de dicha canción es:*\n${song.subtitle}\n
-
-_*Si es correcto o aun no estas seguro de si es... toca el botón de abajo para verificar! 😁*_
-`;
-const buttons = [{
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Buscar en Youtube 🔴',
-            id: `${prefix}yts ${song.title}`
-          }),
-}]
-await sendReplyButton(m.chat, buttons, m, {
-	content: `${songInfo}`,
-	media: await fetchBuffer(`${song.images.coverart}`)
-})
-	} else {
-            await reply(`*No se pudo reconocer la canción*\n_*Intenta etiquetar un audio que contenga la canción que deseás reconocer, y si es una grabación asegurate de que no se escuche mucho ruido*_ 😁`);
-        }
-
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 50;
-    } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('*Error al reconocer la canción:*', error);
-        reply(`*Ocurrió un error al intentar reconocer la canción. Por favor, inténtalo de nuevo.*\n${error}`);
-    }
 }
 break
 			
@@ -2271,47 +2234,6 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
     } catch (e) {
         reactionError(m.chat, m.key, ttlId);
         return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${e}`);
-    }
-}
-break
-
-case 'calc':
-case 'calculadora':
-case 'suma':
-case 'sumar':
-case 'resta':
-case 'multiplicar':
-case 'dividir':
-case 'porcentaje': {
-    // Obtener la ecuación del mensaje
-    const equation = text || m.quoted?.text; // Si hay texto o un mensaje citado
-    if (!equation) {
-        return reply("Por favor, proporciona una operación matemática. Ejemplo: `5 + 5 + 20 - 50`");
-    }
-
-    // Reemplazar espacios para una mejor evaluación
-    const sanitizedEquation = equation.replace(/\s+/g, '');
-
-    // Expresión regular para validar la ecuación
-    const validCharacters = /^[0-9+\-*/().]+$/;
-    if (!validCharacters.test(sanitizedEquation)) {
-        return reply("La operación contiene caracteres no permitidos. Asegúrate de usar solo los siguientes caracteres:\n\n" +
-                     "* Números: 0-9\n" +
-                     "* Operadores: + (suma), - (resta), * (multiplicación), / (división)\n" +
-                     "* Paréntesis: () para agrupar operaciones\n\n" +
-                     "Ejemplo de uso: `5 + 5 - 2 * 3 / (1 + 1)`");
-    }
-
-    try {
-        // Evaluar la ecuación usando eval (con precaución)
-        let result = eval(sanitizedEquation);
-
-        // Formatear la respuesta
-        let response = `El resultado de la operación:\n- *${equation}*\nEs igual a:\n- *${result}*`;
-        reply(response);
-    } catch (error) {
-        console.error('Error al evaluar la ecuación:', error);
-        return reply("Ocurrió un error al intentar evaluar la operación. Asegúrate de que esté escrita correctamente.");
     }
 }
 break
@@ -3084,7 +3006,7 @@ case 'update':
 if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
 exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
-if (stdout) reply(`🍟 | ${stdout}\n\n> *NyanBot-V2*`)
+if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 })
 break
 
