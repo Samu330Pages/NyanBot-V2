@@ -148,7 +148,7 @@ const sendReminder = async (chatId, message) => {
 
     await sendReplyButton(chatId, buttons, message, {
         content: message,
-        media: await fetchBuffer('https://example.com/image.png') // Cambiar por la imagen adecuada
+        //media: await fetchBuffer('https://example.com/image.png') // Cambiar por la imagen adecuada
     });
 };
 
