@@ -44,6 +44,7 @@ const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const {translate} = require('@vitalets/google-translate-api')
 const scp = require('./lib/scraper')
+const { sendPasswordResetEmail, createUserWithEmailAndPassword } = require('firebase/auth');
 const { auth } = require('./lib/firebaseAuth.js')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
