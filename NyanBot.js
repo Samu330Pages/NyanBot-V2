@@ -2034,7 +2034,7 @@ break
 
 case 'music': case 'song': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 50) return reply(*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_);
+    if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (!m.quoted) return reply('Responde a un audio para reconocer la canción.');
 
     if (!/audio/.test(mime)) return reply('*No as etiquetado un audio, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
@@ -2047,14 +2047,14 @@ case 'music': case 'song': {
         if (recognitionResult.status === 'success') {
             const result = recognitionResult.result;
 
-            let responseMessage = > *♫ Reconocimiento exitoso:*\n\n;
-            responseMessage += *› Artista:* ${result.artist}\n\n;
-            responseMessage += *› Título:* ${result.title}\n\n;
-            responseMessage += *› Álbum:* ${result.album}\n\n;
-            responseMessage += *› Fecha de lanzamiento:* ${result.release_date}\n\n;
-            responseMessage += *› Sello:* ${result.label}\n\n;
-            responseMessage += *› Duración:* ${result.timecode}\n\n;
-            responseMessage += *› Enlace de la canción:* ${result.song_link}\n\n;
+            let responseMessage = `> *♫ Reconocimiento exitoso:*\n\n`;
+            responseMessage += `*› Artista:* ${result.artist}\n\n`;
+            responseMessage += `*› Título:* ${result.title}\n\n`;
+            responseMessage += `*› Álbum:* ${result.album}\n\n`;
+            responseMessage += `*› Fecha de lanzamiento:* ${result.release_date}\n\n`;
+            responseMessage += `*› Sello:* ${result.label}\n\n`;
+            responseMessage += `*› Duración:* ${result.timecode}\n\n`;
+            responseMessage += `*› Enlace de la canción:* ${result.song_link}\n\n`;
 
             await nyanBot2.sendMessage(m.chat, { text: responseMessage }, { quoted: m });
         } else {
