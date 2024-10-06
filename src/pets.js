@@ -65,91 +65,87 @@ const feedPet = (sender) => {
     const userPets = petsData.find(pet => pet.user === sender);
 
     if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0]; // Obtener la primera mascota
+        const pet = userPets.pets[0];
         pet.lastFed = new Date();
         pet.hunger = Math.max(0, pet.hunger - 20);
-        pet.level = Math.min(100, pet.level + 10);
+        pet.level = Math.min(100, pet.level + 1); // Aumentar solo 1 nivel
         savePetsData(petsData);
     }
 };
 
-// Función para sacar a pasear a la mascota
 const walkPet = (sender) => {
     const petsData = loadPetsData();
     const userPets = petsData.find(pet => pet.user === sender);
 
     if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0]; // Obtener la primera mascota
+        const pet = userPets.pets[0];
         pet.lastWalked = new Date();
         pet.boredom = Math.max(0, pet.boredom - 20);
-        pet.level = Math.min(100, pet.level + 15);
+        pet.level = Math.min(100, pet.level + 1); // Aumentar solo 1 nivel
         savePetsData(petsData);
     }
 };
 
-// Función para jugar con la mascota
 const playWithPet = (sender) => {
     const petsData = loadPetsData();
     const userPets = petsData.find(pet => pet.user === sender);
 
     if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0]; // Obtener la primera mascota
+        const pet = userPets.pets[0];
         pet.lastPlayed = new Date();
         pet.boredom = Math.max(0, pet.boredom - 15);
-        pet.level = Math.min(100, pet.level + 5);
+        pet.level = Math.min(100, pet.level + 1); // Aumentar solo 1 nivel
         savePetsData(petsData);
     }
 };
 
-// Función para verificar el estado de la mascota y enviar notificaciones
-const checkPetStatus = () => {
+const checkPetStatus = (sender) => {
     const petsData = loadPetsData();
-    const now = new Date();
+    const userPets = petsData.find(pet => pet.user === sender);
 
-    petsData.forEach(user => {
-        user.pets.forEach(pet => {
-            const hoursSinceFed = pet.lastFed ? (now - new Date(pet.lastFed)) / 36e5 : Infinity;
-            const hoursSinceWalked = pet.lastWalked ? (now - new Date(pet.lastWalked)) / 36e5 : Infinity;
+    if (!userPets || userPets.pets.length === 0) {
+        return null; // No tiene mascotas
+    }
 
-            // Verificar si necesita comer
-            if (hoursSinceFed >= 8) {
-                pet.hunger += 10;
-                if (pet.hunger >= 100) {
-                    pet.level = Math.max(0, pet.level - 10);
-                    sendReminder(user.user, `${pet.name} necesita comer!`);
-                }
-            }
-
-            // Verificar si necesita pasear
-            if (hoursSinceWalked >= 5) {
-                pet.boredom += 10;
-                if (pet.boredom >= 100) {
-                    pet.level = Math.max(0, pet.level - 10);
-                    sendReminder(user.user, `${pet.name} necesita salir a pasear!`);
-                }
-            }
-        });
-    });
-
-    savePetsData(petsData);
+    const pet = userPets.pets[0]; // Obtener la primera mascota
+    return pet; // Retornar la mascota
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (chatId, message) => {
-    const buttons = [
-        {
-            name: "quick_reply",
-            buttonParamsJson: JSON.stringify({
-                display_text: 'Atender',
-                id: `atender_mascota`
-            }),
-        }
-    ];
+const sendReminder = async (chatId, pet) => {
+    let message = `${pet.name} necesita atención!\n`;
 
-    await sendReplyButton(chatId, buttons, message, {
-        content: message,
-        //media: await fetchBuffer('https://example.com/image.png') // Cambiar por la imagen adecuada
-    });
+    if (pet.hunger >= 70) {
+        message += `🔴 *Alimentación baja:* ${pet.hunger}/100\n`;
+    }
+    if (pet.boredom >= 70) {
+        message += `🔴 *Diversión baja:* ${pet.boredom}/100\n`;
+    }
+    if (pet.health <= 30) {
+        message += `🔴 *Salud crítica:* ${pet.health}/100\n`;
+    }
+
+    await nyanBot2.sendMessage(chatId, { text: message });
+};
+
+const getPetInfo = (sender) => {
+    const pet = checkPetStatus(sender);
+    if (!pet) {
+        return `No tienes ninguna mascota registrada. Por favor, crea una mascota primero.`;
+    }
+
+    let petInfo = `*Información de tu mascota:*\n`;
+    petInfo += `*Nombre:* ${pet.name}\n`;
+    petInfo += `*Tipo:* ${pet.type}\n`;
+    petInfo += `*Nivel:* ${pet.level}/100\n`;
+    petInfo += `*Última vez alimentado:* ${pet.lastFed ? pet.lastFed.toLocaleString() : 'Nunca'}\n`;
+    petInfo += `*Última vez paseado:* ${pet.lastWalked ? pet.lastWalked.toLocaleString() : 'Nunca'}\n`;
+    petInfo += `*Última vez jugado:* ${pet.lastPlayed ? pet.lastPlayed.toLocaleString() : 'Nunca'}\n`;
+    petInfo += `*Salud:* ${pet.health}/100\n`;
+    petInfo += `*Hambre:* ${pet.hunger}/100\n`;
+    petInfo += `*Diversión:* ${pet.boredom}/100\n`;
+
+    return petInfo;
 };
 
 module.exports = {
@@ -157,5 +153,6 @@ module.exports = {
     feedPet,
     walkPet,
     playWithPet,
-    checkPetStatus
+    checkPetStatus,
+    getPetInfo
 };
