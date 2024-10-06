@@ -47,9 +47,10 @@ const scp = require('./lib/scraper')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
-const recognizeMusic = require('./lib/Audd.js')
 const { recognizeSong } = require('./lib/test1.js')
 const { getOrganicData } = require('./lib/gg.js')
+const { Audd } = require("audd.io")
+const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
 const client = new ImgurClient({ clientId: "a0113354926015a" })*/
@@ -2032,57 +2033,15 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 break
 
 case 'music': case 'song': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (!m.quoted) return reply('*Responde a un audio para reconocer la canción.*');
-
-    const mediaMsg = await m.getQuotedObj();
-    if (!quoted) return reply('*Responde a un audio para reconocer la canción.*');
-
     const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
-
-    try {
-        const recognitionResult = await recognizeMusic(tempFilePath);
-
-        if (recognitionResult.status) {
-            const result = recognitionResult.data.result;
-
-            let responseMessage = `> *♫ Reconocimiento exitoso:*\n\n`;
-            responseMessage += `*› Artista:* ${result.artist}\n\n`;
-            responseMessage += `*› Título:* ${result.title}\n\n`;
-            responseMessage += `*› Álbum:* ${result.album}\n\n`;
-            responseMessage += `*› Fecha de lanzamiento:* ${result.release_date}\n\n`;
-            responseMessage += `*› Sello:* ${result.label}\n\n`;
-            responseMessage += `*› Duración:* ${result.timecode}\n\n`;
-            responseMessage += `*› Enlace de la canción:* ${result.song_link}\n\n`;
-
-            if (result.apple_music) {
-                responseMessage += `*🍎 Disponible en Apple Music:* ${result.apple_music.url}\n\n`;
-            } else {
-                responseMessage += `*No disponible en Apple Music*\n\n`;
-            }
-
-            if (result.spotify) {
-                responseMessage += `*🟢 Disponible en Spotify:* ${result.spotify.external_urls.spotify}\n\n`;
-            } else {
-                responseMessage += `*No disponible en Spotify*\n\n`;
-            }
-
-            await nyanBot2.sendMessage(m.chat, { text: responseMessage }, { quoted: m });
-        } else {
-            await nyanBot2.sendMessage(m.chat, { text: `Error en el reconocimiento: ${recognitionResult.msg}` }, { quoted: m });
-        }
+try {
+        let r = await audd.recognize.fromFile(tempFilePath)
+	reply(`${r}`)
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
-        await nyanBot2.sendMessage(m.chat, { text: 'Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo.' }, { quoted: m });
-    } finally {
-        fs.unlink(tempFilePath, (err) => {
-            if (err) {
-                console.error('Error al eliminar el archivo temporal:', err);
-            }
-        });
+        await reply(`${error}`)
     }
-
+	fs.unlink(tempFilePath)
     db.data.users[sender].limit -= 50;
 }
 break
