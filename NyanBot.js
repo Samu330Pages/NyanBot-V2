@@ -2035,14 +2035,13 @@ break
 case 'music': case 'song': {
     const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
 try {
-        let r = await audd.recognize.fromFile(tempFilePath)
+        let r = await audd.recognize.fromFile(`${tempFilePath}`)
 	reply(`${r}`)
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         await reply(`${error}`)
     }
 	fs.unlink(tempFilePath)
-    db.data.users[sender].limit -= 50;
 }
 break
 
