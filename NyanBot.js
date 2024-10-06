@@ -1149,15 +1149,15 @@ case 'logout': {
 if (db.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
 nyanBot2.sendMessage(m.chat, {react: {text: '😫', key: m.key}})
 const buttons = [{
-                    name: "quick_reply",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Si',
-                        id: `${prefix}lg ${sender}`
-                    }),
-                }];
-                sendReplyButton(m.chat, buttons, m, {
-                    content: `*Estás seguro que deseas cerrar tu sesión en el bot?* ⚠`
-                });
+name: "quick_reply",
+buttonParamsJson: JSON.stringify({
+display_text: 'Si',
+id: `${prefix}lg ${sender}`
+}),
+}];
+sendReplyButton(m.chat, buttons, m, {
+content: `*Estás seguro que deseas cerrar tu sesión en el bot?* ⚠`
+});
 }
 break
 case 'login': {
@@ -1167,15 +1167,12 @@ case 'login': {
 	nyanBot2.sendMessage(m.chat, {react: {text: '📝', key: m.key}})
         return reply('Por favor, proporciona un correo electrónico para verificar si está registrado.');
     }
-
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
 	nyanBot2.sendMessage(m.chat, {react: {text: '❌', key: m.key}})
         return reply('El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.');
     }
-
     const url = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
-
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -1222,7 +1219,7 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
         })
         .catch(error => {
             console.error('Error:', error);
-            reply('Ocurrió un error al verificar el correo.'); // Mensaje de error
+            reply('Ocurrió un error al verificar el correo.');
         });
 }
 break
@@ -1280,74 +1277,41 @@ const cards = [
         cards: cards
     }); 
 	}
-    const args = text.split(' '); // Separar los argumentos por espacios
-    const email = args[0]; // Correo
-    const password = args[1]; // Contraseña
-    const name = args[2]; // Nombre de usuario
+    const args = text.split(' ');
+    const email = args[0];
+    const password = args[1];
+    const name = args[2];
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function isValidPassword(password) {
-    const minLength = 8; // Longitud mínima
-    const hasLowerCase = /[a-z]/.test(password); // Al menos una letra minúscula
-    const hasNumbers = /\d/.test(password); // Al menos un número
-    const hasSpecialChars = /[!@#$%^&*]/.test(password); // Al menos un carácter especial
+    const minLength = 8;
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*]/.test(password);
 
-    // Verifica si cumple con todos los requisitos
     return password.length >= minLength && hasLowerCase && hasNumbers && hasSpecialChars;
 }
-    // firebaseConfig.js
-const { initializeApp } = require('firebase/app');
-const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
-
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCqsYZA9wU9Y1YvYGicdZQ_7DDzfEVLXDU",
-    authDomain: "number-ac729.firebaseapp.com",
-    projectId: "number-ac729",
-    storageBucket: "number-ac729.appspot.com",
-    messagingSenderId: "36610055964",
-    appId: "1:36610055964:web:ec80cc7ea2fb23287ce4d9",
-    measurementId: "G-0BTNK7VNM3"
-};
-
-// Inicializa Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-    // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
         return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com contraseña nombreUsuario*`);
     }
-
-    // Validar que no haya más de tres parámetros
     if (args.length > 3) {
         return reply(`*No se pueden ingresar más de tres parámetros. Ejemplo de uso:*\n${prefix + command} correo@gmail.com contraseña nombreUsuario`);
     }
 
-    // Validar que se haya proporcionado un texto
     if (!text.trim()) {
         return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*\n*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*`);
     }
-
-    // Validar que se hayan proporcionado todos los argumentos necesarios
     if (!email || !password || !name) {
         return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*');
     }
-
-    // Validar que ninguno de los parámetros contenga espacios
     if (email.includes(' ') || password.includes(' ') || name.includes(' ')) {
         return reply('*Los datos no deben contener espacios. Asegúrate de que tu correo, contraseña y nombre de usuario sean correctos.*');
     }
-
-    // Validar el formato del correo
     if (!emailPattern.test(email)) {
         return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
     }
-
-    // Validar la contraseña
     if (!isValidPassword(password)) {
         return reply('*La contraseña debe tener al menos 8 caracteres, incluir un número y un carácter especial.*');
     }
-
-    // Verificar si el correo ya está registrado
     const verificationUrl = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
 
     fetch(verificationUrl)
@@ -1419,33 +1383,22 @@ _Tu sesión sé ha guardado e la base de datos del bot! 😸_`
 break
 
 case 'reset': {
-    const args = text.split(' '); // Separar los argumentos por espacios
-    const email = args[0]; // Correo
+    const args = text.split(' ');
+    const email = args[0];
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-	//
-
-    // Verificar que el comando no tenga espacios entre el prefijo y el comando
     if (text.startsWith(`${prefix} `) || text.includes(` ${prefix}`)) {
         return reply(`*El comando debe estar en el formato correcto, sin espacios entre el prefijo y el comando. Ejemplo: ${prefix + command} correo@gmail.com*`);
     }
-
-    // Validar que se haya proporcionado un texto
     if (!text.trim()) {
         return reply(`*Por favor ingresa el correo para restablecer la contraseña!*`);
     }
-
-    // Validar que se haya proporcionado el correo electrónico
     if (!email) {
         return reply('*Por favor, introduce el correo electrónico registrado.*');
     }
-
-    // Validar el formato del correo
     if (!emailPattern.test(email)) {
         return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
     }
-
-    // Verificar si el correo está registrado
     const verificationUrl = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
 
     fetch(verificationUrl)
@@ -1457,7 +1410,6 @@ case 'reset': {
         })
         .then(data => {
             if (data.IsEmailRegistered) {
-                // Enviar el correo de restablecimiento de contraseña
                 return sendPasswordResetEmail(auth, email)
                     .then(() => {
                         reply(`*Se ha enviado un correo de restablecimiento de contraseña a ${email}. Por favor, revisa tu bandeja de entrada.*`);
