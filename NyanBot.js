@@ -2038,6 +2038,7 @@ case 'music': case 'song': {
 
     if (!/audio/.test(mime)) return reply('*No as etiquetado un audio, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
 
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
 
     try {
@@ -2067,10 +2068,12 @@ const buttons = [{
     return await sendReplyButton(m.chat, buttons, m, {
         content: responseMessage
     });
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         } else {
             await reply(`Error en el reconocimiento: ${recognitionResult.status}`);
         }
     } catch (error) {
+	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         await reply(`Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo.\n${error}`)
     } finally {
