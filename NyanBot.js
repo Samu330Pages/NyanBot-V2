@@ -51,7 +51,7 @@ const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
 const { getOrganicData } = require('./lib/gg.js')
 const { Audd } = require('audd.io')
-const { createOrGetPet, feedPet, walkPet, playWithPet, checkPetStatus } = require('./src/pets')
+const { createOrGetPet, feedPet, walkPet, playWithPet, checkPetStatus, getPetInfo } = require('./src/pets')
 const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -2559,6 +2559,12 @@ case 'pet': {
     const petType = args[1]; // Tipo de mascota (gato, perro, etc.)
     const pet = createOrGetPet(sender, petName, petType);
     reply(`Mascota ${pet.name} creada exitosamente!`);
+}
+break
+
+case 'petinfo': {
+    const petInfo = getPetInfo(sender);
+    await reply(`${petInfo}`);
 }
 break
 
