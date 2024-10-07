@@ -2555,6 +2555,13 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 }
 break
 
+case 'mascota': {
+let petExist = await createOrGetPet(sender);
+if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es: ${petExist.name}! es un lindo ${petExist.type} 😍*`)
+reply('xD')
+}
+break
+			
 case 'pet+': {
     const petName = args[0]; // Nombre de la mascota
     const petType = args[1]; // Tipo de mascota (gato, perro, etc.)
