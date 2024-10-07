@@ -2620,7 +2620,7 @@ _*Asi que si estás dispuesto a cargar esa responsabilidad, selecciona el tipo d
 break
 			
 case 'pet+': {
-if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque no es tu mascota! 🙂*');
+if (!text.includes(sender)) return reply('*Esta acción no te corresponde! 🙂*');
 let petName = args[0];
 let petType = args[1];
 let petOwn = args[2];
