@@ -97,7 +97,7 @@ const checkPetStatus = (sender) => {
     
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        sendReminder(nyanBot2, sender, pet);
+        sendReminder(sender, pet);
     }
 
     // Verificar si la mascota se ha escapado
@@ -110,7 +110,7 @@ const checkPetStatus = (sender) => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (NyanBotUser, sender, pet) => {
+const sendReminder = async (NyanBotUser, chatID, pet) => {
     let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
     
     if (pet.hunger >= 70) {
@@ -123,7 +123,7 @@ const sendReminder = async (NyanBotUser, sender, pet) => {
         message += `👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑\n`;
     }
 
-    await NyanBotUser.sendMessage(sender, { text: message });
+    await NyanBotUser.sendMessage(chatID, { text: message });
 };
 
 // Calcular el porcentaje
@@ -251,7 +251,7 @@ const sleepPet = (sender) => {
         setTimeout(() => {
             pet.isSleeping = false; // Cambiar estado a despierto
             savePetsData(petsData);
-            sendReminder(nyanBot2, sender, pet); // Notificar que la mascota se ha despertado
+            sendReminder(sender, pet); // Notificar que la mascota se ha despertado
         }, 7200000); // 2 horas en milisegundos
 
         return `¡*${pet.name}* está durmiendo! 💤`;
