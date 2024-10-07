@@ -2577,31 +2577,31 @@ const buttons = [
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Gato 😺',
-                id: `${prefix}pet+ ${args[0]}|gato ${sender}`
+                id: `${prefix}pet+ ${args[0]} gato ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Perro 🐶',
-                id: `${prefix}pet+ ${args[0]}|perro ${sender}`
+                id: `${prefix}pet+ ${args[0]} perro ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pollo 🐣',
-                id: `${prefix}pet+ ${args[0]}|pollo ${sender}`
+                id: `${prefix}pet+ ${args[0]} pollo ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Lorito 🦜',
-                id: `${prefix}pet+ ${args[0]}|lorito ${sender}`
+                id: `${prefix}pet+ ${args[0]} lorito ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pingüino 🐧',
-                id: `${prefix}pet+ ${args[0]}|pinguino ${sender}`
+                id: `${prefix}pet+ ${args[0]} pinguino ${sender}`
             }),
 	}]
 
@@ -2621,9 +2621,8 @@ break
 			
 case 'pet+': {
 if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque no es tu mascota! 🙂*');
-const petData = args.join(" ")
-const petName = petData.split("|")[0]
-const petType = petData.split("|")[1]
+const petName = args[0]
+const petType = args[1]
 const pet = createOrGetPet(sender, petName, petType);
 reply(`*¡🥳 Felicidades, has creado a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
 }
