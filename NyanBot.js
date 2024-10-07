@@ -2564,7 +2564,7 @@ case 'mascota': {
 let petExist = await createOrGetPet(sender);
 if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es ${petExist.name}! es un lindo ${petExist.type} 😍*`)
 if (!text) return reply(`*Por favor incluye el nombre que deseas darle a tu mascota después del comando, ejemplo:*\n\n- ${prefix+command} Tom`);
-if (text.includes(command)) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
+if (budy.startsWith(`${prefix} ${command}`)) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
 const buttons = [
         {
             name: "quick_reply",
@@ -2613,8 +2613,9 @@ _*Asi que si estás dispuesto a cargar esa responsabilidad, selecciona el tipo d
 break
 			
 case 'pet+': {
-    const petName = args[0]; // Nombre de la mascota
-    const petType = args[1]; // Tipo de mascota (gato, perro, etc.)
+if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque no es tu mascota! 🙂*');
+    const petName = text.split("|")[0]
+    const petType = text.split("|")[1]
     const pet = createOrGetPet(sender, petName, petType);
     reply(`Mascota ${pet.name} creada exitosamente!`);
 }
@@ -3548,7 +3549,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 
             default:
 if (isCmd && budy.startsWith('.')) {
-if (!isCmd) return
+if (!command) return
     const allCommands = Object.values(categories)
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
