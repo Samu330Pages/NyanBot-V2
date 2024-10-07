@@ -61,7 +61,6 @@ const getImageUrl = (petType) => {
     return images[petType] || '';
 };
 
-// Función para aumentar hambre y aburrimiento automáticamente
 const updatePetNeeds = () => {
     const petsData = loadPetsData();
     const now = new Date();
@@ -124,39 +123,30 @@ const startPetUpdateInterval = (NyanBotUser) => {
     setInterval(async () => {
         updatePetNeeds(); // Actualiza el hambre y aburrimiento
         const petsData = loadPetsData();
+        const now = new Date();
         
         for (const userPets of petsData) {
-    if (userPets.pets && userPets.pets.length > 0) {
-        for (const pet of userPets.pets) {
-            // Enviar notificación si es necesario y no se ha enviado previamente
-            if ((pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) && !pet.notificationSent) {
-                await sendReminder(NyanBotUser, userPets.user, pet);
-                pet.notificationSent = true; // Marcar como enviado después de enviar el mensaje
-            }
+            if (userPets.pets && userPets.pets.length > 0) {
+                for (const pet of userPets.pets) {
+                    // Verificar si se necesita enviar una notificación
+                    const needsAttention = (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30);
+                    const timeSinceLastNotification = pet.lastNotificationSent ? (now - new Date(pet.lastNotificationSent)) / 30000 : Infinity; // Tiempo en minutos
 
-            // Verificar si la mascota se ha escapado
-            if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
-                removePet(userPets.user);
-                console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
+                    if (needsAttention && timeSinceLastNotification >= 10) { // 10 minutos
+                        await sendReminder(NyanBotUser, userPets.user, pet);
+                        pet.lastNotificationSent = now; // Actualizar la fecha de la última notificación
+                    }
+
+                    // Verificar si la mascota se ha escapado
+                    if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
+                        removePet(userPets.user);
+                        console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
+                    }
+                }
             }
         }
-    }
-}
 
-// Guardar los cambios en el archivo
-savePetsData(petsData); 
-
-// Reiniciar el estado de notificación para el próximo ciclo
-petsData.forEach(userPets => {
-    userPets.pets.forEach(pet => {
-        // Solo reiniciar si ya se envió un mensaje
-        if (pet.notificationSent) {
-            pet.notificationSent = false; // Resetear el estado de notificación
-        }
-    });
-});
-        
-        savePetsData(petsData); // Guardar el estado actualizado de las mascotas
+        savePetsData(petsData); // Guarda los cambios en el archivo
     }, 30000); // Cada 10 minutos
 };
 
