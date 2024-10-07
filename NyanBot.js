@@ -2555,10 +2555,60 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 }
 break
 
+case 'bloa':
+if (!args[1] === sender) return reply('no es tu mascota');
+reply('test')
+break
+
 case 'mascota': {
 let petExist = await createOrGetPet(sender);
-if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es: ${petExist.name}! es un lindo ${petExist.type} 😍*`)
-reply('xD')
+if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es ${petExist.name}! es un lindo ${petExist.type} 😍*`)
+if (!text) return reply(`*Por favor incluye el nombre que deseas darle a tu mascota después del comando, ejemplo:*\n\n- ${prefix+command} Tom`);
+if (budy.includes(`${prefix} ${command}`)) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
+const buttons = [
+        {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Gato 😺',
+                id: `.bloa ${text+sender}`
+            }),
+	}, {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Perro 🐶',
+                id: ''
+            }),
+	}, {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Pollo 🐣',
+                id: ''
+            }),
+	}, {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Lorito 🦜',
+                id: ''
+            }),
+	}, {
+            name: "quick_reply",
+            buttonParamsJson: JSON.stringify({
+                display_text: 'Pingüino 🐧',
+                id: ''
+            }),
+	}]
+
+    return await sendReplyButton(m.chat, buttons, m, {
+        content: `_*Quieres cuidar a una mascota? 😍*_
+_Puedes tener un amiguito y cuidar de él, atender sus necesidades como alimentarlo, sacarlo a caminar, jugar con el! 😊_
+*Es una responsabilidad eh!* 🧐 _si descuidas de el puede perder salud... y si no lo atiendes bien se te puede escapar! 😖_
+
+_*Asi que si estás dispuesto a cargar esa responsabilidad, selecciona el tipo de mascota que desees!*_
+
+⚠️ _*una vez seleccionada tu mascota no podrpodrás cambiar de tipo, asi que escoge con sabiduria*_ ⚠️
+
+*Que mascota deseas cuidar?* 😁`
+    });
 }
 break
 			
