@@ -2577,31 +2577,31 @@ const buttons = [
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Gato 😺',
-                id: `${prefix}pet+ ${text}|gato ${sender}`
+                id: `${prefix}pet+ ${args[0]}|gato ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Perro 🐶',
-                id: `${prefix}pet+ ${text}|perro ${sender}`
+                id: `${prefix}pet+ ${args[0]}|perro ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pollo 🐣',
-                id: `${prefix}pet+ ${text}|pollo ${sender}`
+                id: `${prefix}pet+ ${args[0]}|pollo ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Lorito 🦜',
-                id: `${prefix}pet+ ${text}|lorito ${sender}`
+                id: `${prefix}pet+ ${args[0]}|lorito ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pingüino 🐧',
-                id: `${prefix}pet+ ${text}|pinguino ${sender}`
+                id: `${prefix}pet+ ${args[0]}|pinguino ${sender}`
             }),
 	}]
 
@@ -2625,12 +2625,12 @@ const petData = args.join(" ")
 const petName = petData.split("|")[0]
 const petType = petData.split("|")[1]
 const pet = createOrGetPet(sender, petName, petType);
-reply(`*¡🥳 Felicidades, as creado tú a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
+reply(`*¡🥳 Felicidades, has creado a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
 }
 break
 
 case 'pet': { // Un solo case para manejar las acciones
-    const action = args[1]; // El comando de acción (comer, caminar, jugar, estado, dormir)
+    const action = args[0]; // El comando de acción (comer, caminar, jugar, estado, dormir)
 
     switch (action) {
         case 'comer':
