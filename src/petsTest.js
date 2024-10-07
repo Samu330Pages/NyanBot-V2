@@ -126,30 +126,35 @@ const startPetUpdateInterval = (NyanBotUser) => {
         const petsData = loadPetsData();
         
         for (const userPets of petsData) {
-            if (userPets.pets && userPets.pets.length > 0) {
-                for (const pet of userPets.pets) {
-                    // Enviar notificación si es necesario y no se ha enviado previamente
-                    if ((pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) && !pet.notificationSent) {
-                        await sendReminder(NyanBotUser, userPets.user, pet);
-                    }
+    if (userPets.pets && userPets.pets.length > 0) {
+        for (const pet of userPets.pets) {
+            // Enviar notificación si es necesario y no se ha enviado previamente
+            if ((pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) && !pet.notificationSent) {
+                await sendReminder(NyanBotUser, userPets.user, pet);
+                pet.notificationSent = true; // Marcar como enviado después de enviar el mensaje
+            }
 
-                    // Verificar si la mascota se ha escapado
-                    if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
-                        removePet(userPets.user);
-                        console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
-                    }
-                }
+            // Verificar si la mascota se ha escapado
+            if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
+                removePet(userPets.user);
+                console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
             }
         }
+    }
+}
 
-        savePetsData(petsData); // Guarda los cambios en el archivo
+// Guardar los cambios en el archivo
+savePetsData(petsData); 
 
-        // Reiniciar el estado de notificación para el próximo ciclo
-        petsData.forEach(userPets => {
-            userPets.pets.forEach(pet => {
-                pet.notificationSent = false; // Resetear el estado de notificación
-            });
-        });
+// Reiniciar el estado de notificación para el próximo ciclo
+petsData.forEach(userPets => {
+    userPets.pets.forEach(pet => {
+        // Solo reiniciar si ya se envió un mensaje
+        if (pet.notificationSent) {
+            pet.notificationSent = false; // Resetear el estado de notificación
+        }
+    });
+});
         
         savePetsData(petsData); // Guardar el estado actualizado de las mascotas
     }, 30000); // Cada 10 minutos
