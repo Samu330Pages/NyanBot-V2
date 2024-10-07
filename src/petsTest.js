@@ -97,7 +97,7 @@ const checkPetStatus = (sender) => {
     
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        sendReminder(sender, pet);
+        sendReminder(nyanBot2, sender, pet);
     }
 
     // Verificar si la mascota se ha escapado
