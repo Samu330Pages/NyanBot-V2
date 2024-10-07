@@ -1312,7 +1312,7 @@ function isValidPassword(password) {
         return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
     }
     if (!isValidPassword(password)) {
-        return reply('*La contraseña debe tener al menos 8 caracteres, incluir letras, un número y un carácter especial.*');
+        return reply(`*La contraseña debe tener al menos 8 caracteres, incluir letras, un número y un carácter especial.*\n*Ejemplo: Pass123!*`);
     }
     const verificationUrl = `https://us-central1-number-ac729.cloudfunctions.net/checkEmail?email=${encodeURIComponent(email)}`;
 
