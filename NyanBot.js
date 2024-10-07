@@ -56,7 +56,6 @@ const {
     feedPet,
     walkPet,
     playWithPet,
-    checkPetStatus,
     getPetInfo,
     removePet,
     updatePetNeeds,
@@ -403,7 +402,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isSamu = [botNumber, ...owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
-	startPetUpdateInterval()
+	startPetUpdateInterval(nyanBot2)
 
         //premium
         async function replyprem(teks) {
