@@ -2556,7 +2556,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 break
 
 case 'bloa':
-if (!text.includes(sender)) return reply('no es tu mascota');
+if (!text.includes(sender)) return reply('no es tu mascota 🙂');
 reply('test')
 break
 
