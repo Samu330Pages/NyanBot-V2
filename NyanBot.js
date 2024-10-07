@@ -2577,31 +2577,31 @@ const buttons = [
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Gato 😺',
-                id: `.bloa ${text} ${sender}`
+                id: `${prefix}pet+ ${text}|gato`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Perro 🐶',
-                id: ''
+                id: `${prefix}pet+ ${text}|perro`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pollo 🐣',
-                id: ''
+                id: `${prefix}pet+ ${text}|pollo`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Lorito 🦜',
-                id: ''
+                id: `${prefix}pet+ ${text}|lorito`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pingüino 🐧',
-                id: ''
+                id: `${prefix}pet+ ${text}|pinguino`
             }),
 	}]
 
@@ -2624,7 +2624,7 @@ if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque
     const petName = text.split("|")[0]
     const petType = text.split("|")[1]
     const pet = createOrGetPet(sender, petName, petType);
-    reply(`Mascota ${pet.name} creada exitosamente!`);
+    reply(`*¡🥳 Felicidades, as creado tú a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
 }
 break
 
