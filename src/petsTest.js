@@ -99,21 +99,22 @@ const checkPetStatus = (sender) => {
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
         console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
-        sendReminder(sender, pet);
+        await sendReminder(NyanBotUser, sender, pet);
     }
 
     // Verificar si la mascota se ha escapado
-    if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
-        removePet(sender);
-        return `¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`;
+    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
+        console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
+        await sendReminder(NyanBotUser, sender, pet); // Asegúrate de pasar NyanBotUser y sender correctamente
     }
 
     return pet; // Retornar la mascota para más información
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (NyanBotUser, chatID, pet) => {
+const sendReminder = async (NyanBotUser, chatId, pet) => {
     if (!pet || !pet.name) {
+        console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
         return; // Asegurarse de que pet y pet.name existan
     }
 
@@ -129,7 +130,12 @@ const sendReminder = async (NyanBotUser, chatID, pet) => {
         message += `👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑\n`;
     }
 
-    await NyanBotUser.sendMessage(chatID, { text: message });
+    try {
+        await NyanBotUser.sendMessage(chatId, { text: message });
+        console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
+    } catch (error) {
+        console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
+    }
 };
 
 // Calcular el porcentaje
