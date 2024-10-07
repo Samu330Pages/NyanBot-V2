@@ -2577,31 +2577,31 @@ const buttons = [
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Gato 😺',
-                id: `${prefix}pet+ ${text}|gato`
+                id: `${prefix}pet+ ${text}|gato ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Perro 🐶',
-                id: `${prefix}pet+ ${text}|perro`
+                id: `${prefix}pet+ ${text}|perro ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pollo 🐣',
-                id: `${prefix}pet+ ${text}|pollo`
+                id: `${prefix}pet+ ${text}|pollo ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Lorito 🦜',
-                id: `${prefix}pet+ ${text}|lorito`
+                id: `${prefix}pet+ ${text}|lorito ${sender}`
             }),
 	}, {
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Pingüino 🐧',
-                id: `${prefix}pet+ ${text}|pinguino`
+                id: `${prefix}pet+ ${text}|pinguino ${sender}`
             }),
 	}]
 
