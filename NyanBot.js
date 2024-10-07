@@ -350,7 +350,7 @@ if (isCmd) {
     const command = trimmedBody.split(/ +/).shift().toLowerCase(); // Comando
     const args = trimmedBody.split(/ +/).slice(1); // Argumentos
     const text = args.join(" "); // Texto completo
-
+}
 	
         const isCmd2 = body.startsWith(prefix)
         //const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
