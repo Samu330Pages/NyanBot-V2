@@ -110,7 +110,7 @@ const checkPetStatus = (sender) => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (sender, pet) => {
+const sendReminder = async (nyanBot2, sender, pet) => {
     let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
     
     if (pet.hunger >= 70) {
