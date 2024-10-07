@@ -51,7 +51,7 @@ const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
 const { getOrganicData } = require('./lib/gg.js')
 const { Audd } = require('audd.io')
-const { createOrGetPet, feedPet, walkPet, playWithPet, checkPetStatus, getPetInfo, removePet } = require('./src/petsInf')
+const { createOrGetPet, feedPet, walkPet, playWithPet, checkPetStatus, getPetInfo, removePet, updatePetNeeds } = require('./src/petsIn')
 const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -2562,9 +2562,38 @@ case 'pet': {
 }
 break
 
-case 'petinfo': {
-    const petInfo = getPetInfo(sender);
-    await reply(`${petInfo}`);
+case 'pet': { // Un solo case para manejar las acciones
+    const action = text; // El comando de acción (comer, caminar, jugar, estado)
+
+    switch (action) {
+        case 'comer':
+            const feedMessage = feedPet(sender);
+            await nyanBot2.sendMessage(m.chat, { text: feedMessage }, { quoted: m });
+            break;
+        case 'caminar':
+            const walkMessage = walkPet(sender);
+            await nyanBot2.sendMessage(m.chat, { text: walkMessage }, { quoted: m });
+            break;
+        case 'jugar':
+            const playMessage = playWithPet(sender);
+            await nyanBot2.sendMessage(m.chat, { text: playMessage }, { quoted: m });
+            break;
+        case 'estado':
+            const petInfo = getPetInfo(sender);
+            await nyanBot2.sendMessage(m.chat, { text: petInfo }, { quoted: m });
+            break;
+        case 'notificacion':
+            const petStatus = checkPetStatus(sender);
+            if (petStatus) {
+                await sendReminder(sender, petStatus);
+            } else {
+                await nyanBot2.sendMessage(m.chat, { text: `No tienes ninguna mascota registrada.` }, { quoted: m });
+            }
+            break;
+        default:
+            await nyanBot2.sendMessage(m.chat, { text: `Acción no reconocida. Usa: comer, caminar, jugar, estado, notificacion.` }, { quoted: m });
+            break;
+    }
 }
 break
 
