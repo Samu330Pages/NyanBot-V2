@@ -2621,7 +2621,7 @@ break
 			
 case 'pet+': {
 if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque no es tu mascota! 🙂*');
-reply(budy)
+reply(text)
 const petName = args[0];
 const petType = args[1];
 const pet = createOrGetPet(sender, petName, petType);
