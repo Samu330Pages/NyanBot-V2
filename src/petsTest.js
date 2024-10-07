@@ -35,6 +35,8 @@ const createOrGetPet = (sender, petName, petType) => {
                 health: 100,
                 hunger: 0,
                 boredom: 0,
+                createdAt: new Date(),
+                isSleeping: false,
                 imageUrl: getImageUrl(petType)
             }]
         };
@@ -56,68 +58,6 @@ const getImageUrl = (petType) => {
         pinguino: 'https://static.wikia.nocookie.net/horadeaventura/images/f/f9/Gunter3.png/revision/latest/scale-to-width/360?cb=20120818151902&path-prefix=es'
     };
     return images[petType] || '';
-};
-
-const feedPet = (sender) => {
-    const petsData = loadPetsData();
-    const userPets = petsData.find(pet => pet.user === sender);
-
-    if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0];
-
-        // Verificar si la mascota necesita comer
-        if (pet.hunger < 50) {
-            return `¡*${pet.name}* no tiene hambre en este momento! 🍽️❌`;
-        }
-
-        pet.lastFed = new Date();
-        pet.hunger = Math.max(0, pet.hunger - 20);
-        pet.level = Math.min(100, pet.level + 1);
-        savePetsData(petsData);
-        return `¡${pet.name} ha sido alimentado! 🍽️`;
-    }
-};
-
-// Función para sacar a pasear a la mascota
-const walkPet = (sender) => {
-    const petsData = loadPetsData();
-    const userPets = petsData.find(pet => pet.user === sender);
-
-    if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0];
-
-        // Verificar si la mascota necesita un paseo
-        if (pet.boredom < 50) {
-            return `¡*${pet.name}* no necesita salir a pasear en este momento! 🚶‍♂️❌`;
-        }
-
-        pet.lastWalked = new Date();
-        pet.boredom = Math.max(0, pet.boredom - 20);
-        pet.level = Math.min(100, pet.level + 1);
-        savePetsData(petsData);
-        return `¡${pet.name} ha salido a pasear! 🚶‍♂️`;
-    }
-};
-
-// Función para jugar con la mascota
-const playWithPet = (sender) => {
-    const petsData = loadPetsData();
-    const userPets = petsData.find(pet => pet.user === sender);
-
-    if (userPets && userPets.pets.length > 0) {
-        const pet = userPets.pets[0];
-
-        // Verificar si la mascota necesita jugar
-        if (pet.boredom < 50) {
-            return `¡*${pet.name}* no necesita jugar en este momento! 🎉❌`;
-        }
-
-        pet.lastPlayed = new Date();
-        pet.boredom = Math.max(0, pet.boredom - 15);
-        pet.level = Math.min(100, pet.level + 1);
-        savePetsData(petsData);
-        return `¡${pet.name} ha jugado! 🎉`;
-    }
 };
 
 // Función para aumentar hambre y aburrimiento automáticamente
@@ -170,7 +110,7 @@ const checkPetStatus = (sender) => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (NyanBotUser, chatId, pet) => {
+const sendReminder = async (sender, pet) => {
     let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
     
     if (pet.hunger >= 70) {
@@ -183,7 +123,7 @@ const sendReminder = async (NyanBotUser, chatId, pet) => {
         message += `👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑\n`;
     }
 
-    await NyanBotUser.sendMessage(chatId, { text: message });
+    await nyanBot2.sendMessage(sender, { text: message });
 };
 
 // Calcular el porcentaje
@@ -215,8 +155,107 @@ const getPetInfo = (sender) => {
     petInfo += `*Salud:* ${calculatePercentage(pet.health)}% 🏥\n`;
     petInfo += `*Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️\n`;
     petInfo += `*Diversión:* ${calculatePercentage(pet.boredom)}% 🎉\n`;
+    petInfo += `*Fecha de nacimiento:*\n*${formatDate(pet.createdAt)}*\n`;
 
     return petInfo;
+};
+
+// Función para alimentar a la mascota
+const feedPet = (sender) => {
+    const petsData = loadPetsData();
+    const userPets = petsData.find(pet => pet.user === sender);
+
+    if (userPets && userPets.pets.length > 0) {
+        const pet = userPets.pets[0];
+        if (pet.isSleeping) {
+            return `¡*${pet.name}* está durmiendo y no puede comer ahora! 💤❌`;
+        }
+
+        // Verificar si la mascota necesita comer
+        if (pet.hunger < 50) {
+            return `¡*${pet.name}* no tiene hambre en este momento! 🍽️❌`;
+        }
+
+        pet.lastFed = new Date();
+        pet.hunger = Math.max(0, pet.hunger - 20);
+        pet.level = Math.min(100, pet.level + 1);
+        savePetsData(petsData);
+        return `¡${pet.name} ha sido alimentado! 🍽️`;
+    }
+};
+
+// Función para sacar a pasear a la mascota
+const walkPet = (sender) => {
+    const petsData = loadPetsData();
+    const userPets = petsData.find(pet => pet.user === sender);
+
+    if (userPets && userPets.pets.length > 0) {
+        const pet = userPets.pets[0];
+        if (pet.isSleeping) {
+            return `¡*${pet.name}* está durmiendo y no puede caminar ahora! 💤❌`;
+        }
+
+        // Verificar si la mascota necesita un paseo
+        if (pet.boredom < 50) {
+            return `¡*${pet.name}* no necesita salir a pasear en este momento! 🚶‍♂️❌`;
+        }
+
+        pet.lastWalked = new Date();
+        pet.boredom = Math.max(0, pet.boredom - 20);
+        pet.level = Math.min(100, pet.level + 1);
+        savePetsData(petsData);
+        return `¡${pet.name} ha salido a pasear! 🚶‍♂️`;
+    }
+};
+
+// Función para jugar con la mascota
+const playWithPet = (sender) => {
+    const petsData = loadPetsData();
+    const userPets = petsData.find(pet => pet.user === sender);
+
+    if (userPets && userPets.pets.length > 0) {
+        const pet = userPets.pets[0];
+        if (pet.isSleeping) {
+            return `¡*${pet.name}* está durmiendo y no puede jugar ahora! 💤❌`;
+        }
+
+        // Verificar si la mascota necesita jugar
+        if (pet.boredom < 50) {
+            return `¡*${pet.name}* no necesita jugar en este momento! 🎉❌`;
+        }
+
+        pet.lastPlayed = new Date();
+        pet.boredom = Math.max(0, pet.boredom - 15);
+        pet.level = Math.min(100, pet.level + 1);
+        savePetsData(petsData);
+        return `¡${pet.name} ha jugado! 🎉`;
+    }
+};
+
+// Función para dormir a la mascota
+const sleepPet = (sender) => {
+    const petsData = loadPetsData();
+    const userPets = petsData.find(pet => pet.user === sender);
+
+    if (userPets && userPets.pets.length > 0) {
+        const pet = userPets.pets[0];
+
+        if (pet.isSleeping) {
+            return `¡*${pet.name}* ya está durmiendo! 💤❌`;
+        }
+
+        pet.isSleeping = true; // Cambiar estado a durmiendo
+        savePetsData(petsData);
+
+        // Despertar después de 2 horas
+        setTimeout(() => {
+            pet.isSleeping = false; // Cambiar estado a despierto
+            savePetsData(petsData);
+            sendReminder(sender, pet); // Notificar que la mascota se ha despertado
+        }, 7200000); // 2 horas en milisegundos
+
+        return `¡*${pet.name}* está durmiendo! 💤`;
+    }
 };
 
 // Función para eliminar la mascota
@@ -230,6 +269,22 @@ const removePet = (sender) => {
     }
 };
 
+// Iniciar el intervalo para actualizar automáticamente las necesidades de las mascotas
+const startPetUpdateInterval = () => {
+    setInterval(() => {
+        updatePetNeeds(); // Actualiza el hambre y aburrimiento
+        const petsData = loadPetsData();
+        
+        petsData.forEach(userPets => {
+            userPets.pets.forEach(pet => {
+                checkPetStatus(userPets.user); // Verifica el estado de cada mascota
+            });
+        });
+
+        savePetsData(petsData); // Guarda los cambios en el archivo
+    }, 600000); // Cada 10 minutos
+};
+
 // Exportar funciones
 module.exports = {
     createOrGetPet,
@@ -240,5 +295,7 @@ module.exports = {
     getPetInfo,
     removePet,
     updatePetNeeds,
-    sendReminder
+    sendReminder,
+    startPetUpdateInterval,
+    sleepPet
 };
