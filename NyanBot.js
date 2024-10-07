@@ -2586,7 +2586,7 @@ case 'pet': { // Un solo case para manejar las acciones
         case 'notificacion':
             const petStatus = checkPetStatus(sender);
             if (petStatus) {
-                await sendReminder(sender, petStatus);
+                await sendReminder(nyanBot2, sender, petStatus);
             } else {
                 await nyanBot2.sendMessage(m.chat, { text: `No tienes ninguna mascota registrada.` }, { quoted: m });
             }
