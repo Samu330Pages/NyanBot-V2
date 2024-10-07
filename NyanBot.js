@@ -2621,10 +2621,10 @@ break
 			
 case 'pet+': {
 if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque no es tu mascota! 🙂*');
-reply(text)
 const petName = args[0];
 const petType = args[1];
-const pet = createOrGetPet(sender, petName, petType);
+const petOwn = args[2];
+const pet = createOrGetPet(petOwn, petName, petType);
 reply(`*¡🥳 Felicidades, has creado a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
 }
 break
