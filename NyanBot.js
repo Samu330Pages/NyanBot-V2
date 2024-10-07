@@ -335,7 +335,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
         const isCmd = body.startsWith(prefix, '')
         const isCmd2 = body.startsWith(prefix)
-        const command = body.replace(new RegExp(`^${prefix}\\s*`), '').trim().split(/ +/).shift().toLowerCase();
+        const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
         const full_args = body.replace(command, '').slice(1).trim()
@@ -343,7 +343,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const botNumber = await nyanBot2.decodeJid(nyanBot2.user.id)
         const itsMe = m.sender == botNumber ? true : false
         const sender = m.sender
-        const text = body.replace(new RegExp(`^${prefix}\\s*${command}\\s*`), '').trim();
+        const text = q = args.join(" ")
         const from = m.key.remoteJid
         const fatkuns = (m.quoted || m)
         const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
