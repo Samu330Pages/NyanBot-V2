@@ -251,7 +251,7 @@ const sleepPet = (sender) => {
         setTimeout(() => {
             pet.isSleeping = false; // Cambiar estado a despierto
             savePetsData(petsData);
-            sendReminder(sender, pet); // Notificar que la mascota se ha despertado
+            sendReminder(nyanBot2, sender, pet); // Notificar que la mascota se ha despertado
         }, 7200000); // 2 horas en milisegundos
 
         return `¡*${pet.name}* está durmiendo! 💤`;
