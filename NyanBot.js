@@ -51,7 +51,19 @@ const { Rapi } = require('./lib/rapi.js')
 const { createCanvasImage } = require('./lib/canvaImg.js')
 const { getOrganicData } = require('./lib/gg.js')
 const { Audd } = require('audd.io')
-const { createOrGetPet, feedPet, walkPet, playWithPet, checkPetStatus, getPetInfo, removePet, updatePetNeeds, sendReminder } = require('./src/petsTest')
+const {
+    createOrGetPet,
+    feedPet,
+    walkPet,
+    playWithPet,
+    checkPetStatus,
+    getPetInfo,
+    removePet,
+    updatePetNeeds,
+    sendReminder,
+    startPetUpdateInterval,
+    sleepPet
+      } = require('./src/petsTest')
 const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
@@ -391,7 +403,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isSamu = [botNumber, ...owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
-	//sendReminder(nyanBot2, m.chat, sender)
+	startPetUpdateInterval()
 
         //premium
         async function replyprem(teks) {
@@ -2617,7 +2629,7 @@ if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque
 break
 
 case 'pet': { // Un solo case para manejar las acciones
-    const action = text; // El comando de acción (comer, caminar, jugar, estado)
+    const action = args[1]; // El comando de acción (comer, caminar, jugar, estado, dormir)
 
     switch (action) {
         case 'comer':
@@ -2636,16 +2648,20 @@ case 'pet': { // Un solo case para manejar las acciones
             const petInfo = getPetInfo(sender);
             await nyanBot2.sendMessage(m.chat, { text: petInfo }, { quoted: m });
             break;
+        case 'dormir':
+            const sleepMessage = sleepPet(sender);
+            await nyanBot2.sendMessage(m.chat, { text: sleepMessage }, { quoted: m });
+            break;
         case 'notificacion':
             const petStatus = checkPetStatus(sender);
             if (petStatus) {
-                await sendReminder(nyanBot2, sender, petStatus);
+                await sendReminder(sender, petStatus);
             } else {
                 await nyanBot2.sendMessage(m.chat, { text: `No tienes ninguna mascota registrada.` }, { quoted: m });
             }
             break;
         default:
-            await nyanBot2.sendMessage(m.chat, { text: `Acción no reconocida. Usa: comer, caminar, jugar, estado, notificacion.` }, { quoted: m });
+            await nyanBot2.sendMessage(m.chat, { text: `Acción no reconocida. Usa: comer, caminar, jugar, estado, dormir, notificacion.` }, { quoted: m });
             break;
     }
 }
