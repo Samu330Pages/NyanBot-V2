@@ -89,18 +89,17 @@ const checkPetStatus = (sender) => {
     const userPets = petsData.find(pet => pet.user === sender);
 
     if (!userPets || userPets.pets.length === 0) {
+        console.log(`No hay mascotas registradas para ${sender}`); // Mensaje para debugging
         return null; // No tiene mascotas
     }
 
-    const pet = userPets.pets[0];
+    const pet = userPets.pets[0]; // Tomar la primera mascota
     const now = new Date();
 
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        // Verificar que pet no sea indefinido
-        if (pet && pet.name) {
-            sendReminder(sender, pet);
-        }
+        console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
+        sendReminder(sender, pet);
     }
 
     // Verificar si la mascota se ha escapado
@@ -278,14 +277,19 @@ const removePet = (sender) => {
 
 // Iniciar el intervalo para actualizar automáticamente las necesidades de las mascotas
 const startPetUpdateInterval = () => {
-    setInterval(() => {
+    setInterval(async () => {
         updatePetNeeds(); // Actualiza el hambre y aburrimiento
         const petsData = loadPetsData();
         
         petsData.forEach(userPets => {
-            userPets.pets.forEach(pet => {
-                checkPetStatus(userPets.user); // Verifica el estado de cada mascota
-            });
+            if (userPets.pets && userPets.pets.length > 0) {
+                userPets.pets.forEach(pet => {
+                    const statusMessage = checkPetStatus(userPets.user); // Verifica el estado de cada mascota
+                    if (statusMessage) {
+                        console.log(statusMessage); // Mensaje para debugging
+                    }
+                });
+            }
         });
 
         savePetsData(petsData); // Guarda los cambios en el archivo
