@@ -94,10 +94,13 @@ const checkPetStatus = (sender) => {
 
     const pet = userPets.pets[0];
     const now = new Date();
-    
+
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        sendReminder(sender, pet);
+        // Verificar que pet no sea indefinido
+        if (pet && pet.name) {
+            sendReminder(sender, pet);
+        }
     }
 
     // Verificar si la mascota se ha escapado
@@ -111,6 +114,10 @@ const checkPetStatus = (sender) => {
 
 // Función para enviar recordatorios
 const sendReminder = async (NyanBotUser, chatID, pet) => {
+    if (!pet || !pet.name) {
+        return; // Asegurarse de que pet y pet.name existan
+    }
+
     let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
     
     if (pet.hunger >= 70) {
