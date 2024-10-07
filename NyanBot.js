@@ -2556,7 +2556,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 break
 
 case 'bloa':
-if (!args[1] === sender) return reply('no es tu mascota');
+if (!text.includes(sender)) return reply('no es tu mascota');
 reply('test')
 break
 
@@ -2564,7 +2564,7 @@ case 'mascota': {
 let petExist = await createOrGetPet(sender);
 if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es ${petExist.name}! es un lindo ${petExist.type} 😍*`)
 if (!text) return reply(`*Por favor incluye el nombre que deseas darle a tu mascota después del comando, ejemplo:*\n\n- ${prefix+command} Tom`);
-if (command.includes(' ')) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
+if (text.includes(command) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
 const buttons = [
         {
             name: "quick_reply",
