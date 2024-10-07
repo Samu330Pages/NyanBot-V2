@@ -91,16 +91,23 @@ const sendReminder = async (NyanBotUser, chatId, pet) => {
         return; // Asegurarse de que pet y pet.name existan
     }
 
-    let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
-    
+    let message = `¡Atención! 🐾 ${pet.name} necesita cuidado:\n`;
+    let needs = [];
+
     if (pet.hunger >= 70) {
-        message += `👉🏻 *Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️\n`;
+        needs.push(`👉🏻 *Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️`);
     }
     if (pet.boredom >= 70) {
-        message += `👉🏻 *Diversión:* ${calculatePercentage(pet.boredom)}% 🎉\n`;
+        needs.push(`👉🏻 *Diversión:* ${calculatePercentage(pet.boredom)}% 🎉`);
     }
     if (pet.health <= 30) {
-        message += `👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑\n`;
+        needs.push(`👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑`);
+    }
+
+    if (needs.length > 0) {
+        message += needs.join('\n'); // Unir necesidades en un solo mensaje
+    } else {
+        message += `*No hay necesidades críticas en este momento.*`;
     }
 
     try {
@@ -145,7 +152,7 @@ const startPetUpdateInterval = (NyanBotUser) => {
         });
         
         savePetsData(petsData); // Guardar el estado actualizado de las mascotas
-    }, 60000); // Cada 10 minutos
+    }, 30000); // Cada 10 minutos
 };
 
 // Calcular el porcentaje
