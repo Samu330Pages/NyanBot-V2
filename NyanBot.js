@@ -334,7 +334,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
         //const isCmd = body.startsWith(prefix, '')
-
+var matchedPrefix = body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi);
 	// Verificar si hay un prefijo y obtener el primer coincidido
 if (matchedPrefix) {
     prefix = matchedPrefix[0];
