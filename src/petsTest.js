@@ -99,13 +99,13 @@ const checkPetStatus = (sender) => {
     // Detección de atención requerida
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
         console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
-        sendReminder(NyanBotUser, sender, pet);
+        sendReminder(nyanBot2, sender, pet);
     }
 
     // Verificar si la mascota se ha escapado
     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
         console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
-        sendReminder(NyanBotUser, sender, pet); // Asegúrate de pasar NyanBotUser y sender correctamente
+        sendReminder(nyanBot2, sender, pet); // Asegúrate de pasar NyanBotUser y sender correctamente
     }
 
     return pet; // Retornar la mascota para más información
