@@ -37,7 +37,8 @@ const createOrGetPet = (sender, petName, petType) => {
                 boredom: 0,
                 createdAt: new Date(),
                 isSleeping: false,
-                imageUrl: getImageUrl(petType)
+                imageUrl: getImageUrl(petType),
+                notificationSent: false // Estado de notificación
             }]
         };
         petsData.push(newPet);
@@ -105,6 +106,7 @@ const sendReminder = async (NyanBotUser, chatId, pet) => {
     try {
         await NyanBotUser.sendMessage(chatId, { text: message });
         console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
+        pet.notificationSent = true; // Marcar como enviado
     } catch (error) {
         console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
     }
@@ -119,8 +121,8 @@ const startPetUpdateInterval = (NyanBotUser) => {
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
                 for (const pet of userPets.pets) {
-                    // Enviar notificación si es necesario
-                    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
+                    // Enviar notificación si es necesario y no se ha enviado previamente
+                    if ((pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) && !pet.notificationSent) {
                         await sendReminder(NyanBotUser, userPets.user, pet);
                     }
 
@@ -134,7 +136,16 @@ const startPetUpdateInterval = (NyanBotUser) => {
         }
 
         savePetsData(petsData); // Guarda los cambios en el archivo
-    }, 600000); // Cada 10 minutos
+
+        // Reiniciar el estado de notificación para el próximo ciclo
+        petsData.forEach(userPets => {
+            userPets.pets.forEach(pet => {
+                pet.notificationSent = false; // Resetear el estado de notificación
+            });
+        });
+        
+        savePetsData(petsData); // Guardar el estado actualizado de las mascotas
+    }, 60000); // Cada 10 minutos
 };
 
 // Calcular el porcentaje
