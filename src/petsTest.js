@@ -112,7 +112,7 @@ const checkPetStatus = (sender) => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (nyanBot2, chatId, pet) => {
+const sendReminder = async (NyanBotUser, chatId, pet) => {
     if (!pet || !pet.name) {
         console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
         return; // Asegurarse de que pet y pet.name existan
@@ -131,7 +131,7 @@ const sendReminder = async (nyanBot2, chatId, pet) => {
     }
 
     try {
-        await nyanBot2.sendMessage(chatId, { text: message });
+        await NyanBotUser.sendMessage(chatId, { text: message });
         console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
     } catch (error) {
         console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
