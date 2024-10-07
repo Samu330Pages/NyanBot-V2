@@ -2564,7 +2564,7 @@ case 'mascota': {
 let petExist = await createOrGetPet(sender);
 if (petExist.name) return reply(`*No puedes crear una mascota, porque ya cuentas con una, y su nombre es ${petExist.name}! es un lindo ${petExist.type} 😍*`)
 if (!text) return reply(`*Por favor incluye el nombre que deseas darle a tu mascota después del comando, ejemplo:*\n\n- ${prefix+command} Tom`);
-if (command.inludes(' ')) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
+if (text.inludes(command)) return reply(`*NO INCLUYAS ESPACIOS ENTRE EL PREFIJO Y EL COMANDO, ASEGURATE DE ENVIAR* _*${prefix+command}*_ *JUNTO.*`);
 const buttons = [
         {
             name: "quick_reply",
@@ -2599,13 +2599,13 @@ const buttons = [
 	}]
 
     return await sendReplyButton(m.chat, buttons, m, {
-        content: `_*Quieres cuidar a una mascota? 😍*_
-_Puedes tener un amiguito y cuidar de él, atender sus necesidades como alimentarlo, sacarlo a caminar, jugar con el! 😊_
+        content: `_*Quieres cuidar a una mascota? 😍*_\n
+_Puedes tener un amiguito y cuidar de él, atender sus necesidades como alimentarlo, sacarlo a caminar, jugar con el! 😊_\n
 *Es una responsabilidad eh!* 🧐 _si descuidas de el puede perder salud... y si no lo atiendes bien se te puede escapar! 😖_
 
 _*Asi que si estás dispuesto a cargar esa responsabilidad, selecciona el tipo de mascota que desees!*_
 
-⚠️ _*una vez seleccionada tu mascota no podrpodrás cambiar de tipo, asi que escoge con sabiduria*_ ⚠️
+⚠️ _*una vez seleccionada tu mascota no podrás cambiar de tipo, asi que escoge con sabiduria*_ ⚠️
 
 *Que mascota deseas cuidar?* 😁`
     });
