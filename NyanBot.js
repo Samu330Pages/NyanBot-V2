@@ -2624,7 +2624,7 @@ if (!text.includes(sender)) return reply('*Esta acción no te corresponde porque
 let petName = args[0];
 let petType = args[1];
 let petOwn = args[2];
-reply(`${petName}`\n${petType}\n${petOwn})
+reply(`${petName}\n${petType}\n${petOwn}`)
 let pet = createOrGetPet(petOwn, petName, petType);
 reply(`*¡🥳 Felicidades, has creado a ${pet.name}, tu nueva mascota!*\n\n_*Para atender a tu amiguito y ver su estado, puedes usar el comando: ${prefix}pet*_`);
 }
