@@ -333,25 +333,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
-        //const isCmd = body.startsWith(prefix, '')
-var matchedPrefix = body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi);
-	// Verificar si hay un prefijo y obtener el primer coincidido
-if (matchedPrefix) {
-    prefix = matchedPrefix[0];
-} else {
-    prefix = ""; // Si no se encuentra, dejarlo vacío
-}
-
-// Verificar si es un comando
-const isCmd = body.startsWith(prefix);
-const trimmedBody = body.slice(prefix.length).trim(); // Eliminar el prefijo y recortar espacios
-
-if (isCmd) {
-    const command = trimmedBody.split(/ +/).shift().toLowerCase(); // Comando
-    const args = trimmedBody.split(/ +/).slice(1); // Argumentos
-    const text = args.join(" "); // Texto completo
-}
-	
+        const isCmd = body.startsWith(prefix, '')
         const isCmd2 = body.startsWith(prefix)
         const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
