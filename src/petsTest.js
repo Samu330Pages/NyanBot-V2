@@ -110,7 +110,7 @@ const checkPetStatus = (sender) => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (nyan, sender, pet) => {
+const sendReminder = async (nyanBot2, sender, pet) => {
     let message = `¡Atención! 🐾 ${pet.name} necesita cuidado!\n_*Utilice El comando para mascotas (.pet) para darle atención a su amiguito!*_\n\n`;
     
     if (pet.hunger >= 70) {
@@ -123,7 +123,7 @@ const sendReminder = async (nyan, sender, pet) => {
         message += `👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑\n`;
     }
 
-    await nyan.sendMessage(sender, { text: message });
+    await nyanBot2.sendMessage(sender, { text: message });
 };
 
 // Calcular el porcentaje
