@@ -67,7 +67,7 @@ const feedPet = (sender) => {
 
         // Verificar si la mascota necesita comer
         if (pet.hunger < 50) {
-            return `¡${pet.name} no tiene hambre en este momento! 🍽️❌`;
+            return `¡*${pet.name}* no tiene hambre en este momento! 🍽️❌`;
         }
 
         pet.lastFed = new Date();
@@ -88,7 +88,7 @@ const walkPet = (sender) => {
 
         // Verificar si la mascota necesita un paseo
         if (pet.boredom < 50) {
-            return `¡${pet.name} no necesita salir a pasear en este momento! 🚶‍♂️❌`;
+            return `¡*${pet.name}* no necesita salir a pasear en este momento! 🚶‍♂️❌`;
         }
 
         pet.lastWalked = new Date();
@@ -109,7 +109,7 @@ const playWithPet = (sender) => {
 
         // Verificar si la mascota necesita jugar
         if (pet.boredom < 50) {
-            return `¡${pet.name} no necesita jugar en este momento! 🎉❌`;
+            return `¡*${pet.name}* no necesita jugar en este momento! 🎉❌`;
         }
 
         pet.lastPlayed = new Date();
@@ -205,7 +205,7 @@ const getPetInfo = (sender) => {
         return `No tienes ninguna mascota registrada. Por favor, crea una mascota primero.`;
     }
 
-    let petInfo = `*Información de tu mascota:*\n`;
+    let petInfo = `*😊 Información de tu mascota:*\n`;
     petInfo += `*Nombre:* ${pet.name}\n`;
     petInfo += `*Tipo:* ${pet.type}\n`;
     petInfo += `*Nivel:* ${pet.level}/100\n`;
