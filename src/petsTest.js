@@ -83,36 +83,8 @@ const updatePetNeeds = () => {
     savePetsData(petsData);
 };
 
-// Función para verificar el estado de la mascota y enviar notificaciones
-const checkPetStatus = (sender) => {
-    const petsData = loadPetsData();
-    const userPets = petsData.find(pet => pet.user === sender);
-
-    if (!userPets || userPets.pets.length === 0) {
-        console.log(`No hay mascotas registradas para ${sender}`); // Mensaje para debugging
-        return null; // No tiene mascotas
-    }
-
-    const pet = userPets.pets[0]; // Tomar la primera mascota
-    const now = new Date();
-
-    // Detección de atención requerida
-    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
-        sendReminder(nyanBot2, sender, pet);
-    }
-
-    // Verificar si la mascota se ha escapado
-    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-        console.log(`Enviando recordatorio para ${pet.name}`); // Mensaje para debugging
-        sendReminder(nyanBot2, sender, pet); // Asegúrate de pasar NyanBotUser y sender correctamente
-    }
-
-    return pet; // Retornar la mascota para más información
-};
-
 // Función para enviar recordatorios
-const sendReminder = async (nyanBot2, chatId, pet) => {
+const sendReminder = async (NyanBotUser, chatId, pet) => {
     if (!pet || !pet.name) {
         console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
         return; // Asegurarse de que pet y pet.name existan
@@ -131,11 +103,38 @@ const sendReminder = async (nyanBot2, chatId, pet) => {
     }
 
     try {
-        await nyanBot2.sendMessage(chatId, { text: message });
+        await NyanBotUser.sendMessage(chatId, { text: message });
         console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
     } catch (error) {
         console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
     }
+};
+
+// Iniciar el intervalo para actualizar automáticamente las necesidades de las mascotas
+const startPetUpdateInterval = (NyanBotUser) => {
+    setInterval(async () => {
+        updatePetNeeds(); // Actualiza el hambre y aburrimiento
+        const petsData = loadPetsData();
+        
+        for (const userPets of petsData) {
+            if (userPets.pets && userPets.pets.length > 0) {
+                for (const pet of userPets.pets) {
+                    // Enviar notificación si es necesario
+                    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
+                        await sendReminder(NyanBotUser, userPets.user, pet);
+                    }
+
+                    // Verificar si la mascota se ha escapado
+                    if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
+                        removePet(userPets.user);
+                        console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
+                    }
+                }
+            }
+        }
+
+        savePetsData(petsData); // Guarda los cambios en el archivo
+    }, 600000); // Cada 10 minutos
 };
 
 // Calcular el porcentaje
@@ -152,11 +151,14 @@ const formatDate = (date) => {
 
 // Función para obtener información de la mascota
 const getPetInfo = (sender) => {
-    const pet = checkPetStatus(sender);
-    if (!pet) {
+    const petsData = loadPetsData();
+    const userPets = petsData.find(pet => pet.user === sender);
+
+    if (!userPets || userPets.pets.length === 0) {
         return `No tienes ninguna mascota registrada. Por favor, crea una mascota primero.`;
     }
 
+    const pet = userPets.pets[0]; // Tomar la primera mascota
     let petInfo = `*😊 Información de tu mascota:*\n`;
     petInfo += `*Nombre:* ${pet.name}\n`;
     petInfo += `*Tipo:* ${pet.type}\n`;
@@ -263,7 +265,7 @@ const sleepPet = (sender) => {
         setTimeout(() => {
             pet.isSleeping = false; // Cambiar estado a despierto
             savePetsData(petsData);
-            sendReminder(sender, pet); // Notificar que la mascota se ha despertado
+            sendReminder(NyanBotUser, userPets.user, pet); // Notificar que la mascota se ha despertado
         }, 7200000); // 2 horas en milisegundos
 
         return `¡*${pet.name}* está durmiendo! 💤`;
@@ -281,34 +283,12 @@ const removePet = (sender) => {
     }
 };
 
-// Iniciar el intervalo para actualizar automáticamente las necesidades de las mascotas
-const startPetUpdateInterval = () => {
-    setInterval(async () => {
-        updatePetNeeds(); // Actualiza el hambre y aburrimiento
-        const petsData = loadPetsData();
-        
-        petsData.forEach(userPets => {
-            if (userPets.pets && userPets.pets.length > 0) {
-                userPets.pets.forEach(pet => {
-                    const statusMessage = checkPetStatus(userPets.user); // Verifica el estado de cada mascota
-                    if (statusMessage) {
-                        console.log(statusMessage); // Mensaje para debugging
-                    }
-                });
-            }
-        });
-
-        savePetsData(petsData); // Guarda los cambios en el archivo
-    }, 600000); // Cada 10 minutos
-};
-
 // Exportar funciones
 module.exports = {
     createOrGetPet,
     feedPet,
     walkPet,
     playWithPet,
-    checkPetStatus,
     getPetInfo,
     removePet,
     updatePetNeeds,
