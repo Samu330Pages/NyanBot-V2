@@ -38,7 +38,8 @@ const createOrGetPet = (sender, petName, petType) => {
                 createdAt: new Date(),
                 isSleeping: false,
                 imageUrl: getImageUrl(petType),
-                notificationSent: false // Estado de notificación
+                notificationSent: false,
+                lastNotificationSent: null
             }]
         };
         petsData.push(newPet);
