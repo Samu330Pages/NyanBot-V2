@@ -3099,6 +3099,22 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 })
 break
 
+case 'creador':
+var order = generateWAMessageFromContent(from, proto.Message.fromObject({
+"orderMessage": {
+"orderId": "876118931283642",
+"thumbnail": fs.readFileSync('./Media/theme/NyanBot.jpg'),
+"itemCount": 1999,
+"status": "INQUIRY",
+"surface": "CATALOG",
+"message": `${date}`,
+"orderTitle": " TEST ", 
+"sellerJid": "5219984907794@s.whatsapp.net",
+"token": "AR6nb+WgP57s527UP6K9g5qGgtwRhRgS1yCKuY3PKdXq3Q=="
+}
+}), { userJid: from, quoted:m})
+nyanBot2.relayMessage(m.chat, order.message, { messageId: order.key.id })
+break
 
 case 'xvideos': case 'xxx': {
 if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*')
