@@ -2667,6 +2667,43 @@ case 'pet': { // Un solo case para manejar las acciones
 }
 break
 
+case 'pets':
+const fakeQuoted = {
+    key: {
+      participant: "0@s.whatsapp.net", //usuario
+      remoteJid: "0@s.whatsapp.net", //grupo
+      fromMe: false
+    },
+    message: { conversation: "Aqui encontraras información sobre tu mascota! 🍟" }
+  }
+  let msgOptions = { userJid: m.chat, quoted: fakeQuoted };
+  let media = await prepareWAMessageMedia({ image: { url: "https://cdn-icons-png.flaticon.com/256/6438/6438099.png" } }, { upload: nyanBot2.waUploadToServer })
+  let msgL = generateWAMessageFromContent(m.chat, {
+    viewOnceMessage: {
+      message: {
+        interactiveMessage: {
+          header: {
+            title: `${date}`,
+            subtitle: "subtitle",
+            hasMediaAttachment: true,
+            imageMessage: media?.imageMessage,
+          },
+          body: { text: "test" },
+          footer: { text: "NyanV2" },
+          nativeFlowMessage: {
+            buttons: [{
+              name: "review_and_pay",
+              buttonParamsJson: "{\"currency\":\"COP\",\"total_amount\":{\"value\":500000,\"offset\":100},\"reference_id\":\"4PMSGGOW981\",\"type\":\"physical-goods\",\"order\":{\"status\":\"payment_requested\",\"subtotal\":{\"value\":500000,\"offset\":100},\"order_type\":\"ORDER\",\"items\":[{\"retailer_id\":\"26108774512103632\",\"product_id\":\"26108774512103632\",\"name\":\"Información de tu mascota\",\"amount\":{\"value\":500000,\"offset\":100},\"quantity\":1}]},\"native_payment_methods\":[]}",
+            }],
+            messageVersion: 1
+          },
+        }
+      }
+    },
+  }, msgOptions)
+  await nyanBot2.relayMessage(m.chat, msgL.message, { messageId: msgL.key.id });
+break
+
 
 case 'buscarsticker': {
     if (!text) return reply("*Escribe después del comando el tipo de stickers que desees*");
