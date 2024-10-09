@@ -294,22 +294,22 @@ moment.locale('es');
 const time = moment().tz('America/Cancun').format('HH:mm:ss');
 const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
 const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [del] YYYY');
-if(time2 < "23:59:00"){
+if(time < "23:59:00"){
 var timeNow = `🧛🏻‍♂️ Buenas noches`
  }
- if(time2 < "19:00:00"){
+ if(time < "19:00:00"){
 var timeNow = `🧛🏻‍♂️ Buenas tardes`
  }
- if(time2 < "18:00:00"){
+ if(time < "18:00:00"){
 var timeNow = `🏰 Buenas tardes`
  }
- if(time2 < "15:00:00"){
+ if(time < "15:00:00"){
 var timeNow = `🏰 Buenas tardes`
  }
- if(time2 < "11:00:00"){
+ if(time < "11:00:00"){
 var timeNow = `🎃 Buenos dias`
  }
- if(time2 < "05:00:00"){
+ if(time < "05:00:00"){
 var timeNow = `🎃 Buenos dias`
  } 
 //function
