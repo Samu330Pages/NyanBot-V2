@@ -378,9 +378,9 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isQuotedContact = type === 'extendedTextMessage' && content.includes('contactMessage')
         const isQuotedDocument = type === 'extendedTextMessage' && content.includes('documentMessage')
        //prefix 2
-        const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi)
-        const prefBody = body.startsWith(pric)
-        const isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
+        //const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi)
+        const prefBody = body.startsWith(prefix)
+        const isCommand = prefBody ? body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase() : ""
         const sticker = []
        //group
         const isGroup = m.key.remoteJid.endsWith('@g.us')
