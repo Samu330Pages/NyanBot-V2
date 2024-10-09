@@ -295,22 +295,22 @@ const time = moment().tz('America/Cancun').format('HH:mm:ss');
 const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
 const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [del] YYYY');
 if(time < "23:59:00"){
-var timeNow = `🧛🏻‍♂️ Buenas noches`
+var timeNow = `🧛🏻‍♂️ Buenas noches `
  }
  if(time < "19:00:00"){
-var timeNow = `🧛🏻‍♂️ Buenas tardes`
+var timeNow = `🧛🏻‍♂️ Buenas tardes `
  }
  if(time < "18:00:00"){
-var timeNow = `🏰 Buenas tardes`
+var timeNow = `🏰 Buenas tardes `
  }
  if(time < "15:00:00"){
-var timeNow = `🏰 Buenas tardes`
+var timeNow = `🏰 Buenas tardes `
  }
  if(time < "11:00:00"){
-var timeNow = `🎃 Buenos dias`
+var timeNow = `🎃 Buenos dias `
  }
  if(time < "05:00:00"){
-var timeNow = `🎃 Buenos dias`
+var timeNow = `🎃 Buenos dias `
  } 
 //function
 const reSize = async(buffer, ukur1, ukur2) => {
@@ -1072,7 +1072,7 @@ case 'menu': {
     const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
     
     // Configurar el mensaje del menú
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n_*Hora actual:* ${time}_\n_*Fecha actual:* ${longDate}_\n\n- *Tus puntos:* ${userPoints}\n`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n`;
 
     const { isPremium } = checkPremiumUser(sender);
     if (isPremium) {
@@ -1111,7 +1111,8 @@ case 'menu': {
                             text: `🏰 ${botname} 🧛🏻`
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
-                            title: 'Perfil de Usuario',
+                            title: date,
+			    subtitle: time,
                             hasMediaAttachment: true,
                             ...await prepareWAMessageMedia({ image: canvasImage }, { upload: nyanBot2.waUploadToServer })
                         }),
