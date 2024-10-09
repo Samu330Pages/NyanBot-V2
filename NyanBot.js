@@ -3602,7 +3602,7 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (isCmd && budy.startsWith(prefix)) {
+if (isCmd && /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]+$/.test(budy)) {
 if (!command) return
     const allCommands = Object.values(categories)
         .flat()
