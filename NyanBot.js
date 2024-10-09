@@ -426,9 +426,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                         }
                     },
                     text: teks
-                }, {
-                    quoted: m
-                });
+                }, { messageId: "nyan", quoted: m });
         }
             
             //Fake quoted 
