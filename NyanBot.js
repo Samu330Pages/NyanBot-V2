@@ -293,25 +293,24 @@ let quizmath = db.data.game.math = []
 moment.locale('es');
 const time = moment().tz('America/Cancun').format('HH:mm:ss');
 const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
-const time2 = moment().tz('America/Cancun').format('HH:mm:ss');
 const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [del] YYYY');
 if(time2 < "23:59:00"){
-var timeNow = `Buenas noches 🌌`
+var timeNow = `🧛🏻‍♂️ Buenas noches`
  }
  if(time2 < "19:00:00"){
-var timeNow = `Buenas tardes 🌃`
+var timeNow = `🧛🏻‍♂️ Buenas tardes`
  }
  if(time2 < "18:00:00"){
-var timeNow = `Buenas tardes 🌃`
+var timeNow = `🏰 Buenas tardes`
  }
  if(time2 < "15:00:00"){
-var timeNow = `Buenas tardes 🌅`
+var timeNow = `🏰 Buenas tardes`
  }
  if(time2 < "11:00:00"){
-var timeNow = `Buenos dias 🌄`
+var timeNow = `🎃 Buenos dias`
  }
  if(time2 < "05:00:00"){
-var timeNow = `Buenos dias 🌄`
+var timeNow = `🎃 Buenos dias`
  } 
 //function
 const reSize = async(buffer, ukur1, ukur2) => {
@@ -423,7 +422,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                         "isForwarded":true,
 			forwardedNewsletterMessageInfo: {
                            "newsletterJid": '120363215018837468@newsletter',
-			   "newsletterName": `ᶻ 𝗓 𐰁 ${botname} 🍟`
+			   "newsletterName": `ᶻ 𝗓 𐰁 ${botname} 🎃`
                         }
                     },
                     text: teks
@@ -734,15 +733,6 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         });
     }
 
-async function thumB(source) {
-      let jimp = await read(file)
-      let buff = await jimp
-         .quality(100)
-         .resize(200, AUTO, RESIZE_BILINEAR)
-         .getBufferAsync(MIME_JPEG)
-      return buff
-}
-
     // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
         viewOnceMessage: {
@@ -767,7 +757,15 @@ async function thumB(source) {
     await nyanBot2.relayMessage(chatId, message['message'], {});
 }
 	    
-
+async function thumB(source) {
+      let jimp = await read(file)
+      let buff = await jimp
+         .quality(100)
+         .resize(200, AUTO, RESIZE_BILINEAR)
+         .getBufferAsync(MIME_JPEG)
+      return buff
+}
+	    
 async function obfus(query) {
     return new Promise((resolve, reject) => {
         try {
@@ -985,13 +983,6 @@ if (isSamu) return
             }
         }
         
-//total features
-const xeonfeature = () =>{
-            var mytext = fs.readFileSync("./NyanBot.js").toString()
-            var numUpper = (mytext.match(/case '/g) || []).length
-            return numUpper
-        }
-
 const sendapk = (teks) => {
 nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/vnd.android.package-archive'}, {quoted:m})
 }
@@ -1117,20 +1108,20 @@ case 'menu': {
                             text: menuMessage
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: botname
+                            text: `🏰 ${botname} 🧛🏻`
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
-                            text: 'Perfil de Usuario',
+                            title: 'Perfil de Usuario',
                             hasMediaAttachment: true,
                             ...await prepareWAMessageMedia({ image: canvasImage }, { upload: nyanBot2.waUploadToServer })
                         }),
                         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                             buttons: [{
                                 "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Registrarse 📂\",\"id\":\".reg\"}`
+                                "buttonParamsJson": `{\"display_text\":\"Registrarse 🎃\",\"id\":\".reg\"}`
                             }, {
                                 "name": "cta_url",
-                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🌮\",\"url\":\"https://samu330.com/login\"}`
+                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🕸️\",\"url\":\"https://samu330.com/login\"}`
                             }],
                         }),
                         contextInfo: {
@@ -1509,7 +1500,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': {
 
 	if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`)
 	let query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
-siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "@${sender.split("@")[0]} 🍟",
+siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "@${sender.split("@")[0]} 🎃",
 si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
 si te llegan a pedir que realices una acción como dar besos y cosas por el estilo, daras una respuesta referente a la acción, algun sonido o algo,
 darás información lo mas detallada posible de esta solicitud: ${text}`;
