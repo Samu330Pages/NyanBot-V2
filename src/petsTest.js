@@ -110,13 +110,14 @@ const sendReminder = async (NyanBotUser, chatId, pets) => {
     // Si no hay necesidades, notificar que todo está bien
     if (message === `¡Atención! 🐾 Sus mascotas necesitan cuidado:\n`) {
         message = `*No hay necesidades críticas en este momento.*`;
-    }
-
-    try {
-        await NyanBotUser.sendMessage(chatId, { text: message });
-        console.log(`Recordatorio enviado a ${chatId}`); // Mensaje de éxito
-    } catch (error) {
-        console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
+    } else {
+        // Enviar el mensaje si hay necesidades
+        try {
+            await NyanBotUser.sendMessage(chatId, { text: message });
+            console.log(`Recordatorio enviado a ${chatId}`); // Mensaje de éxito
+        } catch (error) {
+            console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
+        }
     }
 };
 
@@ -124,7 +125,6 @@ const startPetUpdateInterval = (NyanBotUser) => {
     setInterval(async () => {
         updatePetNeeds(); // Actualiza el hambre y aburrimiento
         const petsData = loadPetsData();
-        const now = new Date();
         
         // Crear un objeto para rastrear si ya se ha enviado un mensaje por usuario
         const messagesSent = {};
@@ -147,6 +147,12 @@ const startPetUpdateInterval = (NyanBotUser) => {
                 }
             }
         }
+
+        // Restablecer el objeto de mensajes enviados para el próximo ciclo
+        // Esto permite que se envíen mensajes nuevamente en el próximo ciclo si es necesario
+        Object.keys(messagesSent).forEach(user => {
+            messagesSent[user] = false;
+        });
 
         // Guardar los cambios en el archivo
         savePetsData(petsData); 
