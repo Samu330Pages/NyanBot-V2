@@ -3956,12 +3956,14 @@ if (!command) return
 
 if (budy == '🎰') {
     const frutas = ["🍐", "🍎", "🍌", "🍒", "🍇"];
-    const filaGanadora = frutas[Math.floor(Math.random() * frutas.length)];
+    const filaGanadora = Math.random() < 0.5 ? frutas[Math.floor(Math.random() * frutas.length)] : null; // 50% de probabilidad de que haya fila ganadora
     const resultado = [
-        filaGanadora, filaGanadora, filaGanadora, // Fila ganadora en el centro
         frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
+        filaGanadora ? filaGanadora : frutas[Math.floor(Math.random() * frutas.length)],
+        filaGanadora ? filaGanadora : frutas[Math.floor(Math.random() * frutas.length)],
+        filaGanadora ? filaGanadora : frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
@@ -3970,8 +3972,8 @@ if (budy == '🎰') {
     let puntos = 0;
     let msgSlot = `╭────▵────╮\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n├────▵────┤\n~│${resultado[3]}│${resultado[4]}│${resultado[5]}│~\n├────▵────┤\n│${resultado[6]}│${resultado[7]}│${resultado[8]}│\n╰────▵────╯\n`;
 
-    if (resultado[3] === filaGanadora && resultado[4] === filaGanadora && resultado[5] === filaGanadora) {
-        switch (filaGanadora) {
+    if (resultado[3] === resultado[4] && resultado[4] === resultado[5]) {
+        switch (resultado[3]) {
             case "🍐":
                 puntos = 50;
                 msgSlot += '¡Ganaste 50 puntos con 🍐! 🎉';
