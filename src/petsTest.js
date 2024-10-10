@@ -87,43 +87,41 @@ const updatePetNeeds = () => {
 
 // Función para enviar recordatorios
 const sendReminder = async (NyanBotUser, chatId, pets) => {
+    let message = `¡Atención! 🐾 Necesitas cuidar a tus mascotas:\n`;
+    let needs = [];
+
+    // Acumular necesidades de todas las mascotas
     for (const pet of pets) {
-        // Verificar que pet sea un objeto y tenga las propiedades necesarias
         if (!pet || typeof pet !== 'object' || !pet.name) {
             console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
             continue; // Saltar a la siguiente mascota
         }
 
-        let message = `¡Atención! 🐾 ${pet.name} necesita cuidado:\n`;
-        let needs = [];
-
         if (pet.hunger >= 70) {
-            needs.push(`👉🏻 *Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️`);
+            needs.push(`👉🏻 *${pet.name}*: Hambre: ${calculatePercentage(pet.hunger)}% 🍽️`);
         }
         if (pet.boredom >= 70) {
-            needs.push(`👉🏻 *Diversión:* ${calculatePercentage(pet.boredom)}% 🎉`);
+            needs.push(`👉🏻 *${pet.name}*: Diversión: ${calculatePercentage(pet.boredom)}% 🎉`);
         }
         if (pet.health <= 30) {
-            needs.push(`👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑`);
+            needs.push(`👉🏻 *${pet.name}*: Salud crítica: ${calculatePercentage(pet.health)}% 🚑`);
         }
+    }
 
-        if (needs.length > 0) {
-            message += needs.join('\n'); // Unir necesidades en un solo mensaje
-        } else {
-            message += `*No hay necesidades críticas en este momento.*`;
-        }
+    if (needs.length > 0) {
+        message += needs.join('\n'); // Unir necesidades en un solo mensaje
+    } else {
+        message += `*No hay necesidades críticas en este momento.*`;
+    }
 
-        try {
-            await NyanBotUser.sendMessage(chatId, { text: message });
-            console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
-            pet.notificationSent = true; // Marcar como enviado
-        } catch (error) {
-            console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
-        }
+    try {
+        await NyanBotUser.sendMessage(chatId, { text: message });
+        console.log(`Recordatorio enviado a ${chatId}`); // Mensaje de éxito
+    } catch (error) {
+        console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
     }
 };
 
-// Iniciar el intervalo para actualizar automáticamente las necesidades de las mascotas
 const startPetUpdateInterval = (NyanBotUser) => {
     setInterval(async () => {
         updatePetNeeds(); // Actualiza el hambre y aburrimiento
@@ -148,10 +146,6 @@ const startPetUpdateInterval = (NyanBotUser) => {
 
                 // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario en el ciclo actual
                 if (needsAttention && petNeeds.length > 0 && !messagesSent[userPets.user]) {
-                    // Imprimir información para depuración
-                    console.log(`Enviando recordatorio a ${userPets.user} sobre las mascotas:`, petNeeds);
-
-                    // Enviar un mensaje de notificación solo si hay mascotas que requieren atención
                     await sendReminder(NyanBotUser, userPets.user, petNeeds);
                     messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
                 }
