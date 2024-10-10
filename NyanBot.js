@@ -2159,6 +2159,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 caption: infoTt,
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
+		nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', ptt: true})
         } else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
@@ -2167,6 +2168,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
+		    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', ptt: true})
             }
         }
 
