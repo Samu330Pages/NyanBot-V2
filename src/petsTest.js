@@ -86,37 +86,40 @@ const updatePetNeeds = () => {
 };
 
 // Función para enviar recordatorios
-const sendReminder = async (NyanBotUser, chatId, pet) => {
-    if (!pet || !pet.name) {
-        console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
-        return; // Asegurarse de que pet y pet.name existan
-    }
+const sendReminder = async (NyanBotUser, chatId, pets) => {
+    for (const pet of pets) {
+        // Verificar que pet sea un objeto y tenga las propiedades necesarias
+        if (!pet || typeof pet !== 'object' || !pet.name) {
+            console.log('Error: No se puede enviar recordatorio, mascota no válida.'); // Mensaje de error
+            continue; // Saltar a la siguiente mascota
+        }
 
-    let message = `¡Atención! 🐾 ${pet.name} necesita cuidado:\n`;
-    let needs = [];
+        let message = `¡Atención! 🐾 ${pet.name} necesita cuidado:\n`;
+        let needs = [];
 
-    if (pet.hunger >= 70) {
-        needs.push(`👉🏻 *Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️`);
-    }
-    if (pet.boredom >= 70) {
-        needs.push(`👉🏻 *Diversión:* ${calculatePercentage(pet.boredom)}% 🎉`);
-    }
-    if (pet.health <= 30) {
-        needs.push(`👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑`);
-    }
+        if (pet.hunger >= 70) {
+            needs.push(`👉🏻 *Hambre:* ${calculatePercentage(pet.hunger)}% 🍽️`);
+        }
+        if (pet.boredom >= 70) {
+            needs.push(`👉🏻 *Diversión:* ${calculatePercentage(pet.boredom)}% 🎉`);
+        }
+        if (pet.health <= 30) {
+            needs.push(`👉🏻 *Salud crítica:* ${calculatePercentage(pet.health)}% 🚑`);
+        }
 
-    if (needs.length > 0) {
-        message += needs.join('\n'); // Unir necesidades en un solo mensaje
-    } else {
-        message += `*No hay necesidades críticas en este momento.*`;
-    }
+        if (needs.length > 0) {
+            message += needs.join('\n'); // Unir necesidades en un solo mensaje
+        } else {
+            message += `*No hay necesidades críticas en este momento.*`;
+        }
 
-    try {
-        await NyanBotUser.sendMessage(chatId, { text: message });
-        console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
-        pet.notificationSent = true; // Marcar como enviado
-    } catch (error) {
-        console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
+        try {
+            await NyanBotUser.sendMessage(chatId, { text: message });
+            console.log(`Recordatorio enviado a ${chatId} para ${pet.name}`); // Mensaje de éxito
+            pet.notificationSent = true; // Marcar como enviado
+        } catch (error) {
+            console.error(`Error al enviar el mensaje a ${chatId}: ${error.message}`); // Manejo de errores
+        }
     }
 };
 
