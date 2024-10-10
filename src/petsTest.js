@@ -127,24 +127,26 @@ const startPetUpdateInterval = (NyanBotUser) => {
         const petsData = loadPetsData();
         const now = new Date();
         
-        // Crear un objeto para rastrear si ya se envió un mensaje por usuario
+        // Crear un objeto para rastrear si ya se ha enviado un mensaje por usuario
         const messagesSent = {};
 
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
                 let needsAttention = false; // Variable para determinar si alguna mascota necesita atención
+                let petNeeds = []; // Array para almacenar las mascotas que requieren atención
 
                 // Verificar las necesidades de las mascotas
                 for (const pet of userPets.pets) {
                     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
                         needsAttention = true;
+                        petNeeds.push(pet); // Agregar la mascota a la lista de necesidades
                     }
                 }
 
                 // Si alguna mascota necesita atención y no se ha enviado un mensaje para este usuario en el ciclo actual
                 if (needsAttention && !messagesSent[userPets.user]) {
-                    // Enviar un mensaje de notificación
-                    await sendReminder(NyanBotUser, userPets.user, userPets.pets);
+                    // Enviar un mensaje de notificación solo si hay mascotas que requieren atención
+                    await sendReminder(NyanBotUser, userPets.user, petNeeds);
                     messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
                 }
             }
