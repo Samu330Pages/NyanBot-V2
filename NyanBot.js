@@ -1913,7 +1913,7 @@ case 'ytmp3': case 'yta': {
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const res = await fg.yta(text);
+        const res = await fgp.yta(text);
 
         const audioBuffer = await fetchBuffer(res.dl_url);
         await nyanBot2.sendMessage(m.chat, {
@@ -2125,8 +2125,7 @@ case 'tt': case 'tiktok': {
 
         const { result } = await fg.tiktok(text);
         
-        let infoTt = `
-*Información del contenido:*
+let infoTt = `*Información del contenido:*
 ${result.title}\n
 ${result.duration ? `- Duración: ${result.duration} segundos` : ''}
 ${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
@@ -2138,9 +2137,9 @@ ${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''
 ${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
 ${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
 ${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
-${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
+${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}`
 
-*Información del audio:*
+let audCap = `*Información del audio:*
 ${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
 ${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
 ${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
@@ -2148,8 +2147,7 @@ ${result.music_info.original ? `- ¿Original? Sí` : result.music_info.original 
 ${result.music_info.duration ? `- Duración: ${result.music_info.duration} segundos` : ''}
 ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
 
-> ${botname} by ${ownername}
-`;
+> ${botname} by ${ownername}`;
 
         if (result.duration) {
             let videoTt = await fetchBuffer(result.play);
@@ -2159,7 +2157,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 caption: infoTt,
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
-		nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', ptt: true})
+		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: result.music_info.title, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
         } else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
@@ -2168,7 +2166,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
-		    nyanBot2.sendMessage(m.chat, {audio: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', ptt: true})
+		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: result.music_info.title, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
             }
         }
 
