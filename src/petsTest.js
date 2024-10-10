@@ -127,34 +127,31 @@ const startPetUpdateInterval = (NyanBotUser) => {
         const petsData = loadPetsData();
         const now = new Date();
         
+        // Crear un objeto para rastrear si ya se envió un mensaje por usuario
+        const messagesSent = {};
+
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
-                let messageSent = false; // Variable para verificar si se envió un mensaje
+                let needsAttention = false; // Variable para determinar si alguna mascota necesita atención
 
+                // Verificar las necesidades de las mascotas
                 for (const pet of userPets.pets) {
-                    // Verificar si se necesita enviar una notificación
-                    const needsAttention = (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30);
-                    const lastNotification = pet.lastNotificationSent ? new Date(pet.lastNotificationSent) : null;
-
-                    // Comparar si la última notificación es diferente a la fecha actual
-                    if (needsAttention && (lastNotification === null || lastNotification.getTime() !== now.getTime()) && !messageSent) {
-                        await sendReminder(NyanBotUser, userPets.user, pet);
-                        pet.lastNotificationSent = now; // Actualizar la fecha de la última notificación
-                        pet.notificationCount += 1; // Incrementar el contador de notificaciones
-                        messageSent = true; // Marcar que se envió un mensaje
-                        return;
+                    if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
+                        needsAttention = true;
                     }
+                }
 
-                    // Verificar si la mascota se ha escapado
-                    if (pet.hunger >= 90 && pet.boredom >= 90 && pet.health <= 10) {
-                        removePet(userPets.user);
-                        console.log(`¡Tu mascota ${pet.name} ha escapado! 🏃🏻💨`);
-                    }
+                // Si alguna mascota necesita atención y no se ha enviado un mensaje para este usuario en el ciclo actual
+                if (needsAttention && !messagesSent[userPets.user]) {
+                    // Enviar un mensaje de notificación
+                    await sendReminder(NyanBotUser, userPets.user, userPets.pets);
+                    messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
                 }
             }
         }
 
-        savePetsData(petsData); // Guarda los cambios en el archivo
+        // Guardar los cambios en el archivo
+        savePetsData(petsData); 
     }, 30000); // Cada 10 minutos
 };
 
