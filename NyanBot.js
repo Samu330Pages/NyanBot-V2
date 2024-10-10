@@ -2125,8 +2125,8 @@ case 'tt': case 'tiktok': {
 
         const { result } = await fg.tiktok(text);
         
-let infoTt = `*Información del contenido:*
-${result.title}\n
+let infoTt = `*📌 Información del contenido:*
+${result.title ? `${result.title}` : ''}\n
 ${result.duration ? `- Duración: ${result.duration} segundos` : ''}
 ${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
 ${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}
@@ -2139,7 +2139,7 @@ ${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : 
 ${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
 ${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}`
 
-let audCap = `*Información del audio:*
+let audCap = `*📀 Información del audio:*
 ${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
 ${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
 ${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
@@ -2157,7 +2157,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 caption: infoTt,
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
-		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: result.music_info.title, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
+		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: `${result.music_info.title.}.mp3`, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
         } else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
@@ -2166,7 +2166,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
-		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: result.music_info.title, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
+		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', filename: `${result.music_info.title}.mp3`, jpegThumbnail: await fetchBuffer(result.music_info.cover), caption: audCap}, {quoted: m})
             }
         }
 
