@@ -1913,7 +1913,7 @@ case 'ytmp3': case 'yta': {
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const res = await fgp.yta(text);
+        const res = await fg.yta(text);
 
         const audioBuffer = await fetchBuffer(res.dl_url);
         await nyanBot2.sendMessage(m.chat, {
@@ -2137,9 +2137,9 @@ ${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''
 ${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
 ${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
 ${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
-${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}`
+${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
 
-let audCap = `*📀 Información del audio:*
+*📀 Información del audio:*
 ${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
 ${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
 ${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
@@ -2161,7 +2161,6 @@ audio: await fetchBuffer(result.music_info.play),
 mimetype: 'audio/mpeg',
 fileName: `${result.music_info.title}.mp3`,
 jpegThumbnail: await fetchBuffer (result.music_info.cover),
-caption: audCap,
 contextInfo: {
 externalAdReply: {
 renderLargerThumbnail: true,
@@ -2187,7 +2186,6 @@ audio: await fetchBuffer(result.music_info.play),
 mimetype: 'audio/mpeg',
 fileName: `${result.music_info.title}.mp3`,
 jpegThumbnail: await fetchBuffer (result.music_info.cover),
-caption: audCap,
 contextInfo: {
 externalAdReply: {
 renderLargerThumbnail: true,
