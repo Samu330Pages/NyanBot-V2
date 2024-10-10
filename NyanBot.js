@@ -3953,6 +3953,7 @@ if (!command) return
                         }
                     } })
                 }
+
 if (budy == '🎰') {
     const frutas = ["🍐", "🍎", "🍌", "🍒", "🍇"];
     const resultado = [
@@ -3960,12 +3961,12 @@ if (budy == '🎰') {
         frutas[Math.floor(Math.random() * frutas.length)],
         frutas[Math.floor(Math.random() * frutas.length)],
     ];
-    
+
     let puntos = 0;
     let msgSlot = `╭────▵────╮\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n├────▵────┤\n~│${resultado[0]}│${resultado[1]}│${resultado[2]}│~\n├────▵────┤\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n╰────▵────╯\n`;
 
-    if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
-        switch (resultado[0]) {
+    if (resultado[1] === resultado[0] && resultado[1] === resultado[2]) {
+        switch (resultado[1]) {
             case "🍐":
                 puntos = 50;
                 msgSlot += '¡Ganaste 50 puntos con 🍐! 🎉';
@@ -3992,7 +3993,7 @@ if (budy == '🎰') {
     }
 
     db.data.users[sender].limit += puntos;
-    nyanBot2.sendMessage(from, { text: msgSlot }, {quoted: m});
+    nyanBot2.sendMessage(from, { text: msgSlot }, { quoted: m });
 }
 // Definimos los emojis de entrada
 const emojis = {
