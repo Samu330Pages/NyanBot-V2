@@ -121,12 +121,11 @@ const sendReminder = async (NyanBotUser, chatId, pets) => {
 };
 
 const startPetUpdateInterval = (NyanBotUser) => {
+    const messagesSent = {}; // Registro global para controlar los mensajes enviados
+
     setInterval(async () => {
         updatePetNeeds(); // Actualiza el hambre y aburrimiento
         const petsData = loadPetsData();
-        
-        // Crear un objeto para rastrear si ya se ha enviado un mensaje por usuario
-        const messagesSent = {};
 
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
@@ -139,7 +138,7 @@ const startPetUpdateInterval = (NyanBotUser) => {
                     }
                 }
 
-                // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario en el ciclo actual
+                // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario
                 if (petNeeds.length > 0 && !messagesSent[userPets.user]) {
                     await sendReminder(NyanBotUser, userPets.user, petNeeds);
                     messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
@@ -147,12 +146,8 @@ const startPetUpdateInterval = (NyanBotUser) => {
             }
         }
 
-        // Ahora, resetear el objeto de mensajes enviados solo al final del ciclo
-        // Esto permite que se envíen mensajes nuevamente en el próximo ciclo si es necesario
-        Object.keys(messagesSent).forEach(user => {
-            messagesSent[user] = false; // Restablecer para el próximo ciclo
-        });
-
+        // Aquí no restablecemos el objeto messagesSent, para evitar que se envíen múltiples mensajes en ciclos sucesivos.
+        
         // Guardar los cambios en el archivo
         savePetsData(petsData); 
     }, 30000); // Cada 10 minutos
