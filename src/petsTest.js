@@ -145,6 +145,9 @@ const startPetUpdateInterval = (NyanBotUser) => {
 
                 // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario en el ciclo actual
                 if (needsAttention && petNeeds.length > 0 && !messagesSent[userPets.user]) {
+                    // Imprimir información para depuración
+                    console.log(`Enviando recordatorio a ${userPets.user} sobre las mascotas:`, petNeeds);
+
                     // Enviar un mensaje de notificación solo si hay mascotas que requieren atención
                     await sendReminder(NyanBotUser, userPets.user, petNeeds);
                     messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
