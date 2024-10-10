@@ -39,7 +39,8 @@ const createOrGetPet = (sender, petName, petType) => {
                 isSleeping: false,
                 imageUrl: getImageUrl(petType),
                 notificationSent: false,
-                lastNotificationSent: null
+                lastNotificationSent: null,
+                notificationCount: 0
             }]
         };
         petsData.push(newPet);
@@ -131,11 +132,13 @@ const startPetUpdateInterval = (NyanBotUser) => {
                 for (const pet of userPets.pets) {
                     // Verificar si se necesita enviar una notificación
                     const needsAttention = (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30);
-                    const timeSinceLastNotification = pet.lastNotificationSent ? (now - new Date(pet.lastNotificationSent)) / 30000 : Infinity; // Tiempo en minutos
+                    const lastNotification = pet.lastNotificationSent ? new Date(pet.lastNotificationSent) : null;
 
-                    if (needsAttention && timeSinceLastNotification >= 10) { // 10 minutos
+                    // Comparar si la última notificación es diferente a la fecha actual
+                    if (needsAttention && (lastNotification === null || lastNotification.getTime() !== now.getTime())) {
                         await sendReminder(NyanBotUser, userPets.user, pet);
                         pet.lastNotificationSent = now; // Actualizar la fecha de la última notificación
+                        pet.notificationCount += 1; // Incrementar el contador de notificaciones
                     }
 
                     // Verificar si la mascota se ha escapado
