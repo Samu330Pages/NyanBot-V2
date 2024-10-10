@@ -2148,7 +2148,7 @@ ${result.music_info.duration ? `- Duración: ${result.music_info.duration} segun
 ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
 
 > ${botname} by ${ownername}`;
-
+let ttImg = await nyanBot2.downloadAndSaveMediaMessage(fetchBuffer(result.music_info.cover, "imgTt"))
         if (result.duration) {
             let videoTt = await fetchBuffer(result.play);
             await nyanBot2.sendMessage(m.chat, {
@@ -2157,7 +2157,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 caption: infoTt,
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
-		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: result.music_info.cover, caption: audCap}, {quoted: m})
+		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: await thumB(ttImg), caption: audCap}, {quoted: m})
         } else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
@@ -2166,7 +2166,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
-		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: result.music_info.cover, caption: audCap}, {quoted: m})
+		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: await thumB(ttImg), caption: audCap}, {quoted: m})
             }
         }
 
