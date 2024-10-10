@@ -3953,6 +3953,47 @@ if (!command) return
                         }
                     } })
                 }
+if (budy == '🎰') {
+    const frutas = ["🍐", "🍎", "🍌", "🍒", "🍇"];
+    const resultado = [
+        frutas[Math.floor(Math.random() * frutas.length)],
+        frutas[Math.floor(Math.random() * frutas.length)],
+        frutas[Math.floor(Math.random() * frutas.length)],
+    ];
+    
+    let puntos = 0;
+    let msgSlot = `╭────▵────╮\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n├────▵────┤\n~│${resultado[0]}│${resultado[1]}│${resultado[2]}│~\n├────▵────┤\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n╰────▵────╯\n`;
+
+    if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
+        switch (resultado[0]) {
+            case "🍐":
+                puntos = 50;
+                msgSlot += '¡Ganaste 50 puntos con 🍐! 🎉';
+                break;
+            case "🍎":
+                puntos = 70;
+                msgSlot += '¡Ganaste 70 puntos con 🍎! 🎉';
+                break;
+            case "🍌":
+                puntos = 100;
+                msgSlot += '🎉¡Excelente! Ganaste 100 puntos con 🍌! 🎉';
+                break;
+            case "🍒":
+                puntos = 80;
+                msgSlot += '¡Ganaste 80 puntos con 🍒! 🎉';
+                break;
+            case "🍇":
+                puntos = 60;
+                msgSlot += '¡Ganaste 60 puntos con 🍇! 🎉';
+                break;
+        }
+    } else {
+        msgSlot += 'Suerte la próxima! 🎃';
+    }
+
+    db.data.users[sender].limit += puntos;
+    nyanBot2.sendMessage(from, { text: msgSlot }, {quoted: m});
+}
 // Definimos los emojis de entrada
 const emojis = {
     piedra: ['🪨','✊🏻','✊🏼','✊🏽','✊🏾','✊🏿','✊','👊🏻','👊🏼','👊🏽','👊🏾','👊🏿','👊'],
