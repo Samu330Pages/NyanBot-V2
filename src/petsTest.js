@@ -143,9 +143,6 @@ const startPetUpdateInterval = (NyanBotUser) => {
                     }
                 }
 
-                // Filtrar las mascotas válidas para evitar el error
-                petNeeds = petNeeds.filter(pet => isValidPet(pet)); // Asegúrate de que la función isValidPet esté definida y funcione correctamente
-
                 // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario en el ciclo actual
                 if (needsAttention && petNeeds.length > 0 && !messagesSent[userPets.user]) {
                     // Enviar un mensaje de notificación solo si hay mascotas que requieren atención
@@ -159,13 +156,6 @@ const startPetUpdateInterval = (NyanBotUser) => {
         savePetsData(petsData); 
     }, 30000); // Cada 10 minutos
 };
-
-// Función para verificar si una mascota es válida
-function isValidPet(pet) {
-    // Aquí deberías definir las condiciones que consideras para que una mascota sea válida
-    // Por ejemplo, podrías verificar si el ID de la mascota existe en la base de datos
-    return pet && pet.name && pet.health > 0; // Ajusta estas condiciones según tu lógica
-}
 
 // Calcular el porcentaje
 const calculatePercentage = (value) => {
