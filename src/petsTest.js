@@ -129,16 +129,19 @@ const startPetUpdateInterval = (NyanBotUser) => {
         
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
+                let messageSent = false; // Variable para verificar si se envió un mensaje
+
                 for (const pet of userPets.pets) {
                     // Verificar si se necesita enviar una notificación
                     const needsAttention = (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30);
                     const lastNotification = pet.lastNotificationSent ? new Date(pet.lastNotificationSent) : null;
 
                     // Comparar si la última notificación es diferente a la fecha actual
-                    if (needsAttention && (lastNotification === null || lastNotification.getTime() !== now.getTime())) {
+                    if (needsAttention && (lastNotification === null || lastNotification.getTime() !== now.getTime()) && !messageSent) {
                         await sendReminder(NyanBotUser, userPets.user, pet);
                         pet.lastNotificationSent = now; // Actualizar la fecha de la última notificación
                         pet.notificationCount += 1; // Incrementar el contador de notificaciones
+                        messageSent = true; // Marcar que se envió un mensaje
                     }
 
                     // Verificar si la mascota se ha escapado
