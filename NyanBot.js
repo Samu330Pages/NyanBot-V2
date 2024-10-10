@@ -2154,25 +2154,9 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 video: videoTt,
                 fileName: result.title + '.mp4',
                 caption: infoTt,
+		thumbnail: await fetchBuffer(result.author.avatar),
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
-nyanBot2.sendMessage(m.chat, {
-audio: await fetchBuffer(result.music_info.play),
-mimetype: 'audio/mpeg',
-fileName: `${result.music_info.title}.mp3`,
-jpegThumbnail: await fetchBuffer (result.music_info.cover),
-contextInfo: {
-externalAdReply: {
-renderLargerThumbnail: true,
-mediaType: 1,
-title: `${result.music_info.title}.mp3`,
-body: `Click here! 👉🏻🟢`,
-thumbnail: await fetchBuffer(result.music_info.cover),
-jpegThumbnail: await fetchBuffer(result.music_info.cover),
-previewType: "NONE",
-sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
-}}
-}, {quoted: m})
 	} else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
@@ -2181,6 +2165,8 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
+            }
+        }
 nyanBot2.sendMessage(m.chat, {
 audio: await fetchBuffer(result.music_info.play),
 mimetype: 'audio/mpeg',
@@ -2198,9 +2184,6 @@ previewType: "NONE",
 sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }}
 }, {quoted: m})
-            }
-        }
-
         reactionOk(m.chat, m.key, ttlId);
         db.data.users[sender].limit -= 10;
     } catch (e) {
