@@ -87,9 +87,8 @@ const updatePetNeeds = () => {
 
 // Función para enviar recordatorios
 const sendReminder = async (NyanBotUser, chatId, pets) => {
-    let message = `¡Atención! 🐾 Necesitas cuidar a tus mascotas:\n`;
-    let needs = [];
-
+    let message = `¡Atención! 🐾 Sus mascotas necesitan cuidado:\n`;
+    
     // Acumular necesidades de todas las mascotas
     for (const pet of pets) {
         if (!pet || typeof pet !== 'object' || !pet.name) {
@@ -98,20 +97,19 @@ const sendReminder = async (NyanBotUser, chatId, pets) => {
         }
 
         if (pet.hunger >= 70) {
-            needs.push(`👉🏻 *${pet.name}*: Hambre: ${calculatePercentage(pet.hunger)}% 🍽️`);
+            message += `👉🏻 *${pet.name}*: Hambre: ${calculatePercentage(pet.hunger)}% 🍽️\n`;
         }
         if (pet.boredom >= 70) {
-            needs.push(`👉🏻 *${pet.name}*: Diversión: ${calculatePercentage(pet.boredom)}% 🎉`);
+            message += `👉🏻 *${pet.name}*: Diversión: ${calculatePercentage(pet.boredom)}% 🎉\n`;
         }
         if (pet.health <= 30) {
-            needs.push(`👉🏻 *${pet.name}*: Salud crítica: ${calculatePercentage(pet.health)}% 🚑`);
+            message += `👉🏻 *${pet.name}*: Salud crítica: ${calculatePercentage(pet.health)}% 🚑\n`;
         }
     }
 
-    if (needs.length > 0) {
-        message += needs.join('\n'); // Unir necesidades en un solo mensaje
-    } else {
-        message += `*No hay necesidades críticas en este momento.*`;
+    // Si no hay necesidades, notificar que todo está bien
+    if (message === `¡Atención! 🐾 Sus mascotas necesitan cuidado:\n`) {
+        message = `*No hay necesidades críticas en este momento.*`;
     }
 
     try {
@@ -133,19 +131,17 @@ const startPetUpdateInterval = (NyanBotUser) => {
 
         for (const userPets of petsData) {
             if (userPets.pets && userPets.pets.length > 0) {
-                let needsAttention = false; // Variable para determinar si alguna mascota necesita atención
                 let petNeeds = []; // Array para almacenar las mascotas que requieren atención
 
                 // Verificar las necesidades de las mascotas
                 for (const pet of userPets.pets) {
                     if (pet.hunger >= 70 || pet.boredom >= 70 || pet.health <= 30) {
-                        needsAttention = true;
                         petNeeds.push(pet); // Agregar la mascota a la lista de necesidades
                     }
                 }
 
                 // Si hay mascotas que necesitan atención y no se ha enviado un mensaje para este usuario en el ciclo actual
-                if (needsAttention && petNeeds.length > 0 && !messagesSent[userPets.user]) {
+                if (petNeeds.length > 0 && !messagesSent[userPets.user]) {
                     await sendReminder(NyanBotUser, userPets.user, petNeeds);
                     messagesSent[userPets.user] = true; // Marcar que se envió un mensaje para este usuario
                 }
