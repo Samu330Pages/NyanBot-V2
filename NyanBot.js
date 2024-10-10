@@ -2156,8 +2156,25 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 caption: infoTt,
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
-		nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: await fetchBuffer ("https://static.vecteezy.com/system/resources/previews/023/986/561/non_2x/tiktok-logo-tiktok-logo-transparent-tiktok-icon-transparent-free-free-png.png"), caption: audCap}, {quoted: m})
-        } else {
+nyanBot2.sendMessage(m.chat, {
+audio: await fetchBuffer(result.music_info.play),
+mimetype: 'audio/mpeg',
+fileName: `${result.music_info.title}.mp3`,
+jpegThumbnail: await fetchBuffer (result.music_info.cover),
+caption: audCap,
+contextInfo: {
+externalAdReply: {
+renderLargerThumbnail: true,
+mediaType: 1,
+title: `${result.music_info.title}.mp3`,
+body: `Click here! 👉🏻🟢`,
+thumbnail: await fetchBuffer(result.music_info.cover),
+jpegThumbnail: await fetchBuffer(result.music_info.cover),
+previewType: "NONE",
+sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
+}}
+}, {quoted: m})
+	} else {
             await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
             for (let i = 0; i < result.images.length; i++) {
                 let imageTt = await fetchBuffer(result.images[i]);
@@ -2165,7 +2182,24 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                     image: imageTt,
                     caption: `*Imagen ${i + 1} de ${result.images.length}*`
                 }, { quoted: m });
-		    nyanBot2.sendMessage(m.chat, {document: await fetchBuffer(result.music_info.play), mimetype: 'audio/mpeg', fileName: `${result.music_info.title}.mp3`, jpegThumbnail: await fetchBuffer("https://static.vecteezy.com/system/resources/previews/023/986/561/non_2x/tiktok-logo-tiktok-logo-transparent-tiktok-icon-transparent-free-free-png.png"), caption: audCap}, {quoted: m})
+nyanBot2.sendMessage(m.chat, {
+audio: await fetchBuffer(result.music_info.play),
+mimetype: 'audio/mpeg',
+fileName: `${result.music_info.title}.mp3`,
+jpegThumbnail: await fetchBuffer (result.music_info.cover),
+caption: audCap,
+contextInfo: {
+externalAdReply: {
+renderLargerThumbnail: true,
+mediaType: 1,
+title: `${result.music_info.title}.mp3`,
+body: `Click here! 👉🏻🟢`,
+thumbnail: await fetchBuffer(result.music_info.cover),
+jpegThumbnail: await fetchBuffer(result.music_info.cover),
+previewType: "NONE",
+sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
+}}
+}, {quoted: m})
             }
         }
 
