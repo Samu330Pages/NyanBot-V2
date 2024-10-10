@@ -142,6 +142,7 @@ const startPetUpdateInterval = (NyanBotUser) => {
                         pet.lastNotificationSent = now; // Actualizar la fecha de la última notificación
                         pet.notificationCount += 1; // Incrementar el contador de notificaciones
                         messageSent = true; // Marcar que se envió un mensaje
+                        return;
                     }
 
                     // Verificar si la mascota se ha escapado
