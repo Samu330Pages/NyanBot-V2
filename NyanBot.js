@@ -3972,14 +3972,14 @@ if (budy == '🎰') {
     let puntos = 0;
     let msgSlot = `> ⎽⎽⎽⎽⎽⎽⎽⏠⎽⎽⎽⎽⎽⎽⎽┃
 >   𝐺𝑎𝑚𝑒 𝑆𝑙𝑜𝑡   ┃
-> ⎺⎺⎺⎺⎺⎺⎺⏡⎺⎺⎺⎺⎺⎺⎺┃
+> ⎺⎺⎺⎺⎺⎺⎺⏡⎺⎺⎺⎺⎺⎺⎺┃\n
 ${forma1}╭────▵────╮${forma1}
 ${forma1}│${resultado[0]}│${resultado[1]}│${resultado[2]}│${forma1}
 ${forma1}├────▵────┤${forma1}
 ~${forma1}│${resultado[3]}│${resultado[4]}│${resultado[5]}│${forma1}~
 ${forma1}├────▵────┤${forma1}
-${forma1}│${resultado[6]}│${resultado[7]}│${resultado[8]}${forma1}│${forma1}
-${forma1}╰────▵────╯${forma1}\n`;
+${forma1}│${resultado[6]}│${resultado[7]}│${resultado[8]}│${forma1}
+${forma1}╰────▵────╯${forma1}\n\n`;
 
     if (resultado[3] === resultado[4] && resultado[4] === resultado[5]) {
         switch (resultado[3]) {
