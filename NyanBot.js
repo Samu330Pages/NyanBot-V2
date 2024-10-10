@@ -3223,7 +3223,7 @@ break
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
 *Para jugar puedes simplemente enviar uno de estos emojis:*
 
-${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲${forma1}
+${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲 | 🎰${forma1}
 
 *O también juegar a piedra, papel o tijera con el bot enviando los emojis:*
 
@@ -3970,33 +3970,42 @@ if (budy == '🎰') {
     ];
 
     let puntos = 0;
-    let msgSlot = `╭────▵────╮\n│${resultado[0]}│${resultado[1]}│${resultado[2]}│\n├────▵────┤\n~│${resultado[3]}│${resultado[4]}│${resultado[5]}│~\n├────▵────┤\n│${resultado[6]}│${resultado[7]}│${resultado[8]}│\n╰────▵────╯\n`;
+    let msgSlot = `> ⎽⎽⎽⎽⎽⎽⎽⏠⎽⎽⎽⎽⎽⎽⎽┃
+>   𝐺𝑎𝑚𝑒 𝑆𝑙𝑜𝑡   ┃
+> ⎺⎺⎺⎺⎺⎺⎺⏡⎺⎺⎺⎺⎺⎺⎺┃
+${forma1}╭────▵────╮${forma1}
+${forma1}│${resultado[0]}│${resultado[1]}│${resultado[2]}│${forma1}
+${forma1}├────▵────┤${forma1}
+~${forma1}│${resultado[3]}│${resultado[4]}│${resultado[5]}│${forma1}~
+${forma1}├────▵────┤${forma1}
+${forma1}│${resultado[6]}│${resultado[7]}│${resultado[8]}${forma1}│${forma1}
+${forma1}╰────▵────╯${forma1}\n`;
 
     if (resultado[3] === resultado[4] && resultado[4] === resultado[5]) {
         switch (resultado[3]) {
             case "🍐":
                 puntos = 50;
-                msgSlot += '¡Ganaste 50 puntos con 🍐! 🎉';
+                msgSlot += '*¡Ganaste 50 puntos con 🍐!* 🎉';
                 break;
             case "🍎":
                 puntos = 70;
-                msgSlot += '¡Ganaste 70 puntos con 🍎! 🎉';
+                msgSlot += '*¡Ganaste 70 puntos con 🍎!* 🎉';
                 break;
             case "🍌":
                 puntos = 100;
-                msgSlot += '🎉¡Excelente! Ganaste 100 puntos con 🍌! 🎉';
+                msgSlot += '🎉 *¡Excelente! Ganaste 100 puntos con 🍌!* 🎉';
                 break;
             case "🍒":
                 puntos = 80;
-                msgSlot += '¡Ganaste 80 puntos con 🍒! 🎉';
+                msgSlot += '*¡Ganaste 80 puntos con 🍒!* 🎉';
                 break;
             case "🍇":
                 puntos = 60;
-                msgSlot += '¡Ganaste 60 puntos con 🍇! 🎉';
+                msgSlot += '*¡Ganaste 60 puntos con 🍇!* 🎉';
                 break;
         }
     } else {
-        msgSlot += 'Suerte la próxima! 🎃';
+        msgSlot += '*Suerte la próxima!* 🎃';
     }
 
     db.data.users[sender].limit += puntos;
