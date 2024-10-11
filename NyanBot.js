@@ -2019,7 +2019,7 @@ case 'scdl': {
                 }, { quoted: m });
                 fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
             } catch (error) {
-                console.error('Error al enviar el audio:', error);
+                reply(`Error al enviar el audio:\n${error}`);
                 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
                 stcReac('error', `_*❌ Ha ocurrido un error al enviar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
             }
@@ -2031,7 +2031,7 @@ case 'scdl': {
             stcReac('error', `_*❌ Ha ocurrido un error al guardar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
         });
     } catch (error) {
-        console.error('Error al procesar la solicitud:', error);
+        reply(`Error al procesar la solicitud:\n${error}`);
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
