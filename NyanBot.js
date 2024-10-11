@@ -757,8 +757,8 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
 
 
 //stickers actions:
-async function stickerSearch(texto) {
-nyanBot2.sendMessage(from, { sticker: fs.readFileSync('./Media/sticker/lupa.webp'),
+async function stcReac(tipo, texto) {
+nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.webp`),
 }, {
 quoted: {
 key: {
@@ -1703,7 +1703,7 @@ case 'lyrics': {
     
     let letraId;
     letraId = reactionLoad(m.chat, m.key);
-    
+    stcReac('lupa', '_*Buscando Lyrics*_ ✍🏻')
     try {
         let lyric = await fg.lyrics(text);
         
@@ -1746,7 +1746,7 @@ case 'youtubesearch': {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-
+    stcReac('lupa', '_*Buscando resultados...*_ 🔎')
     try {
         const results = await yts(text);
         const videoResults = results.all.filter(video => video.type === 'video');
@@ -1805,7 +1805,7 @@ case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
         return reply(`*Por favor, solo proporciona el nombre de la playlist, no incluyas links. Ejemplo:*\n\n${prefix + command} _*nombre de la playlist*_`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-
+    stcReac('lupa', '_*Generando Playlist...*_ 📃')
     try {
 
         const results = await yts(`playlist ${text}`);
@@ -1878,7 +1878,6 @@ if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
 let playId;
 playId = reactionLoad(m.chat, m.key);
-stickerSearch('*Realizando búsqueda... 🔎*')
 const r = await yts(text);
 if (!r || !r.videos || r.videos.length === 0) {
 reactionError(m.chat, m.key, playId);
