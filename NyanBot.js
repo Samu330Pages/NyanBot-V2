@@ -1604,7 +1604,7 @@ case 'imagenes': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de imágenes:', error);
-	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+	stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1692,7 +1692,7 @@ gglId = reactionLoad(m.chat, m.key);
     } catch (error) {
 	reactionError(m.chat, m.key, gglId);
         console.error('Error en la búsqueda de Google:', error);
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1795,7 +1795,7 @@ case 'youtubesearch': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de YouTube:', error);
-	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+	stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1868,7 +1868,7 @@ case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de playlists de YouTube:', error);
-	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+	stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1952,7 +1952,7 @@ case 'ytmp3': case 'yta': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+	stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
     db.data.users[sender].limit -= 30;
@@ -1984,7 +1984,7 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
 	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error)
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2078,7 +2078,7 @@ case 'facebook': case 'fb': {
         db.data.users[sender].limit -= 20;
     } catch {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2125,7 +2125,7 @@ case 'insta': case 'ig': case 'instagram': {
     } catch (error) {
         reactionError(m.chat, m.key, instalId);
         console.error('Error al procesar la solicitud:', error);
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
     db.data.users[sender].limit -= 20;
@@ -2208,7 +2208,7 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
         db.data.users[sender].limit -= 10;
     } catch (e) {
         reactionError(m.chat, m.key, ttlId);
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2585,7 +2585,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2881,18 +2881,20 @@ if (!args.join(" ")) return reply(`*Porfavor incluye los datos correctos, tanto 
 const swn = args.join(" ")
 const pcknm = swn.split("|")[0]
 const atnm = swn.split("|")[1]
+try {
 if (/image/.test(mime)) {
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
 db.data.users[sender].limit -= 50;
-} else if (/video/.test(mime)) {
+} else {
 if ((quoted.msg || quoted).seconds > 11) return reply('El video debe ser de maximo 10 segundos!')
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
 db.data.users[sender].limit -= 50;
-} else {
-reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
+} catch (error) {
+stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
 break
 
