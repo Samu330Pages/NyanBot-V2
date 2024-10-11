@@ -1964,30 +1964,37 @@ case 'ytmp3': case 'yta': {
 break
 
 case 'ytmp4': case 'ytv': {
-if (db.data.users[sender].limit < 1) return reply(mess.limit);
-if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
-nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-try {
-let res = await fg.ytv(text)
-await nyanBot2.sendMessage(m.chat, {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://youtube.com/...`);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    try {
+        let res = await fg.ytv(text);
+        db.data.users[sender].limit -= 30;
+
+        if (parseFloat(res.size) > 80) {
+	stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️_*\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`)
+            await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
                 fileName: `${res.title}.mp4`,
                 mimetype: 'video/mp4',
-		jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
+                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
+                jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
             }, { quoted: m });
-nyanBot2.sendMessage(m.chat, {
+        } else {
+            await nyanBot2.sendMessage(m.chat, {
                 video: await fetchBuffer(res.dl_url),
-		caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Bytes:_ ${formatBytes(res.sizeB)}\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
-                fileName: `${res.dl_url}.mp4`,
+                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
+                fileName: `${res.title}.mp4`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
-db.data.users[sender].limit -= 30;
-nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        }
+        
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
-	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error al procesar la solicitud:', error)
-        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 }
 break
