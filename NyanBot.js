@@ -2012,17 +2012,23 @@ case 'scdl': {
         r.pipe(writeStream);
 
         writeStream.on('finish', async () => {
-            await nyanBot2.sendMessage(m.chat, {
-                audio: fs.createReadStream(filePath),
-                mimetype: 'audio/mp3',
-                caption: '*Descarga completa! 🍽️*'
-            }, { quoted: m });
+            try {
+                await nyanBot2.sendMessage(m.chat, {
+                    audio: fs.createReadStream(filePath),
+                    mimetype: 'audio/mp3'
+                }, { quoted: m });
+                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
+            } catch (error) {
+                console.error('Error al enviar el audio:', error);
+                nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+                stcReac('error', `_*❌ Ha ocurrido un error al enviar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+            }
         });
 
         writeStream.on('error', (error) => {
             console.error('Error al guardar el archivo:', error);
             nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-            stcReac('error', `_*❌ Ha ocurrido un error al descargar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+            stcReac('error', `_*❌ Ha ocurrido un error al guardar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
         });
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
