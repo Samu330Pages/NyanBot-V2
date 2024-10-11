@@ -1604,7 +1604,7 @@ case 'imagenes': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de imágenes:', error);
-        return reply("Ocurrió un error al realizar la búsqueda de imágenes. Intenta nuevamente más tarde.");
+	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1692,7 +1692,7 @@ gglId = reactionLoad(m.chat, m.key);
     } catch (error) {
 	reactionError(m.chat, m.key, gglId);
         console.error('Error en la búsqueda de Google:', error);
-        return reply(`Ocurrió un error al realizar la búsqueda. Intenta nuevamente más tarde.\n${error.message}`);
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1795,7 +1795,7 @@ case 'youtubesearch': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de YouTube:', error);
-        return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
+	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1868,7 +1868,7 @@ case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la búsqueda de playlists de YouTube:', error);
-        return reply(`Ocurrió un error al realizar la búsqueda en YouTube. Intenta nuevamente más tarde.\n${error.message}`);
+	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -1952,7 +1952,7 @@ case 'ytmp3': case 'yta': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-        reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
+	stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
     db.data.users[sender].limit -= 30;
@@ -1984,7 +1984,7 @@ nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
 	nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error)
-        reply(`Ocurrió un error al intentar obtener el video. Por favor, verifica la URL y vuelve a intentarlo.\n${error}`)
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2078,7 +2078,7 @@ case 'facebook': case 'fb': {
         db.data.users[sender].limit -= 20;
     } catch {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        return reply('Ha ocurrido un error inesperado, por favor repórtalo para darle solución!');
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2125,7 +2125,7 @@ case 'insta': case 'ig': case 'instagram': {
     } catch (error) {
         reactionError(m.chat, m.key, instalId);
         console.error('Error al procesar la solicitud:', error);
-        reply('Ocurrió un error al conectarse a la API. Por favor, verifica la URL y vuelve a intentarlo.');
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
     db.data.users[sender].limit -= 20;
@@ -2208,7 +2208,7 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
         db.data.users[sender].limit -= 10;
     } catch (e) {
         reactionError(m.chat, m.key, ttlId);
-        return reply(`Ha ocurrido un error inesperado, por favor repórtalo para darle solución!\n${e}`);
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2585,7 +2585,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-        reply(`Ocurrió un error al intentar obtener el archivo. Por favor, verifica el enlace y vuelve a intentarlo.\n${error}`);
+        stcReac('error', `_*❌ Ah ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
 break
@@ -2881,11 +2881,7 @@ if (!args.join(" ")) return reply(`*Porfavor incluye los datos correctos, tanto 
 const swn = args.join(" ")
 const pcknm = swn.split("|")[0]
 const atnm = swn.split("|")[1]
-if (m.quoted.isAnimated === true) {
-nyanBot2.downloadAndSaveMediaMessage(quoted, "gifee")
-nyanBot2.sendMessage(from, {sticker:fs.readFileSync("gifee.webp")},{quoted:m})
-db.data.users[sender].limit -= 50;
-} else if (/image/.test(mime)) {
+if (/image/.test(mime)) {
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
 db.data.users[sender].limit -= 50;
