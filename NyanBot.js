@@ -3618,7 +3618,7 @@ case 'ping': case 'botstatus': case 'statusbot': case 'p': {
                 neww = performance.now()
                 oldd = performance.now()
                 respon = `
-*Velocidad de respuesta* ${latensi.toFixed(4)} _Segundos_\n\n*Runtime* : ${runtime(process.uptime())}
+*Runtime* : ${runtime(process.uptime())}
 
 *Info Server*
 RAM: ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
@@ -3632,6 +3632,18 @@ _CPU Core(s) Usage (${cpus.length} Core CPU)_
 ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}` : ''}
                 `.trim()
 	reply(`${respon}`)
+nyanBot2.sendMessage(from, { sticker: fs.readFileSync('./Media/sticker/run.webp'),
+}, {
+quoted: {
+key: {
+remoteJid: '5219984907794@s.whatsapp.net',
+fromMe: false,
+id: `${ownername}`,
+participant: '5219984907794@s.whatsapp.net'
+},
+message: {
+videoMessage: {
+caption: `_*⚡ Velocidad:*_ ${latensi.toFixed(3)} _Seg._`}}}});
     }
 	
 	break
