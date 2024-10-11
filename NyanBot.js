@@ -1973,7 +1973,7 @@ case 'ytmp4': case 'ytv': {
         db.data.users[sender].limit -= 30;
 
         if (parseFloat(res.size) > 80) {
-	stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️_*\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`)
+	stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️*_\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`)
             await nyanBot2.sendMessage(m.chat, {
                 document: await fetchBuffer(res.dl_url),
                 fileName: `${res.title}.mp4`,
