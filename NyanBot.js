@@ -1999,6 +1999,39 @@ case 'ytmp4': case 'ytv': {
 }
 break
 
+case 'scdl': {
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(soundcloud\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de SoundCloud.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://soundcloud.com/...`);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    try {
+        const { SoundCloud } = require('scdl-core');
+        await SoundCloud.connect();
+        let r = await SoundCloud.download(text); // Usar el link proporcionado
+        const filePath = "audio.mp3"; // Nombre del archivo a guardar
+
+        const writeStream = fs.createWriteStream(filePath);
+        r.pipe(writeStream);
+
+        writeStream.on('finish', async () => {
+            await nyanBot2.sendMessage(m.chat, {
+                audio: fs.createReadStream(filePath),
+                mimetype: 'audio/mp3',
+                caption: '*Descarga completa! 🍽️*'
+            }, { quoted: m });
+        });
+
+        writeStream.on('error', (error) => {
+            console.error('Error al guardar el archivo:', error);
+            nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+            stcReac('error', `_*❌ Ha ocurrido un error al descargar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+        });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
+    }
+}
+break
+
 case 'music': case 'song': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
