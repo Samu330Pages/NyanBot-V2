@@ -754,6 +754,26 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
     // Enviar el mensaje
     await nyanBot2.relayMessage(chatId, message['message'], {});
 }
+
+
+//stickers actions:
+async function stickerSearch(texto) {
+nyanBot2.sendMessage(from, { sticker: fs.readFileSync('./Media/sticker/lupa.webp'),
+}, {
+quoted: {
+key: {
+remoteJid: '5219984907794@s.whatsapp.net',
+fromMe: false,
+id: `${ownername}`,
+participant: '5219984907794@s.whatsapp.net'
+},
+message: {
+videoMessage: {
+caption: texto}}}});
+}
+
+//
+	    
 	    
 async function thumB(source) {
       let jimp = await read(file)
