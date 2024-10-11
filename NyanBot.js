@@ -2896,6 +2896,7 @@ db.data.users[sender].limit -= 50;
 stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
 reply(`Etiqueta porfavor un sticker, imagen o video!`)
 }
+}
 break
 
 case 'nobg': case 'sinfondo': {
