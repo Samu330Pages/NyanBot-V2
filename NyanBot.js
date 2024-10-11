@@ -3131,7 +3131,7 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 })
 break
 
-case 'creador':
+case 'creador': case 'owner': case 'script': case 'code':
 var order = generateWAMessageFromContent(from, proto.Message.fromObject({
 "orderMessage": {
 "orderId": "876118931283642",
