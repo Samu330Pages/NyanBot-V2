@@ -342,8 +342,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
         var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
-        var prefix = /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : ""
-        const isCmd = body.startsWith(prefix, '')
+        var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
+	const isCmd = body.startsWith(prefix, '')
         const isCmd2 = body.startsWith(prefix)
         const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
         const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
@@ -378,9 +378,9 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isQuotedContact = type === 'extendedTextMessage' && content.includes('contactMessage')
         const isQuotedDocument = type === 'extendedTextMessage' && content.includes('documentMessage')
        //prefix 2
-        //const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi)
-        const prefBody = body.startsWith(prefix)
-        const isCommand = prefBody ? body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase() : ""
+        const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi) : xprefix
+	const prefBody = body.startsWith(pric)
+        const isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
         const sticker = []
        //group
         const isGroup = m.key.remoteJid.endsWith('@g.us')
