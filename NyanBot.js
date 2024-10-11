@@ -762,10 +762,10 @@ nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.w
 }, {
 quoted: {
 key: {
-remoteJid: '5219984907794@s.whatsapp.net',
+remoteJid: sender,
 fromMe: false,
 id: `${ownername}`,
-participant: '5219984907794@s.whatsapp.net'
+participant: sender
 },
 message: {
 videoMessage: {
@@ -2887,7 +2887,6 @@ let media = await quoted.download()
 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
 db.data.users[sender].limit -= 50;
 } else {
-if ((quoted.msg || quoted).seconds > 11) return reply('El video debe ser de maximo 10 segundos!')
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
 db.data.users[sender].limit -= 50;
