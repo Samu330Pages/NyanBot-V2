@@ -1139,6 +1139,9 @@ case 'menu': {
                                 "name": "quick_reply",
                                 "buttonParamsJson": `{\"display_text\":\"Registrarse 🎃\",\"id\":\".reg\"}`
                             }, {
+                                "name": "quick_reply",
+                                "buttonParamsJson": `{\"display_text\":\"Velocidad ⚡\",\"id\":\".speed\"}`
+			    }, {
                                 "name": "cta_url",
                                 "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🕸️\",\"url\":\"https://samu330.com/login\"}`
                             }],
@@ -3332,7 +3335,9 @@ reply("*Sé ha limpiado la session!* ♻️")
 break
 
 case 'speed': {
-reply('_*Realizando Prueba de velocidad!...*_ 🏃🏻‍♂️💨')
+let vel = speed()
+let velP = speed() - vel
+stcReac('run', `_*⚡ Velocidad de ${velP.toFixed(3)} seg.*_\n_Realizando prueba profunda... 🪂_`)
 let cp = require('child_process')
 let {
 promisify
@@ -3629,18 +3634,7 @@ _CPU Core(s) Usage (${cpus.length} Core CPU)_
 ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}` : ''}
                 `.trim()
 	reply(`${respon}`)
-nyanBot2.sendMessage(from, { sticker: fs.readFileSync('./Media/sticker/run.webp'),
-}, {
-quoted: {
-key: {
-remoteJid: '5219984907794@s.whatsapp.net',
-fromMe: false,
-id: `${ownername}`,
-participant: '5219984907794@s.whatsapp.net'
-},
-message: {
-videoMessage: {
-caption: `_*⚡ Velocidad:*_ ${latensi.toFixed(3)} _Seg._`}}}});
+	stcReac('run', `_*⚡ Velocidad:*_ ${latensi.toFixed(3)} _Seg._`)
     }
 	
 	break
