@@ -2000,34 +2000,28 @@ case 'ytmp4': case 'ytv': {
 break
 
 case 'scdl': {
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(soundcloud\.com)\/.+$/.test(text)) return reply(`*Es necesario un link válido de SoundCloud.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://soundcloud.com/...`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?(soundcloud\.com)\/.+$/.test(text)) {
+        return reply(`*Es necesario un link válido de SoundCloud.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://soundcloud.com/...`);
+    }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     try {
         const { SoundCloud } = require('scdl-core');
         await SoundCloud.connect();
         let r = await SoundCloud.download(text); // Usar el link proporcionado
+        const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
-        // Usar un buffer para almacenar los datos
-        const chunks = [];
-        r.on('data', (chunk) => {
-            chunks.push(chunk); // Almacena los datos en el array
-        });
+        // Crear un stream de escritura
+        const writeStream = fs.createWriteStream(filePath);
+        r.pipe(writeStream); // Piping el audio directamente al archivo
 
-        r.on('end', async () => {
+        writeStream.on('finish', async () => {
             try {
-                const buffer = Buffer.concat(chunks); // Combina todos los chunks en un solo buffer
-                const filePath = "audio.mp3"; // Nombre del archivo a guardar
-                
-                // Escribir el buffer en un archivo
-                fs.writeFileSync(filePath, buffer);
-
                 // Enviar el archivo
-                nyanBot2.sendMessage(m.chat, {
-                    audio: fs.readFileSync(filePath),
+                await nyanBot2.sendMessage(m.chat, {
+                    audio: fs.createReadStream(filePath),
                     mimetype: 'audio/mp3',
                     caption: '*Descarga completa! 🍽️*'
                 }, { quoted: m });
-
                 fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
             } catch (error) {
                 reply(`Error al enviar el audio:\n${error}`);
@@ -2036,6 +2030,13 @@ case 'scdl': {
             }
         });
 
+        writeStream.on('error', (error) => {
+            console.error('Error al guardar el archivo:', error);
+            nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+            stcReac('error', `_*❌ Ha ocurrido un error al guardar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+        });
+        
+        // Manejar el caso en que la descarga falla
         r.on('error', (error) => {
             console.error('Error al descargar el audio:', error);
             nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
