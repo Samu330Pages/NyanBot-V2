@@ -2009,7 +2009,7 @@ case 'scdl': {
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
         // Piping el audio directamente al archivo
-        r.pipe(fs.createWriteStream('audio.mp3'));
+        r.pipe(fs.writeFileSync('audio.mp3'));
 
         // Esperar a que el archivo se guarde completamente
         r.on('end', async () => {
