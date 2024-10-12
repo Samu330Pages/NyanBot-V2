@@ -2023,7 +2023,7 @@ case 'scdl': {
 
                 // Enviar el archivo
                 nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream(filePath),
+                    audio: fs.readFileSync(filePath),
                     mimetype: 'audio/mp3',
                     caption: '*Descarga completa! 🍽️*'
                 }, { quoted: m });
