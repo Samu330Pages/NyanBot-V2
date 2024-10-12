@@ -774,7 +774,48 @@ caption: texto}}}});
 
 //
 	    
-	    
+
+async function crearStickerPacks(stickers) {
+    const packs = [];
+    const maxStickersPorPaquete = 30;
+
+    for (let i = 0; i < stickers.length; i += maxStickersPorPaquete) {
+        const subArray = stickers.slice(i, i + maxStickersPorPaquete);
+        const pack = {
+            stickers: [],
+            pack: {
+                name: `Pack ${Math.floor(i / maxStickersPorPaquete) + 1}`,
+                author: 'Samu330'
+            }
+        };
+
+        for (const sticker of subArray) {
+            const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
+            const nombreImagen = `sticker_${Math.floor(i / maxStickersPorPaquete) + 1}_${sticker.index}.webp`;
+            const rutaImagen = path.join(__dirname, nombreImagen); // Ruta local
+
+            // Guardar la imagen localmente
+            await fs.promises.writeFile(rutaImagen, buffer);
+            pack.stickers.push({
+                image: rutaImagen, // Ruta local de la imagen
+                emojis: "😀" // Personaliza los emojis
+            });
+        }
+
+        packs.push(pack);
+
+        // Guardar cada paquete en un archivo .wastickers
+        const nombreArchivo = `sticker_pack_${Math.floor(i / maxStickersPorPaquete) + 1}.wastickers`;
+        await fs.promises.writeFile(nombreArchivo, JSON.stringify(pack, null, 2));
+        console.log(`Archivo guardado: ${nombreArchivo}`);
+
+        // Eliminar las imágenes después de empaquetar
+        for (const sticker of pack.stickers) {
+            await fs.promises.unlink(sticker.image); // Eliminar la imagen
+        }
+    }
+}
+		
 async function thumB(source) {
       let jimp = await read(file)
       let buff = await jimp
@@ -3129,6 +3170,12 @@ exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
 if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 })
+break
+
+case 'tele':
+let r = await Telesticker('https://t.me/addstickers/AnimatedPenalty');
+let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
+await crearStickerPacks(stickers);
 break
 
 case 'creador': case 'owner': case 'script': case 'code':
