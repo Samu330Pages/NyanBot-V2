@@ -2009,16 +2009,16 @@ case 'scdl': {
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
         // Piping el audio directamente al archivo
-        r.pipe(fs.createWriteStream(filePath));
+        r.pipe(fs.createWriteStream('audio.mp3'));
 
         // Esperar a que el archivo se guarde completamente
         r.on('end', async () => {
             try {
                 await nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream(filePath),
+                    audio: fs.createReadStream('audio.mp3'),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
-                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
+                fs.unlinkSync('audio.mp3'); // Eliminar el archivo después de enviarlo
             } catch (error) {
                 reply(`Error al enviar el audio:\n${error}`);
                 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
