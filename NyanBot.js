@@ -1999,54 +1999,71 @@ case 'ytmp4': case 'ytv': {
 }
 break
 
-case 'scdl': {
-    if (args.length < 1 || !/^https?:\/\/(www\.)?(soundcloud\.com)\/.+$/.test(text)) {
-        return reply(`*Es necesario un link válido de SoundCloud.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://soundcloud.com/...`);
-    }
+case 'apkdl': {
+    if (args.length < 1) return reply(`*Por favor, proporciona el nombre de la aplicación que deseas buscar.*\n_*Ejemplo de uso*_\n\n${prefix + command} whatsapp`);
+    const appName = args.join(' '); // Obtener el nombre de la aplicación a buscar
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    try {
-        const { SoundCloud } = require('scdl-core');
-        await SoundCloud.connect();
-        let r = await SoundCloud.download(text); // Usar el link proporcionado
-        const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
-        // Crear un stream de escritura
-        const writeStream = fs.createWriteStream(filePath);
-        r.pipe(writeStream); // Piping el audio directamente al archivo
+    const apk = require('apkmirror-client');
+    
+    apk.searchForApps(appName, (err, res) => {
+        if (err) {
+            console.error('Error al buscar la aplicación:', err);
+            return reply(`*Error al buscar la aplicación:* ${err.message}`);
+        }
 
-        writeStream.on('finish', async () => {
-            try {
-                // Enviar el archivo
-                await nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream(filePath),
-                    mimetype: 'audio/mp3',
-                    caption: '*Descarga completa! 🍽️*'
-                }, { quoted: m });
-                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
-            } catch (error) {
-                reply(`Error al enviar el audio:\n${error}`);
-                nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-                stcReac('error', `_*❌ Ha ocurrido un error al enviar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+        if (res.length === 0) {
+            return reply(`*No se encontraron aplicaciones para "${appName}".*`);
+        }
+
+        // Filtrar la aplicación que nos interesa
+        let appInfo = res[0]; // Puedes ajustar esto según tu lógica
+        reply(`*Información de la aplicación:*\n\nNombre: ${appInfo.app.name}\nDescripción: ${appInfo.app.description}\n\n*Buscando la última versión...*`);
+
+        apk.getAppPage(appInfo, (err, page) => {
+            if (err) {
+                console.error('Error al obtener la página de la aplicación:', err);
+                return reply(`*Error al obtener la página de la aplicación:* ${err.message}`);
             }
-        });
 
-        writeStream.on('error', (error) => {
-            console.error('Error al guardar el archivo:', error);
-            nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-            stcReac('error', `_*❌ Ha ocurrido un error al guardar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+            page.versions.filter(v => !v.beta)[0].loadRelease((err, release) => {
+                if (err) {
+                    console.error('Error al obtener la versión:', err);
+                    return reply(`*Error al obtener la versión de la aplicación:* ${err.message}`);
+                }
+
+                release.estimateBestCandidate('arm64').loadVariant((err, download) => {
+                    if (err) {
+                        console.error('Error al estimar el candidato:', err);
+                        return reply(`*Error al estimar el candidato para la descarga:* ${err.message}`);
+                    }
+
+                    download.downloadAPK((err, apkStream) => {
+                        if (err) {
+                            console.error('Error al descargar el APK:', err);
+                            return reply(`*Error al descargar el APK:* ${err.message}`);
+                        }
+
+                        const filePath = './' + appInfo.app.name.replace(/\s+/g, '_') + '.apk'; // Nombre del archivo APK
+                        apkStream.pipe(fs.createWriteStream(filePath)).on('close', async () => {
+                            try {
+                                await nyanBot2.sendMessage(m.chat, {
+                                    document: fs.createReadStream(filePath),
+                                    mimetype: 'application/vnd.android.package-archive',
+                                    caption: `*APK de ${appInfo.app.name} descargada con éxito! 🎉*`
+                                }, { quoted: m });
+
+                                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
+                            } catch (error) {
+                                console.error('Error al enviar el APK:', error);
+                                reply(`*Error al enviar el APK:* ${error.message}`);
+                            }
+                        });
+                    });
+                });
+            });
         });
-        
-        // Manejar el caso en que la descarga falla
-        r.on('error', (error) => {
-            console.error('Error al descargar el audio:', error);
-            nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-            stcReac('error', `_*❌ Ha ocurrido un error al descargar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
-        });
-    } catch (error) {
-        reply(`Error al procesar la solicitud:\n${error}`);
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
-    }
+    });
 }
 break
 
