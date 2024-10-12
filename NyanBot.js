@@ -762,9 +762,9 @@ nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.w
 }, {
 quoted: {
 key: {
-remoteJid: sender,
+remoteJid: m.chat,
 fromMe: false,
-id: `${ownername}`,
+id: `Samu330`,
 participant: sender
 },
 message: {
@@ -2015,7 +2015,7 @@ case 'scdl': {
         r.on('end', async () => {
             try {
                 nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream('audio.mp3'),
+                    audio: fs.readFileSync('audio.mp3'),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
                 fs.unlinkSync('audio.mp3'); // Eliminar el archivo después de enviarlo
