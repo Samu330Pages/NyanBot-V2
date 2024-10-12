@@ -2009,7 +2009,7 @@ case 'scdl': {
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
         r.pipe(fs.createWriteStream("audio.mp3")); // Sin comillas alrededor de writeStream
         await nyanBot2.sendMessage(m.chat, {
-                    audio: fs.readFileSync("audio.mp3"),
+                    audio: fs.createReadStream(fs.readFileSync("audio.mp3")),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
                 fs.unlinkSync("audio.mp3"); // Eliminar el archivo después de enviarlo
