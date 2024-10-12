@@ -2008,8 +2008,10 @@ case 'apkdl': {
     
     apk.searchForApps(appName, (err, res) => {
         if (err) {
-            console.error('Error al buscar la aplicación:', err);
-            return reply(`*Error al buscar la aplicación:* ${err.message}`);
+            // Convertir el buffer de error en cadena para ver el mensaje
+            const errorMessage = Buffer.isBuffer(err) ? err.toString() : err.message;
+            console.error('Error al buscar la aplicación:', errorMessage);
+            return reply(`*Error al buscar la aplicación:* ${errorMessage}`);
         }
 
         if (res.length === 0) {
@@ -2022,26 +2024,31 @@ case 'apkdl': {
 
         apk.getAppPage(appInfo, (err, page) => {
             if (err) {
-                console.error('Error al obtener la página de la aplicación:', err);
-                return reply(`*Error al obtener la página de la aplicación:* ${err.message}`);
+                // Manejo de error similar aquí
+                const errorMessage = Buffer.isBuffer(err) ? err.toString() : err.message;
+                console.error('Error al obtener la página de la aplicación:', errorMessage);
+                return reply(`*Error al obtener la página de la aplicación:* ${errorMessage}`);
             }
 
             page.versions.filter(v => !v.beta)[0].loadRelease((err, release) => {
                 if (err) {
-                    console.error('Error al obtener la versión:', err);
-                    return reply(`*Error al obtener la versión de la aplicación:* ${err.message}`);
+                    const errorMessage = Buffer.isBuffer(err) ? err.toString() : err.message;
+                    console.error('Error al obtener la versión:', errorMessage);
+                    return reply(`*Error al obtener la versión de la aplicación:* ${errorMessage}`);
                 }
 
                 release.estimateBestCandidate('arm64').loadVariant((err, download) => {
                     if (err) {
-                        console.error('Error al estimar el candidato:', err);
-                        return reply(`*Error al estimar el candidato para la descarga:* ${err.message}`);
+                        const errorMessage = Buffer.isBuffer(err) ? err.toString() : err.message;
+                        console.error('Error al estimar el candidato:', errorMessage);
+                        return reply(`*Error al estimar el candidato para la descarga:* ${errorMessage}`);
                     }
 
                     download.downloadAPK((err, apkStream) => {
                         if (err) {
-                            console.error('Error al descargar el APK:', err);
-                            return reply(`*Error al descargar el APK:* ${err.message}`);
+                            const errorMessage = Buffer.isBuffer(err) ? err.toString() : err.message;
+                            console.error('Error al descargar el APK:', errorMessage);
+                            return reply(`*Error al descargar el APK:* ${errorMessage}`);
                         }
 
                         const filePath = './' + appInfo.app.name.replace(/\s+/g, '_') + '.apk'; // Nombre del archivo APK
