@@ -2006,19 +2006,29 @@ case 'scdl': {
         const { SoundCloud } = require('scdl-core');
         await SoundCloud.connect();
         let r = await SoundCloud.download(text); // Usar el link proporcionado
-        const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
-        // Piping el audio directamente al archivo
-        r.pipe(fs.writeFileSync('audio.mp3'));
+        // Usar un buffer para almacenar los datos
+        const chunks = [];
+        r.on('data', (chunk) => {
+            chunks.push(chunk); // Almacena los datos en el array
+        });
 
-        // Esperar a que el archivo se guarde completamente
         r.on('end', async () => {
             try {
+                const buffer = Buffer.concat(chunks); // Combina todos los chunks en un solo buffer
+                const filePath = "audio.mp3"; // Nombre del archivo a guardar
+                
+                // Escribir el buffer en un archivo
+                fs.writeFileSync(filePath, buffer);
+
+                // Enviar el archivo
                 nyanBot2.sendMessage(m.chat, {
-                    audio: fs.readFileSync('audio.mp3'),
-                    mimetype: 'audio/mp3'
+                    audio: fs.createReadStream(filePath),
+                    mimetype: 'audio/mp3',
+                    caption: '*Descarga completa! 🍽️*'
                 }, { quoted: m });
-                fs.unlinkSync('audio.mp3'); // Eliminar el archivo después de enviarlo
+
+                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
             } catch (error) {
                 reply(`Error al enviar el audio:\n${error}`);
                 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
