@@ -2007,9 +2007,7 @@ case 'scdl': {
         await SoundCloud.connect();
         let r = await SoundCloud.download(text); // Usar el link proporcionado
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
-
-        const writeStream = fs.createWriteStream(filePath);
-        r.pipe(writeStream); // Sin comillas alrededor de writeStream
+        r.pipe(fs.createWriteStream("audio.mp3")); // Sin comillas alrededor de writeStream
 
         writeStream.on('finish', async () => {
             try {
