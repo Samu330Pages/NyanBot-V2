@@ -2007,12 +2007,30 @@ case 'scdl': {
         await SoundCloud.connect();
         let r = await SoundCloud.download(text); // Usar el link proporcionado
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
-        r.pipe(fs.createWriteStream("audio.mp3")); // Sin comillas alrededor de writeStream
-        await nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream(fs.readFileSync("audio.mp3")),
+
+        // Piping el audio directamente al archivo
+        r.pipe(fs.createWriteStream(filePath));
+
+        // Esperar a que el archivo se guarde completamente
+        r.on('end', async () => {
+            try {
+                await nyanBot2.sendMessage(m.chat, {
+                    audio: fs.createReadStream(filePath),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
-                fs.unlinkSync("audio.mp3"); // Eliminar el archivo después de enviarlo
+                fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
+            } catch (error) {
+                reply(`Error al enviar el audio:\n${error}`);
+                nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+                stcReac('error', `_*❌ Ha ocurrido un error al enviar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+            }
+        });
+
+        r.on('error', (error) => {
+            console.error('Error al descargar el audio:', error);
+            nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+            stcReac('error', `_*❌ Ha ocurrido un error al descargar el audio!*_\n*Intenta de nuevo por favor! 🙂*`);
+        });
     } catch (error) {
         reply(`Error al procesar la solicitud:\n${error}`);
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
