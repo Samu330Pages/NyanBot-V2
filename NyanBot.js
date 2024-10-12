@@ -2014,7 +2014,7 @@ case 'scdl': {
         // Esperar a que el archivo se guarde completamente
         r.on('end', async () => {
             try {
-                await nyanBot2.sendMessage(m.chat, {
+                nyanBot2.sendMessage(m.chat, {
                     audio: fs.createReadStream('audio.mp3'),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
