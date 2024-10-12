@@ -2008,13 +2008,13 @@ case 'scdl': {
         let r = await SoundCloud.download(text); // Usar el link proporcionado
         const filePath = "audio.mp3"; // Nombre del archivo a guardar
 
-        const writeStream = fs.createWriteStream(`${filePath}`);
-        r.pipe(`${writeStream}`);
+        const writeStream = fs.createWriteStream(filePath);
+        r.pipe(writeStream); // Sin comillas alrededor de writeStream
 
         writeStream.on('finish', async () => {
             try {
                 await nyanBot2.sendMessage(m.chat, {
-                    audio: fs.createReadStream(`${filePath}`),
+                    audio: fs.createReadStream(filePath),
                     mimetype: 'audio/mp3'
                 }, { quoted: m });
                 fs.unlinkSync(filePath); // Eliminar el archivo después de enviarlo
