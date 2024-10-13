@@ -775,45 +775,63 @@ caption: texto}}}});
 //
 	    
 
-async function crearStickerPacks(stickers) {
-    const packs = [];
-    const maxStickersPorPaquete = 30;
+async function crearStickerPack(stickers, linkTelegram, title, author) {
+    const directorioPack = `sticker_pack_${title.replace(/\s+/g, '_')}`;
+    await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
-    for (let i = 0; i < stickers.length; i += maxStickersPorPaquete) {
-        const subArray = stickers.slice(i, i + maxStickersPorPaquete);
-        const pack = {
-            stickers: [],
-            pack: {
-                name: `Pack ${Math.floor(i / maxStickersPorPaquete) + 1}`,
-                author: 'Samu330'
-            }
-        };
+    const info = {
+        link: linkTelegram,
+        name: title,
+        author: author,
+        thumbnail: "DMJPremiumStickers_1.webp", // Usar la primera imagen como miniatura
+        stickers: [],
+        info: `Created by https://t.me/tgtowabot. If you have any questions or suggestions, write me at telegram: @ed_asriyan`
+    };
 
-        for (const sticker of subArray) {
-            const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
-            const nombreImagen = `sticker_${Math.floor(i / maxStickersPorPaquete) + 1}_${sticker.index}.webp`;
-            const rutaImagen = path.join(__dirname, nombreImagen); // Ruta local
+    for (let i = 0; i < stickers.length; i++) {
+        const sticker = stickers[i];
+        const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
+        const nombreImagen = `DMJPremiumStickers_${i + 1}.webp`;
+        const rutaImagen = path.join(directorioPack, nombreImagen); // Ruta local
 
-            // Guardar la imagen localmente
-            await fs.promises.writeFile(rutaImagen, buffer);
-            pack.stickers.push({
-                image: rutaImagen, // Ruta local de la imagen
-                emojis: "😀" // Personaliza los emojis
-            });
-        }
-
-        packs.push(pack);
-
-        // Guardar cada paquete en un archivo .wastickers
-        const nombreArchivo = `sticker_pack_${Math.floor(i / maxStickersPorPaquete) + 1}.wastickers`;
-        await fs.promises.writeFile(nombreArchivo, JSON.stringify(pack, null, 2));
-        console.log(`Archivo guardado: ${nombreArchivo}`);
-
-        // Eliminar las imágenes después de empaquetar
-        for (const sticker of pack.stickers) {
-            await fs.promises.unlink(sticker.image); // Eliminar la imagen
-        }
+        // Guardar la imagen localmente
+        await fs.promises.writeFile(rutaImagen, buffer);
+        info.stickers.push({
+            file: nombreImagen,
+            emoji: "😀" // Personaliza los emojis
+        });
     }
+
+    // Guardar archivos de metadatos
+    await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), author);
+    await fs.promises.writeFile(path.join(directorioPack, 'info.json'), JSON.stringify(info, null, 2));
+    await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
+    await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
+
+    // Crear el archivo .wasticker
+    const wastickerFile = `${directorioPack}.wasticker`;
+    const writableStream = fs.createWriteStream(wastickerFile);
+
+    // Escribir todos los archivos en el archivo .wasticker
+    writableStream.write(`author.txt\n${author}\n`);
+    writableStream.write(`link.txt\n${linkTelegram}\n`);
+    writableStream.write(`title.txt\n${title}\n`);
+    writableStream.write(`info.json\n${JSON.stringify(info, null, 2)}\n`);
+
+    // Agregar las imágenes
+    for (const sticker of info.stickers) {
+        const imagePath = path.join(directorioPack, sticker.file);
+        const imageBuffer = await fs.promises.readFile(imagePath);
+        writableStream.write(`file:${sticker.file}\n`);
+        writableStream.write(imageBuffer);
+    }
+
+    writableStream.end();
+
+    // Limpiar el directorio temporal después de crear el archivo
+    await fs.promises.rmdir(directorioPack, { recursive: true });
+
+    console.log(`Archivo guardado: ${wastickerFile}`);
 }
 		
 async function thumB(source) {
@@ -3173,9 +3191,16 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 break
 
 case 'tele':
-let r = await Telesticker('https://t.me/addstickers/AnimatedPenalty');
+let r = await Telesticker('https://t.me/addstickers/AnimatedBasketball');
 let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
-await crearStickerPacks(stickers);
+const linkTelegram = 'https://t.me/addstickers/DMJPremium';
+const title = 'Unlocked - @DMJ_Stickers (part 3)';
+const author = '@tgtowabot';
+
+await crearStickerPack(stickers, linkTelegram, title, author);
+
+// Enviar el archivo por WhatsApp
+nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(`${title.replace(/\s+/g, '_')}.wasticker`), mimetype: 'application/octet-stream' });
 break
 
 case 'creador': case 'owner': case 'script': case 'code':
