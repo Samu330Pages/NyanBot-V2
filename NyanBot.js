@@ -778,17 +778,17 @@ caption: texto}}}});
 async function crearStickerPack(stickers, linkTelegram, title, author) {
     const stickersPorPaquete = 30; // Número máximo de stickers por paquete
     const totalPaquetes = Math.ceil(stickers.length / stickersPorPaquete);
-    const thumbnailPath = './Media/theme/aroPp.png';
+    const thumbnailPath = './Media/theme/aroPp.png'; // Ruta de la imagen del thumbnail
     
     for (let paquete = 0; paquete < totalPaquetes; paquete++) {
-        const nombreArchivo = `pack_${paquete + 1}.wastickers`;
+        const nombreArchivo = `pack_${paquete + 1}.wastickers`; // Nombre del archivo de paquete
         const directorioPack = `sticker_pack_${paquete + 1}`;
         await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
         const info = {
             link: linkTelegram,
-            name: `${global.packname}`,
-            author: `${global.author}`,
+            name: title, // Usar el nombre del paquete proporcionado
+            author: author, // Usar el autor proporcionado
             thumbnail: "unnamed.png", // Nombre del thumbnail
             stickers: [],
             info: `Creado por Samu330 con Nyanbot, bot de WhatsApp.`
@@ -812,10 +812,10 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
         }
 
         // Guardar archivos de metadatos
-        await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), `${global.author}`);
+        await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), author);
         await fs.promises.writeFile(path.join(directorioPack, 'info.json'), JSON.stringify(info, null, 2));
         await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
-        await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), `${global.packname}`);
+        await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
         
         // Copiar el thumbnail
         await fs.promises.copyFile(thumbnailPath, path.join(directorioPack, 'unnamed.png'));
@@ -3221,7 +3221,7 @@ let stickers = r.map((item) => ({ url: item.url })); // Extraer enlaces sin el �
 await crearStickerPack(stickers, text, global.packname, global.author);
 
 // Enviar el archivo por WhatsApp
-const nombreArchivoFinal = `pack.wastickers`;
+const nombreArchivoFinal = `pack_1.wastickers`; // Cambiar a pack_1 para el primer paquete
 nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', fileName: nombreArchivoFinal });
 break
 
