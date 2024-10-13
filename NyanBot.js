@@ -776,7 +776,7 @@ caption: texto}}}});
 	    
 
 async function crearStickerPack(stickers, linkTelegram, title, author) {
-    const nombreArchivo = 'pack.wasticker'; // Nombre específico del archivo
+    const nombreArchivo = 'pack.wastickers'; // Nombre específico del archivo con la extensión correcta
     const directorioPack = `sticker_pack_${title.replace(/\s+/g, '_')}`;
     await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
@@ -809,11 +809,11 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
     await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
     await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
 
-    // Crear el archivo .wasticker
+    // Crear el archivo .wastickers
     const wastickerFile = path.join(__dirname, nombreArchivo);
     const writableStream = fs.createWriteStream(wastickerFile);
 
-    // Escribir todos los archivos en el archivo .wasticker
+    // Escribir todos los archivos en el archivo .wastickers
     writableStream.write(`author.txt\n${author}\n`);
     writableStream.write(`link.txt\n${linkTelegram}\n`);
     writableStream.write(`title.txt\n${title}\n`);
@@ -3201,8 +3201,8 @@ const author = '@tgtowabot';
 await crearStickerPack(stickers, linkTelegram, title, author);
 
 // Enviar el archivo por WhatsApp
-const nombreArchivoFinal = 'pack.wasticker';
-nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', filename: nombreArchivoFinal });
+const nombreArchivoFinal = 'pack.wastickers';
+nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', fileName: nombreArchivoFinal });
 break
 
 case 'creador': case 'owner': case 'script': case 'code':
