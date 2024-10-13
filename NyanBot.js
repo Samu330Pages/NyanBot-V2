@@ -3198,7 +3198,7 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 break
 
 case 'tele':
-let r = await Telesticker('https://t.me/addstickers/DMJPremium');
+let r = await Telesticker('https://t.me/addstickers/AnimatedBasketball');
 let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
 const linkTelegram = 'https://t.me/addstickers/DMJPremium';
 const title = 'Unlocked - @DMJ_Stickers (part 3)';
