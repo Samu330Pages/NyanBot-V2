@@ -776,69 +776,87 @@ caption: texto}}}});
 	    
 
 async function crearStickerPack(stickers, linkTelegram, title, author) {
-    const nombreArchivo = 'pack.wastickers'; // Nombre específico del archivo
-    const directorioPack = `sticker_pack_${title.replace(/\s+/g, '_')}`;
-    await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
+    const stickersPorPaquete = 30; // Número máximo de stickers por paquete
+    const totalPaquetes = Math.ceil(stickers.length / stickersPorPaquete);
+    const thumbnailPath = './Media/theme/aroPp.png';
+    
+    for (let paquete = 0; paquete < totalPaquetes; paquete++) {
+        const nombreArchivo = `pack_${paquete + 1}.wastickers`;
+        const directorioPack = `sticker_pack_${paquete + 1}`;
+        await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
-    const info = {
-        link: linkTelegram,
-        name: title,
-        author: author,
-        thumbnail: "DMJPremiumStickers_1.webp", // Usar la primera imagen como miniatura
-        stickers: [],
-        info: `Created by https://t.me/tgtowabot. If you have any questions or suggestions, write me at telegram: @ed_asriyan`
-    };
+        const info = {
+            link: linkTelegram,
+            name: `${global.packname}`,
+            author: `${global.author}`,
+            thumbnail: "unnamed.png", // Nombre del thumbnail
+            stickers: [],
+            info: `Creado por Samu330 con Nyanbot, bot de WhatsApp.`
+        };
 
-    for (let i = 0; i < stickers.length; i++) {
-        const sticker = stickers[i];
-        const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
-        const nombreImagen = `DMJPremiumStickers_${i + 1}.webp`;
-        const rutaImagen = path.join(directorioPack, nombreImagen); // Ruta local
+        // Obtener los stickers para este paquete
+        const stickersDelPaquete = stickers.slice(paquete * stickersPorPaquete, (paquete + 1) * stickersPorPaquete);
 
-        // Guardar la imagen localmente
-        await fs.promises.writeFile(rutaImagen, buffer);
-        info.stickers.push({
-            file: nombreImagen,
-            emoji: "😀" // Personaliza los emojis
+        for (let i = 0; i < stickersDelPaquete.length; i++) {
+            const sticker = stickersDelPaquete[i];
+            const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
+            const nombreImagen = `Samu330_Sticker_${i + 1 + (paquete * stickersPorPaquete)}.webp`;
+            const rutaImagen = path.join(directorioPack, nombreImagen); // Ruta local
+
+            // Guardar la imagen localmente
+            await fs.promises.writeFile(rutaImagen, buffer);
+            info.stickers.push({
+                file: nombreImagen,
+                emoji: "😀" // Personaliza los emojis
+            });
+        }
+
+        // Guardar archivos de metadatos
+        await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), `${global.author}`);
+        await fs.promises.writeFile(path.join(directorioPack, 'info.json'), JSON.stringify(info, null, 2));
+        await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
+        await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), `${global.packname}`);
+        
+        // Copiar el thumbnail
+        await fs.promises.copyFile(thumbnailPath, path.join(directorioPack, 'unnamed.png'));
+
+        // Crear el archivo .wastickers utilizando archiver
+        const output = fs.createWriteStream(path.join(__dirname, nombreArchivo));
+        const archive = archiver('zip', { zlib: { level: 9 } }); // Usar compresión máxima
+
+        output.on('close', () => {
+            console.log(`Archivo guardado: ${nombreArchivo} (${archive.pointer()} total bytes)`);
         });
+
+        archive.on('error', (err) => {
+            throw err;
+        });
+
+        archive.pipe(output);
+
+        // Agregar los archivos de metadatos al archivo .wastickers
+        archive.file(path.join(directorioPack, 'author.txt'), { name: 'author.txt' });
+        archive.file(path.join(directorioPack, 'info.json'), { name: 'info.json' });
+        archive.file(path.join(directorioPack, 'link.txt'), { name: 'link.txt' });
+        archive.file(path.join(directorioPack, 'title.txt'), { name: 'title.txt' });
+        archive.file(path.join(directorioPack, 'unnamed.png'), { name: 'unnamed.png' });
+
+        // Agregar las imágenes
+        for (const sticker of info.stickers) {
+            const imagePath = path.join(directorioPack, sticker.file);
+            archive.file(imagePath, { name: sticker.file });
+        }
+
+        await archive.finalize();
+
+        // Limpiar el directorio temporal después de crear el archivo
+        await fs.promises.rmdir(directorioPack, { recursive: true });
+
+        // Notificar al usuario sobre el envío
+        if (totalPaquetes > 1) {
+            await sendMessage(m.chat, `Se encontraron ${stickers.length} stickers. Enviando paquete ${paquete + 1} de ${totalPaquetes}...`);
+        }
     }
-
-    // Guardar archivos de metadatos
-    await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), author);
-    await fs.promises.writeFile(path.join(directorioPack, 'info.json'), JSON.stringify(info, null, 2));
-    await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
-    await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
-
-    // Crear el archivo .wastickers utilizando archiver
-    const output = fs.createWriteStream(path.join(__dirname, nombreArchivo));
-    const archive = archiver('zip', { zlib: { level: 9 } }); // Usar compresión máxima
-
-    output.on('close', () => {
-        console.log(`Archivo guardado: ${nombreArchivo} (${archive.pointer()} total bytes)`);
-    });
-
-    archive.on('error', (err) => {
-        throw err;
-    });
-
-    archive.pipe(output);
-
-    // Agregar los archivos de metadatos al archivo .wastickers
-    archive.file(path.join(directorioPack, 'author.txt'), { name: 'author.txt' });
-    archive.file(path.join(directorioPack, 'info.json'), { name: 'info.json' });
-    archive.file(path.join(directorioPack, 'link.txt'), { name: 'link.txt' });
-    archive.file(path.join(directorioPack, 'title.txt'), { name: 'title.txt' });
-
-    // Agregar las imágenes
-    for (const sticker of info.stickers) {
-        const imagePath = path.join(directorioPack, sticker.file);
-        archive.file(imagePath, { name: sticker.file });
-    }
-
-    await archive.finalize();
-
-    // Limpiar el directorio temporal después de crear el archivo
-    await fs.promises.rmdir(directorioPack, { recursive: true });
 }
 		
 async function thumB(source) {
@@ -3198,16 +3216,13 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 break
 
 case 'tele':
-let r = await Telesticker('https://t.me/addstickers/AnimatedBasketball');
-let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
-const linkTelegram = 'https://t.me/addstickers/DMJPremium';
-const title = 'Unlocked - @DMJ_Stickers (part 3)';
-const author = '@tgtowabot';
-
-await crearStickerPack(stickers, linkTelegram, title, author);
+let r = await Telesticker(text);
+let stickers = r.map((item) => ({ url: item.url })); // Extraer enlaces sin el índice
+const linkTelegram = 'https://t.me/addstickers/DMJPremium'; // Este es el link que se usará
+await crearStickerPack(stickers, linkTelegram, global.packname, global.author);
 
 // Enviar el archivo por WhatsApp
-const nombreArchivoFinal = 'pack.wastickers';
+const nombreArchivoFinal = `pack.wastickers`;
 nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', fileName: nombreArchivoFinal });
 break
 
