@@ -776,7 +776,7 @@ caption: texto}}}});
 	    
 
 async function crearStickerPack(stickers, linkTelegram, title, author) {
-    const nombreArchivo = 'pack.wastickers'; // Nombre específico del archivo con la extensión correcta
+    const nombreArchivo = 'pack.wastickers'; // Nombre específico del archivo
     const directorioPack = `sticker_pack_${title.replace(/\s+/g, '_')}`;
     await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
@@ -809,30 +809,36 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
     await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
     await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
 
-    // Crear el archivo .wastickers
-    const wastickerFile = path.join(__dirname, nombreArchivo);
-    const writableStream = fs.createWriteStream(wastickerFile);
+    // Crear el archivo .wastickers utilizando archiver
+    const output = fs.createWriteStream(path.join(__dirname, nombreArchivo));
+    const archive = archiver('zip', { zlib: { level: 9 } }); // Usar compresión máxima
 
-    // Escribir todos los archivos en el archivo .wastickers
-    writableStream.write(`author.txt\n${author}\n`);
-    writableStream.write(`link.txt\n${linkTelegram}\n`);
-    writableStream.write(`title.txt\n${title}\n`);
-    writableStream.write(`info.json\n${JSON.stringify(info, null, 2)}\n`);
+    output.on('close', () => {
+        console.log(`Archivo guardado: ${nombreArchivo} (${archive.pointer()} total bytes)`);
+    });
+
+    archive.on('error', (err) => {
+        throw err;
+    });
+
+    archive.pipe(output);
+
+    // Agregar los archivos de metadatos al archivo .wastickers
+    archive.file(path.join(directorioPack, 'author.txt'), { name: 'author.txt' });
+    archive.file(path.join(directorioPack, 'info.json'), { name: 'info.json' });
+    archive.file(path.join(directorioPack, 'link.txt'), { name: 'link.txt' });
+    archive.file(path.join(directorioPack, 'title.txt'), { name: 'title.txt' });
 
     // Agregar las imágenes
     for (const sticker of info.stickers) {
         const imagePath = path.join(directorioPack, sticker.file);
-        const imageBuffer = await fs.promises.readFile(imagePath);
-        writableStream.write(`file:${sticker.file}\n`); // Indicar el nombre del archivo de imagen
-        writableStream.write(imageBuffer); // Escribir el buffer de la imagen
+        archive.file(imagePath, { name: sticker.file });
     }
 
-    writableStream.end();
+    await archive.finalize();
 
     // Limpiar el directorio temporal después de crear el archivo
     await fs.promises.rmdir(directorioPack, { recursive: true });
-
-    console.log(`Archivo guardado: ${wastickerFile}`);
 }
 		
 async function thumB(source) {
@@ -3192,7 +3198,7 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 break
 
 case 'tele':
-let r = await Telesticker('https://t.me/addstickers/AnimatedBasketball');
+let r = await Telesticker('https://t.me/addstickers/DMJPremium');
 let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
 const linkTelegram = 'https://t.me/addstickers/DMJPremium';
 const title = 'Unlocked - @DMJ_Stickers (part 3)';
