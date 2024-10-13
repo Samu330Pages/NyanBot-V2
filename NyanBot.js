@@ -776,7 +776,7 @@ caption: texto}}}});
 	    
 
 async function crearStickerPack(stickers, linkTelegram, title, author) {
-    const nombreArchivo = `${title.replace(/\s+/g, '_')}.wasticker`; // Nombre del archivo con extensión
+    const nombreArchivo = 'pack.wasticker'; // Nombre específico del archivo
     const directorioPack = `sticker_pack_${title.replace(/\s+/g, '_')}`;
     await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
 
@@ -823,8 +823,8 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
     for (const sticker of info.stickers) {
         const imagePath = path.join(directorioPack, sticker.file);
         const imageBuffer = await fs.promises.readFile(imagePath);
-        writableStream.write(`file:${sticker.file}\n`);
-        writableStream.write(imageBuffer);
+        writableStream.write(`file:${sticker.file}\n`); // Indicar el nombre del archivo de imagen
+        writableStream.write(imageBuffer); // Escribir el buffer de la imagen
     }
 
     writableStream.end();
@@ -3192,7 +3192,7 @@ if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 break
 
 case 'tele':
-let r = await Telesticker('https://t.me/addstickers/DMJPremium');
+let r = await Telesticker('https://t.me/addstickers/AnimatedBasketball');
 let stickers = r.map((item, index) => ({ url: item.url, index })); // Extraer enlaces y mantener el índice
 const linkTelegram = 'https://t.me/addstickers/DMJPremium';
 const title = 'Unlocked - @DMJ_Stickers (part 3)';
@@ -3201,7 +3201,7 @@ const author = '@tgtowabot';
 await crearStickerPack(stickers, linkTelegram, title, author);
 
 // Enviar el archivo por WhatsApp
-const nombreArchivoFinal = `${title.replace(/\s+/g, '_')}.wasticker`;
+const nombreArchivoFinal = 'pack.wasticker';
 nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', filename: nombreArchivoFinal });
 break
 
