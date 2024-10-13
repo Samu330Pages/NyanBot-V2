@@ -854,7 +854,7 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
 
         // Notificar al usuario sobre el envío
         if (totalPaquetes > 1) {
-            await sendMessage(m.chat, `Se encontraron ${stickers.length} stickers. Enviando paquete ${paquete + 1} de ${totalPaquetes}...`);
+            await nyanBot2.sendMessage(m.chat, `Se encontraron ${stickers.length} stickers. Enviando paquete ${paquete + 1} de ${totalPaquetes}...`);
         }
     }
 }
