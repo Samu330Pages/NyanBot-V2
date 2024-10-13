@@ -3218,8 +3218,7 @@ break
 case 'tele':
 let r = await Telesticker(text);
 let stickers = r.map((item) => ({ url: item.url })); // Extraer enlaces sin el índice
-const linkTelegram = 'https://t.me/addstickers/DMJPremium'; // Este es el link que se usará
-await crearStickerPack(stickers, linkTelegram, global.packname, global.author);
+await crearStickerPack(stickers, text, global.packname, global.author);
 
 // Enviar el archivo por WhatsApp
 const nombreArchivoFinal = `pack.wastickers`;
