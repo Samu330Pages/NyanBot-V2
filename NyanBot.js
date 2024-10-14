@@ -3228,15 +3228,18 @@ break
 case 'creador': case 'owner': case 'script': case 'code':
 var order = generateWAMessageFromContent(from, proto.Message.fromObject({
 "orderMessage": {
-"orderId": "876118931283642",
+"orderId": "1219264465945127",
 "thumbnail": fs.readFileSync('./Media/theme/NyanBot.jpg'),
-"itemCount": 1999,
-"status": "INQUIRY",
-"surface": "CATALOG",
-"message": `${date}`,
-"orderTitle": " TEST ", 
+"itemCount": 1,
+"status": "1",
+"surface": "1",
+"messageVersion": 1,
+"message": `*Hola, puedes encontrar al creador en el pedido, la información sobre el SourceCode la encuentras en el catálogo dentro del pedido 😁*`,
+"orderTitle": " NyanBotV2", 
 "sellerJid": "5219984907794@s.whatsapp.net",
-"token": "AR6nb+WgP57s527UP6K9g5qGgtwRhRgS1yCKuY3PKdXq3Q=="
+"totalCurrencyCode": 'MXN',
+"token": "AR6Ng13K53KjBI5JQ2NS4l/E+ExOHvZQe3H0YcFbCeqruA==",
+"sender": sender
 }
 }), { userJid: from, quoted:m})
 nyanBot2.relayMessage(m.chat, order.message, { messageId: order.key.id })
