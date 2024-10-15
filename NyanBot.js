@@ -760,10 +760,11 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
 
 //stickers actions:
 async function stcReac(tipo, texto) {
-nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.webp`),
-isAiSticker: true}, {
+nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.webp`)
+}, {
 quoted: {
 key: {
+isAiSticker: true,
 remoteJid: m.chat,
 fromMe: false,
 id: `Samu330`,
