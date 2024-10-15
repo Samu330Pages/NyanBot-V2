@@ -2314,7 +2314,7 @@ try {
 let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-stcReac('peso', `*Esperé porfavor, se esta enviando el APK\n${apkInfo.data.name}! 😁*`)
+stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
 await nyanBot2.sendMessage(m.chat, {
 document: {url: `${apkInfo.data.dllink}`},
 fileName: `${apkInfo.data.name}.apk`,
@@ -2327,16 +2327,15 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 > ${botname}`,
 jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
 contextInfo: {
-mentionedJid: [target],
-"externalAdReply": {
-"showAdAttribution": true,
-"containsAutoReply": true,
-"title": `Click here 👉🏻🟢`,
-"body": `${ownername}`,
-"previewType": "PHOTO",
-"thumbnailUrl": ``,
-"thumbnail": fetchBuffer(`${apkInfo.data.icon}`),
-"sourceUrl": `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
+externalAdReply: {
+showAdAttribution: true,
+containsAutoReply: true,
+title: `Click here 👉🏻🟢`,
+body: `${ownername}`,
+previewType: "PHOTO",
+thumbnailUrl: ``,
+thumbnail: fetchBuffer(`${apkInfo.data.icon}`),
+sourceUrl: `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
 }
 }
 }, { quoted: m })
