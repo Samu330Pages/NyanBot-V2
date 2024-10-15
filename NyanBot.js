@@ -2147,11 +2147,9 @@ case 'facebook': case 'fb': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|fb\.watch)\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....\n\n*Asegúrate de que no se encuentren espacios entre el prefijo y el comando!* 🟠`);
-    let fbLink = budy.replace(prefix, '').trim().split(/ +/).shift().toLowerCase();
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`${fbLink}`)
     try {
-        let res = await fbdl(fbLink);
+        let res = await fbdl(text);
         let result = res.data;
         let data;
         if (data = result.find(i => i.resolution === "720p (HD)")) {
