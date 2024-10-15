@@ -2326,7 +2326,7 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
 > ${botname}`,
-jpegThumbnail: `${apkInfo.data.icon}`,
+jpegThumbnail: await fetchBuffer(apkInfo.data.icon),
 contextInfo: {
 externalAdReply: {
 showAdAttribution: true,
