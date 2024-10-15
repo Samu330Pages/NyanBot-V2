@@ -2314,6 +2314,7 @@ try {
 let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+let icono = await nyanBot2.downloadAndSaveMediaMessage(`${apkInfo.data.icon}`, 'iconApk')
 stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
 await nyanBot2.sendMessage(m.chat, {
 document: {url: `${apkInfo.data.dllink}`},
