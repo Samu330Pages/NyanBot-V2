@@ -2327,16 +2327,18 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 > ${botname}`,
 jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
 contextInfo: {
-externalAdReply: {
-renderLargerThumbnail: true,
-mediaType: 1,
-title: `${apkInfo.data.name}`,
-body: `Click here! 👉🏻🟢`,
-thumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
-jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
-previewType: "NONE",
-sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
-}}
+mentionedJid: [target],
+"externalAdReply": {
+"showAdAttribution": true,
+"containsAutoReply": true,
+"title": `Click here 👉🏻🟢`,
+"body": `${ownername}`,
+"previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": fetchBuffer(`${apkInfo.data.icon}`),
+"sourceUrl": `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
+}
+}
 }, { quoted: m })
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 } catch (e) {
