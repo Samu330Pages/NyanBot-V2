@@ -347,7 +347,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
 	const isCmd = body.startsWith(prefix, '')
         const isCmd2 = body.startsWith(prefix)
-        const command = isCmd ? body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase() : ""
 	const command = isCmd ? body.replace(/^\.\s*/, '.').split(' ')[0].toLowerCase() : "";
         const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
