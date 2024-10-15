@@ -213,7 +213,7 @@ const categories = {
         { command: 'ytmp4', description: '_*URL*_' },
         { command: 'tiktok', description: '_*URL*_' },
         { command: 'tt', description: '_*URL*_' },
-	{ command: 'tweter', description: '' },
+	{ command: 'twiter', description: '' },
         { command: 'facebook', description: '_*URL*_' },
         { command: 'fb', description: '_*URL*_' },
         { command: 'instagram', description: '_*URL*_' },
@@ -2237,7 +2237,7 @@ try {
 let xInfo = await axios.get(`https://api.dorratz.com/xdown?url=${text}`)
 if (!xInfo.data) return stcReac('error', `_*No sé encontró enlace de descarga*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-let xCap = `${forma1}X / TWEETER DL 💙${forma1}\n
+let xCap = `${forma1}X / TWITTER DL 💙${forma1}\n
 👍🏻 *Likes:* ${formatNumber(xInfo.data.likes)}
 💬 *Respuestas:* ${formatNumber(xInfo.data.replies)}
 🔃 *Retweets:* ${formatNumber(xInfo.data.retweets)}
