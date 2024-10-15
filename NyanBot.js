@@ -355,7 +355,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const botNumber = await nyanBot2.decodeJid(nyanBot2.user.id)
         const itsMe = m.sender == botNumber ? true : false
         const sender = m.sender
-        const text = body.startsWith(prefix) ? body.replace(/^\.\s*([a-zA-Z]+)/, '').trim() : body.trim()
+        const text = body.replace(/^\.\s*([a-zA-Z]+)/, '').trim()
         const from = m.key.remoteJid
         const fatkuns = (m.quoted || m)
         const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
