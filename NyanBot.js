@@ -2251,7 +2251,7 @@ caption: xCap
 }, {quoted: m})
 } else {
 await nyanBot2.sendMessage(m.chat, {
-image: {url: xInfo.data.media.url},
+image: {url: xInfo.data.media[0].url},
 caption: xCap
 }, {quoted: m})
 }
