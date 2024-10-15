@@ -2245,7 +2245,7 @@ let xCap = `${forma1}X / TWEETER DL 💙${forma1}\n
 🔎 *Nombré de usuario:* ${xInfo.data.authorUsername}\n`
 if (xInfo.data.media[0].type === 'video') {
 await nyanBot2.sendMessage(m.chat, {
-video: {url: xInfo.data.media.url},
+video: {url: xInfo.data.media[0].url},
 mimetype: 'video/mp4',
 caption: xCap
 }, {quoted: m})
