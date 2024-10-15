@@ -2325,7 +2325,7 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
 > ${botname}`,
-jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
+jpegThumbnail: await fetchBuffer(apkInfo.data.icon),
 contextInfo: {
 externalAdReply: {
 showAdAttribution: true,
@@ -2334,7 +2334,7 @@ title: `Click here 👉🏻🟢`,
 body: `${ownername}`,
 previewType: "PHOTO",
 thumbnailUrl: ``,
-thumbnail: fetchBuffer(`${apkInfo.data.icon}`),
+thumbnail: fetchBuffer(apkInfo.data.icon),
 sourceUrl: `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
 }
 }
