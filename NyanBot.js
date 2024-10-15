@@ -218,7 +218,8 @@ const categories = {
         { command: 'instagram', description: '_*URL*_' },
         { command: 'ig', description: '_*URL*_' },
         { command: 'mediafire', description: '_*URL*_' },
-	{ command: 'gdrive', description: '_*URL*_' }
+	{ command: 'gdrive', description: '_*URL*_' },
+	{ command: 'apk', description: '' }
     ],
     "🧠 Ia": [
 	{ command: 'bard', description: '' },
@@ -2313,7 +2314,7 @@ try {
 let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-stcReac('peso', `*Esperé porfavor, se esta enviando el APK ${apkInfo.data.name}! 😁*`)
+stcReac('peso', `*Esperé porfavor, se esta enviando el APK\n${apkInfo.data.name}! 😁*`)
 await nyanBot2.sendMessage(m.chat, {
 document: {url: `${apkInfo.data.dllink}`},
 fileName: `${apkInfo.data.name}.apk`,
@@ -2324,8 +2325,18 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
 > ${botname}`,
+jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
+contextInfo: {
+externalAdReply: {
+renderLargerThumbnail: true,
+mediaType: 1,
+title: `${apkInfo.data.name}`,
+body: `Click here! 👉🏻🟢`,
 thumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
-jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`)
+jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
+previewType: "NONE",
+sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
+}}
 }, { quoted: m })
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 } catch (e) {
