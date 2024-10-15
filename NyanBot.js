@@ -2149,6 +2149,7 @@ case 'facebook': case 'fb': {
     if (args.length < 1 || !/^(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|fb\.watch)\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(text)) return reply(`*Es necesario un link válido de Facebook.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://facebook.com/....\n\n*Asegúrate de que no se encuentren espacios entre el prefijo y el comando!* 🟠`);
     let fbLink = text.replace(prefix, '').trim().split(/ +/).shift().toLowerCase();
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply(fbLink)
     try {
         let res = await fbdl(fbLink);
         let result = res.data;
