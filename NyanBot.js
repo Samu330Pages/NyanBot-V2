@@ -2243,7 +2243,7 @@ let xCap = `${forma1}X / TWEETER DL 💙${forma1}\n
 🔃 *Retweets:* ${formatNumber(xInfo.data.retweets)}
 👤 *Autor:* ${xInfo.data.authorName}
 🔎 *Nombré de usuario:* ${xInfo.data.authorUsername}\n`
-if (xInfo.data.media.type === 'video') {
+if (xInfo.data.media[0].type === 'video') {
 await nyanBot2.sendMessage(m.chat, {
 video: {url: xInfo.data.media.url},
 mimetype: 'video/mp4',
