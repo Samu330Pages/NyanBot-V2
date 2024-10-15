@@ -761,7 +761,7 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
 //stickers actions:
 async function stcReac(tipo, texto) {
 nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.webp`),
-}, {
+isAiSticker: true}, {
 quoted: {
 key: {
 remoteJid: m.chat,
@@ -3942,7 +3942,7 @@ if (!command) return
                     }
 		    db.data.users[sender].limit += puntos
                     let amount1000 = puntos * 1000;
-                    nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/bolo/${totalBolo[boloStickers]}.webp`), isAiSticker: true}, { quoted: {
+                    nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/bolo/${totalBolo[boloStickers]}.webp`)}, { quoted: {
                         key: {
                             remoteJid: '0@s.whatsapp.net',
                             fromMe: false,
