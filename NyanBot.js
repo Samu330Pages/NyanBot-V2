@@ -2309,8 +2309,8 @@ break
 
 case 'apk':
 if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix+command} pubg`)
-let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 try {
+let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 stcReac('peso', `*Esperé porfavor, se esta enviando el APK ${apkInfo.data.name}! 😁*`)
@@ -2324,12 +2324,13 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
 > ${botname}`,
+thumbnail: await fetchBuffer(`${apkInfo.data.icon}`),
 jpegThumbnail: await fetchBuffer(`${apkInfo.data.icon}`)
 }, { quoted: m })
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 } catch (e) {
 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-reply(`*Ocurrió un error 😞*\n${e}`)
+stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*')
 }
 break
 
