@@ -2350,7 +2350,7 @@ let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data.name) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 let icono = await reSize(apkInfo.data.icon, 200, 200)
-stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
+await stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
 await nyanBot2.sendMessage(m.chat, {
 document: {url: `${apkInfo.data.dllink}`},
 fileName: `${apkInfo.data.name}.apk`,
@@ -2361,7 +2361,7 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
 > ${botname}`,
-//jpegThumbnail: await fetchBuffer(apkInfo.data.icon),
+jpegThumbnail: await fetchBuffer(apkInfo.data.icon),
 contextInfo: {
 externalAdReply: {
 showAdAttribution: true,
