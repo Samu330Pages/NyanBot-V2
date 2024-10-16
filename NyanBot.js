@@ -3820,8 +3820,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (isCmd && budy.startsWith('.')) {
-if (!command) return
+if (isCmd && body.startsWith('.')) {
+if (!text) return
     const allCommands = Object.values(categories)
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
@@ -3842,7 +3842,7 @@ if (!command) return
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: `✏️ ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
-                id: `.${item.availableCommand} ${text}` // Aquí se pone el comando corregido
+                id: `${item.availableCommand} ${text}` // Aquí se pone el comando corregido
             }),
         }));
 
