@@ -764,7 +764,6 @@ nyanBot2.sendMessage(from, { sticker: fs.readFileSync(`./Media/sticker/${tipo}.w
 }, {
 quoted: {
 key: {
-isAiSticker: true,
 remoteJid: m.chat,
 fromMe: false,
 id: `Samu330`,
