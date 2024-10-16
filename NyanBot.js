@@ -2347,7 +2347,7 @@ if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comand
 if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix+command} pubg`)
 try {
 let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
-if (!apkInfo.data) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
+if (!apkInfo.data.name) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 let icono = await reSize(apkInfo.data.icon, 200, 200)
 stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
