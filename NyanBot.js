@@ -1891,7 +1891,7 @@ break
 
 case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
     if (!text || isUrl(text)) {
-        return reply(`*Por favor, solo proporciona el nombre de la playlist, no incluyas links. Ejemplo:*\n\n${prefix + command} _*nombre de la playlist*_`);
+        return reply(`*Por favor, solo proporciona el nombre de la playlist, no incluyas links. Ejemplo:*\n\n${command} _*nombre de la playlist*_`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     stcReac('lupa', '_*Generando Playlist...*_ 📃')
@@ -1963,7 +1963,7 @@ case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
 break
 			
 case 'play': {
-if (!text) return reply(`Ejemplo: ${prefix + command} piel canela`)
+if (!text) return reply(`Ejemplo: ${command} piel canela`)
 if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
 let playId;
 playId = reactionLoad(m.chat, m.key);
@@ -3820,8 +3820,8 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 	break
 
             default:
-if (isCmd && body.startsWith('.')) {
-if (!text) return
+if (isCmd && budy.startsWith('.')) {
+if (!command) return
     const allCommands = Object.values(categories)
         .flat()
         .map(cmdObj => cmdObj.command.toLowerCase());
@@ -3842,7 +3842,7 @@ if (!text) return
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: `✏️ ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
-                id: `${item.availableCommand} ${text}` // Aquí se pone el comando corregido
+                id: `.${item.availableCommand} ${text}` // Aquí se pone el comando corregido
             }),
         }));
 
