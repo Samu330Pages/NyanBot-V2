@@ -2043,6 +2043,7 @@ case 'yta': {
         }
 
         const audioBuffer = await fetchBuffer(r.videoDownloadLink);
+	let audioC = await toAudio(audioBuffer, 'mp4')
 	//let thm = await reSize(r.thumbnail, 200, 200)
         /*await nyanBot2.sendMessage(m.chat, {
             document: {url: r.audioDownloadLink},
@@ -2053,7 +2054,7 @@ case 'yta': {
         }, { quoted: m });*/
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: audioBuffer,
+            audio: audioC,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`
         }, { quoted: m });
