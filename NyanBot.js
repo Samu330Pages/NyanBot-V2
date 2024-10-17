@@ -779,7 +779,7 @@ caption: texto}}}});
 
 function extractVideoId(url) {
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = url.match(regex);
+    const matches = `${url.match(regex)}`;
     return matches ? matches[1] : null;
 }
 
@@ -2029,7 +2029,7 @@ case 'yta': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const videoId = extractVideoId(args[0]); // Función para extraer el ID del video de la URL
+    const videoId = extractVideoId(text); // Función para extraer el ID del video de la URL
     let i = new Rapi();
     
     try {
