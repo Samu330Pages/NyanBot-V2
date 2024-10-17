@@ -2042,7 +2042,7 @@ case 'yta': {
             throw new Error("No se pudo obtener el enlace de descarga de audio.");
         }
 
-        const audioBuffer = await fetchBuffer(r.audioDownloadLink);
+        const audioBuffer = await fetchBuffer(r.videoDownloadLink);
 	//let thm = await reSize(r.thumbnail, 200, 200)
         /*await nyanBot2.sendMessage(m.chat, {
             document: {url: r.audioDownloadLink},
@@ -2053,7 +2053,7 @@ case 'yta': {
         }, { quoted: m });*/
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: {url: r.audioDownloadLink},
+            audio: audioBuffer,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`
         }, { quoted: m });
