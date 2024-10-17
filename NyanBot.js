@@ -775,7 +775,13 @@ caption: texto}}}});
 }
 
 //
-	    
+
+
+function extractVideoId(url) {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : null;
+}
 
 async function crearStickerPack(stickers, linkTelegram, title, author) {
     const stickersPorPaquete = 30; // Número máximo de stickers por paquete
@@ -2014,40 +2020,58 @@ reactionOk(m.chat, m.key, playId);
 }
 break
 
-case 'ytmp3': case 'yta': {
+case 'ytmp3':
+case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    if (db.data.users[sender].limit < 30) return reply(*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_);
+    if (args.length < 1) return reply(*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...);
+    
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+    reply(*Esperé un momento, se está procesando su solicitud...* 😙);
 
+    const videoId = extractVideoId(text); // Función para extraer el ID del video de la URL
+    let i = new Rapi();
+    
     try {
-        const res = await fg.yta(text);
+        let r = await i.fetchVideoData(videoId);
 
-        const audioBuffer = await fetchBuffer(res.dl_url);
+        // Verificar que la respuesta tenga los enlaces de descarga
+        if (!r.audioDownloadLink) {
+            throw new Error("No se pudo obtener el enlace de descarga de audio.");
+        }
+
+        const audioBuffer = await fetchBuffer(r.audioDownloadLink); // Obtener el buffer del audio
+
         await nyanBot2.sendMessage(m.chat, {
             document: audioBuffer,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${res.title}\n- *Peso:* ${res.size}\n- *Calidad:* ${res.quality}`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}`,
             mimetype: "audio/mpeg",
-            fileName: `${res.title}.mp3`,
-            jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
+            fileName: `${r.title}.mp3`,
+            jpegThumbnail: await fetchBuffer(r.thumbnail) // Usar el thumbnail del video
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
             audio: audioBuffer,
             mimetype: "audio/mpeg",
-            fileName: `${res.title}.mp3`
+            fileName: `${r.title}.mp3`
         }, { quoted: m });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-	stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
 
     db.data.users[sender].limit -= 30;
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
-break
+break;
+
+// Función para extraer el ID del video de la URL
+function extractVideoId(url) {
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : null;
+}
 
 case 'ytmp4': case 'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
