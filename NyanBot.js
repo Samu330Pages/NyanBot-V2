@@ -776,13 +776,6 @@ caption: texto}}}});
 
 //
 
-
-function extractVideoId(url) {
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = `${url.match(regex)}`;
-    return matches ? matches[1] : null;
-}
-
 async function crearStickerPack(stickers, linkTelegram, title, author) {
     const stickersPorPaquete = 30; // Número máximo de stickers por paquete
     const totalPaquetes = Math.ceil(stickers.length / stickersPorPaquete);
@@ -2025,25 +2018,38 @@ case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    
+
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const videoId = extractVideoId(text); // Función para extraer el ID del video de la URL
+    // Extraer el ID del video de la URL proporcionada
+    const url = text;
+    if (typeof url !== 'string') {
+        return reply(`*La URL proporcionada no es válida.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    }
+
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = url.match(regex);
+    const videoId = matches ? matches[1] : null; // Extraer el ID
+
+    if (!videoId) {
+        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    }
+
     let i = new Rapi();
-    
+
     try {
         let r = await i.fetchVideoData(videoId);
-	reply(r)
+
         // Verificar que la respuesta tenga los enlaces de descarga
         if (!r.audioDownloadLink) {
             throw new Error("No se pudo obtener el enlace de descarga de audio.");
         }
 
-        const audioBuffer = await fetchBuffer(r.audioDownloadLink); // Obtener el buffer del audio
+       // const audioBuffer = await fetchBuffer(r.audioDownloadLink); // Obtener el buffer del audio
 
         await nyanBot2.sendMessage(m.chat, {
-            document: audioBuffer,
+            document: {url: r.audioDownloadLink},
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
@@ -2051,7 +2057,7 @@ case 'yta': {
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: audioBuffer,
+            audio: {url: r.audioDownloadLink},
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`
         }, { quoted: m });
@@ -2064,7 +2070,7 @@ case 'yta': {
     db.data.users[sender].limit -= 30;
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
-break;
+break
 
 // Función para extraer el ID del video de la URL
 function extractVideoId(url) {
