@@ -2034,7 +2034,7 @@ case 'yta': {
     
     try {
         let r = await i.fetchVideoData(videoId);
-
+	reply(r)
         // Verificar que la respuesta tenga los enlaces de descarga
         if (!r.audioDownloadLink) {
             throw new Error("No se pudo obtener el enlace de descarga de audio.");
