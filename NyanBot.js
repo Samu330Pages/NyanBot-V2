@@ -2043,14 +2043,14 @@ case 'yta': {
         }
 
         const audioBuffer = await fetchBuffer(r.audioDownloadLink);
-	let thm = await reSize(r.thumbnail, 200, 200)
-        await nyanBot2.sendMessage(m.chat, {
+	//let thm = await reSize(r.thumbnail, 200, 200)
+        /*await nyanBot2.sendMessage(m.chat, {
             document: {url: r.audioDownloadLink},
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
             jpegThumbnail: thm
-        }, { quoted: m });
+        }, { quoted: m });*/
 
         await nyanBot2.sendMessage(m.chat, {
             audio: {url: r.audioDownloadLink},
