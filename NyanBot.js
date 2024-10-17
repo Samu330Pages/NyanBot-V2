@@ -2029,7 +2029,7 @@ case 'yta': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const videoId = extractVideoId(text); // Función para extraer el ID del video de la URL
+    const videoId = extractVideoId(args[0]); // Función para extraer el ID del video de la URL
     let i = new Rapi();
     
     try {
