@@ -2021,16 +2021,13 @@ case 'yta': {
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
-
-    // Extraer el ID del video de la URL proporcionada
     const url = text;
     if (typeof url !== 'string') {
         return reply(`*La URL proporcionada no es válida.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
     }
-
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const matches = url.match(regex);
-    const videoId = matches ? matches[1] : null; // Extraer el ID
+    const videoId = matches ? matches[1] : null;
 
     if (!videoId) {
         return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
@@ -2041,19 +2038,18 @@ case 'yta': {
     try {
         let r = await i.fetchVideoData(videoId);
 
-        // Verificar que la respuesta tenga los enlaces de descarga
         if (!r.audioDownloadLink) {
             throw new Error("No se pudo obtener el enlace de descarga de audio.");
         }
 
-       // const audioBuffer = await fetchBuffer(r.audioDownloadLink); // Obtener el buffer del audio
-
+        const audioBuffer = await fetchBuffer(r.audioDownloadLink);
+	let thm = await reSize(r.thumbnail, 200, 200)
         await nyanBot2.sendMessage(m.chat, {
             document: {url: r.audioDownloadLink},
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
-            jpegThumbnail: await fetchBuffer(r.thumbnail) // Usar el thumbnail del video
+            jpegThumbnail: thm
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
@@ -2072,46 +2068,60 @@ case 'yta': {
 }
 break
 
-// Función para extraer el ID del video de la URL
-function extractVideoId(url) {
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = url.match(regex);
-    return matches ? matches[1] : null;
-}
-
-case 'ytmp4': case 'ytv': {
+case 'ytmp4':
+case 'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    try {
-        let res = await fg.ytv(text);
-        db.data.users[sender].limit -= 30;
 
-        if (parseFloat(res.size) > 80) {
-	stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️*_\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`)
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+
+    const url = args[0];
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = url.match(regex);
+    const videoId = matches ? matches[1] : null;
+
+    if (!videoId) {
+        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    }
+
+    let i = new Rapi();
+
+    try {
+        let r = await i.fetchVideoData(videoId);
+        
+        if (!r.videoDownloadLink) {
+            throw new Error("No se pudo obtener el enlace de descarga del video.");
+        }
+
+        const videoBuffer = await fetchBuffer(r.videoDownloadLink);
+        //if (parseFloat(r.size) > 80) { // Suponiendo que r.size es el tamaño del video
+            //stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️*_\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`);
             await nyanBot2.sendMessage(m.chat, {
-                document: await fetchBuffer(res.dl_url),
-                fileName: `${res.title}.mp4`,
+                document: videoBuffer,
+                fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
-                jpegThumbnail: await fetchBuffer('https://i0.wp.com/smsem.mx/wp-content/uploads/2022/01/kisspng-computer-icon-angle-brand-downloads-metal-folder-5ab0a7da2bbc92.2954475715215267461792-4.png?resize=474%2C474&ssl=1')
+                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
+                jpegThumbnail: await fetchBuffer(r.thumbnail)
             }, { quoted: m });
-        } else {
+       /* } else {
             await nyanBot2.sendMessage(m.chat, {
-                video: await fetchBuffer(res.dl_url),
-                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${res.size}*\n_Calidad:_ ${res.quality}\n\n*Encontrarás el video con el nombre:* ${res.title}`,
-                fileName: `${res.title}.mp4`,
+                video: videoBuffer,
+                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${r.size}*\n_Calidad:_ ${r.quality}\n\n*Encontrarás el video con el nombre:* ${r.title}`,
+                fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
-        }
-        
+        }*/
+
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
+
+    db.data.users[sender].limit -= 30;
 }
 break
 
