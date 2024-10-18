@@ -1165,6 +1165,7 @@ case 'menu': {
     let nickName = nyanBot2.getName(sender);
     let userNumber = sender.split("@")[0];
     let userPoints = db.data.users[sender].limit;
+    let version = await WAVersion();
 
     // Obtener la foto de perfil
     let p;
@@ -1191,7 +1192,7 @@ case 'menu': {
         menuMessage += `- *Estado Premium:* No activo\n\n`;
     }
     
-    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${WAVersion()}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
+    menuMessage += `*Estado del Bot:*\n\n- *Versión de WhatsApp:* ${version}\n- *Activo hace* ${runtime(process.uptime())}\n- *Comandos solicitados:* ${db.data.settings[botNumber].totalhit}\n\n*Menú de Comandos*\n\n`;
 
     for (const [category, commands] of Object.entries(categories)) {
         menuMessage += `*${category}:*\n`;
