@@ -232,6 +232,7 @@ const categories = {
 	{ command: 'eliminar', description: '_*NUM/@tag*_' },
 	{ command: 'promote', description: '_*NUM/@tag*_' },
 	{ command: 'demote', description: '_*NUM/@tag*_' },
+	{ command: 'link', description: '' },
 	{ command: 'anti', description: '' },
 	{ command: 'unavista', description: '' },
 	{ command: 'antiviewonce', description: '' },
@@ -3545,6 +3546,21 @@ if (!isBotAdmins) return reply(mess.adminBot)
 let demNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
 if (!demNum) return reply('*Por favor etiqueta o menciona algún participante o responde al mensaje de la persona que deseas quitarle admin!*')
 await nyanBot2.groupParticipantsUpdate(m.chat, [demNum], 'demote')
+break
+
+case 'linkgroup':
+case 'linkgrup':
+case 'linkgc':
+case 'link':
+case 'grouplink':
+case 'gruplink':
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins && !isGroupOwner && !isSamu) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+let response = await nyanBot2.groupInviteCode(m.chat)
+nyanBot2.sendText(m.chat, `*💬 INFORMACION DEL GRUPO*\n- *NOMBRE :* ${groupMetadata.subject}\n- *CREADOR :* ${groupMetadata.owner !== undefined ? '+'+ groupMetadata.owner.split`@`[0] : 'null'}\n- *LINK :* https://chat.whatsapp.com/${response}\n- *MIEMBROS :* ${groupMetadata.participants.length}\n`, m, {
+detectLink: true
+})
 break
 
 case 'limpiar': {
