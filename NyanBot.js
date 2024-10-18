@@ -230,6 +230,8 @@ const categories = {
     "🎭 Grupos": [
 	{ command: 'añadir', description: '_*NUM*_' },
 	{ command: 'eliminar', description: '_*NUM/@tag*_' },
+	{ command: 'promote', description: '_*NUM/@tag*_' },
+	{ command: 'demote', description: '_*NUM/@tag*_' },
 	{ command: 'anti', description: '' },
 	{ command: 'unavista', description: '' },
 	{ command: 'antiviewonce', description: '' },
@@ -3522,8 +3524,27 @@ case 'kick': case 'eliminar':
 if (!m.isGroup) return reply(mess.group)
 if (!isAdmins) return reply(mess.admin)
 if (!isBotAdmins) return reply(mess.adminBot)
-let blockNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
-await nyanBot2.groupParticipantsUpdate(m.chat, [blockNum], 'remove')
+let delNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+if (!delNum) return reply('*Por favor etiqueta o menciona algún participante o responde al mensaje de la persona que deseas eliminar!*')
+await nyanBot2.groupParticipantsUpdate(m.chat, [delNum], 'remove')
+break
+
+case 'promote': case 'admin':
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+let admNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+if (!admNum) return reply('*Por favor etiqueta o menciona algún participante o responde al mensaje de la persona que deseas otorgarle admin!*')
+await nyanBot2.groupParticipantsUpdate(m.chat, [admNum], 'promote')
+break
+
+case 'demote':
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins) return reply(mess.admin)
+if (!isBotAdmins) return reply(mess.adminBot)
+let demNum = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '') + '@s.whatsapp.net'
+if (!demNum) return reply('*Por favor etiqueta o menciona algún participante o responde al mensaje de la persona que deseas quitarle admin!*')
+await nyanBot2.groupParticipantsUpdate(m.chat, [demNum], 'demote')
 break
 
 case 'limpiar': {
