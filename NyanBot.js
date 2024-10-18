@@ -493,7 +493,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                 if (!isNumber(user.limit)) user.limit = limitUser
             } else global.db.data.users[sender] = {
 	       register: false,
-               serialNumber: randomBytes(16).toString('hex'),
+               serialNumber: randomBytes(5).toString('hex'),
                title: `${isPremium ? 'Premium' : 'User'}`,
                badword: 0,
                nick: nyanBot2.getName(sender),
@@ -506,65 +506,41 @@ return arr[Math.floor(Math.random() * arr.length)]
                if (typeof chats !== 'object') global.db.data.chats[from] = {}
                if (chats) {
                   if (!('badword' in chats)) chats.badword = false
-                  if (!('antiforeignnum' in chats)) chats.antiforeignnum = false
                   if (!('antibot' in chats)) chats.antibot = false
                   if (!('antiviewonce' in chats)) chats.antiviewonce = true
-                  if (!('antimedia' in chats)) chats.media = false
-                  if (!('antiimage' in chats)) chats.antiimage = false
-                  if (!('antivideo' in chats)) chats.video = false
-                  if (!('antiaudio' in chats)) chats.antiaudio = false
-                  if (!('antipoll' in chats)) chats.antipoll = false
-                  if (!('antisticker' in chats)) chats.antisticker = false
-                  if (!('anticontact' in chats)) chats.anticontact = false
-                  if (!('antilocation' in chats)) chats.antilocation = false
-                  if (!('antidocument' in chats)) chats.antidocument = false
-                  if (!('antilink' in chats)) chats.antilink = false
-                  if (!('antilinkgc' in chats)) chats.antilinkgc = false
+                  if (!('antilink' in chats)) chats.antilinkgc = false
+		  if (!('ban' in chats)) chats.ban = false
+		  if (!('adminmode' in chats)) chats.adminmode = false
                } else global.db.data.chats[from] = {
                   badword: false,
-                  antiforeignnum: false,
                   antibot: false,
                   antiviewonce: true,
-                  antimedia: false,
-                  antiimage: false,
-                  antivideo: false,
-                  antiaudio: false,
-                  antipoll: false,
-                  antisticker: false,
-                  antilocation: false,
-                  antidocument: false,
-                  anticontact: false,
                   antilink: false,
-                  antilinkgc: false
+		  ban: false,
+		  adminmode: false
                }
             
             let setting = global.db.data.settings[botNumber]
             if (typeof setting !== 'object') global.db.data.settings[botNumber] = {}
             if (setting) {
                if (!('totalhit' in setting)) setting.totalhit = 0
-               if (!('totalError' in setting)) setting.totalError = 0
-               if (!('online' in setting)) setting.online = false 
                if (!('autosticker' in setting)) setting.autosticker = false 
                if (!('autobio' in setting)) setting.autobio = false 
                if (!('autoread' in setting)) setting.autoread = false
                if (!('autorecordtype' in setting)) setting.autorecordtype = false
                if (!('autorecord' in setting)) setting.autorecord = false
                if (!('autotype' in setting)) setting.autotype = false
-               if (!('autoblocknum' in setting)) setting.autoblocknum = false
-               if (!('onlygrub' in setting)) setting.onlygrub = false
-               if (!('onlypc' in setting)) setting.onlypc = false
+               if (!('onlygroup' in setting)) setting.onlygrub = false
+               if (!('onlypv' in setting)) setting.onlypc = false
                if (!('watermark' in setting)) setting.watermark = { packname , author }
                if (!('about' in setting)) setting.about = { bot: { nick: nyanBot2.getName(botNumber), alias: botname}, owner: { nick: nyanBot2.getName(global.ownernumber + '@s.whatsapp.net'), alias: global.ownernumber}}
             } else global.db.data.settings[botNumber] = {
                totalhit: 0,
-               totalError: 0,
-               online: false,
                autosticker: false,
                autobio: false,
                autoread: false,
-               autoblocknum: false,
-               onlygrub: false,
-               onlypc: false,
+               onlygroup: false,
+               onlypv: false,
                autorecordtype: false,
                autorecord: false,
                autotype: false,
