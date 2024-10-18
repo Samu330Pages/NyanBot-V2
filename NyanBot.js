@@ -2102,18 +2102,24 @@ case 'ytv': {
 }
 break
 
-case 'music': case 'song': {
+case 'music': case 'song': case 'whatmusic': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (!m.quoted) return reply('Responde a un audio con el comando para reconocer la canción.');
-
-    if (!/audio/.test(mime)) return reply('*No as etiquetado un audio, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
+    if (!m.quoted) return reply('Responde a un audio o video con el comando para reconocer la canción.');
+    if (!/audio/.test(mime) || !/video/.test(mime)) return reply('*No as etiquetado un audio/video, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
+    let buffS = ""
+    if (/audio/.test(mime)) {
+    buffS = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
+    }
+    if (/video/.test(mime)) {
+    buffS = await toAudio(quoted, 'mp4')
+    }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
+    //const tempFilePath = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
 
     try {
-        const recognitionResult = await audd.recognize.fromFile(tempFilePath);
+        const recognitionResult = await audd.recognize.fromFile(buffS);
 
         if (recognitionResult.status === 'success') {
             const result = recognitionResult.result;
@@ -2148,7 +2154,7 @@ const buttons = [{
         console.error('Error al procesar la solicitud:', error);
         await reply(`Ocurrió un error al procesar la solicitud. Por favor, intenta de nuevo.\n${error}`)
     } finally {
-        fs.unlink(tempFilePath, (err) => {
+        fs.unlink(buffS, (err) => {
             if (err) {
                 console.error('Error al eliminar el archivo temporal:', err);
             }
