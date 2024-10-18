@@ -1202,44 +1202,20 @@ case 'menu': {
     }
 
     try {
-        const msgs = generateWAMessageFromContent(m.chat, {
-            viewOnceMessage: {
-                message: {
-                    "messageContextInfo": {
-                        "deviceListMetadata": {},
-                        "deviceListMetadataVersion": 2
-                    },
-                    interactiveMessage: proto.Message.InteractiveMessage.create({
-                        body: proto.Message.InteractiveMessage.Body.create({
-                            text: menuMessage
-                        }),
-                        footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: `🏰 ${botname} 🧛🏻`
-                        }),
-                        header: proto.Message.InteractiveMessage.Header.create({
-                            title: date,
-			    subtitle: time,
-                            hasMediaAttachment: true,
-                            ...await prepareWAMessageMedia({ image: canvasImage }, { upload: nyanBot2.waUploadToServer })
-                        }),
-                        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                            buttons: [{
-                                "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Registrarse 🎃\",\"id\":\".reg\"}`
-                            }, {
-                                "name": "cta_url",
-                                "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🕸️\",\"url\":\"https://samu330.com/login\"}`
-                            }],
-                        }),
-                        contextInfo: {
-                            mentionedJid: [m.sender],
-                        }
-                    })
-                }
-            }
-        }, { quoted: m });
-
-        await nyanBot2.relayMessage(m.chat, msgs.message, {});
+nyanBot2.sendMessage(m.chat, {
+text: menuMessage,
+contextInfo: {
+externalAdReply: {
+renderLargerThumbnail: true,
+mediaType: 1,
+title: `🎃 ${date} 🏰`,
+body: '',
+thumbnail: canvasImage,
+jpegThumbnail: canvasImage,
+previewType: "NONE",
+sourceUrl: 'https://samu330.com/login',
+}}
+})
     } catch (e) {
         return m.reply("*Error*");
     }
