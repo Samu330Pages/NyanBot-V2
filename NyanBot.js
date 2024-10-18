@@ -1227,9 +1227,6 @@ case 'menu': {
                                 "name": "quick_reply",
                                 "buttonParamsJson": `{\"display_text\":\"Registrarse 🎃\",\"id\":\".reg\"}`
                             }, {
-                                "name": "quick_reply",
-                                "buttonParamsJson": `{\"display_text\":\"Velocidad ⚡\",\"id\":\".speed\"}`
-			    }, {
                                 "name": "cta_url",
                                 "buttonParamsJson": `{\"display_text\":\"NyanBot-V2 🕸️\",\"url\":\"https://samu330.com/login\"}`
                             }],
