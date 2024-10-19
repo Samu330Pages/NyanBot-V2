@@ -2053,9 +2053,9 @@ case 'ytv': {
         const data = await response.json();
 
         if (data.status && data.data.mp4) {
-            //const videoBuffer = await fetchBuffer(data.data.mp4);
+            const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
-                document: {url: data.data.mp4},
+                document: videoBuffer,
                 fileName: `video.mp4`,
                 mimetype: 'video/mp4',
                 caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
@@ -2088,9 +2088,9 @@ case 'ytv': {
             throw new Error("No se pudo obtener el enlace de descarga del video.");
         }
 
-        //const videoBuffer = await fetchBuffer(r.videoDownloadLink);
+        const videoBuffer = await fetchBuffer(r.videoDownloadLink);
         await nyanBot2.sendMessage(m.chat, {
-            document: {url: r.videoDownloadLink},
+            document: videoBuffer,
             fileName: `${r.title}.mp4`,
             mimetype: 'video/mp4',
             caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
