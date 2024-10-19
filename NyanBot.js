@@ -1970,6 +1970,27 @@ reactionOk(m.chat, m.key, playId);
 }
 break
 
+case 'test1': case 'ytaudio':
+let samFunc = require('./lib/ytdl')
+if (args.length < 1 || !isUrl(text) || !samFunc.isYTUrl(text)) return replygcxeon(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`)
+let audio = await samFunc.mp3(text)
+await nyanBot2.sendMessage(m.chat,{
+    audio: fs.readFileSync(audio.path),
+    mimetype: 'audio/mp4', ptt: true,
+    contextInfo:{
+        externalAdReply:{
+            title:audio.meta.title,
+            body: botname,
+            thumbnail: await fetchBuffer(audio.meta.image),
+            mediaType:2,
+            mediaUrl:text,
+        }
+
+    },
+},{quoted:m})
+await fs.unlinkSync(audio.path)
+break
+
 case 'ytmp3':
 case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
