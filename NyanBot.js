@@ -233,6 +233,7 @@ const categories = {
 	{ command: 'anti', description: '' },
 	{ command: 'unavista', description: '' },
 	{ command: 'antiviewonce', description: '' },
+	{ command: 'banchat', description: '' },
 	{ command: 'gpimg', description: '' }
     ],
     "🛠 Herramientas": [
@@ -3647,7 +3648,7 @@ case 'ban': case 'banchat': {
 if (!m.isGroup) return reply(mess.group)
 if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
-if (!db.data.chats[from].ban === false) {
+if (!db.data.chats[from].ban === true) {
 const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
