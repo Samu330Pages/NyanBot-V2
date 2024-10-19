@@ -2096,7 +2096,8 @@ case 'ytvlink': {
         }
 
         const data = await response.data;
-            const videoBuffer = await fetchBuffer(data.data.mp4);
+	    await reply(`${data}`)
+            const videoBuffer = await fetchBuffer(data.mp4);
             await nyanBot2.sendMessage(m.chat, {
                 document: videoBuffer,
                 fileName: `video.mp4`,
