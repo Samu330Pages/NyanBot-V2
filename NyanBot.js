@@ -2034,7 +2034,7 @@ case 'ytv': {
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const response = await fetch(text, {
+        const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
             method: 'POST',
             headers: {
                 'accept': '*/*',
