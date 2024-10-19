@@ -2019,6 +2019,58 @@ case 'yta': {
 }
 break
 
+case 'ytmp3new':
+case 'ytaudio': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+
+    const options = {
+        method: 'GET',
+        url: 'https://yt-search-and-download-mp3.p.rapidapi.com/mp3',
+        params: {
+            url: text
+        },
+        headers: {
+            'x-rapidapi-key': '657fdc78a0mshcbd4479e816afaap128a12jsn660a39727c61',
+            'x-rapidapi-host': 'yt-search-and-download-mp3.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+        const data = response.data;
+
+        if (data.success) {
+            const audioBuffer = await fetchBuffer(data.download); // Descargar el audio desde el enlace proporcionado
+            await nyanBot2.sendMessage(m.chat, {
+                document: audioBuffer,
+                caption: `*Descarga completa! 🎶*\n\n- *Título:* ${data.title}\n- *Tamaño:* ${data.size}`,
+                mimetype: "audio/mpeg",
+                fileName: `${data.title}.mp3`
+            }, { quoted: m });
+
+            await nyanBot2.sendMessage(m.chat, {
+                audio: audioBuffer,
+                mimetype: "audio/mpeg",
+                fileName: `${data.title}.mp3`
+            }, { quoted: m });
+        } else {
+            throw new Error("No se pudo obtener el enlace para descargar el audio.");
+        }
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
+    }
+
+    db.data.users[sender].limit -= 30;
+}
+break
+
 case 'ytmp4':
 case 'ytv': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
