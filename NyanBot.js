@@ -2161,13 +2161,15 @@ case 'music': case 'song': case 'whatmusic': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (!m.quoted) return reply('Responde a un audio o video con el comando para reconocer la canción.');
-    //if (!/audio/.test(mime)) return reply('*No as etiquetado un audio/video, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
+    if (!/video/.test(mime) && !/audio/.test(mime)) return reply('*No as etiquetado un audio/video, por favor asegurate de etiquetar el audio a reconocer junto al comando!*');
     let buffS = ""
     if (/audio/.test(mime)) {
     buffS = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
     }
     if (/video/.test(mime)) {
-    buffS = await toAudio(quoted, 'mp4')
+    let mediaC = await nyanBot2.downloadMediaMessage(qmsg)
+    let audioC = await toAudio(mediaC, 'mp4')
+    buffS = audioC
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
