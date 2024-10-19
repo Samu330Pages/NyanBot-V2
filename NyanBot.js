@@ -2157,6 +2157,21 @@ case 'ytvlink': {
 }
 break
 
+case 'toaud':
+case 'toaudio': {
+if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`*Porfavor asegúrate de solamente etiquetar el video el cual quieres convertir en audio utilizando El comando:*\n\n${prefix + command}`)
+nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+let media = await nyanBot2.downloadMediaMessage(qmsg)
+let audio = await toAudio(media, 'mp4')
+nyanBot2.sendMessage(m.chat, {
+audio: audio,
+mimetype: 'audio/mpeg'
+}, {
+quoted: m
+})
+}
+break
+
 case 'music': case 'song': case 'whatmusic': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 50) return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
