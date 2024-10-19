@@ -2095,7 +2095,7 @@ case 'ytvlink': {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await JSON.stringify(response, null, 2);
+        const data = await response.json();
 	    await reply(data)
             const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
