@@ -2033,9 +2033,46 @@ case 'ytv': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const url = args[0];
+    try {
+        const response = await fetch(text, {
+            method: 'POST',
+            headers: {
+                'accept': '*/*',
+                'api_key': 'free',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: text
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status && data.data.mp4) {
+            //const videoBuffer = await fetchBuffer(data.data.mp4);
+            await nyanBot2.sendMessage(m.chat, {
+                document: {url: data.data.mp4},
+                fileName: `video.mp4`,
+                mimetype: 'video/mp4',
+                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
+                jpegThumbnail: await fetchBuffer('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png') // Si se requiere, puedes usar el thumbnail aquí
+            }, { quoted: m });
+            return; // Termina el case si se descarga exitosamente
+        } else {
+            throw new Error("No se pudo obtener el enlace de descarga del video.");
+        }
+    } catch (error) {
+        console.error('Error en la nueva API:', error);
+        // Si falla, proceder a la lógica anterior con el ID del video
+    }
+
+    // Lógica anterior usando el ID del video
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = url.match(regex);
+    const matches = text.match(regex);
     const videoId = matches ? matches[1] : null;
 
     if (!videoId) {
@@ -2051,30 +2088,19 @@ case 'ytv': {
             throw new Error("No se pudo obtener el enlace de descarga del video.");
         }
 
-        const videoBuffer = await fetchBuffer(r.videoDownloadLink);
-        //if (parseFloat(r.size) > 80) { // Suponiendo que r.size es el tamaño del video
-            //stcReac('peso', `*El archivo es muy pesado! 🏋🏻‍♂️*\n_*Se enviará el vídeo en documento 🗃️*_\nPuede tardar un poco, se paciente! 🧘🏻‍♂️`);
-            await nyanBot2.sendMessage(m.chat, {
-                document: videoBuffer,
-                fileName: `${r.title}.mp4`,
-                mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
-                jpegThumbnail: await fetchBuffer(r.thumbnail)
-            }, { quoted: m });
-       /* } else {
-            await nyanBot2.sendMessage(m.chat, {
-                video: videoBuffer,
-                caption: `*Descarga completa! 🍟*\n\n_Tamaño:_ *${r.size}*\n_Calidad:_ ${r.quality}\n\n*Encontrarás el video con el nombre:* ${r.title}`,
-                fileName: `${r.title}.mp4`,
-                mimetype: 'video/mp4'
-            }, { quoted: m });
-        }*/
+        //const videoBuffer = await fetchBuffer(r.videoDownloadLink);
+        await nyanBot2.sendMessage(m.chat, {
+            document: {url: r.videoDownloadLink},
+            fileName: `${r.title}.mp4`,
+            mimetype: 'video/mp4',
+            caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
+            jpegThumbnail: await fetchBuffer(r.thumbnail)
+        }, { quoted: m });
 
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error al procesar la solicitud:', error);
-        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
+        console.error('Error al procesar la solicitud con ID:', error);
+        stcReac('error', `_*❌ Ambas opciones de descarga han fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
     db.data.users[sender].limit -= 30;
