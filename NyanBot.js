@@ -2096,7 +2096,6 @@ case 'ytvlink': {
         }
 
         const data = await response.data;
-        if (data.mp4) {
             //const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
                 document: {url: data.mp4},
@@ -2105,9 +2104,6 @@ case 'ytvlink': {
                 caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
                 jpegThumbnail: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png'
             }, { quoted: m });
-        } else {
-            throw new Error("No se pudo obtener el enlace de descarga del video.");
-        }
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la nueva API:', error);
