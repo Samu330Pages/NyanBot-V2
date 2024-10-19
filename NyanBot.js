@@ -2033,6 +2033,37 @@ case 'ytv': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = text.match(regex);
+    const videoId = matches ? matches[1] : null;
+
+    if (!videoId) {
+        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    }
+
+    let i = new Rapi();
+
+    try {
+        let r = await i.fetchVideoData(videoId);
+        
+        if (!r.videoDownloadLink) {
+            throw new Error("No se pudo obtener el enlace de descarga del video.");
+        }
+
+        //const videoBuffer = await fetchBuffer(r.videoDownloadLink);
+        await nyanBot2.sendMessage(m.chat, {
+            document: {url: r.videoDownloadLink},
+            fileName: `${r.title}.mp4`,
+            mimetype: 'video/mp4',
+            caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
+            jpegThumbnail: await fetchBuffer(r.thumbnail)
+        }, { quoted: m });
+
+        return; 
+    } catch (error) {
+        console.error('Error al procesar la solicitud con ID:', error);
+    }
+
     try {
         const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
             method: 'POST',
@@ -2053,53 +2084,20 @@ case 'ytv': {
         const data = await response.json();
 
         if (data.status && data.data.mp4) {
-            const videoBuffer = await fetchBuffer(data.data.mp4);
+            //const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
-                document: videoBuffer,
-                fileName: `video.mp4`,
+                document: {url: data.data.mp4},
+                fileName: `${date}-video.mp4`,
                 mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
-                jpegThumbnail: await fetchBuffer('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png') // Si se requiere, puedes usar el thumbnail aquí
+                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${date}-video.mp4`,
+                jpegThumbnail: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png'
             }, { quoted: m });
-            return; // Termina el case si se descarga exitosamente
         } else {
             throw new Error("No se pudo obtener el enlace de descarga del video.");
         }
     } catch (error) {
-        console.error('Error en la nueva API:', error);
-        // Si falla, proceder a la lógica anterior con el ID del video
-    }
-
-    // Lógica anterior usando el ID del video
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = text.match(regex);
-    const videoId = matches ? matches[1] : null;
-
-    if (!videoId) {
-        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    }
-
-    let i = new Rapi();
-
-    try {
-        let r = await i.fetchVideoData(videoId);
-        
-        if (!r.videoDownloadLink) {
-            throw new Error("No se pudo obtener el enlace de descarga del video.");
-        }
-
-        const videoBuffer = await fetchBuffer(r.videoDownloadLink);
-        await nyanBot2.sendMessage(m.chat, {
-            document: videoBuffer,
-            fileName: `${r.title}.mp4`,
-            mimetype: 'video/mp4',
-            caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
-            jpegThumbnail: await fetchBuffer(r.thumbnail)
-        }, { quoted: m });
-
-    } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error al procesar la solicitud con ID:', error);
+        console.error('Error en la nueva API:', error);
         stcReac('error', `_*❌ Ambas opciones de descarga han fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
