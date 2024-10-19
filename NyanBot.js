@@ -527,8 +527,8 @@ return arr[Math.floor(Math.random() * arr.length)]
                if (!('autorecordtype' in setting)) setting.autorecordtype = false
                if (!('autorecord' in setting)) setting.autorecord = false
                if (!('autotype' in setting)) setting.autotype = false
-               if (!('onlygroup' in setting)) setting.onlygrub = false
-               if (!('onlypv' in setting)) setting.onlypc = false
+               if (!('onlygroup' in setting)) setting.onlygroup = false
+               if (!('onlypv' in setting)) setting.onlypv = false
                if (!('watermark' in setting)) setting.watermark = { packname , author }
                if (!('about' in setting)) setting.about = { bot: { nick: nyanBot2.getName(botNumber), alias: botname}, owner: { nick: nyanBot2.getName(global.ownernumber + '@s.whatsapp.net'), alias: global.ownernumber}}
             } else global.db.data.settings[botNumber] = {
@@ -921,13 +921,18 @@ async function styletext(teks) {
             nyanBot2.sendText(m.chat, { text: `Reset Limit`})
         }
         // Grup Only
-        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygrub ) {
+        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup ) {
         	if (isCommand){
             return reply(`No está permitido el uso del bot en privado!!`)
             }
         }
+	if (m.isGroup && !isSamu && db.data.chats[from].ban) {
+        	if (isCommand){
+            return
+            }
+        }
         // Private Only
-        if (!isSamu && db.data.settings[botNumber].onlypc && m.isGroup) {
+        if (!isSamu && db.data.settings[botNumber].onlypv && m.isGroup) {
         	if (isCommand){
 	         return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!")
 	     }
@@ -3634,6 +3639,52 @@ const buttons = [{
 return await sendReplyButton(m.chat, buttons, m, {
 	content: '*La bienvenida en este grupo está activada, presiona el botón para poder desactivar esta opción*'
 })
+}
+}
+break
+
+case 'ban': case 'banchat': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (!db.data.chats[from].ban === false) {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Si ✔',
+            id: `${prefix}banon'`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Deseas banear este chat?*'
+})	
+} else {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desbanear ❌',
+            id: `${prefix}banoff`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Este chat esta Baneado, presiona el botón para poder desactivar esta opción*'
+})
+}
+}
+break
+
+case 'banoff': case 'banon': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (command === 'banon') {
+if (db.data.chats[from].ban === true) return reply('¡Este chat ya está Baneado!')
+db.data.chats[from].ban  = true
+reply(`¡Este chat se ha Baneado!`)
+} else if (command === 'banoff') {
+if (db.data.chats[from].ban === false) return reply('¡Este chat no esta baneado!')
+db.data.chats[from].ban  = true
+reply(`¡Este chat se ha Desbaneado!`)
 }
 }
 break
