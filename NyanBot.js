@@ -3653,7 +3653,7 @@ const buttons = [{
           name: "quick_reply",
           buttonParamsJson: JSON.stringify({
             display_text: 'Si ✔',
-            id: `${prefix}banon'`
+            id: `${prefix}banon`
           }),
         }]
 return await sendReplyButton(m.chat, buttons, m, {
