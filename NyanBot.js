@@ -2069,6 +2069,49 @@ case 'ytv': {
 }
 break
 
+case 'ytmp3link':
+case 'ytalink': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+
+    try {
+        const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
+            method: 'POST',
+            headers: {
+                'accept': '*/*',
+                'api_key': 'free',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: text
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+            //const videoBuffer = await fetchBuffer(data.data.mp4);
+            await nyanBot2.sendMessage(m.chat, {
+                audio: {url: data.data.mp3},
+                fileName: `${date}-audio.mp3`,
+                mimetype: 'audio/ogg'
+            }, { quoted: m });
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error en la nueva API:', error);
+        stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
+    }
+
+    db.data.users[sender].limit -= 30;
+}
+break
+
 case 'ytmp4link':
 case 'ytvlink': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
