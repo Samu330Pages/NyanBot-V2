@@ -2059,10 +2059,24 @@ case 'ytv': {
             jpegThumbnail: await fetchBuffer(r.thumbnail)
         }, { quoted: m });
 
-        return; 
     } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud con ID:', error);
+        stcReac('error', `_*❌ La descarga con ID ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
+
+    db.data.users[sender].limit -= 30;
+}
+break
+
+case 'ytmp4link':
+case 'ytvlink': {
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
         const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
@@ -2082,14 +2096,14 @@ case 'ytv': {
         }
 
         const data = await response.json();
-
+        reply(data)
         if (data.status && data.data.mp4) {
             const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
                 document: videoBuffer,
-                fileName: `${date}-video.mp4`,
+                fileName: `video.mp4`,
                 mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${date}-video.mp4`,
+                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
                 jpegThumbnail: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png'
             }, { quoted: m });
         } else {
@@ -2098,7 +2112,7 @@ case 'ytv': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error en la nueva API:', error);
-        stcReac('error', `_*❌ Ambas opciones de descarga han fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
+        stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
     db.data.users[sender].limit -= 30;
