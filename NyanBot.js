@@ -2095,12 +2095,11 @@ case 'ytvlink': {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        reply(data)
-        if (data.status && data.data.mp4) {
+        const data = await response.data;
+        if (data.mp4) {
             //const videoBuffer = await fetchBuffer(data.data.mp4);
             await nyanBot2.sendMessage(m.chat, {
-                document: {url: data.data.mp4},
+                document: {url: data.mp4},
                 fileName: `video.mp4`,
                 mimetype: 'video/mp4',
                 caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`,
