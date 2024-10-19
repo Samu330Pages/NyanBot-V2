@@ -2167,7 +2167,7 @@ case 'music': case 'song': case 'whatmusic': {
     buffS = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music');
     }
     if (/video/.test(mime)) {
-    let mediaC = await nyanBot2.downloadMediaMessage(quoted)
+    let mediaC = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'music')
     let audioC = await toAudio(mediaC, 'mp4')
     buffS = audioC
     }
