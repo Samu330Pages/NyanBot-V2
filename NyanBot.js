@@ -3684,7 +3684,7 @@ db.data.chats[from].ban  = true
 reply(`¡Este chat se ha Baneado!`)
 } else if (command === 'banoff') {
 if (db.data.chats[from].ban === false) return reply('¡Este chat no esta baneado!')
-db.data.chats[from].ban  = true
+db.data.chats[from].ban  = false
 reply(`¡Este chat se ha Desbaneado!`)
 }
 }
