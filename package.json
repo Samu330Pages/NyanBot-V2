@@ -18,7 +18,7 @@
     "dependencies": {
         "@adiwajshing/keyed-db": "^0.2.4",
         "@whiskeysockets/baileys": "^6.6.0",
-        "@firebase/auth": "^1.7.9",
+        "firebase/auth": "^1.7.9",
         "audd.io": "^3.0.2",
         "canvas": "^2.11.2",
         "archiver": "^7.0.1",
