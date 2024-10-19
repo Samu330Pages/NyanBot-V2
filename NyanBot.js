@@ -242,6 +242,7 @@ const categories = {
 	{ command: 'sinfondo', description: '' },
 	{ command: 'avideo', description: '' },
 	{ command: 'agif', description: '' },
+	{ command: 'toaudio', description: '' },
 	{ command: 'aimagen', description: '' },
         { command: 'puntos', description: '' },
         { command: 'take', description: '' },
@@ -1188,14 +1189,14 @@ contextInfo: {
 externalAdReply: {
 renderLargerThumbnail: true,
 mediaType: 1,
-title: `🎃 ${date} 🏰`,
+title: `🧛🏻 ${date} 🏰`,
 body: '',
 thumbnail: canvasImage,
 jpegThumbnail: canvasImage,
 previewType: "NONE",
 sourceUrl: 'https://samu330.com/login',
 }}
-})
+}, {quoted: m})
     } catch (e) {
         return m.reply("*Error*");
     }
@@ -1977,10 +1978,8 @@ case 'yta': {
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+
     const url = text;
-    if (typeof url !== 'string') {
-        return reply(`*La URL proporcionada no es válida.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    }
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const matches = url.match(regex);
     const videoId = matches ? matches[1] : null;
@@ -1994,15 +1993,11 @@ case 'yta': {
     try {
         let r = await i.fetchVideoData(videoId);
 
-        if (!r.audioDownloadLink) {
-            throw new Error("No se pudo obtener el enlace de descarga de audio.");
-        }
-
         const audioBuffer = await fetchBuffer(r.videoDownloadLink);
-	let audioC = await toAudio(audioBuffer, 'mp4')
-	await nyanBot2.sendMessage(m.chat, {
+        let audioC = await toAudio(audioBuffer, 'mp4');
+        await nyanBot2.sendMessage(m.chat, {
             document: audioC,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n*Bitrate de Audio:* ${r.audioBitrate}`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
             jpegThumbnail: await fetchBuffer(r.thumbnail)
@@ -2045,20 +2040,29 @@ case 'ytv': {
 
     try {
         let r = await i.fetchVideoData(videoId);
-        
+
         if (!r.videoDownloadLink) {
             throw new Error("No se pudo obtener el enlace de descarga del video.");
         }
 
         const videoBuffer = await fetchBuffer(r.videoDownloadLink);
-        await nyanBot2.sendMessage(m.chat, {
-            document: videoBuffer,
-            fileName: `${r.title}.mp4`,
-            mimetype: 'video/mp4',
-            caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}`,
-            jpegThumbnail: await fetchBuffer(r.thumbnail)
-        }, { quoted: m });
+        const fileSizeMB = parseFloat(r.contentLength) / (1024 * 1024); // Convertir a MB
 
+        if (fileSizeMB > 80) {
+            await nyanBot2.sendMessage(m.chat, {
+                document: videoBuffer,
+                fileName: `${r.title}.mp4`,
+                mimetype: 'video/mp4',
+                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos`
+            }, { quoted: m });
+        } else {
+            await nyanBot2.sendMessage(m.chat, {
+                video: videoBuffer,
+                caption: `*Descarga completa! 🍟*\n\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n\n*Encontrarás el video con el nombre:* ${r.title}\n`,
+                fileName: `${r.title}.mp4`,
+                mimetype: 'video/mp4'
+            }, { quoted: m });
+        }
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud con ID:', error);
