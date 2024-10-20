@@ -910,8 +910,11 @@ async function styletext(teks) {
         //limit func
         async function useLimit(senderLimit, amount) {
             db.data.users[senderLimit].limit -= amount
-            db.data.users[senderLimit].totalLimit += amount
+            aumentarLimit(senderLimit, amount)
         }
+	async function aumentarLimit(senderLimit, amount) {
+            db.data.users[senderLimit].totalLimit += amount
+        }   
         async function resetLimit() {
             let users = Object.keys(global.db.data.users)
             let limite = isPremium ? limit.prem : limit.free
