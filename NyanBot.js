@@ -1001,11 +1001,7 @@ list.push({
  
  if (db.data.chats[m.chat].antibot) {
     if (m.sender === '51960134974@s.whatsapp.net'){
-        if (isAdmin || !isBotAdmin){		  
-        } else {
-          reply(`*Epaaa! como es que hay otro bot aquí??*\n\nAdios! aqui no se permiten más bots!!`)
     return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
-        }
     }
    }
  
@@ -1050,7 +1046,7 @@ if (db.data.chats[m.chat].badword) {
         
 
         if (db.data.chats[m.chat].antilink) {
-            if (budy.match(`chat.whatsapp.com`)) {
+            if (budy.match(`chat.whatsapp.com`) && budy.match('whatsapp.com/channel')) {
 if (isAdmins) return
 if (m.key.fromMe) return
 if (isSamu) return
