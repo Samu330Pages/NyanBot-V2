@@ -497,7 +497,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                nick: nyanBot2.getName(sender),
                premium: `${isPremium ? 'true' : 'false'}`,
                limit: limitUser,
-               totalLimit: ""
+               totalLimit: 0
             }
             
                let chats = global.db.data.chats[from]
@@ -914,9 +914,8 @@ async function styletext(teks) {
         }
         async function resetLimit() {
             let users = Object.keys(db.data.users)
-            let limite = '1000'
             for (let i of users) {
-               db.data.users[i].limit = limite
+               db.data.users[i].limit = 1000
             }
             nyanBot2.sendText(m.chat, { text: `Reset Limit`})
         }
