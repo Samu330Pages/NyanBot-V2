@@ -3971,7 +3971,7 @@ let bcText = `${text}\n\n\n\nDate: ${date} ${time}`
 for (let i of Object.keys(global.db.data.chats)) {
 await sleep(1500)
 if (/image/.test(mime)) {
-var media = await quoted.download()
+let media = await quoted.download()
 await nyanBot2.sendMessage(i, {
 image:media,
 caption: bcText,
@@ -3989,7 +3989,7 @@ contextInfo: {
 }
 })
 } else if (/video/.test(mime)) {
-var media = await quoted.download()
+let media = await quoted.download()
 await nyanBot2.sendMessage(i, {
 video: media,
 caption: bcText,
