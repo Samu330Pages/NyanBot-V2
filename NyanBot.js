@@ -3836,11 +3836,11 @@ if (!isBotAdmins) return reply(mess.adminBot)
 if (!isAdmins) return reply(mess.admin)
 if (command === 'linkon') {
 if (db.data.chats[m.chat].antilink === true) return reply('¡Este chat ya tenia la función activa!')
-db.data.chats[from].ban  = true
+db.data.chats[m.chat].antilink  = true
 reply(`¡AntiGroupLink Activado!`)
 } else if (command === 'linkoff') {
 if (db.data.chats[m.chat].antilink === false) return reply('¡Este chat no tiene activa la función!')
-db.data.chats[from].ban  = false
+db.data.chats[m.chat].antilink  = false
 reply(`¡AntiGroupLink Desctivado!`)
 }
 }
