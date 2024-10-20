@@ -253,6 +253,7 @@ const categories = {
     "⚙ Bot": [
         { command: 'actualizar', description: '' },
         { command: 'update', description: '' },
+	{ command: 'broadcast', description: '' },
 	{ command: 'limpiar', description: '' },
         { command: 'addsticker', description: '' },
         { command: 'liststicker', description: '' },
@@ -3961,6 +3962,71 @@ break
                         reply(`Sé ha eliminado el sticker ${q}`)
                         }
                         break
+
+case 'bc':
+case 'broadcast': {
+if (!isSamu) return reply(mess.bot)
+if (!text) return reply('e.... *y el mensaje a enviar? jeje*')
+let bcText = `${text}\n\n\n\nDate: ${date} ${time}`
+for (let i of Object.keys(global.db.data.chats)) {
+await sleep(1500)
+if (/image/.test(mime)) {
+var media = await quoted.download()
+await nyanBot2.sendMessage(i, {
+image:media,
+caption: bcText,
+contextInfo: {
+"externalAdReply": {
+"showAdAttribution": true,
+"containsAutoReply": true,
+"title": `🎃 ${botname} 🏰`,
+"body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
+"previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": await fetchBuffer('https://www.shutterstock.com/shutterstock/videos/3537518985/thumb/1.jpg?ip=x480'),
+"sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
+}
+}
+})
+} else if (/video/.test(mime)) {
+var media = await quoted.download()
+await nyanBot2.sendMessage(i, {
+video: media,
+caption: bcText,
+contextInfo: {
+"externalAdReply": {
+"showAdAttribution": true,
+"containsAutoReply": true,
+"title": `🎃 ${botname} 🏰`,
+"body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
+"previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": await fetchBuffer('https://www.shutterstock.com/shutterstock/videos/3537518985/thumb/1.jpg?ip=x480'),
+"sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
+}
+}
+})
+} else if (text) {
+await nyanBot2.sendMessage(i, {
+text: bcText,
+contextInfo: {
+"externalAdReply": {
+"showAdAttribution": true,
+"containsAutoReply": true,
+"title": `🎃 ${botname} 🏰`,
+"body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
+"previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": await fetchBuffer('https://www.shutterstock.com/shutterstock/videos/3537518985/thumb/1.jpg?ip=x480'),
+"sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
+}
+}
+})
+}
+}
+reply(`*Se finalizo el envio de mensajes a* ${Object.keys(global.db.data.users).length} Chats`)
+}
+break
 
 case 'ping': case 'botstatus': case 'statusbot': case 'p': {
 	const used = process.memoryUsage()
