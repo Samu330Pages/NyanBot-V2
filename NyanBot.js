@@ -1125,7 +1125,7 @@ case 'menu': {
     const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
     
     // Configurar el mensaje del menú
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}\n`;
 
     const { isPremium } = checkPremiumUser(sender);
     if (isPremium) {
