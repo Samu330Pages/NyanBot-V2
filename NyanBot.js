@@ -909,8 +909,8 @@ async function styletext(teks) {
         
         //limit func
         async function useLimit(senderLimit, amount) {
-            await db.data.users[senderLimit].limit -= amount
-            await db.data.users[senderLimit].totalLimit += amount
+            db.data.users[senderLimit].limit -= amount
+            db.data.users[senderLimit].totalLimit += amount
         }
         async function resetLimit() {
             let users = Object.keys(global.db.data.users)
