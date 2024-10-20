@@ -908,10 +908,9 @@ async function styletext(teks) {
 }
         
         //limit func
-        async function useLimit(senuseLimitder, amount) {
-            db.data.users[sender].limit -= amount
-            db.data.users[sender].totalLimit += amount
-            reply(`You have used up: ${amount} limit\nRemaining: ${db.data.users[sender].limit} limit`)
+        async function useLimit(senderLimit, amount) {
+            db.data.users[senderLimit].limit -= amount
+            db.data.users[senderLimit].totalLimit += amount
         }
         async function resetLimit() {
             let users = Object.keys(global.db.data.users)
@@ -2021,7 +2020,7 @@ case 'yta': {
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
 
-    db.data.users[sender].limit -= 30;
+    useLimit(sender, '30')
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
@@ -2077,7 +2076,7 @@ case 'ytv': {
         stcReac('error', `_*❌ La descarga con ID ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
-    db.data.users[sender].limit -= 30;
+    useLimit(sender, '30')
 }
 break
 
@@ -2120,7 +2119,7 @@ case 'ytalink': {
         stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
-    db.data.users[sender].limit -= 30;
+    useLimit(sender, '30')
 }
 break
 
@@ -2165,7 +2164,7 @@ case 'ytvlink': {
         stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 
-    db.data.users[sender].limit -= 30;
+    useLimit(sender, '30')
 }
 break
 
@@ -2237,7 +2236,7 @@ const buttons = [{
         });
     }
 
-    db.data.users[sender].limit -= 50;
+    useLimit(sender, '50')
 }
 break
 			
@@ -2269,7 +2268,7 @@ case 'facebook': case 'fb': {
 	    jpegThumbnail: await fetchBuffer(data.thumbnail)
         }, { quoted: m });
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 20;
+        useLimit(sender, '20')
     } catch {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
@@ -2321,7 +2320,7 @@ case 'insta': case 'ig': case 'instagram': {
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
-    db.data.users[sender].limit -= 20;
+    useLimit(sender, '20')
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
@@ -2352,7 +2351,7 @@ image: {url: xInfo.data.media[0].url},
 caption: xCap
 }, {quoted: m})
 }
-db.data.users[sender].limit -= 10;
+useLimit(sender, '10')
 } catch (e) {
 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
 stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*')
@@ -2429,7 +2428,7 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }}
 }, {quoted: m})
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 10;
+        useLimit(sender, '10')
     } catch (e) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
@@ -2471,7 +2470,7 @@ sourceUrl: `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
 }
 }
 }, { quoted: m })
-db.data.users[sender].limit -= 30;
+useLimit(sender, '30')
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 } catch (e) {
 nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
@@ -2743,7 +2742,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
         }
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 50;
+        useLimit(sender, '50')
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
@@ -2847,7 +2846,7 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
         }
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 50;
+        useLimit(sender, '50')
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
