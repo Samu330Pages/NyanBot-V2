@@ -186,81 +186,79 @@ function calculateSimilarity(str1, str2) {
 // Constante de categorías y comandos disponibles
 const categories = {
     "📝 Registro": [
-        { command: 'login', description: '_*CORREO*_' },
-        { command: 'reg', description: '' },
-        { command: 'reset', description: '_*CORREO*_' },
-        { command: 'logout', description: '_*CORREO*_' }
+        { command: 'login', description: '_*CORREO*_', help: 'Inicia sesión con tu correo si ya te has registrado!' },
+        { command: 'reg', description: '', help: 'Registrate con un correo para obtener recompensas.' },
+        { command: 'reset', description: '_*CORREO*_', help: 'Solicitar correo de restablecimiento de contraseña.' },
+        { command: 'logout', description: '_*CORREO*_', help: 'Cierra tu sesión.' }
     ],
     "🔍 Búsqueda": [
-	{ command: 'google', description: '' },
-	{ command: 'imagen', description: '' },
-	{ command: 'playlist', description: '' },
-	{ command: 'ytplaylist', description: '' },
-	{ command: 'youtubesearch', description: '' },
-	{ command: 'yts', description: '' },
-	{ command: 'song', description: '_*RECONOCE CANCIONES*_' },
-        { command: 'letra', description: '' },
-	{ command: 'buscarsticker', description: '' }
+	{ command: 'google', description: '', help: 'Realiza búsquedas en Google.' },
+	{ command: 'imagen', description: '', help: 'Búsqueda de imágenes.' },
+	{ command: 'playlist', description: '', help: 'Busca una playlist de YouTube para descargar videos.' },
+	{ command: 'ytplaylist', description: '', help: 'Alias de playlist.' },
+	{ command: 'youtubesearch', description: '', help: 'Realiza búsquedas en YouTube.' },
+	{ command: 'yts', description: '', help: 'Alias de youtubesearch.' },
+	{ command: 'song', description: '_*RECONOCE CANCIONES*_', help: 'Etiqueta un audio con el comando para reconocer la canción.' },
+        { command: 'letra', description: '', help: 'Busca la letra de canciones.' },
+	{ command: 'buscarsticker', description: '', help: 'Busca y envía stickers.' }
     ],
     "📥 Descargas": [
-        { command: 'play', description: '' },
-        { command: 'yta', description: '_*URL*_' },
-        { command: 'ytmp3', description: '_*URL*_' },
-        { command: 'ytv', description: '_*URL*_' },
-        { command: 'ytmp4', description: '_*URL*_' },
-        { command: 'tiktok', description: '_*URL*_' },
-        { command: 'tt', description: '_*URL*_' },
-	{ command: 'twiter', description: '' },
-        { command: 'facebook', description: '_*URL*_' },
-        { command: 'fb', description: '_*URL*_' },
-        { command: 'instagram', description: '_*URL*_' },
-        { command: 'ig', description: '_*URL*_' },
-        { command: 'mediafire', description: '_*URL*_' },
-	{ command: 'gdrive', description: '_*URL*_' },
-	{ command: 'apk', description: '' }
+        { command: 'play', description: '', help: 'Descargar videos/adiós de YouTube con búsqueda.' },
+        { command: 'yta', description: '_*URL*_', help: 'Descargar adiós de YouTube con link.' },
+        { command: 'ytmp3', description: '_*URL*_', help: 'Alias de yta.' },
+        { command: 'ytv', description: '_*URL*_', help: 'Descargar videos de YouTube con link.' },
+        { command: 'ytmp4', description: '_*URL*_', help: 'Alias de ytv.' },
+        { command: 'tiktok', description: '_*URL*_', help: 'Descarga videos/imágenes junto con el audio de TikTok.' },
+        { command: 'tt', description: '_*URL*_', help: 'Alias de tiktok.' },
+	{ command: 'twiter', description: '', help: 'Descarga videos/imágenes de Twitter (X).' },
+        { command: 'facebook', description: '_*URL*_', help: 'Descarga videos de Facebook.' },
+        { command: 'fb', description: '_*URL*_', help: 'Alias de facebook.' },
+        { command: 'instagram', description: '_*URL*_', help: 'Descarga videos/imágenes de Instagram.' },
+        { command: 'ig', description: '_*URL*_', help: 'Alias de instagram.' },
+        { command: 'mediafire', description: '_*URL*_', help: 'Descarga archivos de Mediafire sin seguridad.' },
+	{ command: 'gdrive', description: '_*URL*_', help: 'Descarga archivos de Google Drive.' },
+	{ command: 'apk', description: '', help: 'Descarga aplicaciones.' }
     ],
     "🧠 Ia": [
-	{ command: 'bard', description: '' },
-	{ command: 'ia', description: '' },
-	{ command: 'chatgpt', description: '' }
+	{ command: 'bard', description: '', help: 'Inteligencia artificial.' },
+	{ command: 'ia', description: '', help: 'Inteligencia artificial.' },
+	{ command: 'chatgpt', description: '', help: 'Inteligencia artificial.' }
     ],
     "🎭 Grupos": [
-	{ command: 'añadir', description: '_*NUM*_' },
-	{ command: 'eliminar', description: '_*NUM/@tag*_' },
-	{ command: 'promote', description: '_*NUM/@tag*_' },
-	{ command: 'demote', description: '_*NUM/@tag*_' },
-	{ command: 'link', description: '' },
-	{ command: 'anti', description: '' },
-	{ command: 'unavista', description: '' },
-	{ command: 'antiviewonce', description: '' },
-	{ command: 'banchat', description: '' },
-	{ command: 'gpimg', description: '' }
+	{ command: 'añadir', description: '_*NUM*_', help: 'Agrega a personas a un grupo (solo administradores).' },
+	{ command: 'eliminar', description: '_*NUM/@tag*_', help: 'Elimina a personas de un grupo (solo administradores).' },
+	{ command: 'promote', description: '_*NUM/@tag*_', help: 'Asigna administración a personas en un grupo (solo administradores).' },
+	{ command: 'demote', description: '_*NUM/@tag*_', help: 'Quita administración a personas en un grupo (solo administradores).' },
+	{ command: 'link', description: '', help: 'Obtiene el enlace de invitación del grupo.' },
+	{ command: 'anti', description: '', help: 'Activa/desactiva la función de AntiGroserias en un grupo (solo administradores).' },
+	{ command: 'antilink', description: '', help: 'Activa/desactiva la función de AntiGroupLink en un grupo (solo administradores).' },
+	{ command: 'unavista', description: '', help: 'Activa/desactiva la función de UnaVista en un grupo (solo administradores).' },
+	{ command: 'antiviewonce', description: '', help: 'Alias de unavista.' },
+	{ command: 'banchat', description: '', help: 'Ignora comandos en un grupo (solo administradores).' },
+	{ command: 'gpimg', description: '', help: 'Cambia la imagen de perfil del grupo (solo administradores).' }
     ],
     "🛠 Herramientas": [
-        { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_' },
-        { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_' },
-	{ command: 'sinfondo', description: '' },
-	{ command: 'avideo', description: '' },
-	{ command: 'agif', description: '' },
-	{ command: 'toaudio', description: '' },
-	{ command: 'aimagen', description: '' },
-        { command: 'puntos', description: '' },
-        { command: 'take', description: '' },
-        { command: 'wm', description: '' },
-        { command: 'perfil', description: '' },
-	{ command: 'speed', description: '' }
+        { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Crea Stickers a partir de Imagen/Video/GIF, usa las opciones para agregar efecto a el Sticker.' },
+        { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Alias de sticker.' },
+	{ command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
+	{ command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
+	{ command: 'agif', description: '', help: 'Convierte un Sticker animado a GIF.' },
+	{ command: 'toaudio', description: '', help: 'Convierte un Video a Audio.' },
+	{ command: 'aimagen', description: '', help: 'Convierte un Sticker estático a imagen.' },
+        { command: 'puntos', description: '', help: 'Verifica tus puntos y te da información de como ganar más.' },
+        { command: 'take', description: '', help: 'Renombra el paquete y autor de los Stickers.' },
+        { command: 'wm', description: '', help: 'Crea un sticker con paquete y autor custom.' },
+        { command: 'perfil', description: '', help: 'Obtiene información de un número de WhatsApp.' },
+	{ command: 'speed', description: '', help: 'Verifica con que velocidad el bot responde.' }
     ],
     "⚙ Bot": [
-        { command: 'actualizar', description: '' },
-        { command: 'update', description: '' },
-	{ command: 'broadcast', description: '' },
-	{ command: 'limpiar', description: '' },
-        { command: 'addsticker', description: '' },
-        { command: 'liststicker', description: '' },
-        { command: 'delsticker', description: '' },
-        { command: '<=', description: '_*EVAL*_' },
-        { command: '=>', description: '_*EVAL*_' },
-        { command: '$', description: '_*EXECUTE*_' }
+        { command: 'actualizar', description: '', help: 'Actualiza el Bot a la versión más reciente (Solo Bot).' },
+        { command: 'update', description: '', help: 'Alias de actualizar.' },
+	{ command: 'broadcast', description: '', help: 'Envía mensajes masivos a todos los chats (Solo Bot).' },
+	{ command: 'limpiar', description: '', help: 'Libera memoria (Solo Bot).' },
+        { command: '<=', description: '_*EVAL*_', help: 'Eval con return.' },
+        { command: '=>', description: '_*EVAL*_', help: 'Eval sin return.' },
+        { command: '$', description: '_*EXECUTE*_', help: 'Ejecutar en consola.' }
     ]
 };
 //data
@@ -1053,22 +1051,22 @@ if (db.data.chats[m.chat].badword) {
         
 
         if (db.data.chats[m.chat].antilink) {
-            if (budy.match('http') && budy.match('https') && budy.match(`chat.whatsapp.com`)) {
+            if (budy.match(`chat.whatsapp.com`)) {
 if (isAdmins) return
 if (m.key.fromMe) return
 if (isSamu) return
-               await nyanBot2.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-            }
-        }
+await nyanBot2.sendMessage(m.chat,
+{
+delete: {
+remoteJid: m.chat,
+fromMe: false,
+id: m.key.id,
+participant: m.key.participant
+}
+})
+nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links de otros grupos!!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
+}
+}
         
 const sendapk = (teks) => {
 nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/vnd.android.package-archive'}, {quoted:m})
@@ -3798,6 +3796,52 @@ reply(`¡Este chat se ha Baneado!`)
 if (db.data.chats[from].ban === false) return reply('¡Este chat no esta baneado!')
 db.data.chats[from].ban  = false
 reply(`¡Este chat se ha Desbaneado!`)
+}
+}
+break
+
+case 'antilink': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (!db.data.chats[m.chat].antilink === true) {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Si ✔',
+            id: `${prefix}linkon`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Deseas activar la función AntiGroupLink en este chat?*'
+})	
+} else {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desactivar ❌',
+            id: `${prefix}linkoff`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Este chat tiene la función AntiGroupLink activa, presiona el botón para poder desactivar esta opción*'
+})
+}
+}
+break
+
+case 'linkon': case 'linkoff': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (command === 'linkon') {
+if (db.data.chats[m.chat].antilink === true) return reply('¡Este chat ya tenia la función activa!')
+db.data.chats[from].ban  = true
+reply(`¡AntiGroupLink Activado!`)
+} else if (command === 'linkoff') {
+if (db.data.chats[m.chat].antilink === false) return reply('¡Este chat no tiene activa la función!')
+db.data.chats[from].ban  = false
+reply(`¡AntiGroupLink Desctivado!`)
 }
 }
 break
