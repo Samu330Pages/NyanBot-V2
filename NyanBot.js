@@ -2443,7 +2443,7 @@ try {
 let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
 if (!apkInfo.data.name) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-let icono = await reSize(apkInfo.data.icon, 200, 200)
+//let icono = await reSize(apkInfo.data.icon, 200, 200)
 await stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
 await nyanBot2.sendMessage(m.chat, {
 document: {url: `${apkInfo.data.dllink}`},
@@ -2454,19 +2454,7 @@ caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
 *Tamaño:* ${apkInfo.data.size}
 *Paquete:* ${apkInfo.data.package}
 *Última actualización:* ${apkInfo.data.lastUpdate}\n
-> ${botname}`,
-contextInfo: {
-externalAdReply: {
-showAdAttribution: true,
-containsAutoReply: true,
-title: `Click here 👉🏻🟢`,
-body: `${ownername}`,
-previewType: "PHOTO",
-thumbnailUrl: ``,
-thumbnail: icono,
-sourceUrl: `https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1`
-}
-}
+> ${botname}`
 }, { quoted: m })
 useLimit(sender, 30)
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
