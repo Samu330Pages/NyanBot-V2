@@ -232,6 +232,7 @@ const categories = {
 	{ command: 'link', description: '', help: 'Obtiene el enlace de invitación del grupo.' },
 	{ command: 'anti', description: '', help: 'Activa/desactiva la función de AntiGroserias en un grupo (solo administradores).' },
 	{ command: 'antilink', description: '', help: 'Activa/desactiva la función de AntiGroupLink en un grupo (solo administradores).' },
+	{ command: 'antibot', description: '', help: 'Activa/desactiva la función de AntiBot en un grupo (solo administradores).' },
 	{ command: 'unavista', description: '', help: 'Activa/desactiva la función de UnaVista en un grupo (solo administradores).' },
 	{ command: 'antiviewonce', description: '', help: 'Alias de unavista.' },
 	{ command: 'banchat', description: '', help: 'Ignora comandos en un grupo (solo administradores).' },
@@ -3781,6 +3782,52 @@ reply(`¡AntiGroupLink Activado!`)
 if (db.data.chats[m.chat].antilink === false) return reply('¡Este chat no tiene activa la función!')
 db.data.chats[m.chat].antilink  = false
 reply(`¡AntiGroupLink Desctivado!`)
+}
+}
+break
+
+case 'antibot': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (!db.data.chats[m.chat].antibot === true) {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Si ✔',
+            id: `${prefix}boton`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Deseas activar la función AntiBot en este chat?*'
+})	
+} else {
+const buttons = [{
+          name: "quick_reply",
+          buttonParamsJson: JSON.stringify({
+            display_text: 'Desactivar ❌',
+            id: `${prefix}botoff`
+          }),
+        }]
+return await sendReplyButton(m.chat, buttons, m, {
+	content: '*Este chat tiene la función AntiBot activa, presiona el botón para poder desactivar esta opción*'
+})
+}
+}
+break
+
+case 'boton': case 'botoff': {
+if (!m.isGroup) return reply(mess.group)
+if (!isBotAdmins) return reply(mess.adminBot)
+if (!isAdmins) return reply(mess.admin)
+if (command === 'boton') {
+if (db.data.chats[m.chat].antibot === true) return reply('¡Este chat ya tenia la función activa!')
+db.data.chats[m.chat].antibot  = true
+reply(`¡AntiBot Activado!`)
+} else if (command === 'botoff') {
+if (db.data.chats[m.chat].antibot === false) return reply('¡Este chat no tiene activa la función!')
+db.data.chats[m.chat].antibot  = false
+reply(`¡AntiBot Desctivado!`)
 }
 }
 break
