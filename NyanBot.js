@@ -1097,37 +1097,6 @@ let buffer = fs.readFileSync(`./Media/doc/${BhosdikaXeon}.pdf`)
 senddocu(buffer)
 }
 }
-
-// Respon Cmd with media
-/*if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.data.sticker)) {
-let hash = global.db.data.sticker[m.msg.fileSha256.toString('base64')]
-let { text, mentionedJid } = hash
-let messages = await generateWAMessage(m.chat, { text: text, mentions: mentionedJid }, {
-    userJid: nyanBot2.user.id,
-    quoted: m.quoted && m.quoted.fakeObj
-})
-messages.key.fromMe = areJidsSameUser(m.sender, nyanBot2.user.id)
-messages.key.id = m.key.id
-messages.pushName = m.pushName
-if (m.isGroup) messages.participant = m.sender
-let msg = {
-    ...chatUpdate,
-    messages: [proto.WebMessageInfo.fromObject(messages)],
-    type: 'append'
-}
-nyanBot2.ev.emit('messages.upsert', msg)
-}
-*/
-//math
-if (quizmath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
-	if (m.key.fromMe) return
-            kuis = true
-            jawaban = quizmath[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == jawaban) {
-                await reply(`🎮 Math Quiz 🎮\n\nCorrect Answer 🎉\n\nWant To Play Again? Send ${prefix}math mode`)
-                delete quizmath[m.sender.split('@')[0]]
-            } else reply('*Wrong Answer!*')
-        }
         
         //user db
         if (isCommand && !isUser) {
@@ -1200,6 +1169,23 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
         return m.reply("*Error*");
     }
 }
+break
+
+case 'ayuda': case 'help':
+let helpMsg = `😊 AQUÍ TE EXPLICO COMO USAR LAS FUNCIONES DEL BOT!
+PRIMERO DEBES SABER QUE PARA USAR UN COMANDO DEBES PRIMERO ESCRIBIR EL PREFIJO, QUE EN ESTE CASO ES 👉🏻 *${prefix}* 👈🏻, SEGUIDAMENTE VA EL COMANDO QUE DESEES USAR, EJEMPLO:
+
+*${prefix}menu*
+
+TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:`
+for (const [category, help] of Object.entries(categories)) {
+        helpMsg += `*${category}:*\n`;
+        help.forEach(cmdObj => {
+            helpMsg += `- ${forma1}${cmdObj.command}${forma1} ${cmdObj.help}\n`;
+        });
+        helpMsg += '\n';
+    }
+reply(helpMsg)
 break
 
 case 'lg': {
