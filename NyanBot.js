@@ -1046,7 +1046,7 @@ if (db.data.chats[m.chat].badword) {
         
 
         if (db.data.chats[m.chat].antilink) {
-            if (budy.match(`chat.whatsapp.com`) && budy.match('whatsapp.com/channel')) {
+            if (budy.match(`whatsapp.com`)) {
 if (isAdmins) return
 if (m.key.fromMe) return
 if (isSamu) return
