@@ -2636,11 +2636,7 @@ break
 case 'say': case 'tts': case 'gtts':{
 if (!text) return reply('*Porfavor ingresa un texto junto con el comando para que el Bot pueda reproducirlo!* 😛')
             let texttts = text
-            const ttsUrl = googleTTS.getAudioUrl(texttts, {
-                lang: "es",
-                slow: false,
-                host: "https://translate.google.com",
-            })
+            const ttsUrl = googleTTS(texttts, 'es')
             return nyanBot2.sendMessage(m.chat, {
                 audio: {
                     url: ttsUrl,
