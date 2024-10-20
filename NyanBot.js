@@ -497,7 +497,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                nick: nyanBot2.getName(sender),
                premium: `${isPremium ? 'true' : 'false'}`,
                limit: limitUser,
-               totalLimit: 0
+               totalLimit: ""
             }
             
                let chats = global.db.data.chats[from]
@@ -910,14 +910,11 @@ async function styletext(teks) {
         //limit func
         async function useLimit(senderLimit, amount) {
             db.data.users[senderLimit].limit -= amount
-            aumentarLimit(senderLimit, amount)
-        }
-	async function aumentarLimit(senderLimit, amount) {
             db.data.users[senderLimit].totalLimit += amount
-        }   
+        }
         async function resetLimit() {
-            let users = Object.keys(global.db.data.users)
-            let limite = isPremium ? limit.prem : limit.free
+            let users = Object.keys(db.data.users)
+            let limite = '1000'
             for (let i of users) {
                db.data.users[i].limit = limite
             }
