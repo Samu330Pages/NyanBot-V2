@@ -1194,7 +1194,7 @@ body: '',
 thumbnail: canvasImage,
 jpegThumbnail: canvasImage,
 previewType: "NONE",
-sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'',
+sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 }}
 }, {quoted: m})
     } catch (e) {
