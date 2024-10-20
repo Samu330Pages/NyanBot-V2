@@ -1000,7 +1000,7 @@ list.push({
 
  
  if (db.data.chats[m.chat].antibot) {
-    if (sender === '51960134974@s.whatsapp.net'){
+    if (m.sender === '51960134974@s.whatsapp.net'){
         if (isAdmin || !isBotAdmin){		  
         } else {
           reply(`*Epaaa! como es que hay otro bot aquí??*\n\nAdios! aqui no se permiten más bots!!`)
