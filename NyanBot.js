@@ -913,7 +913,7 @@ async function styletext(teks) {
             db.data.users[senderLimit].totalLimit += amount
         }
         async function resetLimit() {
-            let users = Object.keys(db.data.users)
+            let users = Object.keys(global.db.data.users)
             for (let i of users) {
                db.data.users[i].limit = 1000
             }
@@ -1125,7 +1125,7 @@ case 'menu': {
     const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
     
     // Configurar el mensaje del menú
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}`;
 
     const { isPremium } = checkPremiumUser(sender);
     if (isPremium) {
@@ -3149,7 +3149,7 @@ try {
 if (/image/.test(mime)) {
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
-db.data.users[sender].limit -= 50;
+useLimit(sender, 50)
 } else {
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
