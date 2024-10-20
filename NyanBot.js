@@ -1567,6 +1567,7 @@ darás información lo mas detallada posible de esta solicitud: ${text}`;
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
 	const response = await bard.getBardResponse(query);
 
+	nyanBot2.sendMessage(m.chat, { react: { text: '🧠', key: m.key } });
         console.log('Respuesta de Bard:', response);
 
         if (response && response.response && response.response.candidates.length > 0) {
@@ -2281,8 +2282,7 @@ case 'insta': case 'ig': case 'instagram': {
     if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
 
-    let instalId;
-    instalId = reactionLoad(m.chat, m.key);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
     try {
@@ -2316,13 +2316,13 @@ case 'insta': case 'ig': case 'instagram': {
             }, { quoted: m });
         }
     } catch (error) {
-        reactionError(m.chat, m.key, instalId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
     db.data.users[sender].limit -= 20;
-    reactionOk(m.chat, m.key, instalId);
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
 
@@ -2365,10 +2365,8 @@ case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (args.length < 1) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
 
-    let ttlId;
     try {
-        ttlId = reactionLoad(m.chat, m.key);
-
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
         const { result } = await fg.tiktok(text);
         
 let infoTt = `*📌 Información del contenido:*
@@ -2430,10 +2428,10 @@ previewType: "NONE",
 sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }}
 }, {quoted: m})
-        reactionOk(m.chat, m.key, ttlId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         db.data.users[sender].limit -= 10;
     } catch (e) {
-        reactionError(m.chat, m.key, ttlId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
@@ -3157,7 +3155,7 @@ db.data.users[sender].limit -= 50;
 } else {
 let media = await quoted.download()
 let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
-db.data.users[sender].limit -= 50;
+useLimit(sender, '50')
 }
 } catch (error) {
 stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
@@ -3187,7 +3185,7 @@ case 'nobg': case 'sinfondo': {
         }, { quoted: m });
 	fs.unlinkSync(media);
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        db.data.users[sender].limit -= 50;
+        useLimit(sender, '50')
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
@@ -3511,36 +3509,6 @@ ${forma1}🪨 | ✊🏻 | 📄 | ✋🏻 | ✂️ | ✌🏻${forma1}
 
 _*Y ganarás puntos de manera más rápida!*_`);
             break
-
-            case 'llaves': // Comando para ver el uso de claves
-    const usageDataFilePath = path.join(__dirname, './lib/Media/database/usage.json'); // Ruta del archivo de uso
-
-    if (fs.existsSync(usageDataFilePath)) {
-        const usageData = JSON.parse(fs.readFileSync(usageDataFilePath)); // Cargar datos de uso
-
-        let message = '*Usos de las claves:*\n\n'; // Mensaje para enviar
-
-        // Iterar sobre las claves y agregar su uso al mensaje
-        for (const key of Object.keys(usageData.keys)) {
-            const keyInfo = usageData.keys[key];
-            const formattedLastReset = new Date(keyInfo.lastReset).toLocaleString('es-ES', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false // Para usar el formato de 24 horas
-            });
-
-            message += `*Clave:* ${key}, *Usos:* ${keyInfo.usage}, *Último reinicio:* ${formattedLastReset}\n`;
-        }
-
-        reply(message); // Enviar el mensaje con la información de uso
-    } else {
-        reply("El archivo de uso no existe."); // Mensaje si el archivo no se encuentra
-    }
-    break
 			
 	case 'groseria': case 'addbd':
                if (!isSamu) return reply(mess.bot)
