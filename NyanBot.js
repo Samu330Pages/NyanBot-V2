@@ -477,7 +477,7 @@ return arr[Math.floor(Math.random() * arr.length)]
         //database
         try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
-            let limitUser = isPremium ? 1000 : 100
+            let limitUser = isPremium ? 1000 : 1000
             let user = global.db.data.users[sender]
             if (typeof user !== 'object') global.db.data.users[sender] = {}
             if (user) {
@@ -909,8 +909,8 @@ async function styletext(teks) {
         
         //limit func
         async function useLimit(senderLimit, amount) {
-            db.data.users[senderLimit].limit -= amount
-            db.data.users[senderLimit].totalLimit += amount
+            await db.data.users[senderLimit].limit -= amount
+            await db.data.users[senderLimit].totalLimit += amount
         }
         async function resetLimit() {
             let users = Object.keys(global.db.data.users)
@@ -4452,43 +4452,39 @@ ${forma1}╰────▵────╯${forma1}\n\n`;
     db.data.users[sender].limit += puntos;
     nyanBot2.sendMessage(from, { text: msgSlot }, { quoted: m });
 }
-// Definimos los emojis de entrada
+
 const emojis = {
     piedra: ['🪨','✊🏻','✊🏼','✊🏽','✊🏾','✊🏿','✊','👊🏻','👊🏼','👊🏽','👊🏾','👊🏿','👊'],
     papel: ['📄','🤚🏻','🤚🏼','🤚🏽','🤚🏾','🤚🏿','🤚'],
     tijera: ['✂️','✌🏻','✌🏼','✌🏽','✌🏾','✌🏿','✌️']
 };
 
-// Recibir el mensaje del usuario
 if (Object.values(emojis).flat().includes(budy)) {
     let userChoice;
     
-    // Determinar la elección del usuario
     for (const [key, value] of Object.entries(emojis)) {
         if (value.includes(budy)) {
-            userChoice = key; // 'piedra', 'papel' o 'tijera'
+            userChoice = key;
             break;
         }
     }
 
     const choices = ['piedra', 'papel', 'tijera'];
-    const botChoice = choices[Math.floor(Math.random() * choices.length)]; // Elección aleatoria del bot
+    const botChoice = choices[Math.floor(Math.random() * choices.length)];
 
     let resultMessage = '';
     let puntos = 0;
 
-    // Determinar el resultado del juego
     if (userChoice === botChoice) {
         resultMessage = "¡Es un empate! 🤝";
     } else if (
-        (userChoice === 'piedra' && botChoice === 'tijera') || // Piedra gana a tijera
-        (userChoice === 'papel' && botChoice === 'piedra') || // Papel gana a piedra
-        (userChoice === 'tijera' && botChoice === 'papel')    // Tijera gana a papel
+        (userChoice === 'piedra' && botChoice === 'tijera') ||
+        (userChoice === 'papel' && botChoice === 'piedra') ||
+        (userChoice === 'tijera' && botChoice === 'papel')
     ) {
-        puntos = 50; // Ganancia de puntos
+        puntos = 50;
         resultMessage = `¡Felicidades! 🎉 Has ganado 50 puntos.`;
     } else {
-        // Mensajes de pérdida
         const lossMessages = [
             `¡Uy! Has perdido 😢. ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
             `¡Qué pena! 😭 Has perdido. ${botChoice.charAt(0).toUpperCase() + botChoice.slice(1)} gana a ${userChoice}.`,
@@ -4499,10 +4495,8 @@ if (Object.values(emojis).flat().includes(budy)) {
         resultMessage = lossMessages[Math.floor(Math.random() * lossMessages.length)];
     }
 
-    // Sumar puntos al usuario
     db.data.users[sender].limit += puntos;
 
-    // Enviar el sticker correspondiente al bot
     let stickerPath;
     switch (botChoice) {
         case 'piedra':
@@ -4516,10 +4510,9 @@ if (Object.values(emojis).flat().includes(budy)) {
             break;
         default:
             console.error("Elección del bot no válida.");
-            return; // Salir si no hay una elección válida
+            return;
     }
 
-    // Enviar el sticker y el mensaje de resultado
     try {
         await nyanBot2.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, {
             quoted: {
@@ -4556,17 +4549,16 @@ if (Object.values(emojis).flat().includes(budy)) {
 
 if (budy.includes('@5219984907794')) {
     if (isSamu) return;
-    const emojis = ['🌮', '❤️', '🐡', '🪅', '🔥', '🦞', '🍟', '🪀', '🌺', '🍋‍🟩']; // Array de emojis para las reacciones
-    let emojiIndex = 0; // Índice para el emoji actual
+    const emojis = ['🌮', '❤️', '🐡', '🪅', '🔥', '🦞', '🍟', '🪀', '🌺', '🍋‍🟩'];
+    let emojiIndex = 0;
     const sendReaction = () => {
         nyanBot2.sendMessage(m.chat, { react: { text: emojis[emojiIndex], key: m.key } });
-        emojiIndex = (emojiIndex + 1) % emojis.length; // Cambiar al siguiente emoji, y volver al inicio si es necesario
+        emojiIndex = (emojiIndex + 1) % emojis.length;
     };
     
-    const intervalId = setInterval(sendReaction, 1000); // Enviar reacción cada segundo
+    const intervalId = setInterval(sendReaction, 1000);
 
-    // Opcional: detener el intervalo después de cierto tiempo o bajo una condición
-    setTimeout(() => clearInterval(intervalId), 11000); // Detener después de 10 segundos, por ejemplo
+    setTimeout(() => clearInterval(intervalId), 11000);
 }
                 if (budy.startsWith('=>')) {
                     if (!isSamu) return
