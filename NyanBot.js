@@ -242,6 +242,7 @@ const categories = {
         { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Crea Stickers a partir de Imagen/Video/GIF, usa las opciones para agregar efecto a el Sticker.' },
         { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Alias de sticker.' },
 	{ command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
+	{ command: 'tts', description: '', help: 'Escribe una frase para que el Bot pueda reproducirlo.' },
 	{ command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
 	{ command: 'agif', description: '', help: 'Convierte un Sticker animado a GIF.' },
 	{ command: 'toaudio', description: '', help: 'Convierte un Video a Audio.' },
@@ -2630,6 +2631,26 @@ case 'clima': {
         }
     );
 }
+break
+
+case 'say': case 'tts': case 'gtts':{
+if (!text) return reply('*Porfavor ingresa un texto junto con el comando para que el Bot pueda reproducirlo!* 😛')
+            let texttts = text
+            const ttsUrl = googleTTS.getAudioUrl(texttts, {
+                lang: "es",
+                slow: false,
+                host: "https://translate.google.com",
+            })
+            return nyanBot2.sendMessage(m.chat, {
+                audio: {
+                    url: ttsUrl,
+                },
+                mimetype: 'audio/mp4',
+                ptt: true
+            }, {
+                quoted: m,
+            })
+        }
 break
 
 case 'gdrive': {
