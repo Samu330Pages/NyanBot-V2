@@ -2169,6 +2169,7 @@ case 'ytvlink': {
 break
 
 case 'toaud':
+case 'tomp3':
 case 'toaudio': {
 if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`*Porfavor asegúrate de solamente etiquetar el video el cual quieres convertir en audio utilizando El comando:*\n\n${prefix + command}`)
 nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
