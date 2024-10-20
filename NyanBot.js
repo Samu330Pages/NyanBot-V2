@@ -2018,7 +2018,7 @@ case 'yta': {
         let audioC = await toAudio(audioBuffer, 'mp4');
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n*Bitrate de Audio:* ${r.audioBitrate}`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n- *Canal:* ${r.author}\n- *Bitrate de Audio:* ${r.audioBitrate}\n- *Categoría:* ${r.category}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
             jpegThumbnail: await fetchBuffer(r.thumbnail)
@@ -2074,12 +2074,13 @@ case 'ytv': {
                 document: videoBuffer,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* ${r.title}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos`
+                caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n*Categoría:* ${r.category}\n\n*Encontrarás el video con el nombre:* ${r.title}`,
+		jpegThumbnail: await fetchBuffer(r.thumbnail)
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer,
-                caption: `*Descarga completa! 🍟*\n\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n\n*Encontrarás el video con el nombre:* ${r.title}\n`,
+                caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n*Categoría:* ${r.category}\n\n*Encontrarás el video con el nombre:* ${r.title}\n`,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
