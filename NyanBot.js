@@ -1572,6 +1572,7 @@ darás información lo mas detallada posible de esta solicitud: ${text}`;
             message = message.replace(/\*\*/g, '*');
 
 	if (command === 'nyan') {
+	query = `da una explicación corta, concisa, de menos de 200 letras, de esta solicitud: ${text}`
 	let ttsUrl = await googleTTS(message, 'es', 1, 'https://translate.google.com', ',.?!')
             return nyanBot2.sendMessage(m.chat, {
                 audio: {
