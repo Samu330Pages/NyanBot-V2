@@ -1546,6 +1546,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
         if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`);
         
         let query = '';
+        let message = ''; // Definimos la variable message aquí
         const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg';
         await bard.initializeChat(apiKey);
 
@@ -1561,16 +1562,6 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
 
         if (command === 'nyan') {
             query = `da una explicación corta, concisa, de menos de 200 letras, de esta solicitud: ${text}`;
-            let ttsUrl = await googleTTS(message, 'es', 1, 'https://translate.google.com', ',.?!');
-            return nyanBot2.sendMessage(m.chat, {
-                audio: {
-                    url: ttsUrl,
-                },
-                mimetype: 'audio/mp4',
-                ptt: true
-            }, {
-                quoted: m,
-            });
         } else {
             query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
             siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "${nombre} 🎃",
@@ -1584,7 +1575,21 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
         console.log('Respuesta de Bard:', response);
 
         if (response && response.response && response.response.candidates.length > 0) {
-            let message = response.response.candidates[0].content.parts[0].text;
+            message = response.response.candidates[0].content.parts[0].text; // Asignar el mensaje desde la respuesta
+
+            if (command === 'nyan') {
+                let ttsUrl = await googleTTS(message, 'es', 1, 'https://translate.google.com', ',.?!');
+                return nyanBot2.sendMessage(m.chat, {
+                    audio: {
+                        url: ttsUrl,
+                    },
+                    mimetype: 'audio/mp4',
+                    ptt: true
+                }, {
+                    quoted: m,
+                });
+            }
+
             message = message.replace(/\*\*/g, '*');
 
             return await sendReplyButton(m.chat, [{
