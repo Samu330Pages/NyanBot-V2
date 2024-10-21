@@ -221,6 +221,7 @@ const categories = {
 	{ command: 'apk', description: '', help: 'Descarga aplicaciones.' }
     ],
     "🧠 Ia": [
+	{ command: 'nyan', description: '', help: 'IA con respuesta en audio! (Respuestas cortas).' },
 	{ command: 'bard', description: '', help: 'Inteligencia artificial.' },
 	{ command: 'ia', description: '', help: 'Inteligencia artificial.' },
 	{ command: 'chatgpt', description: '', help: 'Inteligencia artificial.' }
