@@ -1544,11 +1544,7 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
         const bard = new BardAPI();
 
 	if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`)
-	let query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
-siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "${nombre} 🎃",
-si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
-si te llegan a pedir que realices una acción como dar besos y cosas por el estilo, daras una respuesta referente a la acción, algun sonido o algo,
-darás información lo mas detallada posible de esta solicitud: ${text}`;
+	let query = '';
         const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg';
         await bard.initializeChat(apiKey);
 
@@ -1584,6 +1580,11 @@ darás información lo mas detallada posible de esta solicitud: ${text}`;
                 quoted: m,
             })
 	}
+	query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
+siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "${nombre} 🎃",
+si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
+si te llegan a pedir que realices una acción como dar besos y cosas por el estilo, daras una respuesta referente a la acción, algun sonido o algo,
+darás información lo mas detallada posible de esta solicitud: ${text}`
             return await sendReplyButton(m.chat, [{
                 name: "cta_copy",
                 buttonParamsJson: JSON.stringify({
