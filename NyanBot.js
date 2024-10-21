@@ -2110,7 +2110,7 @@ case 'ytv2': {
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        let r = await ny.ytdown(text);
+        let r = await sm.ytdown(text);
 
         const videoBuffer = await fetchBuffer(r.data.video);
             await nyanBot2.sendMessage(m.chat, {
