@@ -2101,36 +2101,6 @@ case 'ytv': {
 }
 break
 
-case 'ytmp42':
-case 'ytv2': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
-
-    try {
-        let r = await sm.ytdown(text);
-
-        const videoBuffer = await fetchBuffer(r.data.video);
-            await nyanBot2.sendMessage(m.chat, {
-                document: `${videoBuffer}`,
-                caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.data.channel}\n*Calidad:* ${r.data.quality}\n\n*Encontrarás el video con el nombre:* ${r.data.title}\n`,
-                fileName: `${r.data.title}.mp4`,
-                mimetype: 'video/mp4'
-            }, { quoted: m });
-    } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error al procesar la solicitud con ID:', error);
-	reply(`${error}`)
-        stcReac('error', `_*❌ La descarga con ID ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
-    }
-
-    useLimit(sender, 30)
-}
-break			
-
 case 'ytmp3link':
 case 'ytalink': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
