@@ -2114,7 +2114,7 @@ case 'ytv2': {
 
         const videoBuffer = await fetchBuffer(r.data.video);
             await nyanBot2.sendMessage(m.chat, {
-                document: videoBuffer,
+                document: `${videoBuffer}`,
                 caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.data.channel}\n*Calidad:* ${r.data.quality}\n\n*Encontrarás el video con el nombre:* ${r.data.title}\n`,
                 fileName: `${r.data.title}.mp4`,
                 mimetype: 'video/mp4'
