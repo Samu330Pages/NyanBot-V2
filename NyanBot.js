@@ -1543,8 +1543,9 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
         let nombre = nyanBot2.getName(sender);
         const bard = new BardAPI();
 
-	if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`)
-	let query = '';
+        if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix+command} Quien te creo!`);
+        
+        let query = '';
         const apiKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg';
         await bard.initializeChat(apiKey);
 
@@ -1557,19 +1558,10 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
         bard.setResponseGenerationConfig(generationConfig);
 
         const normalizedText = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9ñÑ]/g, "");
-	const response = await bard.getBardResponse(query);
 
-	nyanBot2.sendMessage(m.chat, { react: { text: '🧠', key: m.key } });
-        console.log('Respuesta de Bard:', response);
-
-        if (response && response.response && response.response.candidates.length > 0) {
-            let message = response.response.candidates[0].content.parts[0].text;
-
-            message = message.replace(/\*\*/g, '*');
-
-	if (command === 'nyan') {
-	query = `da una explicación corta, concisa, de menos de 200 letras, de esta solicitud: ${text}`
-	let ttsUrl = await googleTTS(message, 'es', 1, 'https://translate.google.com', ',.?!')
+        if (command === 'nyan') {
+            query = `da una explicación corta, concisa, de menos de 200 letras, de esta solicitud: ${text}`;
+            let ttsUrl = await googleTTS(message, 'es', 1, 'https://translate.google.com', ',.?!');
             return nyanBot2.sendMessage(m.chat, {
                 audio: {
                     url: ttsUrl,
@@ -1578,13 +1570,23 @@ case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': {
                 ptt: true
             }, {
                 quoted: m,
-            })
-	}
-	query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
-siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "${nombre} 🎃",
-si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
-si te llegan a pedir que realices una acción como dar besos y cosas por el estilo, daras una respuesta referente a la acción, algun sonido o algo,
-darás información lo mas detallada posible de esta solicitud: ${text}`
+            });
+        } else {
+            query = `Tu idioma predeterminado es español y siempre vas a responder en ese idioma, eres un bot de WhatsApp llamado Nyan creado por Samu330, tu eres de Cancún México, te gustan los gatos y la pizza,
+            siempre vas a responder amablemente y tus respuestas serán certeras y cómicas, en caso qué quieras referirte a la persona con quién hablas solo agrega a la respuesta esto: "${nombre} 🎃",
+            si te preguntan la fecha, la fecha es ${date} y la hora ${time}, tu función en WhatsApp es dar un servicio como inteligencia artificial y responder o dar información a lo que las personas te pregunten,
+            si te llegan a pedir que realices una acción como dar besos y cosas por el estilo, daras una respuesta referente a la acción, algun sonido o algo,
+            darás información lo más detallada posible de esta solicitud: ${text}`;
+        }
+
+        const response = await bard.getBardResponse(query);
+        nyanBot2.sendMessage(m.chat, { react: { text: '🧠', key: m.key } });
+        console.log('Respuesta de Bard:', response);
+
+        if (response && response.response && response.response.candidates.length > 0) {
+            let message = response.response.candidates[0].content.parts[0].text;
+            message = message.replace(/\*\*/g, '*');
+
             return await sendReplyButton(m.chat, [{
                 name: "cta_copy",
                 buttonParamsJson: JSON.stringify({
