@@ -2547,7 +2547,7 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
 
             return {
                 header: {
-                    videoMessage: ttDl.play, // Aquí se asume que ttDl.play es el URL del video
+                    videoMessage: `${ttDl.play}`, // Aquí se asume que ttDl.play es el URL del video
                     hasMediaAttachment: true,
                 },
                 body: {
