@@ -744,7 +744,7 @@ async function sendVidCarousel(chatId, nativeFlowMessage, options) {
     let carouselCards = [];
 
     for (const card of cards) {
-        var videoImageParse = await prepareWAMessageMedia({
+        var cardVideoParse = await prepareWAMessageMedia({
             video: {
                 url: card.header.videoMessage
             },
