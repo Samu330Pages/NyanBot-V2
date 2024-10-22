@@ -2547,7 +2547,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
             contents.push({
                 header: {
-                    videoMessage: ttDl.play, // Aquí se asume que ttDl.play es el URL de descarga
+                    videoMessage: `${ttDl.play}`, // Aquí se asume que ttDl.play es el URL de descarga
                     hasMediaAttachment: true,
                 },
                 body: {
