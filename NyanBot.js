@@ -2518,7 +2518,7 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }
 break
 
-case 'tiktok': case 'tiktoks': case 'tiktoksearch': {
+case 'tiktoks': case 'tiktoksearch': {
     if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _TikTok_ 🎵*');
     nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
 
@@ -2536,7 +2536,7 @@ case 'tiktok': case 'tiktoks': case 'tiktoksearch': {
 
         for (let video of limitedResults) {
             // Obtener detalles del video usando la URL
-            let ttDl = await fg.tiktok(video.url);
+            let ttDl = await fg.tiktok(`${video.url}`);
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
