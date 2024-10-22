@@ -3465,7 +3465,7 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
     try {
         let data = await fg.xnxxSearch(text);
 
-        const limitedResults = data.result.slice(0, 10);
+        const limitedResults = data.result.slice(0, 5);
 
         let contents = [];
 
