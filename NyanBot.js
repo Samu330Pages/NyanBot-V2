@@ -3543,10 +3543,7 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
             footer: `Resultados de la búsqueda`,
             cards: contents
         });
-
-        reactionOk(m.chat, m.key, xvlId);
     } catch (error) {
-        reactionError(m.chat, m.key, xvlId);
         console.error('Error en la búsqueda de Xnxx.com:', error);
         return reply(`Ocurrió un error al realizar la búsqueda en Xvideos. Intenta nuevamente más tarde.\n${error.message}`);
     }
