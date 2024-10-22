@@ -244,6 +244,7 @@ const categories = {
         { command: 'sticker', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Crea Stickers a partir de Imagen/Video/GIF, usa las opciones para agregar efecto a el Sticker.' },
         { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Alias de sticker.' },
 	{ command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
+	{ command: 'emojimix', description: '', help: 'Combina emojis.' },
 	{ command: 'tts', description: '', help: 'Escribe una frase para que el Bot pueda reproducirlo.' },
 	{ command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
 	{ command: 'agif', description: '', help: 'Convierte un Sticker animado a GIF.' },
@@ -2344,6 +2345,22 @@ case 'insta': case 'ig': case 'instagram': {
 
     useLimit(sender, 20)
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+}
+break
+
+case 'emojimix': {
+let [emoji1, emoji2] = text.split`+`
+if (!emoji1) return reply(`*Te falta el otro emoji:* ${prefix + command} 😅+🥹`)
+if (!emoji2) return reply(`*Te falta el otro emoji*: ${prefix + command} 😅+🥹`)
+nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+let emoji = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
+for (let res of emoji.results) {
+let encmedia = await nyanBot2.sendImageAsSticker(m.chat, res.url, m, {
+packname: global.packname,
+author: global.author,
+categories: res.tags
+})
+}
 }
 break
 
