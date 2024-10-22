@@ -61,7 +61,7 @@ const {
     startPetUpdateInterval,
     sleepPet
       } = require('./src/petsTest')
-const audd = new Audd('70d0e2c549dcf2b36f63d5ec3a2a780e');
+const audd = new Audd('30f04e9697cd28e5dba4e5906a2bb021');//21/10/24
 /*const pkg = require('imgur')
 const { ImgurClient } = pkg
 const client = new ImgurClient({ clientId: "a0113354926015a" })*/
