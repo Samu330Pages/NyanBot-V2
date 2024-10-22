@@ -3460,8 +3460,7 @@ break
 
 case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
     if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*');
-    let xvlId;
-    xvlId = reactionLoad(m.chat, m.key);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🔥', key: m.key } });
 
     try {
         let data = await fg.xnxxSearch(text);
@@ -3512,12 +3511,12 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
 break
 
 case 'xnxxdl': {
+nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 let v = await fg.xnxxdl(text)
 nyanBot2.sendMessage(m.chat, {
 	video: {url: v.url_dl},
         fileName: `${v.title}.mp4`,
         mimeType: 'video/mp4',
-        jpegThumbnail: await fetchBuffer(v.thumb),
         caption: `- *Título:* ${v.title}\n- *Duración:* ${v.duration}\n- *Calidad:* ${v.quality}\n- *Tamaño:* ${v.size}\n`,
 }, {quoted:m})
 }
