@@ -2518,7 +2518,7 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }
 break
 
-case 'tts': case 'tiktoks': case 'tiktoksearch': {
+case 'tiktok': case 'tiktoks': case 'tiktoksearch': {
     if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _TikTok_ 🎵*');
     nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
 
@@ -2534,10 +2534,10 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
         const limitedResults = data.data.slice(0, 5);
         let contents = [];
 
-        // Usar Promise.all para obtener los detalles de todos los videos en paralelo
-        const videoDetailsPromises = limitedResults.map(async (video) => {
-            let ttDl = await fg.tiktok(`${video.url}`);
-            let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
+        for (let video of limitedResults) {
+            // Obtener detalles del video usando la URL
+            let ttDl = await fg.tiktok(video.url);
+            let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
             content += `◦  *Likes*: ${formatNumber(video.like)}\n`;
@@ -2545,9 +2545,9 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
             content += `◦  *Compartidos*: ${formatNumber(video.share)}\n`;
             content += `◦  *Descargas*: ${formatNumber(video.download)}`;
 
-            return {
+            contents.push({
                 header: {
-                    videoMessage: `${ttDl.play}`, // Aquí se asume que ttDl.play es el URL del video
+                    videoMessage: ttDl.play, // Aquí se asume que ttDl.play es el URL de descarga
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -2557,22 +2557,19 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
                     buttons: [{
                         name: 'cta_url',
                         buttonParamsJson: JSON.stringify({
-                            display_text: 'Ver video! 💬',
-                            url: `${video.url}`
+                            display_text: 'Ver video! 🎥',
+                            url: `${video.url}` // Enlace directo al video en TikTok
                         })
                     }]
                 },
-            };
-        });
+            });
+        }
 
-        // Esperar a que todas las promesas se resuelvan
-        const videoContents = await Promise.all(videoDetailsPromises);
-        
-        // Enviar el carrusel con los detalles de los videos
+        // Enviar el carrusel con los detalles de los videos encontrados
         await sendVidCarousel(m.chat, {}, {
             header: `*🎵 Resultados de búsqueda de TikTok*\n`,
-            footer: `Search By *Samu330.com* `,
-            cards: videoContents // Pasar todas las cards
+            footer: `Resultados de la búsqueda`,
+            cards: contents // Pasar todas las cards
         });
     } catch (error) {
         console.error('Error en la búsqueda de TikTok:', error);
