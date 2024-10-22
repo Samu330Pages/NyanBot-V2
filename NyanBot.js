@@ -739,6 +739,49 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
     await nyanBot2.relayMessage(chatId, message['message'], {});
 }
 
+async function sendVidCarousel(chatId, nativeFlowMessage, options) {
+    const { header, footer, cards } = options;
+    let carouselCards = [];
+
+    for (const card of cards) {
+        var videoImageParse = await prepareWAMessageMedia({
+            video: {
+                url: card.header.videoMessage
+            },
+        }, {
+            upload: nyanBot2.waUploadToServer
+        });
+
+        carouselCards.push({
+            header: {
+                title: card.header.title,
+                videoMessage: cardVideoParse.videoMessage,
+                hasMediaAttachment: true,
+            },
+            body: card.body,
+            nativeFlowMessage: card.nativeFlowMessage
+        });
+    }
+const message = generateWAMessageFromContent(chatId, {
+        viewOnceMessage: {
+            message: {
+                interactiveMessage: {
+                    body: {
+                        text: header
+                    },
+                    carouselMessage: {
+                        cards: carouselCards,
+                        messageVersion: 1
+                    },
+                    footer: {
+                        text: footer
+                    }
+                }
+            }
+        }
+    }, { quoted: m });
+await nyanBot2.relayMessage(chatId, message['message'], {});
+}
 
 //stickers actions:
 async function stcReac(tipo, texto) {
@@ -3477,7 +3520,7 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
 
             contents.push({
                 header: {
-                    imageMessage: rD.thumb,
+                    videoMessage: rD.url_dl,
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -3485,17 +3528,17 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
                 },
                 nativeFlowMessage: {
                     buttons: [{
-                        name: 'cta_copy',
+                        name: 'cta_url',
                         buttonParamsJson: JSON.stringify({
                             display_text: 'Descargar video! 🔥',
-                            copy_code: `${prefix}xnxxdl ${video.link}` // Enlace directo al video
+                            url: `${video.link}`
                         })
                     }]
                 },
             });
         }
 
-        await sendCarousel(m.chat, {}, {
+        await sendVidCarousel(m.chat, {}, {
             header: `*🔞 Resultados de búsqueda de xnxx.com*\n\n> *Busca tu video favorito, copia el comando y envíalo para descargar!! 🍋‍🟩*`,
             footer: `Resultados de la búsqueda`,
             cards: contents
