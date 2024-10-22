@@ -2474,9 +2474,8 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
 
 > ${botname} by ${ownername}`;
         if (result.duration) {
-            let videoTt = await fetchBuffer(result.play);
             await nyanBot2.sendMessage(m.chat, {
-                video: videoTt,
+                video: {url: result.play},
                 fileName: result.title + '.mp4',
                 caption: infoTt,
 		thumbnail: await fetchBuffer(result.author.avatar),
@@ -2536,7 +2535,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
         for (let video of limitedResults) {
             // Obtener detalles del video usando la URL
-            let ttDl = await fg.tiktok(`${video.url}`);
+            const { ttDl } = await fg.tiktok(`${video.url}`);
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
