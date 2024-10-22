@@ -3465,7 +3465,7 @@ let xvlId;
 
     try {
         // Realizar la búsqueda en Xvideos
-        let data = await fg.xvideosSearch(text);
+        let data = await fg.xnxxSearch(text);
 
         // Limitar a los primeros 10 resultados
         const limitedResults = data.slice(0, 10);
@@ -3474,12 +3474,13 @@ let xvlId;
         let contents = [];
         // Mapeo de los resultados para crear las cards
         limitedResults.forEach((video) => {
-            let content = `◦  *Título*: ${video.title}\n`;
-            content += `◦  *Duración*: ${video.duration}`;
+	    let rD = await fg.xnxxdl(video.link)
+            let content = `◦  *Título*: ${rD.title}\n`;
+            content += `◦  *Duración*: ${tD.duration}\n◦ *Calidad*: ${rD.quality}\n◦ *Tamaño*: ${rD.size}`;
 
             contents.push({
                 header: {
-                    imageMessage: video.thumb, // Usar la miniatura del video
+                    imageMessage: rD.thumb, // Usar la miniatura del video
                     hasMediaAttachment: true,
                 },
                 body: {
