@@ -2535,7 +2535,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
         for (let video of limitedResults) {
             // Obtener detalles del video usando la URL
-            const { ttDl } = await fg.tiktok(`${video.url}`);
+            const { ttDl } = await fg.tiktok(video.url);
             let content = `◦  *Título*: ${video.title}\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
@@ -2546,7 +2546,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
             contents.push({
                 header: {
-                    videoMessage: `${ttDl.play}`, // Aquí se asume que ttDl.play es el URL de descarga
+                    videoMessage: ttDl.play, // Aquí se asume que ttDl.play es el URL de descarga
                     hasMediaAttachment: true,
                 },
                 body: {
