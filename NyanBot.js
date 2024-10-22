@@ -3458,9 +3458,9 @@ var order = generateWAMessageFromContent(from, proto.Message.fromObject({
 nyanBot2.relayMessage(m.chat, order.message, { messageId: order.key.id })
 break
 
-/*case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
-if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*')
-let xvlId;
+case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
+    if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*');
+    let xvlId;
     xvlId = reactionLoad(m.chat, m.key);
 
     try {
@@ -3468,15 +3468,17 @@ let xvlId;
         let data = await fg.xnxxSearch(text);
 
         // Limitar a los primeros 10 resultados
-        const limitedResults = data.slice(0, 10);
+        const limitedResults = data.result.slice(0, 10);
 
         // Crear un array para las cards del carrusel
         let contents = [];
+
         // Mapeo de los resultados para crear las cards
-        limitedResults.forEach((video) => {
-	    let rD = await fg.xnxxdl(video.link)
+        for (let video of limitedResults) {
+            let rD = await fg.xnxxdl(video.link); // Obtener detalles del video usando el link
+
             let content = `◦  *Título*: ${rD.title}\n`;
-            content += `◦  *Duración*: ${tD.duration}\n◦ *Calidad*: ${rD.quality}\n◦ *Tamaño*: ${rD.size}`;
+            content += `◦  *Duración*: ${rD.duration}\n◦ *Calidad*: ${rD.quality}\n◦ *Tamaño*: ${rD.size}`;
 
             contents.push({
                 header: {
@@ -3491,16 +3493,16 @@ let xvlId;
                         name: 'quick_reply', // Cambiar a botón de respuesta rápida
                         buttonParamsJson: JSON.stringify({
                             display_text: 'Descargar video! 🔥',
-                            id: `${prefix}xvideosdl ${video.url}` // Enlace directo al video
+                            id: `${prefix}xvideosdl ${video.link}` // Enlace directo al video
                         })
                     }]
-		},
+                },
             });
-        });
+        }
 
         // Llamada a la función sendCarousel para enviar todas las tarjetas en un solo mensaje
         await sendCarousel(m.chat, {}, {
-	    header: `*🔞 Resultados de búsqueda de xvideos*\n\n> *Busca tu video favorito y descárgalo!! 🍋‍🟩*`,
+            header: `*🔞 Resultados de búsqueda de Xvideos*\n\n> *Busca tu video favorito y descárgalo!! 🍋‍🟩*`,
             footer: `Resultados de la búsqueda`,
             cards: contents // Pasar todas las cards
         });
@@ -3512,7 +3514,7 @@ let xvlId;
         return reply(`Ocurrió un error al realizar la búsqueda en Xvideos. Intenta nuevamente más tarde.\n${error.message}`);
     }
 }
-break*/
+break
 
 case 'xvideosdl': {
 let v = await fg.xvideosdl(text)
