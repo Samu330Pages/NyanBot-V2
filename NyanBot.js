@@ -2518,6 +2518,61 @@ sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
 }
 break
 
+case 'tts': case 'tiktoks': case 'tiktoksearch': {
+    if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _TikTok_ 🎵*');
+    nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
+
+    try {
+        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
+        let data = await response.json();
+
+        if (data.status !== 200) {
+            return reply(`Ocurrió un error al realizar la búsqueda en TikTok. Intenta nuevamente más tarde.`);
+        }
+
+        const limitedResults = data.data.slice(0, 5);
+        let contents = [];
+
+        for (let video of limitedResults) {
+            let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
+            content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
+            content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
+            content += `◦  *Likes*: ${formatNumber(video.like)}\n`;
+            content += `◦  *Comentarios*: ${formatNumber(video.coment)}\n`;
+            content += `◦  *Compartidos*: ${formatNumber(video.share)}\n`;
+            content += `◦  *Descargas*: ${formatNumber(video.download)}`;
+
+            contents.push({
+                header: {
+                    videoMessage: video.url,
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content
+                },
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: 'cta_url',
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Ver video! 💬',
+                            url: `${video.url}`
+                        })
+                    }]
+                },
+            });
+        }
+await sendVidCarousel(m.chat, {}, {
+            header: `*🎵 Resultados de búsqueda de TikTok*\n`,
+            footer: `Search By *Samu330.com* `,
+            cards: contents
+        });
+    } catch (error) {
+        console.error('Error en la búsqueda de TikTok:', error);
+        return reply(`Ocurrió un error al realizar la búsqueda en TikTok. Intenta nuevamente más tarde.\n${error.message}`);
+    }
+}
+break
+
 case 'apk':
 if (db.data.users[sender].limit < 1) return reply(mess.limit);
 if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`); 
