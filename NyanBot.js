@@ -3458,7 +3458,7 @@ var order = generateWAMessageFromContent(from, proto.Message.fromObject({
 nyanBot2.relayMessage(m.chat, order.message, { messageId: order.key.id })
 break
 
-case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
+/*case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
 if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*')
 let xvlId;
     xvlId = reactionLoad(m.chat, m.key);
@@ -3512,7 +3512,7 @@ let xvlId;
         return reply(`Ocurrió un error al realizar la búsqueda en Xvideos. Intenta nuevamente más tarde.\n${error.message}`);
     }
 }
-break
+break*/
 
 case 'xvideosdl': {
 let v = await fg.xvideosdl(text)
