@@ -2493,7 +2493,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
             }
         }
 nyanBot2.sendMessage(m.chat, {
-audio: await fetchBuffer(result.music_info.play),
+audio: {url: result.music_info.play},
 mimetype: 'audio/mpeg',
 fileName: `${result.music_info.title}.mp3`,
 jpegThumbnail: await fetchBuffer (result.music_info.cover),
