@@ -2523,6 +2523,7 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
 
     try {
+        // Realizar la búsqueda en TikTok
         let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
         let data = await response.json();
 
@@ -2532,8 +2533,10 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
 
         const limitedResults = data.data.slice(0, 5);
         let contents = [];
-	let ttDl = await fg.tiktok(video.url)
-        for (let video of limitedResults) {
+
+        // Usar Promise.all para obtener los detalles de todos los videos en paralelo
+        const videoDetailsPromises = limitedResults.map(async (video) => {
+            let ttDl = await fg.tiktok(video.url);
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
@@ -2542,9 +2545,9 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
             content += `◦  *Compartidos*: ${formatNumber(video.share)}\n`;
             content += `◦  *Descargas*: ${formatNumber(video.download)}`;
 
-            contents.push({
+            return {
                 header: {
-                    videoMessage: ttDl.play,
+                    videoMessage: ttDl.play, // Aquí se asume que ttDl.play es el URL del video
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -2559,12 +2562,17 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
                         })
                     }]
                 },
-            });
-        }
-await sendVidCarousel(m.chat, {}, {
+            };
+        });
+
+        // Esperar a que todas las promesas se resuelvan
+        const videoContents = await Promise.all(videoDetailsPromises);
+        
+        // Enviar el carrusel con los detalles de los videos
+        await sendVidCarousel(m.chat, {}, {
             header: `*🎵 Resultados de búsqueda de TikTok*\n`,
             footer: `Search By *Samu330.com* `,
-            cards: contents
+            cards: videoContents // Pasar todas las cards
         });
     } catch (error) {
         console.error('Error en la búsqueda de TikTok:', error);
