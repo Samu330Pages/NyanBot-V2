@@ -3530,7 +3530,7 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
                     buttons: [{
                         name: 'cta_url',
                         buttonParamsJson: JSON.stringify({
-                            display_text: 'Descargar video! 🔥',
+                            display_text: 'Ver video! 🔥',
                             url: `${video.link}`
                         })
                     }]
@@ -3539,7 +3539,7 @@ case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
         }
 
         await sendVidCarousel(m.chat, {}, {
-            header: `*🔞 Resultados de búsqueda de xnxx.com*\n\n> *Busca tu video favorito, copia el comando y envíalo para descargar!! 🍋‍🟩*`,
+            header: `*🔞 Resultados de búsqueda de xnxx.com*\n`,
             footer: `Resultados de la búsqueda`,
             cards: contents
         });
