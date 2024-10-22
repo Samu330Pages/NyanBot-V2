@@ -2532,7 +2532,7 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
 
         const limitedResults = data.data.slice(0, 5);
         let contents = [];
-
+	let ttDl = await fg.tiktok(video.url)
         for (let video of limitedResults) {
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
@@ -2544,7 +2544,7 @@ case 'tts': case 'tiktoks': case 'tiktoksearch': {
 
             contents.push({
                 header: {
-                    videoMessage: video.url,
+                    videoMessage: ttDl.play,
                     hasMediaAttachment: true,
                 },
                 body: {
