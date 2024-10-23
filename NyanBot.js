@@ -2536,7 +2536,7 @@ case 'tiktoks': case 'tiktoksearch': {
             let ttDl = await fg.tiktok(video.url);
 
             if (!ttDl || !ttDl.result) {
-                console.error(`Error al obtener detalles para el video: ${video.url}`);
+                await reply(`Error al obtener detalles para el video: ${video.url}`);
                 continue;
             }
 
