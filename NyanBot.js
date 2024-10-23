@@ -2535,7 +2535,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
         // Usar Promise.all para obtener los detalles de todos los videos en paralelo
         const videoDetailsPromises = limitedResults.map(async (video) => {
-            let ttDl = await fg.tiktok(video.url);
+            let ttDl = await fg.tiktok(`${video.url}`);
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
@@ -2546,7 +2546,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
             return {
                 header: {
-                    videoMessage: ttDl.result.play, // Aquí se asume que ttDl.play es el URL del video
+                    videoMessage: `${ttDl.result.play}`, // Aquí se asume que ttDl.play es el URL del video
                     hasMediaAttachment: true,
                 },
                 body: {
