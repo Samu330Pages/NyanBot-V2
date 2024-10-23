@@ -2533,12 +2533,12 @@ case 'tiktoks': case 'tiktoksearch': {
         let contents = [];
 
         for (let video of limitedResults) {
-            let ttDl = await fg.tiktok(video.url);
+            /*let ttDl = await fg.tiktok(video.url);
 
             if (!ttDl || !ttDl.result) {
                 await reply(`Error al obtener detalles para el video: ${video.url}`);
                 continue;
-            }
+            }*/
 
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
@@ -2550,7 +2550,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
             contents.push({
                 header: {
-                    videoMessage: ttDl.result.play,
+                    videoMessage: video.url,
                     hasMediaAttachment: true,
                 },
                 body: {
