@@ -491,6 +491,7 @@ return arr[Math.floor(Math.random() * arr.length)]
                 if (!('title' in user)) user.title = ''
                 if (!('serialNumber' in user)) user.serialNumber = randomBytes(16).toString('hex') 
                 if (!('nick' in user)) user.nick = nyanBot2.getName(sender)
+		if (!('lastClaim' in user)) user.lastClaim = null
                 if (!isPremium) user.premium = false
                 if (!('totalLimit' in user)) user.totalLimit = 0
                 if (!isNumber(user.limit)) user.limit = limitUser
@@ -502,7 +503,8 @@ return arr[Math.floor(Math.random() * arr.length)]
                nick: nyanBot2.getName(sender),
                premium: `${isPremium ? 'true' : 'false'}`,
                limit: limitUser,
-               totalLimit: 0
+               totalLimit: 0,
+	       lastClaim: null
             }
             
                let chats = global.db.data.chats[from]
@@ -1209,6 +1211,26 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 }, {quoted: m})
     } catch (e) {
         return m.reply("*Error*");
+    }
+}
+break
+
+case 'claim': {
+    let today = new Date().toISOString().split('T')[0];
+    let user = global.db.data.users[sender];
+
+    if (!user.lastClaim) {
+        user.lastClaim = today;
+        user.limit += 100;
+        return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
+    }
+
+    if (user.lastClaim === today) {
+        return reply(`> 🚫 Ya has reclamado tus puntos hoy. Intenta nuevamente mañana.`);
+    } else {
+        user.lastClaim = today;
+        user.limit += 100;
+        return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
     }
 }
 break
