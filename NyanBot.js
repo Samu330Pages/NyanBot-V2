@@ -2522,8 +2522,7 @@ case 'tiktoks': case 'tiktoksearch': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
 
     try {
-        // Realizar la búsqueda en TikTok
-        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
+        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=1`);
         let data = await response.json();
 
         if (data.status !== 200) {
@@ -2531,17 +2530,14 @@ case 'tiktoks': case 'tiktoksearch': {
         }
 
         const limitedResults = data.data.slice(0, 5);
-        console.log('Resultados de búsqueda:', limitedResults); // Verifica cuántos resultados se obtuvieron
         let contents = [];
 
-        // Usar Promise.all para obtener los detalles de todos los videos en paralelo
-        const videoDetailsPromises = limitedResults.map(async (video) => {
+        for (let video of limitedResults) {
             let ttDl = await fg.tiktok(video.url);
 
-            // Verificar si ttDl.result existe
             if (!ttDl || !ttDl.result) {
                 console.error(`Error al obtener detalles para el video: ${video.url}`);
-                return null; // Retornar null si no hay resultado
+                continue;
             }
 
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
@@ -2552,9 +2548,9 @@ case 'tiktoks': case 'tiktoksearch': {
             content += `◦  *Compartidos*: ${formatNumber(video.share)}\n`;
             content += `◦  *Descargas*: ${formatNumber(video.download)}`;
 
-            return {
+            contents.push({
                 header: {
-                    videoMessage: ttDl.result.play, // Aquí se asume que ttDl.result.play es el URL del video
+                    videoMessage: ttDl.result.play,
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -2569,19 +2565,13 @@ case 'tiktoks': case 'tiktoksearch': {
                         })
                     }]
                 },
-            };
-        });
+            });
+        }
 
-        // Esperar a que todas las promesas se resuelvan y filtrar los nulls
-        const videoContents = (await Promise.all(videoDetailsPromises)).filter(item => item !== null);
-        
-        reply(videoContents); // Verifica cuántos contenidos se generaron
-
-        // Enviar el carrusel con los detalles de los videos
         await sendVidCarousel(m.chat, {}, {
             header: `*🎵 Resultados de búsqueda de TikTok*\n`,
             footer: `Search By *Samu330.com* `,
-            cards: videoContents // Pasar todas las cards
+            cards: contents
         });
     } catch (error) {
         console.error('Error en la búsqueda de TikTok:', error);
