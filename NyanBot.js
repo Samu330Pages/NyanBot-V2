@@ -2535,7 +2535,14 @@ case 'tiktoks': case 'tiktoksearch': {
 
         // Usar Promise.all para obtener los detalles de todos los videos en paralelo
         const videoDetailsPromises = limitedResults.map(async (video) => {
-            let ttDl = await fg.tiktok(`${video.url}`);
+            let ttDl = await fg.tiktok(video.url);
+
+            // Verificar si ttDl.result existe
+            if (!ttDl || !ttDl.result) {
+                console.error(`Error al obtener detalles para el video: ${video.url}`);
+                return null; // Retornar null si no hay resultado
+            }
+
             let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
             content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
             content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
@@ -2546,7 +2553,7 @@ case 'tiktoks': case 'tiktoksearch': {
 
             return {
                 header: {
-                    videoMessage: `${ttDl.result.play}`, // Aquí se asume que ttDl.play es el URL del video
+                    videoMessage: ttDl.result.play, // Aquí se asume que ttDl.result.play es el URL del video
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -2564,8 +2571,8 @@ case 'tiktoks': case 'tiktoksearch': {
             };
         });
 
-        // Esperar a que todas las promesas se resuelvan
-        const videoContents = await Promise.all(videoDetailsPromises);
+        // Esperar a que todas las promesas se resuelvan y filtrar los nulls
+        const videoContents = (await Promise.all(videoDetailsPromises)).filter(item => item !== null);
         
         // Enviar el carrusel con los detalles de los videos
         await sendVidCarousel(m.chat, {}, {
