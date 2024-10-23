@@ -2531,6 +2531,7 @@ case 'tiktoks': case 'tiktoksearch': {
         }
 
         const limitedResults = data.data.slice(0, 5);
+        console.log('Resultados de búsqueda:', limitedResults); // Verifica cuántos resultados se obtuvieron
         let contents = [];
 
         // Usar Promise.all para obtener los detalles de todos los videos en paralelo
@@ -2574,6 +2575,8 @@ case 'tiktoks': case 'tiktoksearch': {
         // Esperar a que todas las promesas se resuelvan y filtrar los nulls
         const videoContents = (await Promise.all(videoDetailsPromises)).filter(item => item !== null);
         
+        reply(videoContents); // Verifica cuántos contenidos se generaron
+
         // Enviar el carrusel con los detalles de los videos
         await sendVidCarousel(m.chat, {}, {
             header: `*🎵 Resultados de búsqueda de TikTok*\n`,
