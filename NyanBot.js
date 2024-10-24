@@ -1076,7 +1076,7 @@ if (db.data.chats[m.chat].badword) {
                 participant: m.key.participant
             }
         });
-        nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m});
+        nyanBot2.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo:{mentionedJid:[m.sender]}});
     }
 }
         //autosticker
