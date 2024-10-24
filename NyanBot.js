@@ -2560,7 +2560,7 @@ case 'tiktoks': case 'tiktoksearch': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
 
     try {
-        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=1`);
+        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
         let data = await response.json();
 
         if (data.status !== 200) {
@@ -2568,52 +2568,78 @@ case 'tiktoks': case 'tiktoksearch': {
         }
 
         const limitedResults = data.data.slice(0, 5);
-        let contents = [];
+        // Seleccionar un video aleatorio de los resultados
+        const randomVideo = limitedResults[Math.floor(Math.random() * limitedResults.length)];
 
-        for (let video of limitedResults) {
-            /*let ttDl = await fg.tiktok(video.url);
+        // Obtener los detalles del video usando fg.tiktok
+        const { result } = await fg.tiktok(randomVideo.url);
 
-            if (!ttDl || !ttDl.result) {
-                await reply(`Error al obtener detalles para el video: ${video.url}`);
-                continue;
-            }*/
+        let infoTt = `*📌 Información del contenido:*
+${result.title ? `${result.title}` : ''}\n
+${result.duration ? `- Duración: ${result.duration} segundos` : ''}
+${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
+${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}
+${result.play_count ? `- Reproducciones: ${formatNumber(result.play_count)}` : ''}
+${result.digg_count ? `- Me gusta: ${formatNumber(result.digg_count)}` : ''}
+${result.comment_count ? `- Comentarios: ${formatNumber(result.comment_count)}` : ''}
+${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''}
+${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
+${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
+${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
+${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
 
-            let content = `> ⚫ *TikTok Search!* 🔴\n\n`;
-            content += `◦  *Autor*: ${video.author.nickname} (@${video.author.username})\n`;
-            content += `◦  *Reproducciones*: ${formatNumber(video.play)}\n`;
-            content += `◦  *Likes*: ${formatNumber(video.like)}\n`;
-            content += `◦  *Comentarios*: ${formatNumber(video.coment)}\n`;
-            content += `◦  *Compartidos*: ${formatNumber(video.share)}\n`;
-            content += `◦  *Descargas*: ${formatNumber(video.download)}`;
+*📀 Información del audio:*
+${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
+${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
+${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
+${result.music_info.original ? `- ¿Original? Sí` : result.music_info.original === false ? `- ¿Original? No` : ''}
+${result.music_info.duration ? `- Duración: ${result.music_info.duration} segundos` : ''}
+${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
 
-            contents.push({
-                header: {
-                    videoMessage: video.url,
-                    hasMediaAttachment: true,
-                },
-                body: {
-                    text: content
-                },
-                nativeFlowMessage: {
-                    buttons: [{
-                        name: 'cta_url',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Ver video! 💬',
-                            url: `${video.url}`
-                        })
-                    }]
-                },
-            });
+> ${botname} by ${ownername}`;
+
+        if (result.duration) {
+            await nyanBot2.sendMessage(m.chat, {
+                video: { url: result.play },
+                fileName: result.title + '.mp4',
+                caption: infoTt,
+                thumbnail: await fetchBuffer(result.author.avatar),
+                jpegThumbnail: await fetchBuffer(result.author.avatar)
+            }, { quoted: m });
+        } else {
+            await reply(`_*Se están enviando las imágenes...*_ 🔗\n\n${infoTt}`);
+            for (let i = 0; i < result.images.length; i++) {
+                let imageTt = await fetchBuffer(result.images[i]);
+                await nyanBot2.sendMessage(m.chat, {
+                    image: imageTt,
+                    caption: `*Imagen ${i + 1} de ${result.images.length}*`
+                }, { quoted: m });
+            }
         }
 
-        await sendVidCarousel(m.chat, {}, {
-            header: `*🎵 Resultados de búsqueda de TikTok*\n`,
-            footer: `Search By *Samu330.com* `,
-            cards: contents
-        });
-    } catch (error) {
-        console.error('Error en la búsqueda de TikTok:', error);
-        return reply(`Ocurrió un error al realizar la búsqueda en TikTok. Intenta nuevamente más tarde.\n${error.message}`);
+        nyanBot2.sendMessage(m.chat, {
+            audio: { url: result.music_info.play },
+            mimetype: 'audio/mpeg',
+            fileName: `${result.music_info.title}.mp3`,
+            jpegThumbnail: await fetchBuffer(result.music_info.cover),
+            contextInfo: {
+                externalAdReply: {
+                    renderLargerThumbnail: true,
+                    mediaType: 1,
+                    title: `${result.music_info.title}.mp3`,
+                    body: `Click here! 👉🏻🟢`,
+                    thumbnail: await fetchBuffer(result.music_info.cover),
+                    jpegThumbnail: await fetchBuffer(result.music_info.cover),
+                    previewType: "NONE",
+                    sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
+                }
+            }
+        }, { quoted: m });
+
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+    } catch (e) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
 }
 break
