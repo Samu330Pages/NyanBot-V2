@@ -1216,22 +1216,38 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 break
 
 case 'claim': {
-    let today = new Date().toISOString().split('T')[0];
+    let now = new Date();
+    let today = now.toISOString().split('T')[0];
+    let currentTime = now.getTime();
     let user = global.db.data.users[sender];
 
     if (!user.lastClaim) {
-        user.lastClaim = today;
+        user.lastClaim = {
+            date: today,
+            time: currentTime
+        };
         user.limit += 100;
         return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
     }
 
-    if (user.lastClaim === today) {
-        return reply(`> 🚫 Ya has reclamado tus puntos hoy. Intenta nuevamente mañana.`);
-    } else {
-        user.lastClaim = today;
-        user.limit += 100;
-        return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
+    let lastClaimDate = user.lastClaim.date;
+    let lastClaimTime = user.lastClaim.time;
+
+    if (lastClaimDate === today) {
+        let hoursSinceLastClaim = Math.floor((currentTime - lastClaimTime) / (1000 * 60 * 60));
+        let hoursLeft = 24 - hoursSinceLastClaim;
+
+        if (hoursLeft > 0) {
+            return reply(`> 🚫 Ya has reclamado tus puntos hoy. Intenta nuevamente en ${hoursLeft} horas.`);
+        }
     }
+
+    user.lastClaim = {
+        date: today,
+        time: currentTime
+    };
+    user.limit += 100;
+    return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
 }
 break
 
