@@ -2702,126 +2702,32 @@ stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver 
 break
 
 // Case para TikTok
-case 'tt': case 'tiktok': {
+case 'tt': case 'tiktok': case 'tiktoksearch': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 10) return reply(`*Lo siento, pero este comando requiere 10 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de TikTok.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://tiktok.com/...`);
+
+    if (!text) return reply(`*Por favor, proporciona un enlace de TikTok válido o un término de búsqueda.*\n_*Ejemplo de uso:*\n\n${prefix + command} https://tiktok.com/... o ${prefix + command} [término]`);
+
+    const isTikTokUrl = text.match(/^(https:\/\/www\.tiktok\.com\/[a-zA-Z0-9._%+-]+\/[a-zA-Z0-9._%+-]+)$/i);
 
     try {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-        const { result } = await fg.tiktok(text);
-        
-let infoTt = `*📌 Información del contenido:*
-${result.title ? `${result.title}` : ''}\n
-${result.duration ? `- Duración: ${result.duration} segundos` : ''}
-${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
-${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}
-${result.play_count ? `- Reproducciones: ${formatNumber(result.play_count)}` : ''}
-${result.digg_count ? `- Me gusta: ${formatNumber(result.digg_count)}` : ''}
-${result.comment_count ? `- Comentarios: ${formatNumber(result.comment_count)}` : ''}
-${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''}
-${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
-${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
-${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
-${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
 
-*📀 Información del audio:*
-${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
-${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
-${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
-${result.music_info.original ? `- ¿Original? Sí` : result.music_info.original === false ? `- ¿Original? No` : ''}
-${result.music_info.duration ? `- Duración: ${result.music_info.duration} segundos` : ''}
-${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
+        const sendMessageTT = async (result) => {
+            let infoTt = `*📌 Información del contenido:*\n`;
+            infoTt += `${result.title ? `- Título: ${result.title}` : ''}\n`;
+            infoTt += `${result.duration ? `- Duración: ${result.duration} segundos` : ''}\n`;
+            infoTt += `${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}\n`;
+            infoTt += `${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}\n`;
+            infoTt += `${result.play_count ? `- Reproducciones: ${formatNumber(result.play_count)}` : ''}\n`;
+            infoTt += `${result.digg_count ? `- Me gusta: ${formatNumber(result.digg_count)}` : ''}\n`;
+            infoTt += `${result.comment_count ? `- Comentarios: ${formatNumber(result.comment_count)}` : ''}\n`;
+            infoTt += `${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''}\n`;
+            infoTt += `${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}\n`;
+            infoTt += `${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}\n`;
+            infoTt += `${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}\n`;
+            infoTt += `${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}\n\n`;
 
-> ${botname} by ${ownername}`;
-        if (result.duration) {
-            await nyanBot2.sendMessage(m.chat, {
-                video: {url: result.play},
-                fileName: result.title + '.mp4',
-                caption: infoTt,
-		thumbnail: await fetchBuffer(result.author.avatar),
-                jpegThumbnail: await fetchBuffer(result.author.avatar)
-            }, { quoted: m });
-	} else {
-            await reply(`_*Se estan enviando las imágenes...*_ 🔗\n\n${infoTt}`)
-            for (let i = 0; i < result.images.length; i++) {
-                let imageTt = await fetchBuffer(result.images[i]);
-                await nyanBot2.sendMessage(m.chat, {
-                    image: imageTt,
-                    caption: `*Imagen ${i + 1} de ${result.images.length}*`
-                }, { quoted: m });
-            }
-        }
-nyanBot2.sendMessage(m.chat, {
-audio: {url: result.music_info.play},
-mimetype: 'audio/mpeg',
-fileName: `${result.music_info.title}.mp3`,
-jpegThumbnail: await fetchBuffer (result.music_info.cover),
-contextInfo: {
-externalAdReply: {
-renderLargerThumbnail: true,
-mediaType: 1,
-title: `${result.music_info.title}.mp3`,
-body: `Click here! 👉🏻🟢`,
-thumbnail: await fetchBuffer(result.music_info.cover),
-jpegThumbnail: await fetchBuffer(result.music_info.cover),
-previewType: "NONE",
-sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
-}}
-}, {quoted: m})
-        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-        useLimit(sender, 10)
-    } catch (e) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
-    }
-}
-break
-
-case 'tiktoks': case 'tiktoksearch': {
-    if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _TikTok_ 🎵*');
-    nyanBot2.sendMessage(m.chat, { react: { text: '🎵', key: m.key } });
-
-    try {
-        let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
-        let data = await response.json();
-
-        if (data.status !== 200) {
-            return reply(`Ocurrió un error al realizar la búsqueda en TikTok. Intenta nuevamente más tarde.`);
-        }
-
-        const limitedResults = data.data.slice(0, 5);
-        // Seleccionar un video aleatorio de los resultados
-        const randomVideo = limitedResults[Math.floor(Math.random() * limitedResults.length)];
-
-        // Obtener los detalles del video usando fg.tiktok
-        const { result } = await fg.tiktok(randomVideo.url);
-
-        let infoTt = `*📌 Información del contenido:*
-${result.title ? `${result.title}` : ''}\n
-${result.duration ? `- Duración: ${result.duration} segundos` : ''}
-${result.size ? `- Tamaño: ${formatBytes(result.size)}` : ''}
-${result.wm_size ? `- Tamaño con marca de agua: ${formatBytes(result.wm_size)}` : ''}
-${result.play_count ? `- Reproducciones: ${formatNumber(result.play_count)}` : ''}
-${result.digg_count ? `- Me gusta: ${formatNumber(result.digg_count)}` : ''}
-${result.comment_count ? `- Comentarios: ${formatNumber(result.comment_count)}` : ''}
-${result.share_count ? `- Compartidos: ${formatNumber(result.share_count)}` : ''}
-${result.download_count ? `- Descargas: ${formatNumber(result.download_count)}` : ''}
-${result.collect_count ? `- Guardados: ${formatNumber(result.collect_count)}` : ''}
-${result.create_time ? `- Publicado: ${new Date(result.create_time * 1000).toLocaleString()}` : ''}
-${result.is_ad ? `- ¿Es anuncio? Sí` : result.is_ad === false ? `- ¿Es anuncio? No` : ''}
-
-*📀 Información del audio:*
-${result.music_info.id ? `- ID: ${result.music_info.id}` : ''}
-${result.music_info.title ? `- Título: ${result.music_info.title}` : ''}
-${result.music_info.author ? `- Autor: ${result.music_info.author}` : ''}
-${result.music_info.original ? `- ¿Original? Sí` : result.music_info.original === false ? `- ¿Original? No` : ''}
-${result.music_info.duration ? `- Duración: ${result.music_info.duration} segundos` : ''}
-${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
-
-> ${botname} by ${ownername}`;
-
-        if (result.duration) {
             await nyanBot2.sendMessage(m.chat, {
                 video: { url: result.play },
                 fileName: result.title + '.mp4',
@@ -2829,37 +2735,46 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 thumbnail: await fetchBuffer(result.author.avatar),
                 jpegThumbnail: await fetchBuffer(result.author.avatar)
             }, { quoted: m });
+
+            await nyanBot2.sendMessage(m.chat, {
+                audio: { url: result.music_info.play },
+                mimetype: 'audio/mpeg',
+                fileName: `${result.music_info.title}.mp3`,
+                jpegThumbnail: await fetchBuffer(result.music_info.cover),
+                contextInfo: {
+                    externalAdReply: {
+                        renderLargerThumbnail: true,
+                        mediaType: 1,
+                        title: `${result.music_info.title}.mp3`,
+                        body: `Click here! 👉🏻🟢`,
+                        thumbnail: await fetchBuffer(result.music_info.cover),
+                        jpegThumbnail: await fetchBuffer(result.music_info.cover),
+                        previewType: "NONE",
+                        sourceUrl: result.music_info.play,
+                    }
+                }
+            }, { quoted: m });
+        };
+
+        if (isTikTokUrl) {
+            const { result } = await fg.tiktok(text);
+            await sendMessageTT(result);
         } else {
-            await reply(`_*Se están enviando las imágenes...*_ 🔗\n\n${infoTt}`);
-            for (let i = 0; i < result.images.length; i++) {
-                let imageTt = await fetchBuffer(result.images[i]);
-                await nyanBot2.sendMessage(m.chat, {
-                    image: imageTt,
-                    caption: `*Imagen ${i + 1} de ${result.images.length}*`
-                }, { quoted: m });
+            let response = await fetch(`https://api.dorratz.com/v2/tiktok-s?q=${text}&limit=5`);
+            let data = await response.json();
+
+            if (data.status !== 200) {
+                return reply(`Ocurrió un error al realizar la búsqueda en TikTok. Intenta nuevamente más tarde.`);
             }
+
+            const limitedResults = data.data.slice(0, 5);
+            const randomVideo = limitedResults[Math.floor(Math.random() * limitedResults.length)];
+            const { result } = await fg.tiktok(randomVideo.url);
+            await sendMessageTT(result);
         }
 
-        nyanBot2.sendMessage(m.chat, {
-            audio: { url: result.music_info.play },
-            mimetype: 'audio/mpeg',
-            fileName: `${result.music_info.title}.mp3`,
-            jpegThumbnail: await fetchBuffer(result.music_info.cover),
-            contextInfo: {
-                externalAdReply: {
-                    renderLargerThumbnail: true,
-                    mediaType: 1,
-                    title: `${result.music_info.title}.mp3`,
-                    body: `Click here! 👉🏻🟢`,
-                    thumbnail: await fetchBuffer(result.music_info.cover),
-                    jpegThumbnail: await fetchBuffer(result.music_info.cover),
-                    previewType: "NONE",
-                    sourceUrl: 'https://www.tiktok.com/@samu330ofc3?_t=8qPoVlCApvc&_r=1',
-                }
-            }
-        }, { quoted: m });
-
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        useLimit(sender, 10);
     } catch (e) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
