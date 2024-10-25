@@ -1868,7 +1868,7 @@ case 'spotify': case 'sp': case 'downloadspotify': {
                     fileName: `${track.title}.mp3`,
                     mimetype: 'audio/mpeg',
 		    caption: spotifyInfo.trim(),
-		    jpegThumbnail: img
+		    jpegThumbnail: await thumB(img)
                 }, { quoted: m });
 
             } else if (isSpotifyUrl[2] === 'playlist') {
