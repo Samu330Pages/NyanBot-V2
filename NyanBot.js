@@ -1855,7 +1855,8 @@ case 'spotify': case 'sp': case 'downloadspotify': {
 
             } else if (isSpotifyUrl[2] === 'track') {
                 const track = await downloadTrack(isSpotifyUrl[0]);
-                const img = await (await fetch(`${track.imageUrl}`)).buffer();
+		    await reply(track)
+                const img = await fetchBuffer(track.imageUrl)
                 let spotifyInfo = `*Título:* ${track.title}\n`;
                 spotifyInfo += `*Artistas:* ${track.artists}\n`;
                 spotifyInfo += `*Duración:* ${track.duration}\n`;
@@ -1863,27 +1864,11 @@ case 'spotify': case 'sp': case 'downloadspotify': {
                 spotifyInfo += `*Fecha de lanzamiento:* ${track.album.releasedDate}\n`;
 
                 await nyanBot2.sendMessage(m.chat, {
-                    text: spotifyInfo.trim(),
-                    contextInfo: {
-                        forwardingScore: 9999999,
-                        isForwarded: true,
-                        "externalAdReply": {
-                            "showAdAttribution": true,
-                            "containsAutoReply": true,
-                            "renderLargerThumbnail": true,
-                            "title": global.titulowm2,
-                            "mediaType": 1,
-                            "thumbnail": img,
-                            "mediaUrl": track.url,
-                            "sourceUrl": track.url
-                        }
-                    }
-                }, { quoted: m });
-
-                await nyanBot2.sendMessage(m.chat, {
-                    audio: track.audioBuffer,
+                    document: track.audioBuffer,
                     fileName: `${track.title}.mp3`,
-                    mimetype: 'audio/mpeg'
+                    mimetype: 'audio/mpeg',
+		    caption: spotifyInfo.trim(),
+		    jpegThumbnail: img
                 }, { quoted: m });
 
             } else if (isSpotifyUrl[2] === 'playlist') {
