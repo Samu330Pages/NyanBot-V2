@@ -195,6 +195,8 @@ const categories = {
     "🔍 Búsqueda": [
 	{ command: 'google', description: '', help: 'Realiza búsquedas en Google.' },
 	{ command: 'imagen', description: '', help: 'Búsqueda de imágenes.' },
+	{ command: 'pinsearch', description: '', help: 'Búsqueda de imágenes en pinterest.' },
+	{ command: 'pin', description: '', help: 'Alias de pinsearch.' },
 	{ command: 'playlist', description: '', help: 'Busca una playlist de YouTube para descargar videos.' },
 	{ command: 'ytplaylist', description: '', help: 'Alias de playlist.' },
 	{ command: 'youtubesearch', description: '', help: 'Realiza búsquedas en YouTube.' },
@@ -1696,7 +1698,7 @@ darás información lo más detallada posible de esta solicitud: ${text}`;
 }
 break
 
-case 'pins': case 'pin': case 'pinsearch': {
+case 'pins': case 'pinterest': case 'pin': case 'pinsearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
