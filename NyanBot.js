@@ -592,7 +592,7 @@ return arr[Math.floor(Math.random() * arr.length)]
   }
 }
         
-        async function ephoto(url, texk) {
+async function ephoto(url, texk) {
 let form = new FormData 
 let gT = await axios.get(url, {
   headers: {
@@ -892,16 +892,7 @@ async function crearStickerPack(stickers, linkTelegram, title, author) {
         }
     }
 }
-		
-async function thumB(source) {
-      let jimp = await read(file)
-      let buff = await jimp
-         .quality(100)
-         .resize(200, AUTO, RESIZE_BILINEAR)
-         .getBufferAsync(MIME_JPEG)
-      return buff
-}
-	    
+
 async function obfus(query) {
     return new Promise((resolve, reject) => {
         try {
@@ -1868,7 +1859,7 @@ case 'spotify': case 'sp': case 'downloadspotify': {
                     fileName: `${track.title}.mp3`,
                     mimetype: 'audio/mpeg',
 		    caption: spotifyInfo.trim(),
-		    jpegThumbnail: await thumB(img)
+		    jpegThumbnail: await reSize(img, 200, 200)
                 }, { quoted: m });
 
             } else if (isSpotifyUrl[2] === 'playlist') {
