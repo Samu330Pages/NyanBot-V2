@@ -2096,8 +2096,7 @@ ${lyric.lyrics}\n`,
 }
 break
 
-case 'yts':
-case 'youtubesearch': {
+case 'yts': case 'youtubesearch': case 'ytsearch': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
