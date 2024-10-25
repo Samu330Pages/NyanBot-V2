@@ -1796,6 +1796,18 @@ case 'imagenes': {
 }
 break
 
+case 'remini': case 'hd': {
+if (!quoted) return replygcxeon(`*Porfavor etiqueta una imagen con el comando para poder realizar el aumento de calidad!* 🖼️`)
+if (!/image/.test(mime)) return reply(`*por favor envía o etiqueta una imagen junto con el comando:* ${prefix + command}`)
+nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+const { remini } = require('./lib/remini')
+let media = await quoted.download()
+let proses = await remini(media, "enhance")
+nyanBot2.sendMessage(m.chat, { image: proses, caption: mess.success}, { quoted: m})
+nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+}
+break
+
 case 'buscar': case 'gg': case 'google': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
