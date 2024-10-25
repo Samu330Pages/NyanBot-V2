@@ -1846,8 +1846,7 @@ case 'spotify': case 'sp': case 'downloadspotify': {
 
             } else if (isSpotifyUrl[2] === 'track') {
                 const track = await downloadTrack(isSpotifyUrl[0]);
-		    await reply(JSON.stringify(track, null, 2))
-                const img = await fetchBuffer(track.imageUrl)
+		const img = await fetchBuffer(track.imageUrl)
                 let spotifyInfo = `*Título:* ${track.title}\n`;
                 spotifyInfo += `*Artistas:* ${track.artists}\n`;
                 spotifyInfo += `*Duración:* ${track.duration}\n`;
