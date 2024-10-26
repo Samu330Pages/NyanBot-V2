@@ -667,6 +667,7 @@ const reactionError = (chatId, messageKey, { intervalId, timeoutId }) => {
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
+    let iconBtn = await (await fetch("https://cdn3.emoji.gg/emojis/56370-boxcat.png")).buffer();
     const interactiveMessage = proto.Message.InteractiveMessage.create({
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
@@ -679,7 +680,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
 						     mimetype: "audio/mpeg",
 						     fileName: "🎃 Nyan-V2 🏰",
-						     jpegThumbnail: await fetchBuffer("https://stickerly.pstatic.net/sticker_pack/FghRAEqho2XeJw7wIIinfw/IC6QLX/31/75296cfa-9c4a-4367-85bb-c0b28b863938.png")
+						     jpegThumbnail: iconBtn
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
