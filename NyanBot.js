@@ -690,7 +690,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 		externalAdReply: {
 			renderLargerThumbnail: true,
 			mediaType: 1,
-			title: `💬 Tus puntos: *${db.data.users[sender].limit*}`,
+			title: `💬 Tus puntos: *${db.data.users[sender].limit}*`,
 			body: `Click here! 👉🏻🟢`,
 			thumbnail: media,
 			jpegThumbnail: media,
