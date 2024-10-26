@@ -667,7 +667,7 @@ const reactionError = (chatId, messageKey, { intervalId, timeoutId }) => {
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
-    let iconBtn = await (await fetch("https://cdn3.emoji.gg/emojis/56370-boxcat.png")).buffer();
+    let iconBtn = await (await fetch("https://static.vecteezy.com/system/resources/thumbnails/009/665/312/small/cute-kitty-cat-head-cartoon-element-png.png")).buffer();
     const interactiveMessage = proto.Message.InteractiveMessage.create({
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
@@ -680,7 +680,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
 						     mimetype: "audio/mpeg",
 						     fileName: "🎃 Nyan-V2 🏰",
-						     jpegThumbnail: await reSize(iconBtn, 200, 200)
+						     jpegThumbnail: iconBtn
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
