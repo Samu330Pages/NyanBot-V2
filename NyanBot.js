@@ -680,18 +680,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
 						     mimetype: "application/pdf",
 						     fileName: "🎃 Nyan-V2 🏰",
 						     pageCount: 999,
-						     fileSize: 9999,
-						     contextInfo: {
-							     externalAdReply: {
-								     renderLargerThumbnail: true,
-								     mediaType: 1,
-								     title: '',
-								     body: `Click here! 👉🏻🟢`,
-								     thumbnail: media,
-								     jpegThumbnail: media,
-								     previewType: "NONE",
-								     sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1",
-							     }}},{ upload: nyanBot2.waUploadToServer }) : {})
+						     fileLength: 9999,
+						     },{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
@@ -706,7 +696,18 @@ async function sendReplyButton(chatId, buttons, message, options) {
             message: {
                 interactiveMessage: interactiveMessage
             }
-        }
+        },
+	contextInfo: {
+	externalAdReply: {
+	renderLargerThumbnail: true,
+	mediaType: 1,
+	title: '',
+	body: `Click here! 👉🏻🟢`,
+	thumbnail: media,
+	jpegThumbnail: media,
+	previewType: "NONE",
+	sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1",
+	}}
     }, { quoted: m });
 
     await nyanBot2.relayMessage(chatId, msgs.message, {});
