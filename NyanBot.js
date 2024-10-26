@@ -696,7 +696,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
                         "previewType": "PHOTO",
                         "thumbnailUrl": ``,
                         "thumbnail": media,
-                        "sourceUrl": "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"
+                        "sourceUrl": "https://whatsapp.com/channel/0029VaDVQFVL7UVd71R7bY23"
 		}
 	}
     })
