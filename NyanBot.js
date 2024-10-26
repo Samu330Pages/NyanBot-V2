@@ -682,6 +682,16 @@ async function sendReplyButton(chatId, buttons, message, options) {
 						     jpegThumbnail: media,
 						     pageCount: 999,
 						     size: 9999,
+						     contextInfo: {
+							     externalAdReply: {
+								     renderLargerThumbnail: true,
+								     mediaType: 1,
+								     title: '',
+								     body: `Click here! 👉🏻🟢`,
+								     thumbnail: media,
+								     jpegThumbnail: media,
+								     previewType: "NONE",
+								     sourceUrl: "https://samu330.com"}}
 						     },{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
@@ -697,18 +707,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             message: {
                 interactiveMessage: interactiveMessage
             }
-        },
-	contextInfo: {
-	externalAdReply: {
-	renderLargerThumbnail: true,
-	mediaType: 1,
-	title: '',
-	body: `Click here! 👉🏻🟢`,
-	thumbnail: media,
-	jpegThumbnail: media,
-	previewType: "NONE",
-	sourceUrl: "https://samu330.com",
-	}}
+        }
     }, { quoted: m });
 
     await nyanBot2.relayMessage(chatId, msgs.message, {});
