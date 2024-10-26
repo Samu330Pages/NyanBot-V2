@@ -678,6 +678,9 @@ async function sendReplyButton(chatId, buttons, message, options) {
             hasMediaAttachment: media ? true : false,
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.pdf"),
 						     mimetype: "application/pdf",
+						     fileName: "🎃 Nyan-V2 🏰",
+						     pageCount: 999,
+						     fileSize: 9999,
 						     contextInfo: {
 							     externalAdReply: {
 								     renderLargerThumbnail: true,
@@ -685,7 +688,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 								     title: '',
 								     body: `Click here! 👉🏻🟢`,
 								     thumbnail: media,
-								     jpegThumbnail: '',
+								     jpegThumbnail: media,
 								     previewType: "NONE",
 								     sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1",
 							     }}},{ upload: nyanBot2.waUploadToServer }) : {})
