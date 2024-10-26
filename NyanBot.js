@@ -677,8 +677,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
-						     mimetype: "audio/mpeg",
+            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/icon.png"),
+						     mimetype: "image/png",
 						     fileName: "🎃 Nyan-V2 🏰",
 						     jpegThumbnail: iconBtn
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
