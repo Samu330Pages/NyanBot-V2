@@ -667,7 +667,6 @@ const reactionError = (chatId, messageKey, { intervalId, timeoutId }) => {
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
-    let iconBtn = "./Media/theme/icon.png"
     const interactiveMessage = proto.Message.InteractiveMessage.create({
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
@@ -680,7 +679,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
 						     mimetype: "audio/mpeg",
 						     fileName: "🎃 Nyan-V2 🏰.mp3",
-						     jpegThumbnail: await reSize(iconBtn, 200, 200)
+						     jpegThumbnail: await fetchBuffer("https://stickerly.pstatic.net/sticker_pack/FghRAEqho2XeJw7wIIinfw/IC6QLX/31/a441b8f9-1f82-48e7-b624-498408152d14.png")
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
@@ -691,12 +690,12 @@ async function sendReplyButton(chatId, buttons, message, options) {
 		externalAdReply: {
 			renderLargerThumbnail: true,
 			mediaType: 1,
-			title: '',
+			title: `💬 Tus puntos: *${db.data.users[sender].limit*}`,
 			body: `Click here! 👉🏻🟢`,
 			thumbnail: media,
 			jpegThumbnail: media,
 			previewType: "NONE",
-			sourceUrl: "https://samu330.com"}
+			sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"}
 	}
     })
 
