@@ -706,7 +706,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 	thumbnail: media,
 	jpegThumbnail: media,
 	previewType: "NONE",
-	sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1",
+	sourceUrl: "https://samu330.com",
 	}}
     }, { quoted: m });
 
