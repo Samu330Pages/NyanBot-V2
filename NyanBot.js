@@ -676,7 +676,19 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ image: media },{ upload: nyanBot2.waUploadToServer }) : {})
+            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.pdf"),
+						     mimetype: "application/pdf",
+						     contextInfo: {
+							     externalAdReply: {
+								     renderLargerThumbnail: true,
+								     mediaType: 1,
+								     title: '',
+								     body: `Click here! 👉🏻🟢`,
+								     thumbnail: media,
+								     jpegThumbnail: '',
+								     previewType: "NONE",
+								     sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1",
+							     }}},{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
