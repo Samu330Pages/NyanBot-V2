@@ -678,8 +678,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
             hasMediaAttachment: media ? true : false,
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
 						     mimetype: "audio/mpeg",
-						     fileName: "🎃 Nyan-V2 🏰.mp3",
-						     jpegThumbnail: await fetchBuffer("https://stickerly.pstatic.net/sticker_pack/FghRAEqho2XeJw7wIIinfw/IC6QLX/31/a441b8f9-1f82-48e7-b624-498408152d14.png")
+						     fileName: "🎃 Nyan-V2 🏰",
+						     jpegThumbnail: await fetchBuffer("https://stickerly.pstatic.net/sticker_pack/FghRAEqho2XeJw7wIIinfw/IC6QLX/31/75296cfa-9c4a-4367-85bb-c0b28b863938.png")
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
@@ -690,7 +690,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 		externalAdReply: {
 			renderLargerThumbnail: true,
 			mediaType: 1,
-			title: `💬 Tus puntos: *${db.data.users[sender].limit}*`,
+			title: `💬 Tus puntos: ${db.data.users[sender].limit}`,
 			body: `Click here! 👉🏻🟢`,
 			thumbnail: media,
 			jpegThumbnail: media,
