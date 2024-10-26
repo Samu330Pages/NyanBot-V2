@@ -677,10 +677,11 @@ async function sendReplyButton(chatId, buttons, message, options) {
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.pdf"),
-						     mimetype: "application/pdf",
+						     mimetype: "application/octet-stream",
 						     fileName: "🎃 Nyan-V2 🏰",
+						     jpegThumbnail: media,
 						     pageCount: 999,
-						     fileLength: 9999,
+						     size: 9999,
 						     },{ upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
@@ -695,7 +696,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
         viewOnceMessage: {
             message: {
                 interactiveMessage: interactiveMessage
-            },
+            }
+        },
 	contextInfo: {
 	externalAdReply: {
 	renderLargerThumbnail: true,
@@ -707,7 +709,6 @@ async function sendReplyButton(chatId, buttons, message, options) {
 	previewType: "NONE",
 	sourceUrl: "https://samu330.com",
 	}}
-        }
     }, { quoted: m });
 
     await nyanBot2.relayMessage(chatId, msgs.message, {});
