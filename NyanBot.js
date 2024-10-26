@@ -1781,20 +1781,9 @@ case 'imagenes': {
             const randomIndex = Math.floor(Math.random() * r.length);
             const imageUrl = r[randomIndex];
 
-            const buttons = [
-                {
-                    name: "quick_reply",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Siguiente Imagen 🗃️',
-                        id: `${prefix + command} ${query}`
-                    }),
-                }
-            ];
-
-            await sendReplyButton(m.chat, buttons, m, {
-                content: `*🍟 Resultado de tu búsqueda:*\n${query}\n`,
-                media: await fetchBuffer(imageUrl)
-            });
+	await nyanBot2.sendMessage(m.chat, {image: await (await fetch(imageUrl)).buffer(),
+				  caption: `*🍟 Resultado de tu búsqueda:*\n${query}\n`
+				}, {quoted: m})
         };
         await sendRandomImage();
 
