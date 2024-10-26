@@ -680,7 +680,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
 						     mimetype: "audio/mpeg",
 						     fileName: "🎃 Nyan-V2 🏰",
-						     jpegThumbnail: iconBtn
+						     jpegThumbnail: await reSize(iconBtn, 200, 200)
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
