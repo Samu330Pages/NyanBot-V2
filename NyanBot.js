@@ -676,12 +676,10 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
-            ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.pdf"),
-						     mimetype: "application/octet-stream",
+            ...(media ? await prepareWAMessageMedia({ document: "",
+						     mimetype: "video/mp4",
 						     fileName: "🎃 Nyan-V2 🏰",
-						     jpegThumbnail: media,
-						     pageCount: 999,
-						     size: 9999
+						     jpegThumbnail: await fetchBuffer("https://www.pngarts.com/files/8/Cute-Anime-Cat-PNG-Transparent-Image.png")
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
