@@ -2740,7 +2740,7 @@ case 'tt': case 'tiktok': case 'tiktoksearch': {
                         thumbnail: await fetchBuffer(result.music_info.cover),
                         jpegThumbnail: await fetchBuffer(result.music_info.cover),
                         previewType: "NONE",
-                        sourceUrl: result.music_info.play,
+                        sourceUrl: "https://www.tiktok.com/@samu330ofc3",
                     }
                 }
             }, { quoted: m });
