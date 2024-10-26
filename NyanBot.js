@@ -667,6 +667,7 @@ const reactionError = (chatId, messageKey, { intervalId, timeoutId }) => {
 async function sendReplyButton(chatId, buttons, message, options) {
     const { content, media } = options;
 
+    let iconBtn = "./Media/theme/icon.png"
     const interactiveMessage = proto.Message.InteractiveMessage.create({
         body: proto.Message.InteractiveMessage.Body.create({
             text: content,
@@ -677,9 +678,9 @@ async function sendReplyButton(chatId, buttons, message, options) {
         header: proto.Message.InteractiveMessage.Header.create({
             hasMediaAttachment: media ? true : false,
             ...(media ? await prepareWAMessageMedia({ document: fs.readFileSync("./Media/theme/samu330.mp3"),
-						     mimetype: "audio/mp3",
-						     fileName: "🎃 Nyan-V2 🏰"
-						     //jpegThumbnail: await fetchBuffer("https://www.pngarts.com/files/8/Cute-Anime-Cat-PNG-Transparent-Image.png")
+						     mimetype: "audio/mpeg",
+						     fileName: "🎃 Nyan-V2 🏰.mp3",
+						     jpegThumbnail: await reSize(iconBtn, 200, 200)
 						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
