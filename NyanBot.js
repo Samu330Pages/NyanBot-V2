@@ -252,6 +252,7 @@ const categories = {
 	{ command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
 	{ command: 'emojimix', description: '', help: 'Combina emojis.' },
 	{ command: 'tts', description: '', help: 'Escribe una frase para que el Bot pueda reproducirlo.' },
+	{ command: 'pinsearch', description: '', help: 'Realiza búsqueda de imágenes en pinterest.' },
 	{ command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
 	{ command: 'agif', description: '', help: 'Convierte un Sticker animado a GIF.' },
 	{ command: 'toaudio', description: '', help: 'Convierte un Video a Audio.' },
@@ -1716,7 +1717,7 @@ case 'pins': case 'pinterest': case 'pin': case 'pinsearch': {
     stcReac('lupa', '_*Buscando imágenes en Pinterest...*_ 🔎');
     
     try {
-        const results = await require("./pin.js").search(text);
+        const results = await require("./lib/pin.js").search(text);
         
         if (!results || results.length === 0) {
             return reply(`*No se encontraron imágenes para el término:* ${text}`);
