@@ -1815,7 +1815,7 @@ case 'spotify': case 'sp': case 'downloadspotify': {
     
     try {
         if (isSpotifyUrl) {
-            if (isSpotifyUrl[1] === 'album') {
+            if (isSpotifyUrl[2] === 'album') {
                 const album = await downloadAlbum(isSpotifyUrl[0]);
                 const img = await (await fetch(`${album.metadata.cover}`)).buffer();
                 let spotifyInfo = `*Album:* ${album.metadata.title}\n`;
@@ -1849,8 +1849,8 @@ case 'spotify': case 'sp': case 'downloadspotify': {
                     }, { quoted: m });
                 }
 
-            } else if (isSpotifyUrl[1] === 'track') {
-                const track = await downloadTrack(isSpotifyUrl[0]);
+            } else if (isSpotifyUrl[2] === 'track') {
+                const track = await downloadTrack(isSpotifyUrl[1]);
 		const img = await fetchBuffer(track.imageUrl)
                 let spotifyInfo = `*Título:* ${track.title}\n`;
                 spotifyInfo += `*Artistas:* ${track.artists}\n`;
@@ -1866,7 +1866,7 @@ case 'spotify': case 'sp': case 'downloadspotify': {
 		    jpegThumbnail: await reSize(img, 200, 200)
                 }, { quoted: m });
 
-            } else if (isSpotifyUrl[1] === 'playlist') {
+            } else if (isSpotifyUrl[2] === 'playlist') {
                 const infos = new Spotify({
                     clientID: "7fb26a02133d463da465671222b9f19b",
                     clientSecret: "d4e6f8668f414bb6a668cc5c94079ca1",
