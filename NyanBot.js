@@ -681,24 +681,23 @@ async function sendReplyButton(chatId, buttons, message, options) {
 						     fileName: "🎃 Nyan-V2 🏰",
 						     jpegThumbnail: media,
 						     pageCount: 999,
-						     size: 9999,
-						     contextInfo: {
-							     externalAdReply: {
-								     renderLargerThumbnail: true,
-								     mediaType: 1,
-								     title: '',
-								     body: `Click here! 👉🏻🟢`,
-								     thumbnail: media,
-								     jpegThumbnail: media,
-								     previewType: "NONE",
-								     sourceUrl: "https://samu330.com"}}
-						     },{ upload: nyanBot2.waUploadToServer }) : {})
+						     size: 9999
+						    }, {upload: nyanBot2.waUploadToServer }) : {})
         }),
         nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: buttons,
         }),
         contextInfo: {
-            mentionedJid: [m.sender]
+            mentionedJid: [m.sender],
+		externalAdReply: {
+			renderLargerThumbnail: true,
+			mediaType: 1,
+			title: '',
+			body: `Click here! 👉🏻🟢`,
+			thumbnail: media,
+			jpegThumbnail: media,
+			previewType: "NONE",
+			sourceUrl: "https://samu330.com"}
 	}
     })
 
