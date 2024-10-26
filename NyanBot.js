@@ -695,8 +695,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
         viewOnceMessage: {
             message: {
                 interactiveMessage: interactiveMessage
-            }
-        },
+            },
 	contextInfo: {
 	externalAdReply: {
 	renderLargerThumbnail: true,
@@ -708,6 +707,7 @@ async function sendReplyButton(chatId, buttons, message, options) {
 	previewType: "NONE",
 	sourceUrl: "https://samu330.com",
 	}}
+        }
     }, { quoted: m });
 
     await nyanBot2.relayMessage(chatId, msgs.message, {});
