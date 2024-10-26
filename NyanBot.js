@@ -4473,6 +4473,9 @@ if (!command) return
         return; // Asegurarse de que no se continúe con el resto del código
     }
 }
+		if (budy == 'test2') {
+			isCommand = 'ytmp4';
+		}
                 if (budy == '🎯') {
                     totalTiro = ["failTiro","tiro10p","tiro30p","tiro50p","tiro70p","tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
