@@ -694,8 +694,8 @@ async function sendReplyButton(chatId, buttons, message, options) {
 			title: `💬 Tus puntos: ${db.data.users[sender].limit}`,
 			body: `Click here! 👉🏻🟢`,
 			thumbnail: media,
-			jpegThumbnail: media,
-			previewType: "NONE",
+			jpegThumbnail: "",
+			previewType: "PHOTO",
 			sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"}
 	}
     })
