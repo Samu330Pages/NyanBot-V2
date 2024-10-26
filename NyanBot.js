@@ -688,15 +688,16 @@ async function sendReplyButton(chatId, buttons, message, options) {
         }),
         contextInfo: {
             mentionedJid: [m.sender],
-		externalAdReply: {
-			renderLargerThumbnail: true,
-			mediaType: 1,
-			title: `💬 Tus puntos: ${db.data.users[sender].limit}`,
-			body: `Click here! 👉🏻🟢`,
-			thumbnail: media,
-			jpegThumbnail: "",
-			previewType: "PHOTO",
-			sourceUrl: "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"}
+		"externalAdReply": {
+                        "showAdAttribution": true,
+                        "containsAutoReply": true,
+                        "title": `💬 Tus puntos: ${db.data.users[sender].limit}`,
+                        "body": `Click here! 👉🏻🟢`,
+                        "previewType": "PHOTO",
+                        "thumbnailUrl": ``,
+                        "thumbnail": media,
+                        "sourceUrl": "https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"
+		}
 	}
     })
 
