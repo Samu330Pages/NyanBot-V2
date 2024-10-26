@@ -1748,7 +1748,7 @@ case 'pins': case 'pinterest': case 'pin': case 'pinsearch': {
         });
 
         await sendCarousel(m.chat, {}, {
-            header: `📌 *Resultados de tu búsqueda de ${text} en Pinterest 📍*\n`,
+            header: `*Resultados de tu búsqueda de ${text} en Pinterest 📍*\n`,
             footer: `Search by Samu330.com`,
             cards: contents
         });
