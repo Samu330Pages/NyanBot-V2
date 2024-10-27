@@ -66,9 +66,6 @@ const {
     sleepPet
       } = require('./src/petsTest')
 const audd = new Audd('30f04e9697cd28e5dba4e5906a2bb021');//21/10/24
-/*const pkg = require('imgur')
-const { ImgurClient } = pkg
-const client = new ImgurClient({ clientId: "a0113354926015a" })*/
 const {
     exec,
     spawn,
@@ -418,18 +415,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
 
-        //premium
-        async function replyprem(teks) {
-    reply(`This feature is for premium user, contact the owner to become premium user`)
-}
-        //script replier
-        async function sendnyanBot2Message(chatId, message, options = {}){
-    let generate = await generateWAMessage(chatId, message, options)
-    let type2 = getContentType(generate.message)
-    if ('contextInfo' in options) generate.message[type2].contextInfo = options?.contextInfo
-    if ('contextInfo' in message) generate.message[type2].contextInfo = message?.contextInfo
-    return await nyanBot2.relayMessage(chatId, generate.message, { messageId: generate.key.id })
-}
         //reply
         async function reply(teks) {
                 nyanBot2.sendMessage(m.chat, {
@@ -443,49 +428,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                     text: teks
                 }, { quoted: m });
         }
-            
-            //Fake quoted 
-        const fpay = { key: { remoteJid: '0@s.whatsapp.net', fromMe: false, id:global.botname, participant: '0@s.whatsapp.net'}, message: { requestPaymentMessage: { currencyCodeIso4217: "USD", amount1000: 999999999, requestFrom: '0@s.whatsapp.net', noteMessage: { extendedTextMessage: { text: global.botname}}, expiryTimestamp: 999999999, amount: { value: 91929291929, offset: 1000, currencyCode: "USD"}}}}
-	    const ftroli ={key: {fromMe: false,"participant":"0@s.whatsapp.net", "remoteJid": "status@broadcast"}, "message": {orderMessage: {itemCount: 2022,status: 200, thumbnail: thumb, surface: 200, message: botname, orderTitle: ownername, sellerJid: '0@s.whatsapp.net'}}, contextInfo: {"forwardingScore":999,"isForwarded":true},sendEphemeral: true}
-		const fdoc = {key : {participant : '0@s.whatsapp.net', ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },message: {documentMessage: {title: botname,jpegThumbnail: thumb}}}
-		const fvn = {key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {})},message: { "audioMessage": {"mimetype":"audio/ogg; codecs=opus","seconds":359996400,"ptt": "true"}} } 
-		const fgif = {key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {})},message: {"videoMessage": { "title":botname, "h": wm,'seconds': '359996400', 'gifPlayback': 'true', 'caption': ownername, 'jpegThumbnail': thumb}}}
-		const fgclink = {key: {participant: "0@s.whatsapp.net","remoteJid": "0@s.whatsapp.net"},"message": {"groupInviteMessage": {"groupJid": "6288213840883-1616169743@g.us","inviteCode": "m","groupName": wm, "caption": `${pushname}`, 'jpegThumbnail': thumb}}}
-		const fvideo = {key: { fromMe: false,participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {}) },message: { "videoMessage": { "title":botname, "h": wm,'seconds': '359996400', 'caption': `${pushname}`, 'jpegThumbnail': thumb}}}
-		const floc = {key : {participant : '0@s.whatsapp.net', ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },message: {locationMessage: {name: wm,jpegThumbnail: thumb}}}
-		const fkontak = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }, message: { 'contactMessage': { 'displayName': ownername, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;${ownername},;;;\nFN:${ownername}\nitem1.TEL;waid=916909137213:916909137213\nitem1.X-ABLabel:Mobile\nEND:VCARD`, 'jpegThumbnail': thumb, thumbnail: thumb,sendEphemeral: true}}}
-	    const fakestatus = {key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {})},message: { "imageMessage": {"url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc","mimetype": "image/jpeg","caption": wm,"fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=","fileLength": "28777","height": 1080,"width": 1079,"mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=","fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=","directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69","mediaKeyTimestamp": "1610993486","jpegThumbnail": fs.readFileSync('./Media/theme/NyanBot.jpg'),"scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="}}}
-	    const frpayment = {
-	key: {
-		remoteJid: '0@s.whatsapp.net',
-		fromMe: false,
-		id: `${ownername}`,
-		participant: '0@s.whatsapp.net'
-	},
-	message: {
-		requestPaymentMessage: {
-			currencyCodeIso4217: "USD",
-			amount1000: 999999999,
-			requestFrom: '0@s.whatsapp.net',
-			noteMessage: {
-				extendedTextMessage: {
-					text: `${botname}`
-				}
-			},
-			expiryTimestamp: 999999999,
-			amount: {
-				value: 91929291929,
-				offset: 1000,
-				currencyCode: "INR"
-			}
-		}
-	}
-}
-            
-            const pickRandom = (arr) => {
-return arr[Math.floor(Math.random() * arr.length)]
-}
-        
+
         //database
         try {
             let isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -575,64 +518,6 @@ return arr[Math.floor(Math.random() * arr.length)]
         } catch (err) {
             console.log(err)
         }
-        
-        //photo uploader
-        async function uploadtoimgur(imagepath) {
-  try {
-    const response = await client.upload({
-      image: fs.createReadStream(imagepath),
-      type: 'stream',
-    })
-
-    let url = response.data.link
-    console.log(url)
-    return url
-  } catch (error) {
-    console.error('Error uploading image to Imgur:', error)
-    throw error
-  }
-}
-        
-async function ephoto(url, texk) {
-let form = new FormData 
-let gT = await axios.get(url, {
-  headers: {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
-  }
-})
-let $ = cheerio.load(gT.data)
-let text = texk
-let token = $("input[name=token]").val()
-let build_server = $("input[name=build_server]").val()
-let build_server_id = $("input[name=build_server_id]").val()
-form.append("text[]", text)
-form.append("token", token)
-form.append("build_server", build_server)
-form.append("build_server_id", build_server_id)
-let res = await axios({
-  url: url,
-  method: "POST",
-  data: form,
-  headers: {
-    Accept: "*/*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-    cookie: gT.headers["set-cookie"]?.join("; "),
-    ...form.getHeaders()
-  }
-})
-let $$ = cheerio.load(res.data)
-let json = JSON.parse($$("input[name=form_value_input]").val())
-json["text[]"] = json.text
-delete json.text
-let { data } = await axios.post("https://en.ephoto360.com/effect/create-image", new URLSearchParams(json), {
-  headers: {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-    cookie: gT.headers["set-cookie"].join("; ")
-    }
-})
-return build_server + data.image
-}
 
 const reactionLoad = (chatId, messageKey) => {
     const emojis = ['🟠', '⚫'];
@@ -714,12 +599,10 @@ async function sendReplyButton(chatId, buttons, message, options) {
 }
 
 async function sendCarousel(chatId, nativeFlowMessage, options) {
-    const { header, footer, cards } = options; // Eliminamos header, content y media
+    const { header, footer, cards } = options;
     let carouselCards = [];
 
-    // Agregar todas las cards pasadas a la función
     for (const card of cards) {
-        // Preparar la imagen de cada tarjeta
         var cardImageParse = await prepareWAMessageMedia({
             image: {
                 url: card.header.imageMessage
@@ -731,15 +614,13 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
         carouselCards.push({
             header: {
                 title: card.header.title,
-                imageMessage: cardImageParse.imageMessage, // Asegúrate de que esto esté correctamente formateado
+                imageMessage: cardImageParse.imageMessage,
                 hasMediaAttachment: true,
             },
             body: card.body,
             nativeFlowMessage: card.nativeFlowMessage
         });
     }
-
-    // Crear el mensaje interactivo
     const message = generateWAMessageFromContent(chatId, {
         viewOnceMessage: {
             message: {
@@ -748,18 +629,17 @@ async function sendCarousel(chatId, nativeFlowMessage, options) {
                         text: header
                     },
                     carouselMessage: {
-                        cards: carouselCards, // Asegúrate de que esto sea un array de cards
+                        cards: carouselCards,
                         messageVersion: 1
                     },
                     footer: {
-                        text: footer // Pie de página
+                        text: footer
                     }
                 }
             }
         }
     }, { quoted: m });
 
-    // Enviar el mensaje
     await nyanBot2.relayMessage(chatId, message['message'], {});
 }
 
@@ -824,230 +704,30 @@ caption: texto}}}});
 }
 
 //
-
-async function crearStickerPack(stickers, linkTelegram, title, author) {
-    const stickersPorPaquete = 30; // Número máximo de stickers por paquete
-    const totalPaquetes = Math.ceil(stickers.length / stickersPorPaquete);
-    const thumbnailPath = './Media/theme/aroPp.png'; // Ruta de la imagen del thumbnail
     
-    for (let paquete = 0; paquete < totalPaquetes; paquete++) {
-        const nombreArchivo = `pack_${paquete + 1}.wastickers`; // Nombre del archivo de paquete
-        const directorioPack = `sticker_pack_${paquete + 1}`;
-        await fs.promises.mkdir(directorioPack, { recursive: true }); // Crear un directorio para el paquete
-
-        const info = {
-            link: linkTelegram,
-            name: title, // Usar el nombre del paquete proporcionado
-            author: author, // Usar el autor proporcionado
-            thumbnail: "unnamed.png", // Nombre del thumbnail
-            stickers: [],
-            info: `Creado por Samu330 con Nyanbot, bot de WhatsApp.`
-        };
-
-        // Obtener los stickers para este paquete
-        const stickersDelPaquete = stickers.slice(paquete * stickersPorPaquete, (paquete + 1) * stickersPorPaquete);
-
-        for (let i = 0; i < stickersDelPaquete.length; i++) {
-            const sticker = stickersDelPaquete[i];
-            const buffer = await fetchBuffer(sticker.url); // Descargar la imagen
-            const nombreImagen = `Samu330_Sticker_${i + 1 + (paquete * stickersPorPaquete)}.webp`;
-            const rutaImagen = path.join(directorioPack, nombreImagen); // Ruta local
-
-            // Guardar la imagen localmente
-            await fs.promises.writeFile(rutaImagen, buffer);
-            info.stickers.push({
-                file: nombreImagen,
-                emoji: "😀" // Personaliza los emojis
-            });
-        }
-
-        // Guardar archivos de metadatos
-        await fs.promises.writeFile(path.join(directorioPack, 'author.txt'), author);
-        await fs.promises.writeFile(path.join(directorioPack, 'info.json'), JSON.stringify(info, null, 2));
-        await fs.promises.writeFile(path.join(directorioPack, 'link.txt'), linkTelegram);
-        await fs.promises.writeFile(path.join(directorioPack, 'title.txt'), title);
-        
-        // Copiar el thumbnail
-        await fs.promises.copyFile(thumbnailPath, path.join(directorioPack, 'unnamed.png'));
-
-        // Crear el archivo .wastickers utilizando archiver
-        const output = fs.createWriteStream(path.join(__dirname, nombreArchivo));
-        const archive = archiver('zip', { zlib: { level: 9 } }); // Usar compresión máxima
-
-        output.on('close', () => {
-            console.log(`Archivo guardado: ${nombreArchivo} (${archive.pointer()} total bytes)`);
-        });
-
-        archive.on('error', (err) => {
-            throw err;
-        });
-
-        archive.pipe(output);
-
-        // Agregar los archivos de metadatos al archivo .wastickers
-        archive.file(path.join(directorioPack, 'author.txt'), { name: 'author.txt' });
-        archive.file(path.join(directorioPack, 'info.json'), { name: 'info.json' });
-        archive.file(path.join(directorioPack, 'link.txt'), { name: 'link.txt' });
-        archive.file(path.join(directorioPack, 'title.txt'), { name: 'title.txt' });
-        archive.file(path.join(directorioPack, 'unnamed.png'), { name: 'unnamed.png' });
-
-        // Agregar las imágenes
-        for (const sticker of info.stickers) {
-            const imagePath = path.join(directorioPack, sticker.file);
-            archive.file(imagePath, { name: sticker.file });
-        }
-
-        await archive.finalize();
-
-        // Limpiar el directorio temporal después de crear el archivo
-        await fs.promises.rmdir(directorioPack, { recursive: true });
-
-        // Notificar al usuario sobre el envío
-        if (totalPaquetes > 1) {
-            await reply(`Se encontraron *${stickers.length}* stickers. Enviando paquete *${paquete + 1}* de *${totalPaquetes}*...`);
-        }
-    }
-}
-
-async function obfus(query) {
-    return new Promise((resolve, reject) => {
-        try {
-        const obfuscationResult = jsobfus.obfuscate(query,
-        {
-            compact: false,
-            controlFlowFlattening: true,
-            controlFlowFlatteningThreshold: 1,
-            numbersToExpressions: true,
-            simplify: true,
-            stringArrayShuffle: true,
-            splitStrings: true,
-            stringArrayThreshold: 1
-        }
-        )
-        const result = {
-            status: 200,
-            author: `${ownername}`,
-            result: obfuscationResult.getObfuscatedCode()
-        }
-        resolve(result)
-    } catch (e) {
-        reject(e)
-    }
-    })
-}
-
-async function styletext(teks) {
-    return new Promise((resolve, reject) => {
-        axios.get('http://qaz.wtf/u/convert.cgi?text='+teks)
-        .then(({ data }) => {
-            let $ = cheerio.load(data)
-            let hasil = []
-            $('table > tbody > tr').each(function (a, b) {
-                hasil.push({ name: $(b).find('td:nth-child(1) > span').text(), result: $(b).find('td:nth-child(2)').text().trim() })
-            })
-            resolve(hasil)
-        })
-    })
-}
-        
-        async function Telesticker(url) {
-    return new Promise(async (resolve, reject) => {
-        if (!url.match(/(https:\/\/t.me\/addstickers\/)/gi)) return reply('Enther your url telegram sticker link')
-        packName = url.replace("https://t.me/addstickers/", "")
-        data = await axios(`https://api.telegram.org/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/getStickerSet?name=${encodeURIComponent(packName)}`, {method: "GET",headers: {"User-Agent": "GoogleBot"}})
-        const NyanOnResult = []
-        for (let i = 0; i < data.data.result.stickers.length; i++) {
-            fileId = data.data.result.stickers[i].thumb.file_id
-            data2 = await axios(`https://api.telegram.org/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/getFile?file_id=${fileId}`)
-            result = {
-            status: 200,
-            author: 'Samu330',
-            url: "https://api.telegram.org/file/bot891038791:AAHWB1dQd-vi0IbH2NjKYUk-hqQ8rQuzPD4/" + data2.data.result.file_path
-            }
-            NyanOnResult.push(result)
-        }
-    resolve(NyanOnResult)
-    })
-}
-        
         //limit func
-        async function useLimit(senderLimit, amount) {
-            db.data.users[senderLimit].limit -= amount
-            db.data.users[senderLimit].totalLimit += amount
-        }
-        async function resetLimit() {
-            let users = Object.keys(global.db.data.users)
-            for (let i of users) {
-               db.data.users[i].limit = 1000
-            }
-            nyanBot2.sendText(m.chat, { text: `Reset Limit`})
-        }
-        // Grup Only
-        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup ) {
-        	if (isCommand){
-            return reply(`No está permitido el uso del bot en privado!!`)
-            }
-        }
-	if (m.isGroup && !isSamu && db.data.chats[from].ban) {
-        	if (isCommand){
-            return
-            }
-        }
-        // Private Only
-        if (!isSamu && db.data.settings[botNumber].onlypv && m.isGroup) {
-        	if (isCommand){
-	         return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!")
-	     }
-	}
+        async function useLimit(senderLimit, amount) {db.data.users[senderLimit].limit -= amountdb.data.users[senderLimit].totalLimit += amount}
+        async function resetLimit() {let users = Object.keys(global.db.data.users)for (let i of users) {db.data.users[i].limit = 1000}nyanBot2.sendText(m.chat, { text: `Reset Limit`})}
+	    // Grup Only
+	if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup ) {if (isCommand){return reply(`No está permitido el uso del bot en privado!!`)}}
+	if (m.isGroup && !isSamu && db.data.chats[from].ban) {if (isCommand){return}}
+	    // Private Only
+        if (!isSamu && db.data.settings[botNumber].onlypv && m.isGroup) {if (isCommand){return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!")}}
 	     
-        if (!nyanBot2.public) {
-            if (isSamu && !m.key.fromMe) return
-        }
-        if (db.data.settings[botNumber].online) {
-        	if (isCommand) {
-        	nyanBot2.sendPresenceUpdate('unavailable', from)
-        }
-        }
-        if (db.data.settings[botNumber].autoread) {
-            nyanBot2.readMessages([m.key])
-        }
-        //auto set bio\\
-	if (db.data.settings[botNumber].autobio) {
-            nyanBot2.updateProfileStatus(`*${botname} Activo hace ${runtime(process.uptime())}*`).catch(_ => _)
-        }
-     //auto type record
-        if (db.data.settings[botNumber].autorecordtype){
-        if (isCommand) {
-            let presenceMix = ['composing', 'recording']
-            nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
-            nyanBot2.sendPresenceUpdate(nyanMix, from)
-        }
-        }
-        if (db.data.settings[botNumber].autorecord){
-        if (isCommand) {
-        	let presenceMix = ['recording']
-            nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
-            nyanBot2.sendPresenceUpdate(nyanMix, from)
-        }
-        }
-        if (db.data.settings[botNumber].autotype){
-        if (isCommand) {
-        	let nyanComposing = ['composing']
-            nyanBot2.sendPresenceUpdate(nyanComposing, from)
-        }
-        }
+        if (!nyanBot2.public) {if (isSamu && !m.key.fromMe) return}
+        if (db.data.settings[botNumber].online) {if (isCommand) {nyanBot2.sendPresenceUpdate('unavailable', from)}}
+        if (db.data.settings[botNumber].autoread) {nyanBot2.readMessages([m.key])}
+	    //auto set bio\\
+	if (db.data.settings[botNumber].autobio) {nyanBot2.updateProfileStatus(`*${botname} Activo hace ${runtime(process.uptime())}*`).catch(_ => _)}
+	    //auto type record
+        if (db.data.settings[botNumber].autorecordtype){if (isCommand) {let presenceMix = ['composing', 'recording']nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]nyanBot2.sendPresenceUpdate(nyanMix, from)}}
+        if (db.data.settings[botNumber].autorecord){if (isCommand) {let presenceMix = ['recording']nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]nyanBot2.sendPresenceUpdate(nyanMix, from)}}
+        if (db.data.settings[botNumber].autotype){if (isCommand) {let nyanComposing = ['composing']nyanBot2.sendPresenceUpdate(nyanComposing, from)}}
         
-        let list = []
-for (let i of owner) {
-list.push({
-	    	displayName: await nyanBot2.getName(i),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await nyanBot2.getName(i)}\nFN:${await nyanBot2.getName(i)}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Click here to chat\nitem2.EMAIL;type=INTERNET:${ytname}\nitem2.X-ABLabel:YouTube\nitem3.URL:${socialm}\nitem3.X-ABLabel:GitHub\nitem4.ADR:;;${location};;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
-	    })
-	}
         //console log
         if (isCommand) {
             console.log(color(`\n< ================================================== >\n`, 'cyan'))
-            console.log(chalk.black(chalk.bgWhite(!isCommand ? '[ MESSAGE ]' : '[ COMMAND ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
+            console.log(chalk.black(chalk.bgWhite(!isCommand ? '[ MENSAJE ]' : '[ COMANDO ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> De'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> En'), chalk.green(m.isGroup ? pushname : 'Chat', m.chat))
             global.db.data.settings[botNumber].totalhit += 1
         }
     
@@ -1071,7 +751,6 @@ list.push({
 if (db.data.chats[m.chat].badword) {
     let isBadWord = false;
     for (let bak of bad) {
-        // Convertir el mensaje y la palabra prohibida a minúsculas para comparación
         if (new RegExp(`\\b${bak.toLowerCase()}\\b`).test(budy.toLowerCase())) {
             isBadWord = true;
             break;
@@ -1107,8 +786,8 @@ if (db.data.chats[m.chat].badword) {
         }
         
 
-        if (db.data.chats[m.chat].antilink) {
-            if (budy.match(`whatsapp.com`)) {
+if (db.data.chats[m.chat].antilink) {
+if (budy.match(`whatsapp.com`)) {
 if (isAdmins) return
 if (m.key.fromMe) return
 if (isSamu) return
@@ -1122,36 +801,6 @@ participant: m.key.participant
 }
 })
 nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links de otros grupos!!*`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-}
-}
-        
-const sendapk = (teks) => {
-nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/vnd.android.package-archive'}, {quoted:m})
-}
-for (let BhosdikaXeon of ApkNyan) {
-if (budy === BhosdikaXeon) {
-let buffer = fs.readFileSync(`./Media/apk/${BhosdikaXeon}.apk`)
-sendapk(buffer)
-}
-}
-
-const sendzip = (teks) => {
-nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/zip'}, {quoted:m})
-}
-for (let BhosdikaXeon of ZipNyan) {
-if (budy === BhosdikaXeon) {
-let buffer = fs.readFileSync(`./Media/zip/${BhosdikaXeon}.zip`)
-sendzip(buffer)
-}
-}
-
-const senddocu = (teks) => {
-nyanBot2.sendMessage(from, { document: teks, mimetype: 'application/pdf'}, {quoted:m})
-}
-for (let BhosdikaXeon of DocNyan) {
-if (budy === BhosdikaXeon) {
-let buffer = fs.readFileSync(`./Media/doc/${BhosdikaXeon}.pdf`)
-senddocu(buffer)
 }
 }
         
@@ -3729,16 +3378,6 @@ exec(`bash update.sh`, (err, stdout) => {
 if (err) return reply(`${err}`)
 if (stdout) reply(`🍟 ¬\n> ${stdout}\n\n> *NyanBot-V2*`)
 })
-break
-
-case 'tele':
-let r = await Telesticker(text);
-let stickers = r.map((item) => ({ url: item.url })); // Extraer enlaces sin el índice
-await crearStickerPack(stickers, text, global.packname, global.author);
-
-// Enviar el archivo por WhatsApp
-const nombreArchivoFinal = `pack_1.wastickers`; // Cambiar a pack_1 para el primer paquete
-nyanBot2.sendMessage(m.chat, { document: fs.readFileSync(nombreArchivoFinal), mimetype: 'application/octet-stream', fileName: nombreArchivoFinal });
 break
 
 case 'creador': case 'owner': case 'script': case 'code':
