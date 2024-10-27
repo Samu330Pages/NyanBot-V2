@@ -1948,7 +1948,7 @@ case 'yta': {
         
         await nyanBot2.sendMessage(m.chat, {
             document: audioBuffer,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r[0].title}\n- *Canal:* ${r[0].author}\n- *Calidad:* ${r[0].quality}\n- *Vistas:* ${formatNumber(r[0].views)}\n- *Duración:* ${durationMinutes}m\n- *Categoría:* ${r[0].category}\n- *Fecha de publicación:* ${publishDate}\n`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r[0].title}\n- *Canal:* ${r[0].author}\n- *Vistas:* ${formatNumber(r[0].views)}\n- *Duración:* ${durationMinutes}m\n- *Categoría:* ${r[0].category}\n- *Fecha de publicación:* ${publishDate}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r[0].title}.mp3`,
             jpegThumbnail: await (await fetch(`${r[0].thumbnail}`)).buffer()
