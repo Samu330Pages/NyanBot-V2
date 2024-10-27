@@ -707,8 +707,7 @@ caption: texto}}}});
     
         //limit func
         async function useLimit(senderLimit, amount) {db.data.users[senderLimit].limit -= amountdb.data.users[senderLimit].totalLimit += amount}
-        async function resetLimit() {let users = Object.keys(global.db.data.users)for (let i of users) {db.data.users[i].limit = 1000}nyanBot2.sendText(m.chat, { text: `Reset Limit`})}
-	    // Grup Only
+            // Grup Only
 	if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup ) {if (isCommand){return reply(`No está permitido el uso del bot en privado!!`)}}
 	if (m.isGroup && !isSamu && db.data.chats[from].ban) {if (isCommand){return}}
 	    // Private Only
