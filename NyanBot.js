@@ -1988,7 +1988,7 @@ case 'ytv': {
 
         if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
-                document: {url: `${r.url}`},
+                document: {url: r.url},
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
                 caption: caption,
@@ -1996,7 +1996,7 @@ case 'ytv': {
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
-                video: {url: `${r.url}`},
+                video: {url: r.url},
                 caption: caption,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4'
