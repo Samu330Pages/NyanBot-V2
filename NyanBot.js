@@ -1947,7 +1947,7 @@ case 'yta': {
         let audioC = await toAudio(audioBuffer, 'mp3');
         
         await nyanBot2.sendMessage(m.chat, {
-            document: audioBuffer,
+            document: audioC,
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r[0].title}\n- *Canal:* ${r[0].author}\n- *Vistas:* ${formatNumber(r[0].views)}\n- *Duración:* ${durationMinutes}m\n- *Categoría:* ${r[0].category}\n- *Fecha de publicación:* ${publishDate}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r[0].title}.mp3`,
@@ -1955,7 +1955,7 @@ case 'yta': {
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: audioBuffer,
+            audio: audioC,
             mimetype: "audio/mpeg",
             fileName: `${r[0].title}.mp3`
         }, { quoted: m });
