@@ -2385,6 +2385,28 @@ case 'ytv': {
 }
 break
 
+case 'cuevana': {
+    if (!text) return reply('_*¿Qué película estás buscando?*_');
+    
+    let searchResults = await require("./lib/cuevana.js").cuevana(text);
+    
+    let responseText = `*👤 Autor: ${searchResults.author.author}*\n`;
+    responseText += `*🌐 Página: ${searchResults.author.page}*\n\n`;
+    responseText += `*Resultados de búsqueda para "${text}":*\n\n`;
+
+    if (searchResults.results.length === 0) {
+        responseText += `_*No se encontraron resultados para "${text}".*_`;
+    } else {
+        searchResults.results.forEach((movie, index) => {
+            responseText += `*${index + 1}. ${movie.title}*\n`;
+            responseText += `*Enlace:* ${movie.link}\n`;
+            responseText += `📍--------------\n\n`;
+        });
+    }
+	await reply(responseText)
+}
+break
+
 case 'ytmp3link':
 case 'ytalink': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
