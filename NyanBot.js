@@ -415,7 +415,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
-	let ytLink = ''
 
         //reply
         async function reply(teks) {
@@ -835,7 +834,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 		const matches = quotedText.match(regex);
 		if (matches && matches[0]) {
-			ytLink = matches[0];
+			const ytLink = matches[0];
 			isCommand = `yta`
 		} else {
 			reply("No se encontró un enlace de YouTube.");
@@ -1945,16 +1944,13 @@ case 'ytmp3':
 case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
+    if (args.length < 1 || !/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    if (!ytLink) {
-	    ytLink = text;
-    }
     try {
-        let r = await ytdl.sYtdl(ytLink);
+        let r = await ytdl.sYtdl(text);
         const durationMinutes = Math.floor(r[0].duration / 60);
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
