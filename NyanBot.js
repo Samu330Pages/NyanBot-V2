@@ -835,7 +835,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		const matches = quotedText.match(regex);
 		if (matches && matches[0]) {
 			const ytLink = matches[0];
-			command = `yta ${ytLink}`
+			command = `.yta ${ytLink}`
 		} else {
 			reply("No se encontró un enlace de YouTube.");
 		}
