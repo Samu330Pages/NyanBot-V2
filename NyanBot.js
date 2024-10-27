@@ -719,9 +719,26 @@ caption: texto}}}});
 	    //auto set bio\\
 	if (db.data.settings[botNumber].autobio) {nyanBot2.updateProfileStatus(`*${botname} Activo hace ${runtime(process.uptime())}*`).catch(_ => _)}
 	    //auto type record
-        if (db.data.settings[botNumber].autorecordtype){if (isCommand) {let presenceMix = ['composing', 'recording']nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]nyanBot2.sendPresenceUpdate(nyanMix, from)}}
-        if (db.data.settings[botNumber].autorecord){if (isCommand) {let presenceMix = ['recording']nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]nyanBot2.sendPresenceUpdate(nyanMix, from)}}
-        if (db.data.settings[botNumber].autotype){if (isCommand) {let nyanComposing = ['composing']nyanBot2.sendPresenceUpdate(nyanComposing, from)}}
+        if (db.data.settings[botNumber].autorecordtype){
+		if (isCommand) {
+			let presenceMix = ['composing', 'recording']
+				nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+					nyanBot2.sendPresenceUpdate(nyanMix, from)
+		}
+	}
+        if (db.data.settings[botNumber].autorecord){
+		if (isCommand) {
+			let presenceMix = ['recording']
+				nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+					nyanBot2.sendPresenceUpdate(nyanMix, from)
+		}
+	}
+        if (db.data.settings[botNumber].autotype){
+		if (isCommand) {
+			let nyanComposing = ['composing']
+				nyanBot2.sendPresenceUpdate(nyanComposing, from)
+		}
+	}
         
         //console log
         if (isCommand) {
