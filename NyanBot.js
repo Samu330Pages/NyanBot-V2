@@ -33,8 +33,9 @@ const FormData = require('form-data')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
+const ytsdl = require('./lib/ytdlNew.js')
 const sm = require("nayan-media-downloader")
-const { igdl, fbdl, ttdl, ytmp3v3, ytmp4v4 } = require('ruhend-scraper');
+const { igdl, fbdl, ttdl } = require('ruhend-scraper')
 const google = require('googlethis')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -46,7 +47,7 @@ const pkg = require('sanzy-spotifydl')
 const { downloadTrack, downloadAlbum, search } = pkg; 
 const pkg2 = require('fluid-spotify.js')
 const { Spotify } = pkg2;
-const { sendPasswordResetEmail, createUserWithEmailAndPassword } = require('firebase/auth');
+const { sendPasswordResetEmail, createUserWithEmailAndPassword } = require('firebase/auth')
 const { auth } = require('./lib/firebaseAuth.js')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
@@ -1955,28 +1956,20 @@ case 'yta': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const url = text;
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = url.match(regex);
-    const videoId = matches ? matches[1] : null;
-
-    if (!videoId) {
-        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    }
-
-    let i = new Rapi();
-
     try {
-        let r = await i.fetchVideoData(videoId);
+        let r = await ytdl.sYtdl(text);
+        const durationMinutes = Math.floor(r.duration / 60);
+        const publishDate = new Date(r.publishDate).toLocaleDateString();
 
-        const audioBuffer = await fetchBuffer(r.videoDownloadLink);
+	const audioBuffer = await (await fetch(`${r.url}`)).buffer();
         let audioC = await toAudio(audioBuffer, 'mp4');
+        
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n- *Canal:* ${r.author}\n- *Bitrate de Audio:* ${r.audioBitrate}\n- *Categoría:* ${r.category}\n`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n- *Canal:* ${r.author}\n*Calidad:* ${r.quality}\n*Vistas:* ${formatNumber(r.views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r.category}\n*Fecha de publicación:* ${publishDate}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
-            jpegThumbnail: await fetchBuffer(r.thumbnail)
+            jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer();
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
@@ -1990,7 +1983,7 @@ case 'yta': {
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
 
-    useLimit(sender, 30)
+    useLimit(sender, 30);
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
@@ -2004,38 +1997,26 @@ case 'ytv': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const matches = text.match(regex);
-    const videoId = matches ? matches[1] : null;
-
-    if (!videoId) {
-        return reply(`*La URL proporcionada no es válida. Asegúrate de que sea un enlace de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-    }
-
-    let i = new Rapi();
-
     try {
-        let r = await i.fetchVideoData(videoId);
+        let r = await ytdl.sYtdl(text);
+        const durationMinutes = Math.floor(r.duration / 60);
+        const publishDate = new Date(r.publishDate).toLocaleDateString();
 
-        if (!r.videoDownloadLink) {
-            throw new Error("No se pudo obtener el enlace de descarga del video.");
-        }
+	const videoBuffer = await (await fetch(`${r.url}`)).buffer();
+        const caption = `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.quality}\n*Vistas:* ${formatNumber(r.views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r.category}\n*Fecha de publicación:* ${publishDate}\n\n*Encontrarás el video con el nombre:* ${r.title}`;
 
-        const videoBuffer = await fetchBuffer(r.videoDownloadLink);
-        const fileSizeMB = parseFloat(r.contentLength) / (1024 * 1024); // Convertir a MB
-
-        if (fileSizeMB > 80) {
+        if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
                 document: videoBuffer,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n*Categoría:* ${r.category}\n\n*Encontrarás el video con el nombre:* ${r.title}`,
-		jpegThumbnail: await fetchBuffer(r.thumbnail)
+                caption: caption,
+                jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer();
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer,
-                caption: `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.qualityLabel}\n*Tamaño:* ${fileSizeMB.toFixed(2)} MB\n*Duración Aproximada:* ${Math.round(r.approxDurationMs / 1000)} segundos\n*Categoría:* ${r.category}\n\n*Encontrarás el video con el nombre:* ${r.title}\n`,
+                caption: caption,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
@@ -2046,7 +2027,7 @@ case 'ytv': {
         stcReac('error', `_*❌ La descarga con ID ha fallado!*_\n*Intenta de nuevo! 🙂*`);
     }
 
-    useLimit(sender, 30)
+    useLimit(sender, 30);
 }
 break
 
@@ -2068,94 +2049,6 @@ case 'cuevana': case 'pelis': {
         });
     }
 	await reply(responseText)
-}
-break
-
-case 'ytmp3link':
-case 'ytalink': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
-
-    try {
-        const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
-            method: 'POST',
-            headers: {
-                'accept': '*/*',
-                'api_key': 'free',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                text: text
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-            //const videoBuffer = await fetchBuffer(data.data.mp4);
-            await nyanBot2.sendMessage(m.chat, {
-                audio: {url: data.data.mp3},
-                fileName: `${date}-audio.mp3`,
-                mimetype: 'audio/ogg'
-            }, { quoted: m });
-    } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error en la nueva API:', error);
-        stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
-    }
-
-    useLimit(sender, 30)
-}
-break
-
-case 'ytmp4link':
-case 'ytvlink': {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (args.length < 1) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`);
-
-    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
-
-    try {
-        const response = await fetch('https://shinoa.us.kg/api/download/ytdl', {
-            method: 'POST',
-            headers: {
-                'accept': '*/*',
-                'api_key': 'free',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                text: text
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-            //const videoBuffer = await fetchBuffer(data.data.mp4);
-            await nyanBot2.sendMessage(m.chat, {
-                video: {url: data.data.mp4},
-                fileName: `video.mp4`,
-                mimetype: 'video/mp4',
-                caption: `*Descarga completa! 🍟*\n\n*Encontrarás el video con el nombre:* video.mp4`
-                //jpegThumbnail: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2PuaECZr9VtGsBH2maNVGGgmr1urhcBrfqy0SrNyy5JzhzmYIngih4wovm8HRByAFlE3vj0-YExfje-R7GLH60WagWYikWRMdg9mCeqQFY8vXf2O84ueIybeFz4FzZDmZIvWqIkOsttAW/s1600/descarga.png'
-            }, { quoted: m });
-    } catch (error) {
-        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-        console.error('Error en la nueva API:', error);
-        stcReac('error', `_*❌ La descarga con enlace ha fallado!*_\n*Intenta de nuevo por favor! 🙂*`);
-    }
-
-    useLimit(sender, 30)
 }
 break
 
