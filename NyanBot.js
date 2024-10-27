@@ -1943,7 +1943,7 @@ case 'yta': {
         const durationMinutes = Math.floor(r.duration / 60);
         const publishDate = new Date(r.publishDate).toLocaleDateString();
 
-	const audioBuffer = await (await fetch(`${r.url}`)).buffer();
+	const audioBuffer = await fetchBuffer(`${r.url}`)
         let audioC = await toAudio(audioBuffer, 'mp4');
         
         await nyanBot2.sendMessage(m.chat, {
@@ -1984,12 +1984,11 @@ case 'ytv': {
         const durationMinutes = Math.floor(r.duration / 60);
         const publishDate = new Date(r.publishDate).toLocaleDateString();
 
-	const videoBuffer = await (await fetch(`${r.url}`)).buffer();
         const caption = `*Descarga completa! 🍟*\n\n*Canal:* ${r.author}\n*Calidad:* ${r.quality}\n*Vistas:* ${formatNumber(r.views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r.category}\n*Fecha de publicación:* ${publishDate}\n\n*Encontrarás el video con el nombre:* ${r.title}`;
 
         if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
-                document: videoBuffer,
+                document: {url: `${r.url}`},
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
                 caption: caption,
@@ -1997,7 +1996,7 @@ case 'ytv': {
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
-                video: videoBuffer,
+                video: {url: `${r.url}`},
                 caption: caption,
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4'
