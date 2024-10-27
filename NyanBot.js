@@ -2016,6 +2016,7 @@ case 'ytv': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud con ID:', error);
+	reply(error)
         stcReac('error', `_*❌ La descarga ha fallado!*_\n*Intenta de nuevo! 🙂*`);
     }
 
