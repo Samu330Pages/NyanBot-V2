@@ -33,7 +33,7 @@ const FormData = require('form-data')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
 const yts = require('yt-search')
-const ytsdl = require('./lib/ytdlNew.js')
+const ytdl = require('./lib/ytdlNew.js')
 const sm = require("nayan-media-downloader")
 const { igdl, fbdl, ttdl } = require('ruhend-scraper')
 const google = require('googlethis')
@@ -1924,27 +1924,6 @@ await sendReplyButton(m.chat, buttons, m, {
 })
 reactionOk(m.chat, m.key, playId);
 }
-break
-
-case 'test1': case 'ytaudio':
-let samFunc = require('./lib/ytdl')
-if (args.length < 1 || !isUrl(text) || !samFunc.isYTUrl(text)) return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${command} https://youtube.com/...`)
-let audio = await samFunc.mp3(text)
-await nyanBot2.sendMessage(m.chat,{
-    audio: fs.readFileSync(audio.path),
-    mimetype: 'audio/mp4', ptt: true,
-    contextInfo:{
-        externalAdReply:{
-            title:audio.meta.title,
-            body: botname,
-            thumbnail: await fetchBuffer(audio.meta.image),
-            mediaType:2,
-            mediaUrl:text,
-        }
-
-    },
-},{quoted:m})
-await fs.unlinkSync(audio.path)
 break
 
 case 'ytmp3':
