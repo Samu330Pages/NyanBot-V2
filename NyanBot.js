@@ -1940,24 +1940,24 @@ case 'yta': {
 
     try {
         let r = await ytdl.sYtdl(text);
-        const durationMinutes = Math.floor(r.duration / 60);
-        const publishDate = new Date(r.publishDate).toLocaleDateString();
+        const durationMinutes = Math.floor(r[0].duration / 60);
+        const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-	const audioBuffer = await fetchBuffer(`${r.url}`)
+	const audioBuffer = await fetchBuffer(`${r[0].url}`)
         let audioC = await toAudio(audioBuffer, 'mp4');
         
         await nyanBot2.sendMessage(m.chat, {
             document: audioBuffer,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n- *Canal:* ${r.author}\n*Calidad:* ${r.quality}\n*Vistas:* ${formatNumber(r.views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r.category}\n*Fecha de publicación:* ${publishDate}\n`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r[0].title}\n- *Canal:* ${r[0].author}\n*Calidad:* ${r[0].quality}\n*Vistas:* ${formatNumber(r[0].views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r[0].category}\n*Fecha de publicación:* ${publishDate}\n`,
             mimetype: "audio/mpeg",
-            fileName: `${r.title}.mp3`,
-            jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer()
+            fileName: `${r[0].title}.mp3`,
+            jpegThumbnail: await (await fetch(`${r[0].thumbnail}`)).buffer()
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
             audio: audioBuffer,
             mimetype: "audio/mpeg",
-            fileName: `${r.title}.mp3`
+            fileName: `${r[0].title}.mp3`
         }, { quoted: m });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
