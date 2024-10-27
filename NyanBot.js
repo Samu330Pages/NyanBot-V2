@@ -835,9 +835,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 		const matches = quotedText.match(regex);
 		if (matches && matches[0]) {
-			const youtubeLink = matches[0];
-			reply(youtubeLink)
-			ytLink = `${youtubeLink}`
+			ytLink = matches[0];
 			isCommand = `yta`
 		} else {
 			reply("No se encontró un enlace de YouTube.");
