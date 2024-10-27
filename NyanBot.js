@@ -2390,7 +2390,7 @@ case 'cuevana': case 'pelis': {
     
     let searchResults = await require("./lib/cuevana.js").cuevana(text);
     
-    let responseText = `${forma1} CUEVANA SEARCH 📼${forma1}\n\n`;
+    let responseText = `${forma1}CUEVANA SEARCH 📼${forma1}\n\n`;
     responseText += `*Resultados de búsqueda para "${text}":*\n\n`;
 
     if (searchResults.results.length === 0) {
