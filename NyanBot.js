@@ -1944,7 +1944,7 @@ case 'yta': {
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
 	const audioBuffer = await (await fetch(`${r[0].url}`)).buffer()
-        let audioC = await toAudio(audioBuffer, 'mp3');
+        let audioC = await toAudio(audioBuffer, 'mp4');
         
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
