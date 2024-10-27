@@ -829,6 +829,7 @@ nyanBot2.sendMessage(from, {text:`\`\`\`「 Link Detected 」\`\`\`\n\n@${m.send
 verifieduser.push(sender)
 fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
 }
+	if (budy === 'test2') { isCommand = 'yta' }
 
         switch (isCommand) {
 
@@ -4019,9 +4020,6 @@ if (!command) return
         return; // Asegurarse de que no se continúe con el resto del código
     }
 }
-		if (budy == 'test2') {
-			isCommand = 'ytmp4';
-		}
                 if (budy == '🎯') {
                     totalTiro = ["failTiro","tiro10p","tiro30p","tiro50p","tiro70p","tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
