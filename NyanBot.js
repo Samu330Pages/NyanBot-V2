@@ -1969,7 +1969,7 @@ case 'yta': {
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r.title}\n- *Canal:* ${r.author}\n*Calidad:* ${r.quality}\n*Vistas:* ${formatNumber(r.views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r.category}\n*Fecha de publicación:* ${publishDate}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r.title}.mp3`,
-            jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer();
+            jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer()
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
@@ -2011,7 +2011,7 @@ case 'ytv': {
                 fileName: `${r.title}.mp4`,
                 mimetype: 'video/mp4',
                 caption: caption,
-                jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer();
+                jpegThumbnail: await (await fetch(`${r.thumbnail}`)).buffer()
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
