@@ -366,7 +366,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const botNumber = await nyanBot2.decodeJid(nyanBot2.user.id)
         const itsMe = m.sender == botNumber ? true : false
         const sender = m.sender
-        let text = body.replace(/^\.\s*\S+\s*/, '').trim();
+        const text = body.replace(/^\.\s*\S+\s*/, '').trim();
 	const from = m.key.remoteJid
         const fatkuns = (m.quoted || m)
         const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
@@ -415,6 +415,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
+	let ytLink;
 
         //reply
         async function reply(teks) {
@@ -837,7 +838,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 			const youtubeLink = matches[0];
 			reply(youtubeLink)
 			isCommand = `yta`
-			text = `${youtubeLink}`
+			ytLink = `${youtubeLink}`
 		} else {
 			reply("No se encontró un enlace de YouTube.");
 		}
@@ -1951,6 +1952,9 @@ case 'yta': {
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
+    if (!ytLink) {
+	    ytLink = text;
+    }
     try {
         let r = await ytdl.sYtdl(text);
         const durationMinutes = Math.floor(r[0].duration / 60);
