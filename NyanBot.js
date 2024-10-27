@@ -393,7 +393,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
        //prefix 2
         const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi) : xprefix
 	const prefBody = body.startsWith(pric)
-        const isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
+        let isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
         const sticker = []
        //group
         const isGroup = m.key.remoteJid.endsWith('@g.us')
