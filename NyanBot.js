@@ -415,7 +415,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
-	let ytLink;
+	let ytLink = ''
 
         //reply
         async function reply(teks) {
