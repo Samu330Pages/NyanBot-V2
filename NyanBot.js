@@ -1956,7 +1956,7 @@ case 'yta': {
 	    ytLink = text;
     }
     try {
-        let r = await ytdl.sYtdl(text);
+        let r = await ytdl.sYtdl(ytLink);
         const durationMinutes = Math.floor(r[0].duration / 60);
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
