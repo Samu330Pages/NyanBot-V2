@@ -415,6 +415,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
+	let ytLink;
 
         //reply
         async function reply(teks) {
@@ -1945,8 +1946,9 @@ case 'yta': {
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
+	if (!ytLink) { ytLink = text; }
     try {
-        let r = await ytdl.sYtdl(text);
+        let r = await ytdl.sYtdl(ytLink);
         const durationMinutes = Math.floor(r[0].duration / 60);
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
