@@ -1481,7 +1481,7 @@ nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 const { remini } = require('./lib/remini')
 let media = await quoted.download()
 let proses = await remini(media, "enhance")
-let big = await resizeImage(proses, 2)
+await resizeImage(proses, 4)
   .then(resizedBuffer => {
     fs.writeFileSync('hd.jpg', resizedBuffer);
     reply('_*Se agregó calidad a su imagen, espere mientras se agregan pixeles!*_ 👾.');
@@ -1489,8 +1489,9 @@ let big = await resizeImage(proses, 2)
   .catch(error => {
     reply(error.message);
   });
-nyanBot2.sendMessage(m.chat, { image: big, caption: mess.success}, { quoted: m})
+nyanBot2.sendMessage(m.chat, { image: fs.readFileSync('./hd.jpg'), caption: mess.success}, { quoted: m})
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+fs.unlinkSync('hd.jpg')
 }
 break
 
