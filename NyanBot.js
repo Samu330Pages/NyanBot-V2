@@ -84,6 +84,7 @@ const {
     floNime
 } = require('./lib/uploader2')
 const {
+    resizeImage,
     toAudio,
     toPTT,
     toVideo,
