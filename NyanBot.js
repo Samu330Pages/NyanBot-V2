@@ -1,4 +1,3 @@
-require('./lib/listmenu')
 const {
     BufferJSON,
     WA_DEFAULT_EPHEMERAL,
