@@ -1484,12 +1484,12 @@ let proses = await remini(media, "enhance")
 let big = await resizeImage(proses, 2)
   .then(resizedBuffer => {
     fs.writeFileSync('hd.jpg', resizedBuffer);
-    reply('Imagen redimensionada guardada exitosamente.');
+    reply('_*Se agregó calidad a su imagen, espere mientras se agregan pixeles!*_ 👾.');
   })
   .catch(error => {
     reply(error.message);
   });
-nyanBot2.sendMessage(m.chat, { image: hd, caption: mess.success}, { quoted: m})
+nyanBot2.sendMessage(m.chat, { image: big, caption: mess.success}, { quoted: m})
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
 break
