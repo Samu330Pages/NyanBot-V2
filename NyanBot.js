@@ -1480,8 +1480,8 @@ if (!/image/.test(mime)) return reply(`*por favor envía o etiqueta una imagen j
 nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 const { remini } = require('./lib/remini')
 let media = await quoted.download()
-let proses = await remini(media, "enhance")
-await resizeImage(proses, 4)
+let proses = await remini(media, "recolor")
+await resizeImage(proses, 2)
   .then(resizedBuffer => {
     fs.writeFileSync('hd.jpg', resizedBuffer);
     reply('_*Se agregó calidad a su imagen, espere mientras se agregan pixeles!*_ 👾.');
