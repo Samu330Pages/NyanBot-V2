@@ -358,7 +358,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
 	const isCmd = body.startsWith(prefix, '')
         const isCmd2 = body.startsWith(prefix)
-	let command = isCmd ? body.replace(/^\s*\.?\s*/, '').split(' ')[0].toLowerCase() : ""
+	const command = isCmd ? body.replace(/^\s*\.?\s*/, '').split(' ')[0].toLowerCase() : ""
 	const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
         const full_args = body.replace(command, '').slice(1).trim()
@@ -393,7 +393,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
        //prefix 2
         const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi) : xprefix
 	const prefBody = body.startsWith(pric)
-        let isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
+        const isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
         const sticker = []
        //group
         const isGroup = m.key.remoteJid.endsWith('@g.us')
@@ -835,7 +835,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		const matches = quotedText.match(regex);
 		if (!matches) return reply("No se encontró un enlace de YouTube.");
 		let ytLink = matches[0];
-		command = `.yta ${ytLink}`
+		budy = `.yta ${ytLink}`
 	}
 
         switch (isCommand) {
