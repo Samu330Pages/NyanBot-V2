@@ -250,6 +250,9 @@ const categories = {
         { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Alias de sticker.' },
 	{ command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
 	{ command: 'emojimix', description: '', help: 'Combina emojis.' },
+	{ command: 'hd', description: '', help: 'Aumentar calidad a imagenes.' },
+	{ command: 'remini', description: '', help: 'Alias de hd.' },
+	{ command: 'recolor', description: '', help: 'Colorea imágenes en B/N o borrosas (personas/paisajes/animales).' },
 	{ command: 'tts', description: '', help: 'Escribe una frase para que el Bot pueda reproducirlo.' },
 	{ command: 'pinsearch', description: '', help: 'Realiza búsqueda de imágenes en pinterest.' },
 	{ command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
@@ -1474,6 +1477,18 @@ case 'imagenes': {
 }
 break
 
+case 'color': case 'recolor': {
+if (!quoted) return replygcxeon(`*Porfavor etiqueta una imagen con el comando para poder realizar el aumento de calidad!* 🖼️`)
+if (!/image/.test(mime)) return reply(`*por favor envía o etiqueta una imagen junto con el comando:* ${prefix + command}`)
+nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+const { remini } = require('./lib/remini')
+let media = await quoted.download()
+let recolor = await remini(media, "recolor")
+nyanBot2.sendMessage(m.chat, { image: recolor, caption: mess.success}, { quoted: m})
+nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+}
+break
+			
 case 'remini': case 'hd': {
 if (!quoted) return replygcxeon(`*Porfavor etiqueta una imagen con el comando para poder realizar el aumento de calidad!* 🖼️`)
 if (!/image/.test(mime)) return reply(`*por favor envía o etiqueta una imagen junto con el comando:* ${prefix + command}`)
