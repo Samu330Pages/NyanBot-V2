@@ -1251,7 +1251,7 @@ case 'reset': {
 break
 case 'test':
     const buttons = [
-        {
+        /*{
             name: "send_location",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Ubicación',
@@ -1263,13 +1263,13 @@ case 'test':
                 display_text: 'Reply',
                 id: ''
             }),
-	}, {
+	}, */{
             name: "cta_url",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Page',
                 url: 'https://wa.me/samu330'
             }),
-        },
+        }/*,
         {
             name: "cta_call",
             buttonParamsJson: JSON.stringify({
@@ -1304,7 +1304,7 @@ case 'test':
                             }]
                         }]
                     })
-                }]
+                }*/]
 
     const mediaPath = '';
 
