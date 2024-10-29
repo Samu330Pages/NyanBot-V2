@@ -911,11 +911,6 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 }
 break
 
-case 'play2':
-const casePlay = require('./cases/play');
-await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
-break
-
 case 'claim': {
     let now = new Date();
     let today = now.toISOString().split('T')[0];
@@ -1917,58 +1912,17 @@ case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
 }
 break
 			
-case 'play': {
-if (!text) return reply(`Ejemplo: ${command} piel canela`)
-if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`)
-let playId;
-playId = reactionLoad(m.chat, m.key);
-const r = await yts(text);
-if (!r || !r.videos || r.videos.length === 0) {
-reactionError(m.chat, m.key, playId);
-return reply("No se encontraron videos para esa búsqueda.");
-}
-const video = r.videos[0];
-const buttons = [{
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Descargar audio 🎙️',
-            id: `${prefix}ytmp3 ${video.url}`
-          }),
-        }, {
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Descargar video 🎬',
-            id: `${prefix}ytv ${video.url}`
-          }),
-	}, {
-          name: "cta_url",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Ver en la app ❤️',
-            url: `${video.url}`,
-	    merchant_url: `${video.url}`
-          }),
-        }, {
-          name: "quick_reply",
-          buttonParamsJson: JSON.stringify({
-            display_text: 'Buscar letra de la canción 📝',
-            id: `${prefix}letra ${text}`
-          }),
-}]
-await sendReplyButton(m.chat, buttons, m, {
-	content: `> *YT Play 🍟.*
- 
-- *Título:* ${video.title}\n
-- *Duración:* ${video.timestamp}\n
-- *Autor:* ${video.author.name}\n
-- *Vistas:* ${formatNumber(video.views)}
-
-`,
-	media: await fetchBuffer(`${video.thumbnail}`)
-})
-reactionOk(m.chat, m.key, playId);
-}
+case 'play':
+const casePlay = require('./cases/play');
+await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
 break
 
+case 'ytmp3':
+case 'yta': {
+const caseYtmp3 = require('./cases/ytmp3');
+await caseYtmp3(text, m, reply, nyanBot2, formatNumber, useLimit, sender, db, command, forma1, prefix);
+break;
+			
 case 'ytmp3':
 case 'yta': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
