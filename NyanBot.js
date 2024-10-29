@@ -2105,7 +2105,7 @@ case 'pelis': case 'peliculas': {
 
         await sendCarousel(m.chat, {}, {
             header: `📼 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Desliza sobre los resultados, toca el botón para copiar el comando, solo envíalo de vuelta y listo! 😁_`,
-            footer: `By *${results.creator} | ${results.website}*`,,
+            footer: `By *${results.creator} | ${results.website}*`,
             cards: contents
         });
 
