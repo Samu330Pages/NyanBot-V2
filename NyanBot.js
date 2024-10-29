@@ -1914,7 +1914,7 @@ break
 			
 case 'play':
 const casePlay = require('./cases/play');
-await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
+await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, formatNumber, prefix);
 break
 
 case 'ytmp3':
