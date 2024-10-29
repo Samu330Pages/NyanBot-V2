@@ -2045,7 +2045,7 @@ case 'ytv': {
 }
 break
 
-case 'yts': case 'peliculas': {
+case 'pelis': case 'peliculas': {
     if (!text) {
         return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
     }
