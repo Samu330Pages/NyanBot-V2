@@ -911,6 +911,11 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 }
 break
 
+case 'play2':
+const casePlay = require('./cases/play');
+await casePlay(text, m, reply, reactionLoad, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
+break
+
 case 'claim': {
     let now = new Date();
     let today = now.toISOString().split('T')[0];
