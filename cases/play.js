@@ -1,4 +1,4 @@
-module.exports = async function(text, m, reply, reactionLoad, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix) {
+module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
     if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`);
 
