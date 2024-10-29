@@ -1921,6 +1921,7 @@ case 'ytmp32':
 case 'yta2': {
 const caseYtmp3 = require('./cases/ytmp3');
 await caseYtmp3(text, m, reply, nyanBot2, formatNumber, useLimit, sender, db, command, forma1, prefix);
+}
 break
 			
 case 'ytmp3':
