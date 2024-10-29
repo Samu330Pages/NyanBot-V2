@@ -913,7 +913,7 @@ break
 
 case 'play2':
 const casePlay = require('./cases/play');
-await casePlay(text, m, reply, isUrl, reactionLoad, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
+await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix);
 break
 
 case 'claim': {
