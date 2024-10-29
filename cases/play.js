@@ -1,6 +1,7 @@
-const yts = require('yt-search')
+const fetch = require('node-fetch');
+const yts = require('yt-search');
 
-module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, fetchBuffer, formatNumber, prefix) {
+module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, formatNumber, prefix) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
     if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`);
 
@@ -46,7 +47,7 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
     
     await sendReplyButton(m.chat, buttons, m, {
         content: `> *YT Play 🍟.*\n\n- *Título:* ${video.title}\n- *Duración:* ${video.timestamp}\n- *Autor:* ${video.author.name}\n- *Vistas:* ${formatNumber(video.views)}\n`,
-        media: await fetchBuffer(`${video.thumbnail}`)
+        media: await (await fetch(`${video.thumbnail}`)).buffer();
     });
     
     reactionOk(m.chat, m.key, playId);
