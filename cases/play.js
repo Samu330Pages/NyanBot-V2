@@ -47,7 +47,7 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
     
     await sendReplyButton(m.chat, buttons, m, {
         content: `> *YT Play 🍟.*\n\n- *Título:* ${video.title}\n- *Duración:* ${video.timestamp}\n- *Autor:* ${video.author.name}\n- *Vistas:* ${formatNumber(video.views)}\n`,
-        media: await (await fetch(`${video.thumbnail}`)).buffer();
+        media: await (await fetch(`${video.thumbnail}`)).buffer()
     });
     
     reactionOk(m.chat, m.key, playId);
