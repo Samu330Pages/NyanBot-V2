@@ -419,6 +419,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isPremium = isSamu || checkPremiumUser(m.sender, premium)
         expiredPremiumCheck(nyanBot2, m, premium)
 	//startPetUpdateInterval(nyanBot2)
+	const TipoDispositivo = m.key.id.length === 20 ? 'iPhone' : m.key.id.length === 32 ? 'Android' : m.key.id.length === 16 ? 'Baileys' : m.key.id.length === 22 ? 'Web Browser' : m.key.id.length === 18 ? 'Desktop' : m.key.id.length > 21 ? 'Android' : 'WhatsApp web';
 
         //reply
         async function reply(teks) {
@@ -865,7 +866,7 @@ case 'menu': {
     const canvasImage = await createCanvasImage(nickName, userNumber, userPoints, p);
     
     // Configurar el mensaje del menú
-    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}\n`;
+    let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}\n- *Tu dispositivo:* ${TipoDispositivo}\n`;
 
     const { isPremium } = checkPremiumUser(sender);
     if (isPremium) {
