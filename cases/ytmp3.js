@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const ytdl = require('./lib/ytdlNew.js');
+const ytdl = require('../lib/ytdlNew.js');
 const { toAudio } = require('../lib/converter');
 
 module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit, sender, db, command, forma1, prefix) {
