@@ -2293,8 +2293,7 @@ case 'tiktoks': case 'tiktoksearch': {
 break
 
 case 'sc'
-try {
-    const searchxd = await axios.get(
+const searchxd = await axios.get(
       "https://deliriusapi-official.vercel.app/search/soundcloud",
       {
         params: {
@@ -2334,9 +2333,6 @@ try {
       },
       { quoted: m },
     );
-  } catch (e){
-    reply(`${e}`);
-}
 break
 
 // Case para TikTok
