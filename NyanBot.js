@@ -3404,20 +3404,10 @@ nyanBot2.sendMessage(m.chat, {
 break
 
 
-            case 'puntos':
-                reply(`*Total de puntos: ${db.data.users[sender].limit}*
-		
-_Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
-*Para jugar puedes simplemente enviar uno de estos emojis:*
-
-${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲 | 🎰${forma1}
-
-*O también juegar a piedra, papel o tijera con el bot enviando los emojis:*
-
-${forma1}🪨 | ✊🏻 | 📄 | ✋🏻 | ✂️ | ✌🏻${forma1}
-
-_*Y ganarás puntos de manera más rápida!*_`);
-            break
+case 'puntos':
+const casePuntos = require('./cases/puntos');
+await casePuntos(reply, nyanBot2, sender, db, forma1);
+break
 			
 	case 'groseria': case 'addbd':
                if (!isSamu) return reply(mess.bot)
