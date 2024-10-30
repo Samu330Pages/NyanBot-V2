@@ -3406,7 +3406,8 @@ break
 
 case 'puntos':
 const casePuntos = require('./cases/puntos');
-await casePuntos(m, reply, nyanBot2, sender, db, forma1);
+const userPoints = db.data.users[sender].limit
+await casePuntos(m, reply, nyanBot2, sender, userPoints, forma1);
 break
 			
 	case 'groseria': case 'addbd':
