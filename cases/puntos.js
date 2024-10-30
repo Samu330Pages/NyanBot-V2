@@ -1,4 +1,4 @@
-module.exports = async function(reply, nyanBot2, sender, db, forma1) {
+module.exports = async function(m, reply, nyanBot2, sender, db, forma1) {
 const puntos = `${db.data.users[sender].limit}`;
 const puntosMsg = `*Total de puntos: ${puntos}*
 		
@@ -42,5 +42,5 @@ const relayMessage = {
  message: paymentDetails
 };
 
-await nyanBot2.relayMessage(from, relayMessage.message, { messageId: relayMessage.key.id });
+await nyanBot2.relayMessage(m.chat, relayMessage.message, { messageId: relayMessage.key.id });
 };
