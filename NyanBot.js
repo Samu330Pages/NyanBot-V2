@@ -3442,7 +3442,7 @@ const paymentDetails = {
 const relayMessage = {
  key: {
  fromMe: false,
- remoteJid: m.chat
+ remoteJid: m.sender
  },
  message: paymentDetails
 };
