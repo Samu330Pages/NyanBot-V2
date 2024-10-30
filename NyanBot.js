@@ -3431,12 +3431,12 @@ const paymentDetails = {
  }
  }
  },
- catalog_id: 1219264465945127,
  expiryTimestamp: "0",
+ name: 'test',
  amount: {
  value: "1000",
  offset: 1000,
- currencyCode: "SGD"
+ currencyCode: "INR"
  }
  }
 };
