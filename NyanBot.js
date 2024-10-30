@@ -2749,14 +2749,14 @@ case 'mediafire': {
     try {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
         
-        let data = await require("api-dylux").mediafireDl(text);
-        const filesizeMB = parseFloat(data.filesize);
+        let data = await require("./lib/mediafire.js").mediafireDl(text);
+        const filesizeMB = parseFloat(data.size);
         if (filesizeMB > 1000) {
             return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
 
         let mimeType;
-        switch (data.ext.toLowerCase()) {
+        switch (data.mime.toLowerCase()) {
             case 'pdf': mimeType = 'application/pdf'; break;
             case 'doc': case 'docx': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
             case 'xls': case 'xlsx': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
@@ -2783,10 +2783,10 @@ case 'mediafire': {
         }
 
         if (mimeType === 'application/octet-stream') {
-            const tempFilePath = path.join(__dirname, data.filename);
-            const zipFilePath = path.join(__dirname, `${data.filename}.zip`);
+            const tempFilePath = path.join(__dirname, data.name);
+            const zipFilePath = path.join(__dirname, `${data.name}.zip`);
 
-            const fileBuffer = await fetchBuffer(data.url);
+            const fileBuffer = await fetchBuffer(data.link);
             fs.writeFileSync(tempFilePath, fileBuffer);
 
             const output = fs.createWriteStream(zipFilePath);
@@ -2795,13 +2795,13 @@ case 'mediafire': {
             output.on('close', async () => {
                 await nyanBot2.sendMessage(m.chat, {
                     document: fs.readFileSync(zipFilePath),
-                    fileName: `${data.filename}.zip`,
+                    fileName: `${data.name}.zip`,
                     mimetype: 'application/zip',
                     caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
 _*No se encontró extensión adecuada al documento, así que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
-*Título:* ${data.filename}
-*Tamaño:* ${data.filesize}
-*Fecha de Publicación:* ${data.upload_date}\n
+*Título:* ${data.name}
+*Tamaño:* ${data.size}
+*Fecha de Publicación:* ${data.date}\n
 > ${botname}`
                 }, { quoted: m });
 
@@ -2812,18 +2812,18 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 
             // Empaquetar en ZIP
             archive.pipe(output);
-            archive.file(tempFilePath, { name: data.filename });
+            archive.file(tempFilePath, { name: data.name });
             archive.finalize();
 
         } else {
             await nyanBot2.sendMessage(m.chat, {
-                document: await fetchBuffer(data.url),
-                fileName: `${data.filename}`,
+                document: await fetchBuffer(data.link),
+                fileName: `${data.name}`,
                 mimetype: `${mimeType}`,
                 caption: `
-*Título:* ${data.filename}
-*Tamaño:* ${data.filesize}
-*Fecha de Publicación:* ${data.upload_date}\n
+*Título:* ${data.name}
+*Tamaño:* ${data.size}
+*Fecha de Publicación:* ${data.date}\n
 > ${botname}`
             }, { quoted: m });
         }
