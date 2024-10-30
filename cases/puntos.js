@@ -1,5 +1,5 @@
 module.exports = async function(reply, nyanBot2, sender, db, forma1) {
-const puntos = ${db.data.users[sender].limit};
+const puntos = `${db.data.users[sender].limit}`;
 const puntosMsg = `*Total de puntos: ${puntos}*
 		
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
