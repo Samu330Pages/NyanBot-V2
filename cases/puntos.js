@@ -36,7 +36,7 @@ const paymentDetails = {
 const relayMessage = {
  key: {
  fromMe: false,
- remoteJid: from
+ remoteJid: m.chat
  },
  message: paymentDetails
 };
