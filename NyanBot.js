@@ -3426,7 +3426,7 @@ const paymentDetails = {
  extendedTextMessage: {
  text: puntosMsg,
  contextInfo: {
- mentionedJid: sender
+ mentionedJid: [m.sender]
  }
  }
  },
