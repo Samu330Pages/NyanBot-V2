@@ -3447,7 +3447,7 @@ const paymentDetails = {
  offset: 100,
  description: "optional_text",
  discount_program_name": "optional_text"
- },
+ }
  }
 };
 
