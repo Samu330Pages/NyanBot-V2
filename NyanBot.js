@@ -3435,6 +3435,11 @@ const paymentDetails = {
  value: "1000",
  offset: 1000,
  currencyCode: "INR"
+ },
+ quantity: 5,
+ sale_amount: {
+ value: 10000,
+ offset: 100
  }
  }
 };
