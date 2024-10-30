@@ -3406,7 +3406,7 @@ break
 
 case 'puntos':
 const casePuntos = require('./cases/puntos');
-const userPoints = `${db.data.users[sender].limit}`
+const userPoints = `${global.db.data.users[sender].limit}`
 await casePuntos(m, reply, nyanBot2, sender, userPoints, forma1);
 break
 			
