@@ -2292,6 +2292,53 @@ case 'tiktoks': case 'tiktoksearch': {
 }
 break
 
+case 'sc'
+try {
+    const searchxd = await axios.get(
+      "https://deliriusapi-official.vercel.app/search/soundcloud",
+      {
+        params: {
+          q: text,
+          limit: 1
+        },
+      },
+    );
+    const shdata = searchxd.data.data[0];
+    const downloadzd = await axios.get(
+      "https://deliriusapi-official.vercel.app/download/soundcloud",
+      {
+        params: {
+          url: shdata.link,
+        },
+      },
+    );
+    const downloadres = downloadzd.data.data;
+    const soundcloudt = `> SOUNDCLOUD DL 🎧\n
+*- Titulo :* ${downloadres.title || "-"}
+*- Artista:* ${downloadres.author.username || "-"}
+*- Id :* ${downloadres.author.id || "-"}
+*- Followers :* ${downloadres.author.followers_count || "-"}
+*- Likes :* ${downloadres.author.likes_count || "-"}
+*- Publicado :* ${new Date(downloadres.author.created_at).toLocaleDateString() || "-"}
+*- Url :* ${shdata.link || "-"}`;
+    const imgxd =
+      downloadres.imageURL.replace("t500x500", "t1080x1080") ||
+      downloadres.imageURL;
+    await nyanBot2.sendMessage(m.chat, {img: {url: imgxd}, caption: soundcloudt}, { quoted: m});
+    await nyanBot2.sendMessage(
+      m.chat,
+      {
+        audio: { url: downloadres.url },
+        fileName: `${downloadres.title}.mp3`,
+        mimetype: "audio/mpeg",
+      },
+      { quoted: m },
+    );
+  } catch (e){
+    reply(`${e}`);
+}
+break
+
 // Case para TikTok
 case 'tt': case 'tiktok': {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
