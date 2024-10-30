@@ -3422,6 +3422,7 @@ const paymentDetails = {
  requestPaymentMessage: {
  currencyCodeIso4217: "MXN",
  amount1000: `${db.data.users[sender].limit}` * 1000,
+ requestFrom: botNumber,
  noteMessage: {
  extendedTextMessage: {
  text: puntosMsg,
@@ -3440,7 +3441,13 @@ const paymentDetails = {
  sale_amount: {
  value: 10000,
  offset: 100
- }
+ },
+ discount: {
+ value: 10000,
+ offset: 100,
+ description: "optional_text",
+ discount_program_name": "optional_text"
+ },
  }
 };
 
