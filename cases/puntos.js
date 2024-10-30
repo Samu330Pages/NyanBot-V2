@@ -1,6 +1,5 @@
-module.exports = async function(m, reply, nyanBot2, sender, db, forma1) {
-const puntos = global.db.data.users[sender].limit
-const puntosMsg = `*Total de puntos: ${puntos}*
+module.exports = async function(m, reply, nyanBot2, sender, userPoints, forma1) {
+const puntosMsg = `*Total de puntos: ${userPoints}*
 		
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
 *Para jugar puedes simplemente enviar uno de estos emojis:*
@@ -16,7 +15,7 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ claim`
 const paymentDetails = {
  requestPaymentMessage: {
  currencyCodeIso4217: "MXN",
- amount1000: puntos * 1000,
+ amount1000: userPoints * 1000,
  noteMessage: {
  extendedTextMessage: {
  text: puntosMsg,
