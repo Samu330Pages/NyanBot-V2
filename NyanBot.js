@@ -3405,7 +3405,7 @@ break
 
 
 case 'puntos':
-const puntosMsg = `*Total de puntos: ${db.data.users[sender].limit}*
+const puntosMsg = `*Hola @${sender.split("@")[0]}, tienes ${db.data.users[sender].limit} puntos*
 		
 _Para aumentar el número de puntos en tu cuenta, puedes jugar minijuegos, de esta manera se sumarán puntos cada vez que ganes!_
 *Para jugar puedes simplemente enviar uno de estos emojis:*
@@ -3416,7 +3416,7 @@ ${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲 | 🎰${forma1}
 
 ${forma1}🪨 | ✊🏻 | 📄 | 🤚🏻 | ✂️ | ✌🏻${forma1}
 
-_*Puedes igual recolectar 100 puntos diarios con el comando:*_ claim`
+_*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
 
 const paymentDetails = {
  requestPaymentMessage: {
