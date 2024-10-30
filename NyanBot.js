@@ -2293,7 +2293,7 @@ case 'tiktoks': case 'tiktoksearch': {
 break
 
 case 'game':
-if (!m.quoted.id == "game: 5219984907794") return reply("este juego no te pertenece");
+if (m.quoted.id !== "game: 5219984907794") return reply("este juego no te pertenece");
 reply("💀💬")
 break
 
