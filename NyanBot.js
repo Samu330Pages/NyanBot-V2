@@ -845,20 +845,23 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 	}
 
 const userGames = db.data.game.soup || [];
-const juegoActivo = userGames.find(game => game.user === sender);
+const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
 
-if (juegoActivo && m.quoted && m.quoted.id === `gameSoup: ${sender.split("@")[0]}`) {
+if (juegoActivoIndex !== -1 && m.quoted && m.quoted.id === `gameSoup: ${sender.split("@")[0]}`) {
+    const juegoActivo = userGames[juegoActivoIndex]; // Obtener el juego activo usando el índice
     juegoActivo.intentos += 1;
 
     if (juegoActivo.intentos >= 3) {
         reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nTu juego ha sido eliminado.`);
         
-        db.data.game.soup = userGames.filter(game => game.user !== sender);
+        // Eliminar el juego del arreglo usando splice
+        userGames.splice(juegoActivoIndex, 1);
     } else {
         reply(`*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`);
     }
 
-    db.data.game.soup = userGames;
+    // Guardar cambios en la base de datos
+    db.data.game.soup = userGames; // Actualizar la base de datos
 }
 
         switch (isCommand) {
