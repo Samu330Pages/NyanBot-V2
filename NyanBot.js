@@ -844,6 +844,25 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		isCommand = `yta`
 	}
 
+const userGames = db.data.game.soup || [];
+const juegoActivo = userGames.find(game => game.user === sender);
+if (juegoActivo && m.quoted && m.quoted.id === `gameSoup: ${sender.split("@")[0]}`) {
+    juegoActivo.intentos += 1;
+if (juegoActivo.intentos >= 3) {
+        nyanBot2.sendMessage(m.chat, {
+            text: `*Has alcanzado el límite de intentos (3) para el juego.*\nTu juego ha sido eliminado.`,
+            quoted: m
+        });
+db.data.game.soup = userGames.filter(game => game.user !== sender); // Eliminar el juego del usuario
+    } else {
+        nyanBot2.sendMessage(m.chat, {
+            text: `*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`,
+            quoted: m
+        });
+    }
+db.data.game.soup = userGames;
+}
+
         switch (isCommand) {
 
 case 'menu': {
