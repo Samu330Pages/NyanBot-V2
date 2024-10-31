@@ -844,7 +844,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		isCommand = `yta`
 	}
 
-const userGames = db.data.game.soup || [];
+/*const userGames = db.data.game.soup || [];
 const juegoActivo = userGames.find(game => game.user === sender);
 if (juegoActivo && m.quoted && m.quoted.id === `gameSoup: ${sender.split("@")[0]}`) {
     juegoActivo.intentos += 1;
@@ -861,7 +861,7 @@ db.data.game.soup = userGames.filter(game => game.user !== sender); // Eliminar 
         });
     }
 db.data.game.soup = userGames;
-}
+}*/
 
         switch (isCommand) {
 
