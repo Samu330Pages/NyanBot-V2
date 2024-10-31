@@ -2292,9 +2292,23 @@ case 'tiktoks': case 'tiktoksearch': {
 }
 break
 
-case 'game':
-if (m.quoted.id !== `game: ${sender.split("@")[0]}`) return reply("este juego no te pertenece");
-reply("💀💬")
+case 'juego': {
+    const sender = m.sender;
+    const userGames = db.data.game.soup || [];
+const existingGame = userGames.find(game => game.user === sender);
+    if (existingGame) {
+        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`)
+    }
+const newGame = {
+        user: sender,
+        intentos: 0,
+        palabraCorrecta: ''
+    };
+userGames.push(newGame);
+    db.data.game.soup = userGames;
+const texto = `*Juego creado exitosamente para @${sender.split("@")[0]}!* 🎮\n\n*Intentos: ${newGame.intentos}*`;
+    nyanBot2.sendMessage(m.chat, { text: texto }, { quoted: m, messageId: `gameSoup: ${sender.split("@")[0]}` });
+}
 break
 
 // Case para TikTok
