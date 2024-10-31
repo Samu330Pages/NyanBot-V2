@@ -866,8 +866,8 @@ if (juegoActivoIndex !== -1 && m.quoted && m.quoted.text.startsWith("*Nuevo jueg
         switch (isCommand) {
 
 case 'juego': {
-    const userGames = db.data.game.soup || [];
-
+    const existingGame = userGames.find(game => game.user === sender);
+	
     if (existingGame) {
         return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`);
     }
