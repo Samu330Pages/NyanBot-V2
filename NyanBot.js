@@ -953,6 +953,7 @@ break
 
 case 'sopa':
 const sopa = await require("./lib/sopa.js").createWordSearchImages()
+await reply(JSON.stringify(sopa.palabras, null, 2))
 nyanBot2.sendMessage(m.chat, {image: sopa.imagenNormal})
 nyanBot2.sendMessage(m.chat, {image: sopa.imagenResaltada})
 break
