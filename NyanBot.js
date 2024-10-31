@@ -847,7 +847,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
 
-if (juegoActivoIndex !== -1 && m.quoted && m.quoted.id === `gameSoup: ${sender.split("@")[0]}`) {
+if (juegoActivoIndex !== -1 && m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
     const juegoActivo = userGames[juegoActivoIndex]; // Obtener el juego activo usando el índice
     juegoActivo.intentos += 1;
 
@@ -863,8 +863,28 @@ if (juegoActivoIndex !== -1 && m.quoted && m.quoted.id === `gameSoup: ${sender.s
     // Guardar cambios en la base de datos
     db.data.game.soup = userGames; // Actualizar la base de datos
 }
-
         switch (isCommand) {
+
+case 'juego': {
+    const userGames = db.data.game.soup || [];
+
+    if (existingGame) {
+        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`);
+    }
+
+    const newGame = {
+        user: sender,
+        intentos: 0,
+        palabraCorrecta: ''
+    };
+
+    userGames.push(newGame);
+    db.data.game.soup = userGames;
+
+    const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*`;
+    nyanBot2.sendMessage(m.chat, { text: texto }, { quoted: m });
+}
+break
 
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
@@ -2309,25 +2329,6 @@ case 'tiktoks': case 'tiktoksearch': {
         console.error('Error en la búsqueda:', error);
         return reply(`Ocurrió un error al realizar la búsqueda de ${text}. Intenta nuevamente más tarde.\n${error.message}`);
     }
-}
-break
-
-case 'juego': {
-    const sender = m.sender;
-    const userGames = db.data.game.soup || [];
-const existingGame = userGames.find(game => game.user === sender);
-    if (existingGame) {
-        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`)
-    }
-const newGame = {
-        user: sender,
-        intentos: 0,
-        palabraCorrecta: ''
-    };
-userGames.push(newGame);
-    db.data.game.soup = userGames;
-const texto = `*Juego creado exitosamente para @${sender.split("@")[0]}!* 🎮\n\n*Intentos: ${newGame.intentos}*`;
-    nyanBot2.sendMessage(m.chat, { text: texto }, { quoted: m, messageId: `gameSoup: ${sender.split("@")[0]}` });
 }
 break
 
