@@ -952,8 +952,9 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
 break
 
 case 'sopa':
-const sopa = await require("./lib/sopa.js").createWordSearchImage()
-nyanBot2.sendMessage(m.chat, {image: sopa})
+const const { imagenNormal, imagenResaltada } = await require("./lib/sopa.js").createWordSearchImage()
+nyanBot2.sendMessage(m.chat, {image: imagenNormal})
+nyanBot2.sendMessage(m.chat, {image: imagenResaltada)
 break
 
 case 'claim': {
