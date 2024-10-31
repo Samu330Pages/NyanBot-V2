@@ -304,7 +304,7 @@ settings: {},
 }
 
 let vote = db.data.others.vote = []
-let quizmath = db.data.game.math = []
+let gameSoup = db.data.game.soup = []
 
 //time
 moment.locale('es');
