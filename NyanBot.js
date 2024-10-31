@@ -954,7 +954,7 @@ break
 case 'sopa':
 const const { imagenNormal, imagenResaltada } = await require("./lib/sopa.js").createWordSearchImage()
 nyanBot2.sendMessage(m.chat, {image: imagenNormal})
-nyanBot2.sendMessage(m.chat, {image: imagenResaltada)
+nyanBot2.sendMessage(m.chat, {image: imagenResaltada})
 break
 
 case 'claim': {
