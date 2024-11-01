@@ -847,17 +847,32 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
 
-if (juegoActivoIndex !== -1 && m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
+if (juegoActivoIndex !== -1) {
     const juegoActivo = userGames[juegoActivoIndex]; // Obtener el juego activo usando el índice
-    juegoActivo.intentos += 1;
+    const palabraAdivinada = m.text; // Asumiendo que el texto del mensaje es la palabra adivinada
 
-    if (juegoActivo.intentos >= 3) {
-        reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nTu juego ha sido eliminado.`);
-        
-        // Eliminar el juego del arreglo usando splice
-        userGames.splice(juegoActivoIndex, 1);
+    if (juegoActivo.palabras.includes(palabraAdivinada)) {
+        juegoActivo.palabrasEncontradas.push(palabraAdivinada);
+        juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada); // Eliminar la palabra encontrada
+        juegoActivo.intentos += 1; // Incrementar intentos
+
+        await reply(`*Palabra correcta:* ${palabraAdivinada}\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras restantes:* ${juegoActivo.palabras.length}\n*Intentos restantes:* ${3 - juegoActivo.intentos}`);
+
+        // Verificar si se han encontrado todas las palabras
+        if (juegoActivo.palabras.length === 0) {
+            await reply(`*¡Felicidades! Has encontrado todas las palabras. El juego ha terminado.*`);
+            nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Has ganado! Aquí están todas las palabras destacadas.*` });
+            userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+        }
     } else {
-        reply(`*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`);
+        juegoActivo.intentos += 1; // Incrementar intentos si la palabra no es correcta
+        await reply(`*Palabra incorrecta.*\n*Intentos restantes:* ${3 - juegoActivo.intentos}`);
+
+        if (juegoActivo.intentos >= 3) {
+            await reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nAquí están las palabras que no encontraste.`);
+            nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}` });
+            userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+        }
     }
 
     // Guardar cambios en la base de datos
@@ -865,26 +880,33 @@ if (juegoActivoIndex !== -1 && m.quoted && m.quoted.text.startsWith("*Nuevo jueg
 }
         switch (isCommand) {
 
-case 'juego': {
+case 'sopa': {
+    const userGames = db.data.game.soup || [];
     const existingGame = userGames.find(game => game.user === sender);
-	
+
     if (existingGame) {
         return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`);
     }
 
+    const sopa = await require("./lib/sopa.js").createWordSearchImages();
     const newGame = {
         user: sender,
         intentos: 0,
-        palabraCorrecta: ''
+        palabras: sopa.palabras,
+        palabrasEncontradas: [],
+        imagenNormal: sopa.imagenNormal,
+        imagenResaltada: sopa.imagenResaltada
     };
 
     userGames.push(newGame);
     db.data.game.soup = userGames;
 
-    const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*`;
-    nyanBot2.sendMessage(m.chat, { text: texto }, { quoted: m });
+    const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
+    nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: texto });
+
+    break;
 }
-break
+
 
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
@@ -949,13 +971,6 @@ sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
         return m.reply("*Error*");
     }
 }
-break
-
-case 'sopa':
-const sopa = await require("./lib/sopa.js").createWordSearchImages()
-await reply(JSON.stringify(sopa.palabras, null, 2))
-nyanBot2.sendMessage(m.chat, {image: sopa.imagenNormal})
-nyanBot2.sendMessage(m.chat, {image: sopa.imagenResaltada})
 break
 
 case 'claim': {
