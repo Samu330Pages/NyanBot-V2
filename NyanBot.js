@@ -860,7 +860,6 @@ if (juegoActivoIndex !== -1) {
         } else {
             reply(`*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`);
         }
-    } else {
         const palabraAdivinada = m.text; // La palabra adivinada
 
         // Verificar si la palabra adivinada está en la lista de palabras
@@ -885,7 +884,9 @@ if (juegoActivoIndex !== -1) {
                 userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
             }
         }
-    }
+    } else {
+	return 
+}
 
     // Guardar cambios en la base de datos
     db.data.game.soup = userGames; // Actualizar la base de datos
