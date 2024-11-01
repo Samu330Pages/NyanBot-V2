@@ -849,29 +849,41 @@ const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // U
 
 if (juegoActivoIndex !== -1) {
     const juegoActivo = userGames[juegoActivoIndex]; // Obtener el juego activo usando el índice
-    const palabraAdivinada = m.text; // Asumiendo que el texto del mensaje es la palabra adivinada
 
-    if (juegoActivo.palabras.includes(palabraAdivinada)) {
-        juegoActivo.palabrasEncontradas.push(palabraAdivinada);
-        juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada); // Eliminar la palabra encontrada
+    // Verificar si el mensaje citado corresponde a un nuevo juego
+    if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
         juegoActivo.intentos += 1; // Incrementar intentos
 
-        await reply(`*Palabra correcta:* ${palabraAdivinada}\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras restantes:* ${juegoActivo.palabras.length}\n*Intentos restantes:* ${3 - juegoActivo.intentos}`);
-
-        // Verificar si se han encontrado todas las palabras
-        if (juegoActivo.palabras.length === 0) {
-            await reply(`*¡Felicidades! Has encontrado todas las palabras. El juego ha terminado.*`);
-            nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Has ganado! Aquí están todas las palabras destacadas.*` });
+        if (juegoActivo.intentos >= 3) {
+            reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nTu juego ha sido eliminado.`);
             userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+        } else {
+            reply(`*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`);
         }
     } else {
-        juegoActivo.intentos += 1; // Incrementar intentos si la palabra no es correcta
-        await reply(`*Palabra incorrecta.*\n*Intentos restantes:* ${3 - juegoActivo.intentos}`);
+        const palabraAdivinada = m.text; // La palabra adivinada
 
-        if (juegoActivo.intentos >= 3) {
-            await reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nAquí están las palabras que no encontraste.`);
-            nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}` });
-            userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+        // Verificar si la palabra adivinada está en la lista de palabras
+        if (juegoActivo.palabras.includes(palabraAdivinada)) {
+            juegoActivo.palabrasEncontradas.push(palabraAdivinada); // Agregar la palabra a las encontradas
+            juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada); // Eliminar la palabra encontrada
+            await reply(`*¡Palabra correcta!* Has encontrado: ${palabraAdivinada}\n*Palabras encontradas hasta ahora:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras restantes:* ${juegoActivo.palabras.length}`);
+
+            // Verificar si se han encontrado todas las palabras
+            if (juegoActivo.palabras.length === 0) {
+                await reply(`*¡Felicidades! Has encontrado todas las palabras. El juego ha terminado.*`);
+                nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Has ganado! Aquí están todas las palabras destacadas.*` });
+                userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+            }
+        } else {
+            juegoActivo.intentos += 1; // Incrementar intentos si la palabra no es correcta
+            await reply(`*Palabra incorrecta.*\n*Intentos restantes:* ${3 - juegoActivo.intentos}`);
+
+            if (juegoActivo.intentos >= 3) {
+                await reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nAquí están las palabras que no encontraste.`);
+                nyanBot2.sendMessage(m.chat, { image: juegoActivo.imagenResaltada, caption: `*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}` });
+                userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+            }
         }
     }
 
