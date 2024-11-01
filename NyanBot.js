@@ -843,7 +843,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		text = matches[0];
 		isCommand = `yta`
 	}
-
+/*
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
 
@@ -890,7 +890,7 @@ if (juegoActivoIndex !== -1) {
 
     // Guardar cambios en la base de datos
     db.data.game.soup = userGames; // Actualizar la base de datos
-}
+}*/
         switch (isCommand) {
 
 case 'sopa': {
