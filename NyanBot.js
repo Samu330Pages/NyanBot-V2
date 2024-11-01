@@ -752,8 +752,8 @@ caption: texto}}}});
         
         //console log
         if (isCommand) {
-            console.log(color(`\n< =========================[ Samu330 ]========================= >\n`, 'cyan'))
-            console.log(chalk.yellow(chalk.bold.bgCyan(!isCommand ? '[ MENSAJE ]' : '[ COMANDO ]')), chalk.white(budy || m.mtype) + '\n' + chalk.cyan('=> De'), chalk.green(pushname) + '\n' + chalk.redBright('=> En'), chalk.green(m.isGroup ? groupName : 'Chat', m.chat))
+            console.log(color(`\n< ================================================== >\n`, 'cyan'))
+            console.log(chalk.black(chalk.bgWhite(!isCommand ? '[ MESSAGE ]' : '[ COMMAND ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? groupName : 'Private Chat', m.chat))
             global.db.data.settings[botNumber].totalhit += 1
         }
     
