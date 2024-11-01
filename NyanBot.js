@@ -843,7 +843,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		text = matches[0];
 		isCommand = `yta`
 	}
-/*
+
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
 
@@ -852,14 +852,6 @@ if (juegoActivoIndex !== -1) {
 
     // Verificar si el mensaje citado corresponde a un nuevo juego
     if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
-        juegoActivo.intentos += 1; // Incrementar intentos
-
-        if (juegoActivo.intentos >= 3) {
-            reply(`*Has alcanzado el límite de intentos (3) para el juego.*\nTu juego ha sido eliminado.`);
-            userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
-        } else {
-            reply(`*Intento registrado.*\n*Intentos actuales: ${juegoActivo.intentos}*`);
-        }
         const palabraAdivinada = m.text; // La palabra adivinada
 
         // Verificar si la palabra adivinada está en la lista de palabras
@@ -884,13 +876,12 @@ if (juegoActivoIndex !== -1) {
                 userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
             }
         }
-    } else {
-	return 
-}
+    }
 
     // Guardar cambios en la base de datos
     db.data.game.soup = userGames; // Actualizar la base de datos
-}*/
+}
+	    
         switch (isCommand) {
 
 case 'sopa': {
