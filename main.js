@@ -74,7 +74,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
     const NyanBotUser = makeWASocket({
         logger: pino({ level: 'silent' }),
-        printQRInTerminal: true, // popping up QR in terminal log
+        printQRInTerminal: !pairingCode, // popping up QR in terminal log
       browser: Browsers.windows('Firefox'), // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
      auth: {
          creds: state.creds,
