@@ -347,8 +347,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
-	var body = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
-	//var body = m.message?.conversation || m.message?.viewOnceMessageV2?.message?.imageMessage?.caption || m.message?.viewOnceMessageV2?.message?.videoMessage?.caption || m.message?.imageMessage?.caption || m.message?.videoMessage?.caption || m.message?.extendedTextMessage?.text || m.message?.viewOnceMessage?.message?.videoMessage?.caption || m.message?.viewOnceMessage?.message?.imageMessage?.caption || m.message?.documentWithCaptionMessage?.message?.documentMessage?.caption || m.message?.buttonsMessage?.imageMessage?.caption || m.message?.buttonsResponseMessage?.selectedButtonId || m.message?.listResponseMessage?.singleSelectReply?.selectedRowId || m.message?.templateButtonReplyMessage?.selectedId || (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson ? JSON.parse(m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson)?.id : null) || m?.text || "";
+	var body = m.message?.conversation || m.message?.viewOnceMessageV2?.message?.imageMessage?.caption || m.message?.viewOnceMessageV2?.message?.videoMessage?.caption || m.message?.imageMessage?.caption || m.message?.videoMessage?.caption || m.message?.extendedTextMessage?.text || m.message?.viewOnceMessage?.message?.videoMessage?.caption || m.message?.viewOnceMessage?.message?.imageMessage?.caption || m.message?.documentWithCaptionMessage?.message?.documentMessage?.caption || m.message?.buttonsMessage?.imageMessage?.caption || m.message?.buttonsResponseMessage?.selectedButtonId || m.message?.listResponseMessage?.singleSelectReply?.selectedRowId || m.message?.templateButtonReplyMessage?.selectedId || (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson ? JSON.parse(m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson)?.id : null) || m?.text || "";
         var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
@@ -744,7 +743,7 @@ caption: texto}}}});
         //console log
         if (isCommand) {
             console.log(color(`\n< ================================================== >\n`, 'cyan'))
-            console.log(chalk.black(chalk.bgWhite(!isCommand ? '[ MESSAGE ]' : '[ COMMAND ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> From'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> In'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
+            console.log(chalk.black(chalk.bgWhite(!isCommand ? '[ MENSAJE ]' : '[ COMANDO ]')), chalk.white(budy || m.mtype) + '\n' + chalk.red('=> De'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.redBright('=> En'), chalk.green(m.isGroup ? groupName : 'Chat', m.chat))
             global.db.data.settings[botNumber].totalhit += 1
         }
     
@@ -835,7 +834,7 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 		isCommand = `yta`
 	}
 
-/*const userGames = db.data.game.soup || [];
+const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
 if (juegoActivoIndex !== -1) {
@@ -874,11 +873,11 @@ if (juegoActivoIndex !== -1) {
     }
 
     db.data.game.soup = userGames;
-}*/
+}
 	    
         switch (isCommand) {
 
-/*case 'sopa': {
+case 'sopa': {
     const userGames = db.data.game.soup || [];
     const existingGame = userGames.find(game => game.user === sender);
 
@@ -902,7 +901,7 @@ if (juegoActivoIndex !== -1) {
     const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
     nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: texto });
 }
-    break*/
+    break
 
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
