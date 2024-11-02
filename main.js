@@ -83,12 +83,12 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       },
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
-      /*getMessage: async (key) => {
+      getMessage: async (key) => {
           let jid = jidNormalizedUser(key.remoteJid)
           let msg = await store.loadMessage(jid, key.id)
 
           return msg?.message || ""
-    },*/
+    },
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
@@ -139,25 +139,25 @@ try{
             let reason = new Boom(lastDisconnect?.error)?.output.statusCode
             if (reason === DisconnectReason.badSession) {
                 console.log(`Bad Session File, Please Delete Session and Scan Again`);
-                await startNyanBot()
+                startNyanBot()
             } else if (reason === DisconnectReason.connectionClosed) {
                 console.log("Connection closed, reconnecting....");
-                await startNyanBot();
+                startNyanBot();
             } else if (reason === DisconnectReason.connectionLost) {
                 console.log("Connection Lost from Server, reconnecting...");
-                await startNyanBot();
+                startNyanBot();
             } else if (reason === DisconnectReason.connectionReplaced) {
                 console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-                await startNyanBot()
+                startNyanBot()
             } else if (reason === DisconnectReason.loggedOut) {
                 console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-                await startNyanBot();
+                startNyanBot();
             } else if (reason === DisconnectReason.restartRequired) {
                 console.log("Restart Required, Restarting...");
-                await startNyanBot();
+                startNyanBot();
             } else if (reason === DisconnectReason.timedOut) {
                 console.log("Connection TimedOut, Reconnecting...");
-                await startNyanBot();
+                startNyanBot();
             } else nyanBot2.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
         if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
