@@ -1,4 +1,3 @@
-require('./lib/NyanBySamu')
 const {
     BufferJSON,
     WA_DEFAULT_EPHEMERAL,
@@ -902,10 +901,8 @@ case 'sopa': {
 
     const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
     nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: texto });
-
-    break;
 }
-
+    break
 
 case 'menu': {
     nyanBot2.sendMessage(m.chat, {react: {text: '🧃', key: m.key}});
