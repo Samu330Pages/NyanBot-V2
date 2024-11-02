@@ -362,7 +362,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const botNumber = await nyanBot2.decodeJid(nyanBot2.user.id)
         const itsMe = m.sender == botNumber ? true : false
         const sender = m.sender
-        let text = body.replace(/^\.\s*\S+\s*/, '').trim();
+        const text = body.replace(/^\.\s*\S+\s*/, '').trim();
 	const from = m.key.remoteJid
         const fatkuns = (m.quoted || m)
         const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
@@ -389,7 +389,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
        //prefix 2
         const pric = /^#.¦|\\^/.test(body) ? body.match(/^#.¦|\\^/gi) : xprefix
 	const prefBody = body.startsWith(pric)
-        let isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
+        const isCommand = prefBody ? body.replace(pric, '').trim().split(/ +/).shift().toLowerCase() : ""
         const sticker = []
        //group
         const isGroup = m.key.remoteJid.endsWith('@g.us')
