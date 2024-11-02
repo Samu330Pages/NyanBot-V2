@@ -69,7 +69,7 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 async function startNyanBot() {
-	try {
+    try {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
@@ -83,18 +83,15 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       },
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
-      getMessage: async (key) => {
-         let jid = jidNormalizedUser(key.remoteJid)
-         let msg = await store.loadMessage(jid, key.id)
+      // getMessage: async (key) => {
+      //    let jid = jidNormalizedUser(key.remoteJid)
+      //    let msg = await store.loadMessage(jid, key.id)
 
-         return msg?.message || ""
-      },
+      //    return msg?.message || ""
+      // },
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
-		} catch (e) {
-	console.log(e)
-}
    
    store.bind(nyanBot2.ev)
 
@@ -133,54 +130,54 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
    }
 
 nyanBot2.ev.on('connection.update', async (update) => {
-	const {
-		connection,
-		lastDisconnect
-	} = update
+    const {
+        connection,
+        lastDisconnect
+    } = update
 try{
-		if (connection === 'close') {
-			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
-			if (reason === DisconnectReason.badSession) {
-				console.log(`Bad Session File, Please Delete Session and Scan Again`);
-				startNyanBot()
-			} else if (reason === DisconnectReason.connectionClosed) {
-				console.log("Connection closed, reconnecting....");
-				startNyanBot();
-			} else if (reason === DisconnectReason.connectionLost) {
-				console.log("Connection Lost from Server, reconnecting...");
-				startNyanBot();
-			} else if (reason === DisconnectReason.connectionReplaced) {
-				console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-				startNyanBot()
-			} else if (reason === DisconnectReason.loggedOut) {
-				console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-				startNyanBot();
-			} else if (reason === DisconnectReason.restartRequired) {
-				console.log("Restart Required, Restarting...");
-				startNyanBot();
-			} else if (reason === DisconnectReason.timedOut) {
-				console.log("Connection TimedOut, Reconnecting...");
-				startNyanBot();
-			} else nyanBot2.end(`Unknown DisconnectReason: ${reason}|${connection}`)
-		}
-		if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
-			console.log(color(`\n🪅 Conectando...`, 'yellow'))
-		}
-		if (update.connection == "open" || update.receivedPendingNotifications == "true") {
-			console.log(color(` `,'magenta'))
+        if (connection === 'close') {
+            let reason = new Boom(lastDisconnect?.error)?.output.statusCode
+            if (reason === DisconnectReason.badSession) {
+                console.log(`Bad Session File, Please Delete Session and Scan Again`);
+                startNyanBot()
+            } else if (reason === DisconnectReason.connectionClosed) {
+                console.log("Connection closed, reconnecting....");
+                startNyanBot();
+            } else if (reason === DisconnectReason.connectionLost) {
+                console.log("Connection Lost from Server, reconnecting...");
+                startNyanBot();
+            } else if (reason === DisconnectReason.connectionReplaced) {
+                console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
+                startNyanBot()
+            } else if (reason === DisconnectReason.loggedOut) {
+                console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
+                startNyanBot();
+            } else if (reason === DisconnectReason.restartRequired) {
+                console.log("Restart Required, Restarting...");
+                startNyanBot();
+            } else if (reason === DisconnectReason.timedOut) {
+                console.log("Connection TimedOut, Reconnecting...");
+                startNyanBot();
+            } else nyanBot2.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+        }
+        if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
+            console.log(color(`\n🪅 Conectando...`, 'yellow'))
+        }
+        if (update.connection == "open" || update.receivedPendingNotifications == "true") {
+            console.log(color(` `,'magenta'))
             console.log(color(`✅ Conectado a => ` + JSON.stringify(nyanBot2.user, null, 2), 'yellow'))
-			await delay(1999)
+            await delay(1999)
             console.log(chalk.yellow(`\n\n               ${chalk.bold.blue(`[ ${botname} ]`)}\n\n`))
             console.log(color(`< ================================================== >`, 'cyan'))
             console.log(color(`${themeemoji} WA NUMBER: ${owner}`,'magenta'))
             console.log(color(`${themeemoji} CREDIT: ${wm}\n`,'magenta'))
             await delay(1000 * 2) 
-		}
-	
+        }
+    
 } catch (err) {
-	  console.log('Error in Connection.update '+err)
-	  startNyanBot();
-	}
+      console.log('Error in Connection.update '+err)
+      startNyanBot();
+    }
 })
 nyanBot2.ev.on('creds.update', saveCreds)
 nyanBot2.ev.on("messages.upsert",  () => { })
@@ -283,15 +280,15 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
 });
     //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
-        	if (global.antiswview){
+            if (global.antiswview){
             mek = chatUpdate.messages[0]
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-            	await nyanBot2.readMessages([mek.key]) }
+                await nyanBot2.readMessages([mek.key]) }
             }
     })
     //admin event
     nyanBot2.ev.on('group-participants.update', async (anu) => {
-    	if (global.adminevent){
+        if (global.adminevent){
 console.log(anu)
 try {
 let participants = anu.participants
@@ -349,68 +346,68 @@ console.log(err)
 })
 
 // detect group update
-		nyanBot2.ev.on("groups.update", async (json) => {
-			if (global.groupevent) {
-			try {
+        nyanBot2.ev.on("groups.update", async (json) => {
+            if (global.groupevent) {
+            try {
 ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
 } catch (err) {
 ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
 }
-			console.log(json)
-			const res = json[0]
-			if (res.joinApprovalMode == false) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nCualquier persona puede entrar al grupo!!`,
-				})
-			} else if (res.joinApprovalMode == true) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nPara poder entrar al grupo se requerirá aprobación de los administradores!!`,
-				})
-			} else if (res.memberAddMode == false) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora solo los administradores pueden agregar personas al grupo!!`,
-				})
-			} else if (res.memberAddMode == true) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora todos pueden agregar personas al grupo!!`,
-				})
-			} else if (res.announce == true) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo ha sido cerrado, solo los administradores podrán enviar mensajes!`,
-				})
-			} else if (res.announce == false) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo sé ha abierto, ahora todos podrán enviar mensajes!`,
-				})
-			} else if (res.restrict == true) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa información del grupo ha sido restringida para que solo administradores puedan editar!`,
-				})
-			} else if (res.restrict == false) {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa configuración de edición de información del grupo ha sido habilitada para que todos la puedan editar!`,
-				})
-			} else if(!res.desc == ''){
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, { 
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*La descripción del grupo ha cambiado a:*\n\n${res.desc}`,
-				})
+            console.log(json)
+            const res = json[0]
+            if (res.joinApprovalMode == false) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nCualquier persona puede entrar al grupo!!`,
+                })
+            } else if (res.joinApprovalMode == true) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nPara poder entrar al grupo se requerirá aprobación de los administradores!!`,
+                })
+            } else if (res.memberAddMode == false) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora solo los administradores pueden agregar personas al grupo!!`,
+                })
+            } else if (res.memberAddMode == true) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora todos pueden agregar personas al grupo!!`,
+                })
+            } else if (res.announce == true) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo ha sido cerrado, solo los administradores podrán enviar mensajes!`,
+                })
+            } else if (res.announce == false) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo sé ha abierto, ahora todos podrán enviar mensajes!`,
+                })
+            } else if (res.restrict == true) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa información del grupo ha sido restringida para que solo administradores puedan editar!`,
+                })
+            } else if (res.restrict == false) {
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa configuración de edición de información del grupo ha sido habilitada para que todos la puedan editar!`,
+                })
+            } else if(!res.desc == ''){
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, { 
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*La descripción del grupo ha cambiado a:*\n\n${res.desc}`,
+                })
       } else {
-				await sleep(2000)
-				nyanBot2.sendMessage(res.id, {
-					text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*El nombre del grupo ha cambiado a*\n\n*${res.subject}*`,
-				})
-			} 
-			}
-		})
+                await sleep(2000)
+                nyanBot2.sendMessage(res.id, {
+                    text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*El nombre del grupo ha cambiado a*\n\n*${res.subject}*`,
+                })
+            } 
+            }
+        })
             
     nyanBot2.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
@@ -467,14 +464,14 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
     }
 
 nyanBot2.sendContact = async (jid, kon, quoted = '', opts = {}) => {
-	let list = []
-	for (let i of kon) {
-	    list.push({
-	    	displayName: await nyanBot2.getName(i),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await nyanBot2.getName(i)}\nFN:${await nyanBot2.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
-	    })
-	}
-	nyanBot2.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+    let list = []
+    for (let i of kon) {
+        list.push({
+            displayName: await nyanBot2.getName(i),
+            vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await nyanBot2.getName(i)}\nFN:${await nyanBot2.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
+        })
+    }
+    nyanBot2.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
     }
 
     nyanBot2.public = true
@@ -599,7 +596,10 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
         return buffer
     }
     return nyanBot2
-	}
+    } catch (e) {
+    console.log(e)
+}
+    }
 
 startNyanBot()
 
