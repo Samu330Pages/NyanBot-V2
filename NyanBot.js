@@ -836,19 +836,19 @@ fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null,
 	}
 
 /*const userGames = db.data.game.soup || [];
-const juegoActivoIndex = userGames.findIndex(game => game.user === sender); // Usar findIndex para obtener el índice
+const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
 if (juegoActivoIndex !== -1) {
-    const juegoActivo = userGames[juegoActivoIndex]; // Obtener el juego activo usando el índice
+    const juegoActivo = userGames[juegoActivoIndex];
 
     // Verificar si el mensaje citado corresponde a un nuevo juego
     if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
-        const palabraAdivinada = m.text; // La palabra adivinada
+        const palabraAdivinada = m.text;
 
         // Verificar si la palabra adivinada está en la lista de palabras
         if (juegoActivo.palabras.includes(palabraAdivinada)) {
-            juegoActivo.palabrasEncontradas.push(palabraAdivinada); // Agregar la palabra a las encontradas
-            juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada); // Eliminar la palabra encontrada
+            juegoActivo.palabrasEncontradas.push(palabraAdivinada);
+            juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);ñ
 
             // Verificar si se han encontrado todas las palabras
             if (juegoActivo.palabras.length === 0) {
@@ -860,7 +860,7 @@ if (juegoActivoIndex !== -1) {
                 userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
             }
         } else {
-            juegoActivo.intentos += 1; // Incrementar intentos si la palabra no es correcta
+            juegoActivo.intentos += 1;
 
             if (juegoActivo.intentos >= 3) {
                 // Enviar imagen de derrota con un solo mensaje
@@ -868,13 +868,12 @@ if (juegoActivoIndex !== -1) {
                     image: juegoActivo.imagenResaltada,
                     caption: `*Has alcanzado el límite de intentos (3) para el juego.*\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
                 });
-                userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
+                userGames.splice(juegoActivoIndex, 1);
             }
         }
     }
 
-    // Guardar cambios en la base de datos
-    db.data.game.soup = userGames; // Actualizar la base de datos
+    db.data.game.soup = userGames;
 }*/
 	    
         switch (isCommand) {
