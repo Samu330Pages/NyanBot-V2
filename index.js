@@ -4,7 +4,6 @@ const {
 const path = require('path')
 
 function start() {
-   try {
    let args = [path.join(__dirname, 'main.js'), ...process.argv.slice(2)]
    console.log([process.argv[0], ...args].join('\n'))
    let p = spawn(process.argv[0], args, {
@@ -22,8 +21,5 @@ function start() {
          console.error('Exited with code:', code)
          if (code == '.' || code == 1 || code == 0) start()
       })
-   } catch (e) {
-      console.log(e)
-   }
 }
 start()
