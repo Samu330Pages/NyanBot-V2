@@ -102,22 +102,20 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
 
       let phoneNumber
       if (!!phoneNumber) {
-         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-
+         phoneNumber = phoneNumber.replace(/\D/g, '').toString();
          if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
             console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
             process.exit(0)
          }
       } else {
          phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
-         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
+         phoneNumber = phoneNumber.replace(/\D/g, '').toString();
 
          // Ask again when entering the wrong number
          if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
             console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
-
             phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
-            phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
+            phoneNumber = phoneNumber.replace(/\D/g, '').toString();
             rl.close()
          }
       }
