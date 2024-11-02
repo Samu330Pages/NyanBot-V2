@@ -62,7 +62,7 @@ nocache('../main.js', module => console.log(color('[ CHANGE ]', 'green'), color(
 let phoneNumber = "5219984907794"
 let owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 
-const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
+//const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
@@ -83,12 +83,12 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       },
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
-      /*getMessage: async (key) => {
+      getMessage: async (key) => {
           let jid = jidNormalizedUser(key.remoteJid)
           let msg = await store.loadMessage(jid, key.id)
 
           return msg?.message || ""
-    },*/
+    },
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
