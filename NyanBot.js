@@ -1,3 +1,4 @@
+require('./lib/NyanBySamu')
 const {
     BufferJSON,
     WA_DEFAULT_EPHEMERAL,
