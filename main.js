@@ -68,7 +68,7 @@ const useMobile = process.argv.includes("--mobile")
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
-async function startNyanBot() {
+const startNyanBot = async () => {
     try {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
@@ -613,5 +613,5 @@ if (e.includes("rate-overlimit")) return
 if (e.includes("Connection Closed")) return
 if (e.includes("Timed Out")) return
 if (e.includes("Value not found")) return
-console.log('Caught exception: ', err)
+console.log(err)
 })
