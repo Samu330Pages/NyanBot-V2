@@ -841,7 +841,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             isCommand = `yta`
         }
 
-        const userGames = db.data.game.soup || [];
+        /*const userGames = db.data.game.soup || [];
         const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
         if (juegoActivoIndex !== -1) {
@@ -880,7 +880,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             }
 
             db.data.game.soup = userGames;
-        }
+        }*/
 
         switch (isCommand) {
 
