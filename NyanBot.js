@@ -4659,7 +4659,6 @@ forwardingScore: 9999999,
 isForwarded: true
 }})
 if (e.includes("conflict")) return
-if (e.includes("(reading 'subject')")) return
 if (e.includes("not-authorized")) return
 if (e.includes("already-exists")) return
 if (e.includes("rate-overlimit")) return
