@@ -4,9 +4,16 @@ const path = require('path');
 function start() {
    let args = [path.join(__dirname, 'main.js'), ...process.argv.slice(2)];
    console.log([process.argv[0], ...args].join('\n'));
+   
    let p = spawn(process.argv[0], args, {
-      stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+      stdio: ['inherit', 'inherit', 'pipe', 'ipc'] // Cambiamos 'inherit' por 'pipe' para stderr
    });
+
+   // Verifica que el proceso se haya creado correctamente
+   if (!p) {
+      console.error('Failed to start the process.');
+      return;
+   }
 
    p.on('message', data => {
       if (data == 'reset') {
@@ -25,7 +32,6 @@ function start() {
          if (code === 1) {
             console.error('Error: Exited with code 1. Check for errors in your script.');
          }
-         // Puedes agregar más condiciones aquí si necesitas manejar otros códigos de salida
          start(); // Reinicia el proceso
       }
    });
