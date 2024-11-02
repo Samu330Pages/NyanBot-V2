@@ -92,6 +92,9 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
+		} catch (e) {
+	console.log(e)
+}
    
    store.bind(NyanBotUser.ev)
 
@@ -596,10 +599,6 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
         return buffer
     }
     return NyanBotUser
-
-	} catch (e) {
-	console.log(e)
-}
 	}
 
 startNyanBot()
