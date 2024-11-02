@@ -4,19 +4,20 @@ const path = require('path');
 function start() {
    let args = [path.join(__dirname, 'main.js'), ...process.argv.slice(2)];
    console.log([process.argv[0], ...args].join('\n'));
-   
+
+   // Intenta crear el proceso
    let p = spawn(process.argv[0], args, {
-      stdio: ['inherit', 'inherit', 'pipe', 'ipc'] // Cambiamos 'inherit' por 'pipe' para stderr
+      stdio: ['inherit', 'inherit', 'pipe', 'ipc']
    });
 
-   // Verifica que el proceso se haya creado correctamente
-   if (!p) {
-      console.error('Failed to start the process.');
+   // Captura errores de inicio del proceso
+   p.on('error', (err) => {
+      console.error('Failed to start the process:', err);
       return;
-   }
+   });
 
    p.on('message', data => {
-      if (data == 'reset') {
+      if (data === 'reset') {
          console.log('Restarting Bot...');
          p.kill();
          start();
