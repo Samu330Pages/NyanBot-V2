@@ -156,7 +156,7 @@ try{
 				startNyanBot();
 			} else if (reason === DisconnectReason.timedOut) {
 				console.log("Connection TimedOut, Reconnecting...");
-				();
+				startNyanBot();
 			} else NyanBotUser.end(`Unknown DisconnectReason: ${reason}|${connection}`)
 		}
 		if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
