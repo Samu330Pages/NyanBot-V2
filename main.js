@@ -69,7 +69,6 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 const startNyanBot = async () => {
-    console.log('aqui')
     try {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
@@ -84,12 +83,12 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       },
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
-      // getMessage: async (key) => {
-      //    let jid = jidNormalizedUser(key.remoteJid)
-      //    let msg = await store.loadMessage(jid, key.id)
+      getMessage: async (key) => {
+          let jid = jidNormalizedUser(key.remoteJid)
+          let msg = await store.loadMessage(jid, key.id)
 
-      //    return msg?.message || ""
-      // },
+          return msg?.message || ""
+    },
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
@@ -106,18 +105,18 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
          phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
 
          if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Start with country code of your WhatsApp Number, Example : +52199********")))
+            console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
             process.exit(0)
          }
       } else {
-         phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number\nFor example: +52199******** : `)))
+         phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
          phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
 
          // Ask again when entering the wrong number
          if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Start with country code of your WhatsApp Number, Example : +52199********")))
+            console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
 
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number\nFor example: +52199******** : `)))
+            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
             phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
             rl.close()
          }
