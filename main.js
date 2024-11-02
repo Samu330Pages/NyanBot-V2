@@ -83,12 +83,12 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
       },
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
-      getMessage: async (key) => {
+      /*getMessage: async (key) => {
           let jid = jidNormalizedUser(key.remoteJid)
           let msg = await store.loadMessage(jid, key.id)
 
           return msg?.message || ""
-    },
+    },*/
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
    })
