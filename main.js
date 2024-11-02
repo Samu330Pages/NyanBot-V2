@@ -1,5 +1,5 @@
 require('./settings')
-const makeWASocket = require("@whiskeysockets/baileys").default
+const { default: makeWASocket } = require("@whiskeysockets/baileys")
 const { uncache, nocache } = require('./lib/loader')
 const { color } = require('./lib/color')
 const NodeCache = require("node-cache")
@@ -69,6 +69,7 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 const startNyanBot = async () => {
+    console.log('aqui')
     try {
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
