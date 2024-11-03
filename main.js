@@ -96,10 +96,6 @@ const startnyanBot2 = async () => {
             }
         });
 
-    } catch (error) {
-        console.error('Error al iniciar el bot:', error);
-    };
-
 /*nyanBot2.ev.on('connection.update', async (update) => {
     const {
         connection,
@@ -568,7 +564,9 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
     }
     return nyanBot2
     }
-
+} catch (error) {
+        console.error('Error al iniciar el bot:', error);
+    };
 startnyanBot2()
 
 process.on('uncaughtException', function (err) {
