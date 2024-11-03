@@ -100,7 +100,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
    if (pairingCode && !nyanBot2.authState.creds.registered) {
       if (useMobile) throw new Error('Cannot use pairing code with mobile api')
 
-      let phoneNumber
+      /*let phoneNumber
       if (!!phoneNumber) {
          phoneNumber = phoneNumber.replace(/\D/g, '').toString();
          if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
@@ -118,7 +118,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
             phoneNumber = phoneNumber.replace(/\D/g, '').toString();
             rl.close()
          }
-      }
+      }*/
 
       setTimeout(async () => {
          let code = await nyanBot2.requestPairingCode(phoneNumber)
