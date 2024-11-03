@@ -1,5 +1,4 @@
 const fetch = require('node-fetch')
-const fs = require('fs')
 
 module.exports = async function(text, m, reply, nyanBot2, sender, sendReplyButton, prefix) {
     const email = text;
