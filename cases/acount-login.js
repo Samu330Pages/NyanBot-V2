@@ -59,6 +59,6 @@ Por favor accede a la página para un registro más cómodo, o si gustas puedes 
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        reply('Ocurrió un error al verificar el correo.');
+                        reply(`Ocurrió un error al verificar el correo.\n${error}`);
                     });
 };
