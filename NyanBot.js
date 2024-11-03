@@ -1483,10 +1483,10 @@ ${lyric.lyrics}\n`,
             }
                 break
 	    case 'ghstalk': case 'githubstalk':{
-if (!q) return reply(`*Ejemplo de uso:* ${prefix+command} Samu330`)
+if (!text) return reply(`*Ejemplo de uso:* ${prefix+command} Samu330`)
 nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
 let githubstalk = require('./lib/scraper')
-aj = await githubstalk.githubstalk(`${q}`)
+aj = await githubstalk.githubstalk(`${text}`)
 nyanBot2.sendMessage(m.chat, { image: { url : aj.profile_pic }, caption: 
 `> *Github Stalker 🧸*
 
