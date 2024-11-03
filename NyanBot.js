@@ -854,7 +854,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 // Verificar si la palabra adivinada está en la lista de palabras
                 if (juegoActivo.palabras.includes(palabraAdivinada)) {
                     juegoActivo.palabrasEncontradas.push(palabraAdivinada);
-                    juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada); ñ
+                    juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
 
                     // Verificar si se han encontrado todas las palabras
                     if (juegoActivo.palabras.length === 0) {
