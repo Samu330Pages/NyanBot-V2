@@ -71,7 +71,7 @@ const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 const startNyanBot = async () => {
     try {
 let { version, isLatest } = await fetchLatestBaileysVersion()
-const {  state, saveCreds } =await useMultiFileAuthState(./session)
+const {  state, saveCreds } =await useMultiFileAuthState('./session')
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
     const nyanBot2 = makeWASocket({
         logger: pino({ level: 'silent' }),
