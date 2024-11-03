@@ -11,10 +11,9 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
         reactionError(m.chat, m.key, playId);
         return reply("No se encontraron videos para esa búsqueda.");
     }
-    
+
     const video = r.videos[0];
-    const buttons = [
-        {
+    const buttons = [{
             name: "quick_reply",
             buttonParamsJson: JSON.stringify({
                 display_text: 'Descargar audio 🎙️',
@@ -44,11 +43,11 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
             }),
         }
     ];
-    
+
     await sendReplyButton(m.chat, buttons, m, {
         content: `> *YT Play 🍟.*\n\n- *Título:* ${video.title}\n- *Duración:* ${video.timestamp}\n- *Autor:* ${video.author.name}\n- *Vistas:* ${formatNumber(video.views)}\n`,
         media: await (await fetch(`${video.thumbnail}`)).buffer()
     });
-    
+
     reactionOk(m.chat, m.key, playId);
 };
