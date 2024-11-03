@@ -137,25 +137,25 @@ try{
             let reason = new Boom(lastDisconnect?.error)?.output.statusCode
             if (reason === DisconnectReason.badSession) {
                 console.log(`Bad Session File, Please Delete Session and Scan Again`);
-                startnyanBot2()
+                startNyanBot()
             } else if (reason === DisconnectReason.connectionClosed) {
                 console.log("Connection closed, reconnecting....");
-                startnyanBot2();
+                startNyanBot();
             } else if (reason === DisconnectReason.connectionLost) {
                 console.log("Connection Lost from Server, reconnecting...");
-                startnyanBot2();
+                startNyanBot();
             } else if (reason === DisconnectReason.connectionReplaced) {
                 console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-                startnyanBot2()
+                startNyanBot()
             } else if (reason === DisconnectReason.loggedOut) {
                 console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-                startnyanBot2();
+                startNyanBot();
             } else if (reason === DisconnectReason.restartRequired) {
                 console.log("Restart Required, Restarting...");
-                startnyanBot2();
+                startNyanBot();
             } else if (reason === DisconnectReason.timedOut) {
                 console.log("Connection TimedOut, Reconnecting...");
-                startnyanBot2();
+                startNyanBot();
             } else nyanBot2.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
         if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
@@ -174,7 +174,7 @@ try{
     
 } catch (err) {
       console.log('Error in Connection.update '+err)
-      startnyanBot2();
+      startNyanBot();
     }
 })
 nyanBot2.ev.on('creds.update', saveCreds)
@@ -598,7 +598,7 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
         console.error('Error al iniciar el bot:', error);
     };
     }
-startnyanBot2()
+startNyanBot()
 
 process.on('uncaughtException', function (err) {
 let e = String(err)
