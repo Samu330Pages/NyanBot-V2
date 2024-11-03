@@ -24,7 +24,7 @@ const chalk = require('chalk')
 const moment = require('moment-timezone')
 const cron = require('node-cron')
 const speed = require('performance-now')
-const ffmpeg = require('fluent-ffmpeg')
+//const ffmpeg = require('fluent-ffmpeg')
 const ms = toMs = require('ms')
 const axios = require('axios')
 const FormData = require('form-data')
@@ -83,7 +83,7 @@ const {
     toAudio,
     toPTT,
     toVideo,
-    //ffmpeg,
+    ffmpeg,
     addExifAvatar
 } = require('./lib/converter')
 const {
