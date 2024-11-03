@@ -4,7 +4,7 @@ const {
     createUserWithEmailAndPassword
 } = require('firebase/auth')
 
-module.exports = async function(text, m, reply, nyanBot2, sender, command, sendReplyButton, prefix, isGroup) {
+module.exports = async function(text, m, reply, nyanBot2, sender, command, sendReplyButton, sendCarousel, prefix, isGroup) {
     const comilla = '`'
     if (global.DATABASE.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
     if (isGroup) {
