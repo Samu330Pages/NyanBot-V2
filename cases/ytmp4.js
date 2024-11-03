@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js')
-const fc = require('lib/samufuncs.js')
 
 module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix) {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
