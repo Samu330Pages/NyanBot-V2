@@ -10,7 +10,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
     if (isGroup) {
         const cards = [{
                 header: {
-                    imageMessage: '../Media/theme/login.jpg',
+                    imageMessage: './Media/theme/login.jpg',
                     hasMediaAttachment: true,
                 },
                 body: {
@@ -30,7 +30,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
             },
             {
                 header: {
-                    imageMessage: '../Media/theme/reg.jpg',
+                    imageMessage: './Media/theme/reg.jpg',
                     hasMediaAttachment: true,
                 },
                 body: {
