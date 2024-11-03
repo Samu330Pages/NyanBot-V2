@@ -154,8 +154,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
                 sendReplyButton(m.chat, buttons, m, {
                     content: `Usuario registrado con éxito!\n\n*Email: ${data.Result}*\n*UID: ${data.UID}*
 		    
-_*Felicidades, has ganado 200 puntos! 🎁*_
-
+_*Felicidades, has ganado 200 puntos! 🎁*_\n
 _Tu sesión sé ha guardado en la base de datos del bot! 😸_`
                 });
                 nyanBot2.sendMessage(m.chat, {
