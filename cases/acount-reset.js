@@ -7,7 +7,7 @@ const {
     createUserWithEmailAndPassword
 } = require('firebase/auth')
 
-module.exports = async function(text, m, reply, nyanBot2, sender, command, sendReplyButton, prefix) {
+module.exports = async function(text, m, reply, nyanBot2, command, prefix) {
     const email = text;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
