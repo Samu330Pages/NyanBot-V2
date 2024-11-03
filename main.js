@@ -563,10 +563,10 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
         return buffer
     }
     return nyanBot2
-    }
-} catch (error) {
+        } catch (error) {
         console.error('Error al iniciar el bot:', error);
     };
+    }
 startnyanBot2()
 
 process.on('uncaughtException', function (err) {
