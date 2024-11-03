@@ -1,5 +1,6 @@
 module.exports = async function(text, m, reply, nyanBot2, sender, sendReplyButton, prefix) {
-if (global.DATABASE.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
+global.db.data = JSON.parse(fs.readFileSync('./src/database.json'))
+if (global.db.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
                 nyanBot2.sendMessage(m.chat, { react: { text: '😫', key: m.key } })
                 const buttons = [{
                     name: "quick_reply",
