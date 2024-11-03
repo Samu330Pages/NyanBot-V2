@@ -15,7 +15,7 @@ module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit
         const durationMinutes = Math.floor(r[0].duration / 60);
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-        const video = await fc.getBuffer(r[0].url);
+        const video = await fc.getBuffer(`${r[0].url}`);
         const caption = `*Descarga completa! 🍟*\n\n*Canal:* ${r[0].author}\n*Calidad:* ${r[0].quality}\n*Vistas:* ${formatNumber(r[0].views)}\n*Duración:* ${durationMinutes}m\n*Categoría:* ${r[0].category}\n*Fecha de publicación:* ${publishDate}\n\n*Encontrarás el video con el nombre:* ${r[0].title}`;
 
         if (durationMinutes > 30) {
