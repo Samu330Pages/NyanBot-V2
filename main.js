@@ -97,7 +97,7 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
 
     // login use pairing code
    // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-   if (pairingCode && !nyanBot2.authState.creds.registered) {
+   /*if (pairingCode && !nyanBot2.authState.creds.registered) {
       if (useMobile) throw new Error('Cannot use pairing code with mobile api')
 
       /*let phoneNumber
@@ -118,14 +118,14 @@ const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
             phoneNumber = phoneNumber.replace(/\D/g, '').toString();
             rl.close()
          }
-      }*/
+      }
 
       setTimeout(async () => {
          let code = await nyanBot2.requestPairingCode(phoneNumber.toString())
          code = code?.match(/.{1,4}/g)?.join("-") || code
          console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
       }, 3000)
-   }
+   }*/
 
 nyanBot2.ev.on('connection.update', async (update) => {
     const {
