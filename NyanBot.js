@@ -973,43 +973,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             }
                 break
 
-            case 'claim': {
-                let now = new Date();
-                let today = now.toISOString().split('T')[0];
-                let currentTime = now.getTime();
-                let user = global.db.data.users[sender];
-
-                if (!user.lastClaim) {
-                    user.lastClaim = {
-                        date: today,
-                        time: currentTime
-                    };
-                    user.limit += 100;
-                    return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
-                }
-
-                let lastClaimDate = user.lastClaim.date;
-                let lastClaimTime = user.lastClaim.time;
-
-                if (lastClaimDate === today) {
-                    let hoursSinceLastClaim = Math.floor((currentTime - lastClaimTime) / (1000 * 60 * 60));
-                    let hoursLeft = 24 - hoursSinceLastClaim;
-
-                    if (hoursLeft > 0) {
-                        return reply(`> 🚫 Ya has reclamado tus puntos hoy. Intenta nuevamente en ${hoursLeft} horas.`);
-                    }
-                }
-
-                user.lastClaim = {
-                    date: today,
-                    time: currentTime
-                };
-                user.limit += 100;
-                return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
-            }
-                break
-
-            case 'ayuda': case 'help':
+		case 'ayuda': case 'help':
                 let helpMsg = `😊 _*AQUÍ TE EXPLICO COMO USAR LAS FUNCIONES DEL BOT!*_
 _PRIMERO DEBES SABER QUE PARA USAR UN COMANDO DEBES PRIMERO ESCRIBIR EL PREFIJO, QUE EN ESTE CASO ES_ 👉🏻 *${prefix}* 👈🏻, _SEGUIDAMENTE VA EL COMANDO QUE DESEES USAR, EJEMPLO:_
 
@@ -1024,6 +988,11 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
                     helpMsg += '\n';
                 }
                 reply(helpMsg)
+                break
+
+            case 'claim':
+                const caseClaim = require('./cases/claim');
+                await caseClaim(m, reply, sender);
                 break
 
             case 'lg': {
