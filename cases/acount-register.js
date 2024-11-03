@@ -80,7 +80,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
     }
 
     if (!text.trim()) {
-        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*\n*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*`);
+        return reply(`*Por favor ingresa los datos correctamente para poder registrarte!*\n*Asegúrate de incluir tanto como:*\n- correo\n- contraseña\n- nombre de usuario\n*Todo separado por espacios.*`);
     }
     if (!email || !password || !name) {
         return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*');
