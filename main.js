@@ -98,8 +98,7 @@ const startNyanBot = async () => {
 
     } catch (error) {
         console.error('Error al iniciar el bot:', error);
-    }
-};
+    };
 
 /*nyanBot2.ev.on('connection.update', async (update) => {
     const {
