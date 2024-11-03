@@ -86,7 +86,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
         return reply('*Asegúrate de incluir tanto como el correo, contraseña y nombre de usuario, todo separado por espacios.*');
     }
     if (email.includes(' ') || password.includes(' ') || name.includes(' ')) {
-        return reply('*Los datos no deben contener espacios. Asegúrate de que tu correo, contraseña y nombre de usuario sean correctos.*');
+        return reply('*Los datos (correo, contraseña y nombre de usuario) no deben contener espacios. Asegúrate de que tus datos sean correctos.*');
     }
     if (!emailPattern.test(email)) {
         return reply('*El correo ingresado no es válido. Por favor, introduce un correo electrónico válido.*');
