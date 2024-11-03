@@ -837,46 +837,43 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             isCommand = `yta`
         }
 
-        const userGames = db.data.game.soup || [];
-        const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
+const userGames = db.data.game.soup || [];
+const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
-        if (juegoActivoIndex !== -1) {
-            const juegoActivo = userGames[juegoActivoIndex];
+if (juegoActivoIndex !== -1) {
+    const juegoActivo = userGames[juegoActivoIndex];
 
-            // Verificar si el mensaje citado corresponde a un nuevo juego
-            if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
-                const palabraAdivinada = m.text;
+    if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
+        const palabraAdivinada = m.text;
 
-                // Verificar si la palabra adivinada está en la lista de palabras
-                if (juegoActivo.palabras.includes(palabraAdivinada)) {
-                    juegoActivo.palabrasEncontradas.push(palabraAdivinada);
-                    juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
+        if (juegoActivo.palabras.includes(palabraAdivinada)) {
+            juegoActivo.palabrasEncontradas.push(palabraAdivinada);
+            juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
 
-                    // Verificar si se han encontrado todas las palabras
-                    if (juegoActivo.palabras.length === 0) {
-                        // Enviar imagen de victoria con un solo mensaje
-                        await nyanBot2.sendMessage(m.chat, {
-                            image: juegoActivo.imagenResaltada,
-                            caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Aquí están todas las palabras destacadas.*`
-                        });
-                        userGames.splice(juegoActivoIndex, 1); // Eliminar el juego del arreglo
-                    }
-                } else {
-                    juegoActivo.intentos += 1;
-
-                    if (juegoActivo.intentos >= 3) {
-                        // Enviar imagen de derrota con un solo mensaje
-                        await nyanBot2.sendMessage(m.chat, {
-                            image: juegoActivo.imagenResaltada,
-                            caption: `*Has alcanzado el límite de intentos (3) para el juego.*\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
-                        });
-                        userGames.splice(juegoActivoIndex, 1);
-                    }
-                }
+            if (juegoActivo.palabras.length === 0) {
+                await nyanBot2.sendMessage(m.chat, {
+                    image: juegoActivo.imagenResaltada,
+                    caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Aquí están todas las palabras destacadas.*`
+                });
+                userGames.splice(juegoActivoIndex, 1);
             }
+        } else {
+            juegoActivo.intentos -= 1;
 
-            db.data.game.soup = userGames;
+            if (juegoActivo.intentos <= 0) {
+                await nyanBot2.sendMessage(m.chat, {
+                    image: juegoActivo.imagenResaltada,
+                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
+                });
+                userGames.splice(juegoActivoIndex, 1);
+            } else {
+                await reply(`*La palabra "${palabraAdivinada}" no se encontró.*\n*Te quedan ${juegoActivo.intentos} intentos.*`);
+            }
         }
+    }
+
+    db.data.game.soup = userGames;
+}
 
         switch (isCommand) {
 
