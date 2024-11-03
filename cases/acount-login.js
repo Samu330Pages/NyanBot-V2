@@ -68,8 +68,7 @@ _*Ya puedes usar las funciones del bot que requieran registro!*_
                     content: `> *El correo ingresado no está registrado!* 🥲
 		    
 Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
-- *Si te registras mediante WhatsApp ganaras 200 puntos!*`,
-                    media: await (await fetch('https://ibb.co/jMs458d')).buffer()
+- *Si te registras mediante WhatsApp ganaras 200 puntos!*`
                 });
             }
         })
