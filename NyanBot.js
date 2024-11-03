@@ -860,16 +860,16 @@ if (juegoActivoIndex !== -1) {
                 await reply(`*¡Correcto! La palabra "${palabraAdivinada}" existe en la lista.*`);
             }
         } else {
-            juegoActivo.intentos -= 1;
+            juegoActivo.intentos += 1;
 
-            if (juegoActivo.intentos <= 0) {
+            await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*`);
+
+            if (juegoActivo.intentos >= 3) {
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
                     caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
                 });
                 userGames.splice(juegoActivoIndex, 1);
-            } else {
-                await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${juegoActivo.intentos} intentos.*`);
             }
         }
     }
