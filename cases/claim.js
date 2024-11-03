@@ -32,4 +32,4 @@ module.exports = async function(m, reply, sender) {
     };
     user.limit += 100;
     return reply(`🎉 ¡Has reclamado tus 100 puntos!\n*Vuelve mañana para obtener 100 puntos más! 😛*`);
-}:
+};
