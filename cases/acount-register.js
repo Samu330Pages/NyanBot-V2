@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const { auth } = require('./lib/firebaseAuth.js')
 const {
     sendPasswordResetEmail,
     createUserWithEmailAndPassword
