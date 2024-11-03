@@ -856,6 +856,8 @@ if (juegoActivoIndex !== -1) {
                     caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Aquí están todas las palabras destacadas.*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
+            } else {
+                await reply(`*¡Correcto! La palabra "${palabraAdivinada}" existe en la lista.*`);
             }
         } else {
             juegoActivo.intentos -= 1;
@@ -867,7 +869,7 @@ if (juegoActivoIndex !== -1) {
                 });
                 userGames.splice(juegoActivoIndex, 1);
             } else {
-                await reply(`*La palabra "${palabraAdivinada}" no se encontró.*\n*Te quedan ${juegoActivo.intentos} intentos.*`);
+                await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${juegoActivo.intentos} intentos.*`);
             }
         }
     }
