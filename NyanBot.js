@@ -1051,7 +1051,7 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
 			
             case 'reg':
                 const caseRegister = require('./cases/acount-register');
-                await caseRegister(text, m, reply, nyanBot2, sender, command, sendReplyButton, prefix, isGroup);
+                await caseRegister(text, m, reply, nyanBot2, sender, command, sendReplyButton, sendCarousel, prefix, isGroup);
                 break
 
             case 'reset': {
