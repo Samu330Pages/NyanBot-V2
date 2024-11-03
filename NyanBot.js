@@ -250,6 +250,7 @@ const categories = {
         { command: 'remini', description: '', help: 'Alias de hd.' },
         { command: 'recolor', description: '', help: 'Colorea imágenes en B/N o borrosas (personas/paisajes/animales).' },
         { command: 'tts', description: '', help: 'Escribe una frase para que el Bot pueda reproducirlo.' },
+	{ command: 'githubstalk', description: '', help: 'Muestra información sobre usuarios en Github.com.' },
         { command: 'pinsearch', description: '', help: 'Realiza búsqueda de imágenes en pinterest.' },
         { command: 'avideo', description: '', help: 'Convierte un Sticker animado a video.' },
         { command: 'agif', description: '', help: 'Convierte un Sticker animado a GIF.' },
@@ -1481,6 +1482,35 @@ ${lyric.lyrics}\n`,
                 }
             }
                 break
+	    case 'ghstalk': case 'githubstalk':{
+if (!q) return reply(`*Ejemplo de uso:* ${prefix+command} Samu330`)
+nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
+let githubstalk = require('./lib/scraper')
+aj = await githubstalk.githubstalk(`${q}`)
+nyanBot2.sendMessage(m.chat, { image: { url : aj.profile_pic }, caption: 
+`> *Github Stalker 🧸*
+
+- Username : ${aj.username}
+- Nickname : ${aj.nickname}
+- Bio : ${aj.bio}
+- Id : ${aj.id}
+- Nodeid : ${aj.nodeId}
+- Url Profile : ${aj.profile_pic}
+- Url Github : ${aj.url}
+- Type : ${aj.type}
+- Admin : ${aj.admin}
+- Company : ${aj.company}
+- Blog : ${aj.blog}
+- Location : ${aj.location}
+- Email : ${aj.email}
+- Public Repo : ${aj.public_repo}
+- Public Gists : ${aj.public_gists}
+- Followers : ${aj.followers}
+- Following : ${aj.following}
+- Created At : ${aj.ceated_at}
+- Updated At : ${aj.updated_at}` }, { quoted: m } )
+}
+break
 
             case 'yts': case 'youtubesearch': case 'ytsearch': {
                 if (!text) {
