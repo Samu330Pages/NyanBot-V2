@@ -3649,6 +3649,20 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
             }
                 break
 
+case 'abrir':
+case 'cerrar':
+                if (!m.isGroup) return reply(mess.group)
+                if (!isAdmins && !isGroupOwner && !isSamu) return reply(mess.admin)
+                if (!isBotAdmins) return reply(mess.adminBot)
+                if (command === 'cerrar') {
+                    await nyanBot2.groupSettingUpdate(m.chat, 'announcement').then((res) => reply(`Grupo Cerrado ❌`))
+                } else if (command === 'abrir') {
+                    await nyanBot2.groupSettingUpdate(m.chat, 'not_announcement').then((res) => reply(`Grupo Abierto 😁`))
+                } else {
+                    reply(`*Uso ${command}*`)
+                }
+            break
+
             case 'gpimg': case 'setppgruop': {
                 if (!m.isGroup) return reply(mess.group)
                 if (!isAdmins) return reply(mess.admin)
