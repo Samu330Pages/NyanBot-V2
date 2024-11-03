@@ -8,7 +8,7 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, prefi
         let nombre = nyanBot2.getName(sender);
         const bard = new BardAPI();
 
-        if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix + command} Quien te creo!`);
+        if (!text) return reply(`*Porfavor incluye una solicitud para mandarle a la IA*\n\n_Ejemplo de uso:_ ${prefix + command} *Quien te creo!*`);
 
         let query = '';
         let message = '';
