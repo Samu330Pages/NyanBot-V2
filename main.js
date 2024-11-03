@@ -407,7 +407,7 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
             }
         })
             
-    /*nyanBot2.ev.on('messages.upsert', async chatUpdate => {
+    nyanBot2.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
         try {
             mek = chatUpdate.messages[0]
@@ -422,7 +422,7 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
         } catch (err) {
             console.log(err)
         }
-    })*/
+    })
 
    
     nyanBot2.decodeJid = (jid) => {
