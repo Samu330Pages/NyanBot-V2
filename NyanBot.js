@@ -1352,6 +1352,21 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
             }
                 break
 
+	    case 'tourl': {
+                nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
+		let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
+                if (/image/.test(mime)) {
+                    let r = await TelegraPh(media)
+                    reply(util.format(r))
+                } else if (!/image/.test(mime)) {
+                    let r = await UploadFileUgu(media)
+                    reply(util.format(r))
+                }
+                await fs.unlinkSync(media)
+
+            }
+            break
+
             case 'buscar': case 'gg': case 'google': {
                 if (!text) {
                     return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
