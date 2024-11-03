@@ -53,19 +53,19 @@ if (global.db) setInterval(async () => {
    if (global.db.data) await global.db.write()
 }, 30 * 1000)
 
-require('./NyanBot.js')
-nocache('../NyanBot.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
+require('./nyanBot2.js')
+nocache('../nyanBot2.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
 require('./main.js')
 nocache('../main.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
 
 //------------------------------------------------------
-const startNyanBot = async () => {
+const startnyanBot2 = async () => {
     try {
         let { version, isLatest } = await fetchLatestBaileysVersion();
         const { state, saveCreds } = await useMultiFileAuthState('./session');
         const msgRetryCounterCache = new NodeCache();
 
-        const nyanBot = makeWASocket({
+        const nyanBot2 = makeWASocket({
             logger: pino({ level: 'silent' }),
             printQRInTerminal: true,
             browser: Browsers.windows('Firefox'),
@@ -83,13 +83,13 @@ const startNyanBot = async () => {
             },
         });
 
-        nyanBot.ev.on('connection.update', (update) => {
+        nyanBot2.ev.on('connection.update', (update) => {
             const { connection, lastDisconnect } = update;
             if (connection === 'close') {
                 const shouldReconnect = (lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut;
                 console.log('Conexión cerrada debido a', lastDisconnect.error, ', reconectando', shouldReconnect);
                 if (shouldReconnect) {
-                    startNyanBot(); 
+                    startnyanBot2(); 
                 }
             } else if (connection === 'open') {
                 console.log('Conexión abierta');
@@ -100,7 +100,7 @@ const startNyanBot = async () => {
         console.error('Error al iniciar el bot:', error);
     };
 
-/*nyanBot2.ev.on('connection.update', async (update) => {
+/*nyanBot22.ev.on('connection.update', async (update) => {
     const {
         connection,
         lastDisconnect
@@ -110,33 +110,33 @@ try{
             let reason = new Boom(lastDisconnect?.error)?.output.statusCode
             if (reason === DisconnectReason.badSession) {
                 console.log(`Bad Session File, Please Delete Session and Scan Again`);
-                startNyanBot()
+                startnyanBot2()
             } else if (reason === DisconnectReason.connectionClosed) {
                 console.log("Connection closed, reconnecting....");
-                startNyanBot();
+                startnyanBot2();
             } else if (reason === DisconnectReason.connectionLost) {
                 console.log("Connection Lost from Server, reconnecting...");
-                startNyanBot();
+                startnyanBot2();
             } else if (reason === DisconnectReason.connectionReplaced) {
                 console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First");
-                startNyanBot()
+                startnyanBot2()
             } else if (reason === DisconnectReason.loggedOut) {
                 console.log(`Device Logged Out, Please Delete Session and Scan Again.`);
-                startNyanBot();
+                startnyanBot2();
             } else if (reason === DisconnectReason.restartRequired) {
                 console.log("Restart Required, Restarting...");
-                startNyanBot();
+                startnyanBot2();
             } else if (reason === DisconnectReason.timedOut) {
                 console.log("Connection TimedOut, Reconnecting...");
-                startNyanBot();
-            } else nyanBot2.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+                startnyanBot2();
+            } else nyanBot22.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
         if (update.connection == "connecting" || update.receivedPendingNotifications == "false") {
             console.log(color(`\n🪅 Conectando...`, 'yellow'))
         }
         if (update.connection == "open" || update.receivedPendingNotifications == "true") {
             console.log(color(` `,'magenta'))
-            console.log(color(`✅ Conectado a => ` + JSON.stringify(nyanBot2.user, null, 2), 'yellow'))
+            console.log(color(`✅ Conectado a => ` + JSON.stringify(nyanBot22.user, null, 2), 'yellow'))
             await delay(1999)
             console.log(chalk.yellow(`\n\n               ${chalk.bold.blue(`[ ${botname} ]`)}\n\n`))
             console.log(color(`< ================================================== >`, 'cyan'))
@@ -147,31 +147,31 @@ try{
     
 } catch (err) {
       console.log('Error in Connection.update '+err)
-      startNyanBot();
+      startnyanBot2();
     }
 })*/
-nyanBot2.ev.on('creds.update', saveCreds)
-// nyanBot2.ev.on("messages.upsert",  () => { })
+nyanBot22.ev.on('creds.update', saveCreds)
+// nyanBot22.ev.on("messages.upsert",  () => { })
 //------------------------------------------------------
 
 //farewell/welcome
-nyanBot2.ev.on('group-participants.update', async (anu) => {
+nyanBot22.ev.on('group-participants.update', async (anu) => {
     if (global.welcome) {
         console.log(anu);
         try {
-            let metadata = await nyanBot2.groupMetadata(anu.id);
+            let metadata = await nyanBot22.groupMetadata(anu.id);
             let participants = anu.participants;
             const countryData = require('./src/country.json');
 
             for (let num of participants) {
                 try {
-                    ppuser = await nyanBot2.profilePictureUrl(num, 'image');
+                    ppuser = await nyanBot22.profilePictureUrl(num, 'image');
                 } catch (err) {
                     ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
                 }
                 
                 try {
-                    ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image');
+                    ppgroup = await nyanBot22.profilePictureUrl(anu.id, 'image');
                 } catch (err) {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
@@ -203,7 +203,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
-                    nyanBot2.sendMessage(anu.id, {
+                    nyanBot22.sendMessage(anu.id, {
                         text: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
@@ -226,7 +226,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                         WlcBody += `\n\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
-                    nyanBot2.sendMessage(anu.id, {
+                    nyanBot22.sendMessage(anu.id, {
                         text: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
@@ -250,27 +250,27 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
     }
 });
     //autostatus view
-        nyanBot2.ev.on('messages.upsert', async chatUpdate => {
+        nyanBot22.ev.on('messages.upsert', async chatUpdate => {
             if (global.antiswview){
             mek = chatUpdate.messages[0]
             if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                await nyanBot2.readMessages([mek.key]) }
+                await nyanBot22.readMessages([mek.key]) }
             }
     })
     //admin event
-    nyanBot2.ev.on('group-participants.update', async (anu) => {
+    nyanBot22.ev.on('group-participants.update', async (anu) => {
         if (global.adminevent){
 console.log(anu)
 try {
 let participants = anu.participants
 for (let num of participants) {
 try {
-ppuser = await nyanBot2.profilePictureUrl(num, 'image')
+ppuser = await nyanBot22.profilePictureUrl(num, 'image')
 } catch (err) {
 ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
 }
 try {
-ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
+ppgroup = await nyanBot22.profilePictureUrl(anu.id, 'image')
 } catch (err) {
 ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
 }
@@ -279,7 +279,7 @@ const time = moment.tz('America/Cancun').format('HH:mm:ss')
 const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
 let userNumber = num
 WlcBody = `@${userNumber.split("@")[0]}, Has sido promovido a *ADMINISTRADOR*`
-   nyanBot2.sendMessage(anu.id,
+   nyanBot22.sendMessage(anu.id,
  { text: WlcBody,
  contextInfo:{
  mentionedJid:[num],
@@ -296,7 +296,7 @@ const time = moment.tz('America/Cancun').format('HH:mm:ss')
 const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
 let userNumber = num
 WlcBody = `@${userNumber.split("@")[0]}, Has sido degradado de la administración!`
-nyanBot2.sendMessage(anu.id,
+nyanBot22.sendMessage(anu.id,
  { text: WlcBody,
  contextInfo:{
  mentionedJid:[num],
@@ -317,10 +317,10 @@ console.log(err)
 })
 
 // detect group update
-        nyanBot2.ev.on("groups.update", async (json) => {
+        nyanBot22.ev.on("groups.update", async (json) => {
             if (global.groupevent) {
             try {
-ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
+ppgroup = await nyanBot22.profilePictureUrl(anu.id, 'image')
 } catch (err) {
 ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
 }
@@ -328,77 +328,77 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
             const res = json[0]
             if (res.joinApprovalMode == false) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nCualquier persona puede entrar al grupo!!`,
                 })
             } else if (res.joinApprovalMode == true) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nPara poder entrar al grupo se requerirá aprobación de los administradores!!`,
                 })
             } else if (res.memberAddMode == false) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora solo los administradores pueden agregar personas al grupo!!`,
                 })
             } else if (res.memberAddMode == true) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora todos pueden agregar personas al grupo!!`,
                 })
             } else if (res.announce == true) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo ha sido cerrado, solo los administradores podrán enviar mensajes!`,
                 })
             } else if (res.announce == false) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo sé ha abierto, ahora todos podrán enviar mensajes!`,
                 })
             } else if (res.restrict == true) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa información del grupo ha sido restringida para que solo administradores puedan editar!`,
                 })
             } else if (res.restrict == false) {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa configuración de edición de información del grupo ha sido habilitada para que todos la puedan editar!`,
                 })
             } else if(!res.desc == ''){
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, { 
+                nyanBot22.sendMessage(res.id, { 
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*La descripción del grupo ha cambiado a:*\n\n${res.desc}`,
                 })
       } else {
                 await sleep(2000)
-                nyanBot2.sendMessage(res.id, {
+                nyanBot22.sendMessage(res.id, {
                     text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*El nombre del grupo ha cambiado a*\n\n*${res.subject}*`,
                 })
             } 
             }
         })
             
-    nyanBot2.ev.on('messages.upsert', async chatUpdate => {
+    nyanBot22.ev.on('messages.upsert', async chatUpdate => {
         //console.log(JSON.stringify(chatUpdate, undefined, 2))
         try {
             mek = chatUpdate.messages[0]
             if (!mek.message) return
             mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
             if (mek.key && mek.key.remoteJid === 'status@broadcast') return
-            if (!nyanBot2.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
+            if (!nyanBot22.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
             if (mek.key.id.startsWith('Nyan') && mek.key.id.length === 16) return
             if (mek.key.id.startsWith('BAE5')) return
-            m = smsg(nyanBot2, mek, store)
-            require("./NyanBot")(nyanBot2, m, chatUpdate, store)
+            m = smsg(nyanBot22, mek, store)
+            require("./nyanBot2")(nyanBot22, m, chatUpdate, store)
         } catch (err) {
             console.log(err)
         }
     })
 
    
-    nyanBot2.decodeJid = (jid) => {
+    nyanBot22.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
             let decode = jidDecode(jid) || {}
@@ -406,9 +406,9 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
         } else return jid
     }
 
-    nyanBot2.ev.on('contacts.update', update => {
+    nyanBot22.ev.on('contacts.update', update => {
         for (let contact of update) {
-            let id = nyanBot2.decodeJid(contact.id)
+            let id = nyanBot22.decodeJid(contact.id)
             if (store && store.contacts) store.contacts[id] = {
                 id,
                 name: contact.notify
@@ -416,49 +416,49 @@ ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
         }
     })
 
-    nyanBot2.getName = (jid, withoutContact = false) => {
-        id = nyanBot2.decodeJid(jid)
-        withoutContact = nyanBot2.withoutContact || withoutContact
+    nyanBot22.getName = (jid, withoutContact = false) => {
+        id = nyanBot22.decodeJid(jid)
+        withoutContact = nyanBot22.withoutContact || withoutContact
         let v
         if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
             v = store.contacts[id] || {}
-            if (!(v.name || v.subject)) v = nyanBot2.groupMetadata(id) || {}
+            if (!(v.name || v.subject)) v = nyanBot22.groupMetadata(id) || {}
             resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
         })
         else v = id === '0@s.whatsapp.net' ? {
                 id,
                 name: 'WhatsApp'
-            } : id === nyanBot2.decodeJid(nyanBot2.user.id) ?
-            nyanBot2.user :
+            } : id === nyanBot22.decodeJid(nyanBot22.user.id) ?
+            nyanBot22.user :
             (store.contacts[id] || {})
         return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
     }
 
-nyanBot2.sendContact = async (jid, kon, quoted = '', opts = {}) => {
+nyanBot22.sendContact = async (jid, kon, quoted = '', opts = {}) => {
     let list = []
     for (let i of kon) {
         list.push({
-            displayName: await nyanBot2.getName(i),
-            vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await nyanBot2.getName(i)}\nFN:${await nyanBot2.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
+            displayName: await nyanBot22.getName(i),
+            vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await nyanBot22.getName(i)}\nFN:${await nyanBot22.getName(i)}\nitem1.TEL;waid=${i.split('@')[0]}:${i.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
         })
     }
-    nyanBot2.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+    nyanBot22.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
     }
 
-    nyanBot2.public = true
+    nyanBot22.public = true
 
- nyanBot2.serializeM = (m) => smsg(nyanBot2, m, store)
+ nyanBot22.serializeM = (m) => smsg(nyanBot22, m, store)
 
-    nyanBot2.sendText = (jid, text, quoted = '', options) => nyanBot2.sendMessage(jid, {
+    nyanBot22.sendText = (jid, text, quoted = '', options) => nyanBot22.sendMessage(jid, {
         text: text,
         ...options
     }, {
         quoted,
         ...options
     })
-    nyanBot2.sendImage = async (jid, path, caption = '', quoted = '', options) => {
+    nyanBot22.sendImage = async (jid, path, caption = '', quoted = '', options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,` [1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
-        return await nyanBot2.sendMessage(jid, {
+        return await nyanBot22.sendMessage(jid, {
             image: buffer,
             caption: caption,
             ...options
@@ -466,14 +466,14 @@ nyanBot2.sendContact = async (jid, kon, quoted = '', opts = {}) => {
             quoted
         })
     }
-    nyanBot2.sendTextWithMentions = async (jid, text, quoted, options = {}) => nyanBot2.sendMessage(jid, {
+    nyanBot22.sendTextWithMentions = async (jid, text, quoted, options = {}) => nyanBot22.sendMessage(jid, {
         text: text,
         mentions: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net'),
         ...options
     }, {
         quoted
     })
-    nyanBot2.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
+    nyanBot22.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
 let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
 let buffer
 if (options && (options.packname || options.author)) {
@@ -481,14 +481,14 @@ buffer = await writeExifImg(buff, options)
 } else {
 buffer = await imageToWebp(buff)
 }
-await nyanBot2.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+await nyanBot22.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
 .then( response => {
 fs.unlinkSync(buffer)
 return response
 })
 }
 
-nyanBot2.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
+nyanBot22.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
 let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
 let buffer
 if (options && (options.packname || options.author)) {
@@ -496,10 +496,10 @@ buffer = await writeExifVid(buff, options)
 } else {
 buffer = await videoToWebp(buff)
 }
-await nyanBot2.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
+await nyanBot22.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
 return buffer
 }
-    nyanBot2.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+    nyanBot22.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
         let quoted = message.msg ? message.msg : message
         let mime = (message.msg || message).mimetype || ''
         let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
@@ -515,7 +515,7 @@ return buffer
         return trueFileName
     }
     
-    nyanBot2.copyNForward = async (jid, message, forceForward = false, options = {}) => {
+    nyanBot22.copyNForward = async (jid, message, forceForward = false, options = {}) => {
 let vtype
 if (options.readViewOnce) {
 message.message = message.message && message.message.ephemeralMessage && message.message.ephemeralMessage.message ? message.message.ephemeralMessage.message : (message.message || undefined)
@@ -545,17 +545,17 @@ contextInfo: {
 }
 } : {})
 } : {})
-await nyanBot2.relayMessage(jid, waMessage.message, { messageId:  waMessage.key.id })
+await nyanBot22.relayMessage(jid, waMessage.message, { messageId:  waMessage.key.id })
 return waMessage
 }
     
-    nyanBot2.sendPoll = (jid, name = '', values = [], selectableCount = 1) => { return nyanBot2.sendMessage(jid, { poll: { name, values, selectableCount }}) }
+    nyanBot22.sendPoll = (jid, name = '', values = [], selectableCount = 1) => { return nyanBot22.sendMessage(jid, { poll: { name, values, selectableCount }}) }
 
-nyanBot2.parseMention = (text = '') => {
+nyanBot22.parseMention = (text = '') => {
 return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
 }
             
-    nyanBot2.downloadMediaMessage = async (message) => {
+    nyanBot22.downloadMediaMessage = async (message) => {
         let mime = (message.msg || message).mimetype || ''
         let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0]
         const stream = await downloadContentFromMessage(message, messageType)
@@ -566,10 +566,10 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
 
         return buffer
     }
-    return nyanBot2
+    return nyanBot22
     }
 
-startNyanBot()
+startnyanBot2()
 
 process.on('uncaughtException', function (err) {
 let e = String(err)
