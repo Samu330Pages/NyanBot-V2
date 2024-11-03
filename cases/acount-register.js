@@ -168,6 +168,6 @@ _Tu sesión sé ha guardado en la base de datos del bot! 😸_`
         })
         .catch(error => {
             console.error('Error:', error);
-            reply('Ocurrió un error durante el proceso de registro.');
+            reply(`Ocurrió un error durante el proceso de registro.\n${error}`);
         });
 };
