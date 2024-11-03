@@ -1,4 +1,4 @@
-module.exports = async function(text, m, nyanBot2, sender, sendReplyButton, prefix) {
+module.exports = async function(text, m, reply, nyanBot2, sender, sendReplyButton, prefix) {
 if (global.DATABASE.data.users[sender].register === false) return reply('*No fue posible cerrar tu sesión, porque aún no la has iniciado!*')
                 nyanBot2.sendMessage(m.chat, { react: { text: '😫', key: m.key } })
                 const buttons = [{
