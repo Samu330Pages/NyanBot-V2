@@ -59,75 +59,49 @@ require('./main.js')
 nocache('../main.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
 
 //------------------------------------------------------
-let phoneNumber = "5219984907794"
-let owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
-const pairingCode = false
-//const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
-const useMobile = process.argv.includes("--mobile")
-
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-const question = (text) => new Promise((resolve) => rl.question(text, resolve))
-
 const startNyanBot = async () => {
     try {
-let { version, isLatest } = await fetchLatestBaileysVersion()
-const {  state, saveCreds } =await useMultiFileAuthState(`./session`)
-    const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
-    const nyanBot2 = makeWASocket({
-        logger: pino({ level: 'silent' }),
-        printQRInTerminal: true, // popping up QR in terminal log
-      browser: Browsers.windows('Firefox'), // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
-     auth: {
-         creds: state.creds,
-         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-      },
-      markOnlineOnConnect: true, // set false for offline
-      generateHighQualityLinkPreview: true, // make high preview link
-      getMessage: async (key) => {
-          let jid = jidNormalizedUser(key.remoteJid)
-          let msg = await store.loadMessage(jid, key.id)
+        let { version, isLatest } = await fetchLatestBaileysVersion();
+        const { state, saveCreds } = await useMultiFileAuthState('./session');
+        const msgRetryCounterCache = new NodeCache();
 
-          return msg?.message || ""
-    },
-      msgRetryCounterCache, // Resolve waiting messages
-      defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
-   })
-   
-   store.bind(nyanBot2.ev)
+        const nyanBot = makeWASocket({
+            logger: pino({ level: 'silent' }),
+            printQRInTerminal: true,
+            browser: Browsers.windows('Firefox'),
+            auth: {
+                creds: state.creds,
+                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+            },
+            markOnlineOnConnect: true,
+            generateHighQualityLinkPreview: true,
+            msgRetryCounterCache,
+            getMessage: async (key) => {
+                let jid = jidNormalizedUser(key.remoteJid);
+                let msg = await store.loadMessage(jid, key.id);
+                return msg?.message || "";
+            },
+        });
 
-    // login use pairing code
-   // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-   if (pairingCode && !nyanBot2.authState.creds.registered) {
-      if (useMobile) throw new Error('Cannot use pairing code with mobile api')
+        nyanBot.ev.on('connection.update', (update) => {
+            const { connection, lastDisconnect } = update;
+            if (connection === 'close') {
+                const shouldReconnect = (lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut;
+                console.log('Conexión cerrada debido a', lastDisconnect.error, ', reconectando', shouldReconnect);
+                if (shouldReconnect) {
+                    startNyanBot(); 
+                }
+            } else if (connection === 'open') {
+                console.log('Conexión abierta');
+            }
+        });
 
-      let phoneNumber
-      if (!!phoneNumber) {
-         phoneNumber = phoneNumber.replace(/\D/g, '').toString();
-         if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
-            process.exit(0)
-         }
-      } else {
-         phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
-         phoneNumber = phoneNumber.replace(/\D/g, '').toString();
+    } catch (error) {
+        console.error('Error al iniciar el bot:', error);
+    }
+};
 
-         // Ask again when entering the wrong number
-         if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Por favor, inicia con el código de área de tu país : +52199********")))
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Por favor, escribe tu número de teléfono\nPor ejemplo: +52199******** : `)))
-            phoneNumber = phoneNumber.replace(/\D/g, '').toString();
-            rl.close()
-         }
-      }
-
-      setTimeout(async () => {
-         let code = await nyanBot2.requestPairingCode(phoneNumber)
-         code = code?.match(/.{1,4}/g)?.join("-") || code
-         console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
-      }, 3000)
-   }
-
-nyanBot2.ev.on('connection.update', async (update) => {
+/*nyanBot2.ev.on('connection.update', async (update) => {
     const {
         connection,
         lastDisconnect
@@ -176,7 +150,7 @@ try{
       console.log('Error in Connection.update '+err)
       startNyanBot();
     }
-})
+})*/
 nyanBot2.ev.on('creds.update', saveCreds)
 // nyanBot2.ev.on("messages.upsert",  () => { })
 //------------------------------------------------------
