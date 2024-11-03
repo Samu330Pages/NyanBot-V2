@@ -1040,7 +1040,7 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
                 break
             case 'logout': {
                 const caseLogout = require('./cases/acount-logout');
-                await caseLogout(text, m, nyanBot2, sender, sendReplyButton, prefix);
+                await caseLogout(text, m, reply, nyanBot2, sender, sendReplyButton, prefix);
             }
                 break
             case 'login': {
