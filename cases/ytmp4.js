@@ -19,7 +19,7 @@ module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit
 
         if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
-                document: await fc.getBuffer([0].url),
+                document: await fc.getBuffer(r[0].url),
                 fileName: `${r[0].title}.mp4`,
                 mimetype: 'video/mp4',
                 caption: caption,
@@ -27,7 +27,7 @@ module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
-                video: await fc.getBuffer([0].url),
+                video: await fc.getBuffer(r[0].url),
                 caption: caption,
                 fileName: `${r[0].title}.mp4`,
                 mimetype: 'video/mp4'
