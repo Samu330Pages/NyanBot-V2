@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js')
+const fc = require('lib/samufuncs.js')
 
 module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix) {
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
@@ -18,7 +19,7 @@ module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit
 
         if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
-                document: {url: r[0].url},
+                document: await (await fetch(`${[0].url}`)).buffer(),
                 fileName: `${r[0].title}.mp4`,
                 mimetype: 'video/mp4',
                 caption: caption,
@@ -26,7 +27,7 @@ module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit
             }, { quoted: m });
         } else {
             await nyanBot2.sendMessage(m.chat, {
-                video: {url: r[0].url},
+                video: await (await fetch(`${[0].url}`)).buffer(),
                 caption: caption,
                 fileName: `${r[0].title}.mp4`,
                 mimetype: 'video/mp4'
