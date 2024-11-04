@@ -838,7 +838,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             isCommand = `yta`
         }
 
-const userGames = db.data.game.soup || [];
+/*const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
 if (juegoActivoIndex !== -1) {
@@ -875,7 +875,7 @@ if (juegoActivoIndex !== -1) {
 
     db.data.game.soup = userGames;
 }
-
+*/
 const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- ¡Diviértete!`;
 await nyanBot2.sendMessage(m.chat, {
     image: juegoActivo.imagenResaltada,
