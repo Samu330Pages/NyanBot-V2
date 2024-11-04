@@ -1880,7 +1880,7 @@ def shell():
     else:
         callback = print_dots(shutdown_event)
 
-    printer('*• SPEEDTEST.NET*\n\n', quiet)
+    printer('*• SPEEDTEST.NET 🌐*\n\n', quiet)
     try:
         speedtest = Speedtest(
             source_address=args.source,
@@ -1910,11 +1910,11 @@ def shell():
                         raise
         sys.exit(0)
 
-    printer('Testing from %(isp)s (%(ip)s)...' % speedtest.config['client'],
+    printer('📍 *Testing from %(isp)s...*' % speedtest.config['client'],
             quiet)
 
     if not args.mini:
-        printer('Retrieving speedtest.net server list...', quiet)
+        printer('Retrieving _*speedtest.net*_ server list...', quiet)
         try:
             speedtest.get_servers(servers=args.server, exclude=args.exclude)
         except NoMatchedServers:
@@ -1945,13 +1945,13 @@ def shell():
             '%(latency)s ms' % results.server, quiet)
 
     if args.download:
-        printer('Testing download speed\n', quiet,
+        printer('*Testing download speed* 📡\n', quiet,
                 end=('', '\n')[bool(debug)])
         speedtest.download(
             callback=callback,
             threads=(None, 1)[args.single]
         )
-        printer('Download: %0.2f M%s/s' %
+        printer('- _*Download:*_ %0.2f M%s/s' %
                 ((results.download / 1000.0 / 1000.0) / args.units[1],
                  args.units[0]),
                 quiet)
@@ -1959,14 +1959,14 @@ def shell():
         printer('Skipping download test', quiet)
 
     if args.upload:
-        printer('Testing upload speed\n', quiet,
+        printer('\n*Testing upload speed* 📂\n', quiet,
                 end=('', '\n')[bool(debug)])
         speedtest.upload(
             callback=callback,
             pre_allocate=args.pre_allocate,
             threads=(None, 1)[args.single]
         )
-        printer('Upload: %0.2f M%s/s' %
+        printer('- _*Upload:*_ %0.2f M%s/s' %
                 ((results.upload / 1000.0 / 1000.0) / args.units[1],
                  args.units[0]),
                 quiet)
