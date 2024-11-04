@@ -857,26 +857,30 @@ if (juegoActivoIndex !== -1) {
                     caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Aquí están todas las palabras destacadas.*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
-            } else {
-                await reply(`*¡Correcto! La palabra "${palabraAdivinada}" existe en la lista.*`);
             }
         } else {
             juegoActivo.intentos += 1;
 
-            await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*`);
-
             if (juegoActivo.intentos >= 3) {
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
+                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
                 });
                 userGames.splice(juegoActivoIndex, 1);
+            } else {
+                await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*`);
             }
         }
     }
 
     db.data.game.soup = userGames;
 }
+
+const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- ¡Diviértete!`;
+await nyanBot2.sendMessage(m.chat, {
+    image: juegoActivo.imagenResaltada,
+    caption: `${instrucciones}\n\n*¡Buena suerte!*`
+});
 
         switch (isCommand) {
 
