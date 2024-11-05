@@ -850,13 +850,19 @@ if (juegoActivoIndex !== -1) {
         if (juegoActivo.palabras.includes(palabraAdivinada)) {
             juegoActivo.palabrasEncontradas.push(palabraAdivinada);
             juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
+            juegoActivo.intentos += 1;
 
-            if (juegoActivo.palabras.length === 0) {
+            const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
+            const palabrasRestantes = juegoActivo.palabras.length;
+
+            if (palabrasRestantes === 0) {
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Aquí están todas las palabras destacadas.*`
+                    caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Total de puntos: ${puntosGanados}*\n*Aquí están todas las palabras destacadas.*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
+            } else {
+                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${puntosGanados}*`);
             }
         } else {
             juegoActivo.intentos += 1;
@@ -864,7 +870,7 @@ if (juegoActivoIndex !== -1) {
             if (juegoActivo.intentos >= 3) {
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}`
+                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}\n*Total de puntos: ${juegoActivo.palabrasEncontradas.length * 100}*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
             } else {
@@ -874,11 +880,12 @@ if (juegoActivoIndex !== -1) {
     }
 
     db.data.game.soup = userGames;
-		    }
+}
 
         switch (isCommand) {
 
-            case 'sopa': {
+case 'sopa': {
+    const userGames = db.data.game.soup || [];
     const existingGame = userGames.find(game => game.user === sender);
 
     if (existingGame) {
@@ -898,9 +905,10 @@ if (juegoActivoIndex !== -1) {
     userGames.push(newGame);
     db.data.game.soup = userGames;
 
+    const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- Los puntos se contabilizan al finalizar el juego.\n- ¡Diviértete!`;
     const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
-    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: texto });
-	    }
+    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: `${texto}\n\n${instrucciones}` });
+}
     break
 
             case 'menu': {
