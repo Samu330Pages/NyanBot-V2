@@ -886,6 +886,20 @@ if (juegoActivoIndex !== -1) {
         switch (isCommand) {
 
 case 'sopa': {
+    function obtenerPalabrasAleatorias(ruta, cantidad) {
+        const data = JSON.parse(fs.readFileSync(ruta));
+        const palabras = data.palabras;
+        const palabrasAleatorias = [];
+        while (palabrasAleatorias.length < cantidad) {
+            const randomIndex = Math.floor(Math.random() * palabras.length);
+            const palabraAleatoria = palabras[randomIndex];
+            if (!palabrasAleatorias.includes(palabraAleatoria)) {
+                palabrasAleatorias.push(palabraAleatoria);
+            }
+        }
+        return palabrasAleatorias;
+    }
+
     const userGames = db.data.game.soup || [];
     const existingGame = userGames.find(game => game.user === sender);
 
@@ -907,10 +921,15 @@ case 'sopa': {
     db.data.game.soup = userGames;
 
     const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- Los puntos se contabilizan al finalizar el juego.\n- ¡Diviértete!`;
+
+    const palabrasAyuda = obtenerPalabrasAleatorias('./lib/palabras.json', 7);
+    const palabrasCombinadas = [...palabrasAyuda, ...sopa.palabras]; // Combina palabras de ayuda y escondidas
+    const textoPalabrasAyuda = `*Palabras de ayuda:* \n\n- ${shuffleArray(palabrasCombinadas).join('\n- ')}`; // Mezcla las palabras aleatorias
+
     const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
-    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: `${texto}\n\n${instrucciones}` });
+    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: `${texto}\n\n${instrucciones}\n\n${textoPalabrasAyuda}` });
 }
-    break
+break
 
             case 'menu': {
                 nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
