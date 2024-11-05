@@ -862,7 +862,7 @@ if (juegoActivoIndex !== -1) {
                 db.data.users[sender].limit += 200;
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*¡Felicidades! 🎊 Has encontrado todas las palabras! 😗.*\n\n*Total de puntos: 400*`
+                    caption: `*¡Felicidades! 🎊 Has encontrado todas las palabras! 😗.*\n\n*Puntos obtenidos: 400*\n*Puntos totales: ${db.data.users[sender].limit}*`
                 }, {quoted: m});
                 userGames.splice(juegoActivoIndex, 1);
             } else {
@@ -3209,6 +3209,10 @@ ${forma1}⚽ | 🏀 | 🎳 | 🎯 | 🎲 | 🎰${forma1}
 *O también juegar a piedra, papel o tijera con el bot enviando los emojis:*
 
 ${forma1}🪨 | ✊🏻 | 📄 | 🤚🏻 | ✂️ | ✌🏻${forma1}
+
+*NUEVO JUEGO!! 🎊* ${forma1}Sopa de letras 🍜${forma1}
+
+*Para jugar sopa de letras usa el comando: ${prefix}sopa*
 
 _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
 
