@@ -862,8 +862,8 @@ if (juegoActivoIndex !== -1) {
                 db.data.users[sender].limit += 200;
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Total de puntos: 400*\n*Aquí están todas las palabras destacadas.*`
-                });
+                    caption: `*¡Felicidades! 🎊 Has encontrado todas las palabras! 😗.*\n\n*Total de puntos: 400*`
+                }, {quoted: m});
                 userGames.splice(juegoActivoIndex, 1);
             } else {
                 if (totalPalabrasEncontradas === 1) {
@@ -874,7 +874,7 @@ if (juegoActivoIndex !== -1) {
                 }
 
                 const palabrasRestantes = juegoActivo.palabras.length;
-                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${db.data.users[sender].limit}*`);
+                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n- *Palabras restantes: ${palabrasRestantes}*\n- *Te quedan ${3 - juegoActivo.intentos} intentos.*\n- *Total de puntos: ${db.data.users[sender].limit}*`);
             }
         } else {
             juegoActivo.intentos += 1;
@@ -883,8 +883,8 @@ if (juegoActivoIndex !== -1) {
                 const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}\n*Total de puntos: ${puntosGanados}*`
-                });
+                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}\n*Puntos obtenidos: ${puntosGanados}*`
+                }, {quoted: m});
                 userGames.splice(juegoActivoIndex, 1);
             } else {
                 await reply(`*La palabra "${palabraAdivinada}" no se encontró en la sopa de letras.*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*`);
@@ -897,9 +897,7 @@ if (juegoActivoIndex !== -1) {
 
         switch (isCommand) {
 
-case 'sopa': {
-    const fs = require('fs');
-
+case 'sopa': case 'letras': {
     function obtenerPalabrasAleatorias(ruta, cantidad) {
         const data = JSON.parse(fs.readFileSync(ruta));
         const palabras = data.palabras;
@@ -928,7 +926,7 @@ case 'sopa': {
     if (existingGame) {
         return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`);
     }
-
+    nyanBot2.sendMessage(m.chat, { react: { text: '🍜', key: m.key } });
     const sopa = await require("./lib/sopa.js").createWordSearchImages();
     const newGame = {
         user: sender,
@@ -942,14 +940,15 @@ case 'sopa': {
     userGames.push(newGame);
     db.data.game.soup = userGames;
 
-    const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- Los puntos se contabilizan al finalizar el juego.\n- ¡Diviértete!`;
+    const instrucciones = `*Instrucciones del juego:* \n\n- Encuentra las palabras ocultas en la sopa de letras.\n- *Etiqueta este mensaje cada ves que encuentres una palabra!*\n- Cada vez que aciertes una palabra, ganarás 100 puntos.\n- Si encuentras las tres palabras, ganarás un total de 400 puntos.\n- Los puntos se contabilizan al encontrar una palabra.\n
+⚠️ _*LAS PALABRAS PUEDEN ESTAR ACOMODADAS DE FORMA HORIZONTAL, VERTICAL, DIAGONAL, ABAJO HACIA ARRIBA...*_ ⚠️\nSolo podrá responder la persona del juego!\n*¡Diviértete!*`;
 
     const palabrasAyuda = obtenerPalabrasAleatorias('./lib/palabras.json', 7);
-    const palabrasCombinadas = [...palabrasAyuda, ...sopa.palabras]; // Combina palabras de ayuda y escondidas
-    const textoPalabrasAyuda = `*Palabras de ayuda:* \n\n- ${shuffleArray(palabrasCombinadas).join('\n- ')}`; // Mezcla las palabras aleatorias
+    const palabrasCombinadas = [...palabrasAyuda, ...sopa.palabras];
+    const textoPalabrasAyuda = `*Palabras que pueden estar escondidas:* \n\n- ${shuffleArray(palabrasCombinadas).join('\n- ')}`;
 
     const texto = `*Nuevo juego de* \`Sopa de letras\` 🍜\n\n*Intentos: ${newGame.intentos}*\n*Palabras restantes: ${newGame.palabras.length}*`;
-    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: `${texto}\n\n${instrucciones}\n\n${textoPalabrasAyuda}` });
+    await nyanBot2.sendMessage(m.chat, { image: sopa.imagenNormal, caption: `${texto}\n\n${instrucciones}\n\n_Para facilitar la búsqueda clic aquí 👉🏻_${readmore}\n${textoPalabrasAyuda}` }, {quoted: m});
 }
 break
 
