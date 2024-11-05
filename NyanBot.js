@@ -845,24 +845,36 @@ if (juegoActivoIndex !== -1) {
     const juegoActivo = userGames[juegoActivoIndex];
 
     if (m.quoted && m.quoted.text.startsWith("*Nuevo juego de* `Sopa de letras` 🍜")) {
-        const palabraAdivinada = m.text;
+        const palabraAdivinada = m.text.toUpperCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^A-Z]/g, '');
 
         if (juegoActivo.palabrasEncontradas.includes(palabraAdivinada)) {
             await reply(`*La palabra "${palabraAdivinada}" ya ha sido encontrada anteriormente.*`);
         } else if (juegoActivo.palabras.includes(palabraAdivinada)) {
             juegoActivo.palabrasEncontradas.push(palabraAdivinada);
             juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
-            const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
-            const palabrasRestantes = juegoActivo.palabras.length;
+            const puntosGanados = juegoActivo.palabrasEncontradas.length === 1 ? 100 : 0;
+            const totalPalabrasEncontradas = juegoActivo.palabrasEncontradas.length;
 
-            if (palabrasRestantes === 0) {
+            if (totalPalabrasEncontradas === 3) {
+                db.data.users[sender].limit += 200;
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
                     caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Total de puntos: 400*\n*Aquí están todas las palabras destacadas.*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
             } else {
-                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${puntosGanados}*`);
+                if (totalPalabrasEncontradas === 1) {
+                    db.data.users[sender].limit += 100;
+                }
+                if (totalPalabrasEncontradas === 2) {
+                    db.data.users[sender].limit += 100;
+                }
+
+                const palabrasRestantes = juegoActivo.palabras.length;
+                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${db.data.users[sender].limit}*`);
             }
         } else {
             juegoActivo.intentos += 1;
