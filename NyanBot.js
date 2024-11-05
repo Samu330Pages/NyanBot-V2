@@ -897,7 +897,11 @@ if (juegoActivoIndex !== -1) {
 
         switch (isCommand) {
 
-case 'sopa': case 'letras': {
+case 'sopa': case 'letras': case 'nuevasopa': {
+	if (command == 'nuevasopa') {
+		userGames.splice(juegoActivoIndex, 1);
+		reply('*Tu juego anterior se ah eliminado, ya puedes jugar de nuevo!*')
+	}
     function obtenerPalabrasAleatorias(ruta, cantidad) {
         const data = JSON.parse(fs.readFileSync(ruta));
         const palabras = data.palabras;
@@ -924,7 +928,7 @@ case 'sopa': case 'letras': {
     const existingGame = userGames.find(game => game.user === sender);
 
     if (existingGame) {
-        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*`);
+        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*\n_Para eliminar tu juego anterior usa el comando: *${prefix}nuevasopa*_`);
     }
     nyanBot2.sendMessage(m.chat, { react: { text: '🍜', key: m.key } });
     const sopa = await require("./lib/sopa.js").createWordSearchImages();
