@@ -848,29 +848,32 @@ if (juegoActivoIndex !== -1) {
         const palabraAdivinada = m.text;
 
         if (juegoActivo.palabras.includes(palabraAdivinada)) {
-            juegoActivo.palabrasEncontradas.push(palabraAdivinada);
-            juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
-            juegoActivo.intentos += 1;
+            if (!juegoActivo.palabrasEncontradas.includes(palabraAdivinada)) {
+                juegoActivo.palabrasEncontradas.push(palabraAdivinada);
+                juegoActivo.palabras = juegoActivo.palabras.filter(p => p !== palabraAdivinada);
+                const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
+                const palabrasRestantes = juegoActivo.palabras.length;
 
-            const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
-            const palabrasRestantes = juegoActivo.palabras.length;
-
-            if (palabrasRestantes === 0) {
-                await nyanBot2.sendMessage(m.chat, {
-                    image: juegoActivo.imagenResaltada,
-                    caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Total de puntos: ${puntosGanados}*\n*Aquí están todas las palabras destacadas.*`
-                });
-                userGames.splice(juegoActivoIndex, 1);
+                if (palabrasRestantes === 0) {
+                    await nyanBot2.sendMessage(m.chat, {
+                        image: juegoActivo.imagenResaltada,
+                        caption: `*¡Felicidades! Has encontrado todas las palabras.*\n*Total de puntos: 400*\n*Aquí están todas las palabras destacadas.*`
+                    });
+                    userGames.splice(juegoActivoIndex, 1);
+                } else {
+                    await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${puntosGanados}*`);
+                }
             } else {
-                await reply(`*¡Correcto! Has encontrado la palabra "${palabraAdivinada}".*\n*Palabras restantes: ${palabrasRestantes}*\n*Te quedan ${3 - juegoActivo.intentos} intentos.*\n*Total de puntos: ${puntosGanados}*`);
+                await reply(`*La palabra "${palabraAdivinada}" ya ha sido encontrada anteriormente.*`);
             }
         } else {
             juegoActivo.intentos += 1;
 
             if (juegoActivo.intentos >= 3) {
+                const puntosGanados = juegoActivo.palabrasEncontradas.length * 100;
                 await nyanBot2.sendMessage(m.chat, {
                     image: juegoActivo.imagenResaltada,
-                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}\n*Total de puntos: ${juegoActivo.palabrasEncontradas.length * 100}*`
+                    caption: `*No se encontraron palabras. Has agotado tus intentos.*\n*Palabras encontradas:* ${juegoActivo.palabrasEncontradas.join(', ')}\n*Palabras no encontradas:* ${juegoActivo.palabras.join(', ')}\n*Total de puntos: ${puntosGanados}*`
                 });
                 userGames.splice(juegoActivoIndex, 1);
             } else {
