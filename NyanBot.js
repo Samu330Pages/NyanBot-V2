@@ -886,6 +886,8 @@ if (juegoActivoIndex !== -1) {
         switch (isCommand) {
 
 case 'sopa': {
+    const fs = require('fs');
+
     function obtenerPalabrasAleatorias(ruta, cantidad) {
         const data = JSON.parse(fs.readFileSync(ruta));
         const palabras = data.palabras;
@@ -898,6 +900,14 @@ case 'sopa': {
             }
         }
         return palabrasAleatorias;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 
     const userGames = db.data.game.soup || [];
