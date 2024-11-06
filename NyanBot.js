@@ -849,7 +849,7 @@ if (m.quoted && m.quoted.text) {
     }
 
     if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
-        const caseYtmp3Video = require('./cases/ytvideo');
+        const caseYtmp3Video = require('./cases/ytmp4');
         await caseYtmp3Video(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
     }
 }
