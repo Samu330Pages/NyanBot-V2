@@ -923,13 +923,14 @@ case 'sopa': case 'letras': case 'nuevasopa': {
     const userGames = db.data.game.soup || [];
     const existingGame = userGames.find(game => game.user === sender);
 
-    if (existingGame) {
-        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*\n_Para eliminar tu juego anterior usa el comando: *${prefix}nuevasopa*_`);
-    }
     if (command == 'nuevasopa') {
 	userGames.splice(existingGame, 1);
 	return reply('*Tu juego anterior se ah eliminado, ya puedes jugar de nuevo!*')
     }
+    if (existingGame) {
+        return reply(`*Ya tienes un juego en progreso.*\n*Intenta finalizarlo antes de comenzar uno nuevo.*\n_Para eliminar tu juego anterior usa el comando: *${prefix}nuevasopa*_`);
+    }
+    
     nyanBot2.sendMessage(m.chat, { react: { text: '🍜', key: m.key } });
     const sopa = await require("./lib/sopa.js").createWordSearchImages();
     const newGame = {
