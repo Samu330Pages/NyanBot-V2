@@ -831,18 +831,30 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             verifieduser.push(sender)
             fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
         }
-        if (budy === 'v') {
+
+if (m.quoted && m.quoted.text) {
     const quotedText = m.quoted.text;
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const matches = quotedText.match(regex);
-    
+
     if (!matches) return reply("No se encontró un enlace de YouTube.");
-    
+
     const videoLink = matches[0];
 
-    const caseYtmp32 = require('./cases/ytmp3');
-    await caseYtmp32(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
-	}
+    const lowerBudy = budy.toLowerCase();
+
+    if (lowerBudy === 'audio' || lowerBudy === 'a' || lowerBudy === 'aúdio' || lowerBudy === 'áudio') {
+        const caseYtmp32 = require('./cases/ytmp3');
+        await caseYtmp32(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+    }
+
+    if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
+        const caseYtmp3Video = require('./cases/ytvideo');
+        await caseYtmp3Video(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+    }
+} else {
+    return reply("Por favor, etiqueta un mensaje que contenga un enlace de YouTube.");
+}
 
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
