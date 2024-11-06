@@ -3467,11 +3467,11 @@ case 'disable': {
     const optionsMap = {
         badword: 'badword',
         antibot: 'antibot',
-        antiviewonce: 'unavista',
+        unavista: 'antiviewonce',
         antilink: 'antilink',
-        antiadult: 'adult',
+        adult: 'antiadult',
         ban: 'ban',
-        adminmode: 'admin'
+        admin: 'adminmode'
     };
 
     const availableOptions = Object.keys(optionsMap);
@@ -3486,7 +3486,7 @@ case 'disable': {
             } else {
                 feedbackMessage = `📍 *Opciones desactivadas que puedes activar:*\n`;
                 disabledOptions.forEach(opt => {
-                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} (desactivada)\n`;
+                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} _*(desactivada)*_\n`;
                 });
             }
         } else {
@@ -3496,7 +3496,7 @@ case 'disable': {
             } else {
                 feedbackMessage = `📍 *Opciones activadas que puedes desactivar:*\n`;
                 enabledOptions.forEach(opt => {
-                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} (activada)\n`;
+                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} _*(activada)*_\n`;
                 });
             }
         }
