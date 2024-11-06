@@ -3476,17 +3476,42 @@ case 'disable': {
     const option = text;
     let feedbackMessage = '';
 
-    if (!option || !optionsMap[option]) {
+    if (!option) {
+        if (action) {
+            const disabledOptions = availableOptions.filter(opt => !db.data.chats[from][optionsMap[opt]]);
+            if (disabledOptions.length === 0) {
+                feedbackMessage = `*Todas las opciones ya están activadas.*`;
+            } else {
+                feedbackMessage = `📍 *Opciones desactivadas que puedes activar:*\n`;
+                disabledOptions.forEach(opt => {
+                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} (desactivada)\n`;
+                });
+            }
+        } else {
+            const enabledOptions = availableOptions.filter(opt => db.data.chats[from][optionsMap[opt]]);
+            if (enabledOptions.length === 0) {
+                feedbackMessage = `*Todas las opciones ya están desactivadas.*`;
+            } else {
+                feedbackMessage = `📍 *Opciones activadas que puedes desactivar:*\n`;
+                enabledOptions.forEach(opt => {
+                    feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} (activada)\n`;
+                });
+            }
+        }
+        return reply(feedbackMessage);
+    }
+
+    if (!optionsMap[option]) {
         feedbackMessage = `*Opción no encontrada. Opciones disponibles:*\n- ${availableOptions.join('\n- ')}`;
         return reply(feedbackMessage);
     }
 
     if (action) {
         db.data.chats[from][optionsMap[option]] = true;
-        feedbackMessage = `La opción *${option}* se ha activado en este chat.`;
+        feedbackMessage = `📍 La opción *${option}* se ha activado en este chat.`;
     } else {
         db.data.chats[from][optionsMap[option]] = false;
-        feedbackMessage = `La opción *${option}* se ha desactivado en este chat.`;
+        feedbackMessage = `📍 La opción *${option}* se ha desactivado en este chat.`;
     }
 
     reply(feedbackMessage);
