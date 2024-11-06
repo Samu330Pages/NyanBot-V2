@@ -3145,6 +3145,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                 break
 
             case 'xvideos': case 'xxx': case 'porno': case 'xnxxsearch': case 'xnxx': {
+		if (db.data.chats[from].antiadult) return reply("*🔞 ESTE CHAT NO PERMITE CONTENIDO SENSIBLE!*")
                 if (!text) return reply('*Porfavor incluye junto al comando una solicitud a buscar en _XVideos_ 🔞*');
                 nyanBot2.sendMessage(m.chat, { react: { text: '🔥', key: m.key } });
 
@@ -3194,6 +3195,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                 break
 
             case 'xnxxdl': {
+		if (db.data.chats[from].antiadult) return reply("*🔞 ESTE CHAT NO PERMITE CONTENIDO SENSIBLE!*")
                 nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
                 let v = await fg.xnxxdl(text)
                 nyanBot2.sendMessage(m.chat, {
@@ -3465,11 +3467,11 @@ case 'disable': {
     const optionsMap = {
         badword: 'badword',
         antibot: 'antibot',
-        antiviewonce: 'antiviewonce',
+        antiviewonce: 'unavista',
         antilink: 'antilink',
-        antiadult: 'antiadult',
+        antiadult: 'adult',
         ban: 'ban',
-        adminmode: 'adminmode'
+        adminmode: 'admin'
     };
 
     const availableOptions = Object.keys(optionsMap);
