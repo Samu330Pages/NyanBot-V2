@@ -459,6 +459,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('antibot' in chats)) chats.antibot = false
                 if (!('antiviewonce' in chats)) chats.antiviewonce = true
                 if (!('antilink' in chats)) chats.antilinkgc = false
+		if (!('antiadult' in chats)) chats.antiadult = false
                 if (!('ban' in chats)) chats.ban = false
                 if (!('adminmode' in chats)) chats.adminmode = false
             } else global.db.data.chats[from] = {
@@ -466,6 +467,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 antibot: false,
                 antiviewonce: true,
                 antilink: false,
+		antiadult: false,
                 ban: false,
                 adminmode: false
             }
@@ -3439,193 +3441,6 @@ case 'cerrar':
             }
                 break
 
-            case 'bienvenida': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!welcome === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Activar ✔',
-                            id: `${prefix}welon'`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*La bienvenida en este grupo está desactivada, presiona el botón para poder activar esta opción*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desactivar ❌',
-                            id: `${prefix}weloff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*La bienvenida en este grupo está activada, presiona el botón para poder desactivar esta opción*'
-                    })
-                }
-            }
-                break
-
-            case 'ban': case 'banchat': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!db.data.chats[from].ban === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Si ✔',
-                            id: `${prefix}banon`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Deseas banear este chat?*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desbanear ❌',
-                            id: `${prefix}banoff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Este chat esta Baneado, presiona el botón para poder desactivar esta opción*'
-                    })
-                }
-            }
-                break
-
-            case 'banoff': case 'banon': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (command === 'banon') {
-                    if (db.data.chats[from].ban === true) return reply('¡Este chat ya está Baneado!')
-                    db.data.chats[from].ban = true
-                    reply(`¡Este chat se ha Baneado!`)
-                } else if (command === 'banoff') {
-                    if (db.data.chats[from].ban === false) return reply('¡Este chat no esta baneado!')
-                    db.data.chats[from].ban = false
-                    reply(`¡Este chat se ha Desbaneado!`)
-                }
-            }
-                break
-
-            case 'antilink': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!db.data.chats[m.chat].antilink === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Si ✔',
-                            id: `${prefix}linkon`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Deseas activar la función AntiGroupLink en este chat?*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desactivar ❌',
-                            id: `${prefix}linkoff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Este chat tiene la función AntiGroupLink activa, presiona el botón para poder desactivar esta opción*'
-                    })
-                }
-            }
-                break
-
-            case 'linkon': case 'linkoff': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (command === 'linkon') {
-                    if (db.data.chats[m.chat].antilink === true) return reply('¡Este chat ya tenia la función activa!')
-                    db.data.chats[m.chat].antilink = true
-                    reply(`¡AntiGroupLink Activado!`)
-                } else if (command === 'linkoff') {
-                    if (db.data.chats[m.chat].antilink === false) return reply('¡Este chat no tiene activa la función!')
-                    db.data.chats[m.chat].antilink = false
-                    reply(`¡AntiGroupLink Desctivado!`)
-                }
-            }
-                break
-
-            case 'antibot': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!db.data.chats[m.chat].antibot === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Si ✔',
-                            id: `${prefix}boton`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Deseas activar la función AntiBot en este chat?*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desactivar ❌',
-                            id: `${prefix}botoff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*Este chat tiene la función AntiBot activa, presiona el botón para poder desactivar esta opción*'
-                    })
-                }
-            }
-                break
-
-            case 'boton': case 'botoff': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (command === 'boton') {
-                    if (db.data.chats[m.chat].antibot === true) return reply('¡Este chat ya tenia la función activa!')
-                    db.data.chats[m.chat].antibot = true
-                    reply(`¡AntiBot Activado!`)
-                } else if (command === 'botoff') {
-                    if (db.data.chats[m.chat].antibot === false) return reply('¡Este chat no tiene activa la función!')
-                    db.data.chats[m.chat].antibot = false
-                    reply(`¡AntiBot Desctivado!`)
-                }
-            }
-                break
-
-            case 'welon': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (welcome === true) return reply('¡la opción de bienvenida está ya activa!')
-                welcome = true
-                reply(`La bienvenida sé ha activado en este chat.`)
-            }
-                break
-            case 'weloff': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (welcome === false) return reply('¡la opción de bienvenida está ya desactivada!')
-                welcome = false
-                reply(`La bienvenida sé ha desactivado en este chat.`)
-            }
-                break
-
             case 'listbadword': {
                 let teks = '> _LISTA DE MALAS PALABRAS_\n\n'
                 for (let x of bad) {
@@ -3636,102 +3451,47 @@ case 'cerrar':
             }
                 break
 
-            case 'antiviewonce': case 'unavista': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!db.data.chats[from].antiviewonce === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Activar ✔',
-                            id: `${prefix}vwon`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*AntiViewOnce esta desactivado, Si deseas activar esta opción toca el botón.*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desactivar ❌',
-                            id: `${prefix}vwoff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*AntiViewOnce esta activado, Si deseas desactivar esta opción toca el botón.*'
-                    })
-                }
-            }
-                break
-            case 'vwon': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (db.data.chats[from].antiviewonce === true) return reply('¡la opción de badwords está ya activa!')
-                db.data.chats[from].antiviewonce = true
-                reply(`La opción de *AntiViewOnce* sé ha activado en este chat.`)
-            }
-                break
-            case 'vwoff': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (db.data.chats[from].antiviewonce === false) return reply('¡la opción de badwords está ya desactivada!')
-                db.data.chats[from].antiviewonce = false
-                reply(`La opción de *AntiViewOnce* sé ha desactivado en este chat.`)
-            }
-                break
+case 'activar':
+case 'desactivar':
+case 'on':
+case 'off':
+case 'enable':
+case 'disable': {
+    if (!m.isGroup) return reply(mess.group);
+    if (!isBotAdmins) return reply(mess.adminBot);
+    if (!isAdmins) return reply(mess.admin);
 
-            case 'anti': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (!db.data.chats[from].badword === true) {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Activar ✔',
-                            id: `${prefix}bdon`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*AntiBadWords esta desactivado, Si deseas activar esta opción toca el botón.*'
-                    })
-                } else {
-                    const buttons = [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Desactivar ❌',
-                            id: `${prefix}bdoff`
-                        }),
-                    }]
-                    return await sendReplyButton(m.chat, buttons, m, {
-                        content: '*AntiBadWords esta activado, Si deseas desactivar esta opción toca el botón.*'
-                    })
-                }
-            }
-                break
+    const action = command === 'activar' || command === 'on' || command === 'enable' ? true : false;
+    const optionsMap = {
+        badword: 'badword',
+        antibot: 'antibot',
+        antiviewonce: 'antiviewonce',
+        antilink: 'antilink',
+        antiadult: 'antiadult',
+        ban: 'ban',
+        adminmode: 'adminmode'
+    };
 
-            case 'bdon': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (db.data.chats[from].badword === true) return reply('¡la opción de badwords está ya activa!')
-                db.data.chats[from].badword = true
-                reply(`La opción de badwords sé ha activado en este chat.`)
-            }
-                break
-            case 'bdoff': {
-                if (!m.isGroup) return reply(mess.group)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!isAdmins) return reply(mess.admin)
-                if (db.data.chats[from].badword === false) return reply('¡la opción de badwords está ya desactivada!')
-                db.data.chats[from].badword = false
-                reply(`La opción de badwords sé ha desactivado en este chat.`)
-            }
-                break
+    const availableOptions = Object.keys(optionsMap);
+    const option = text;
+    let feedbackMessage = '';
+
+    if (!option || !optionsMap[option]) {
+        feedbackMessage = `*Opción no encontrada. Opciones disponibles:*\n- ${availableOptions.join('\n- ')}`;
+        return reply(feedbackMessage);
+    }
+
+    if (action) {
+        db.data.chats[from][optionsMap[option]] = true;
+        feedbackMessage = `La opción *${option}* se ha activado en este chat.`;
+    } else {
+        db.data.chats[from][optionsMap[option]] = false;
+        feedbackMessage = `La opción *${option}* se ha desactivado en este chat.`;
+    }
+
+    reply(feedbackMessage);
+}
+break
 
             case 'addsticker': {
                 if (!isSamu) return reply(mess.bot)
