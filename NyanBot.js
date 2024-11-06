@@ -924,6 +924,7 @@ case 'sopa': case 'letras': case 'nuevasopa': {
     const existingGame = userGames.find(game => game.user === sender);
 
     if (command == 'nuevasopa') {
+	if (!existingGame) return reply('*No tienes ningún juego activo 😗*')
 	userGames.splice(existingGame, 1);
 	return reply('*Tu juego anterior se ah eliminado, ya puedes jugar de nuevo!*')
     }
