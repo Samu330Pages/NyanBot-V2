@@ -832,12 +832,10 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
         }
 
-if (m.quoted && m.quoted.text) {
+if (m.quoted && m.quoted.text && isUrl(m.quoted.text)) {
     const quotedText = m.quoted.text;
     const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const matches = quotedText.match(regex);
-
-    if (!matches) return
 
     const videoLink = matches[0];
 
