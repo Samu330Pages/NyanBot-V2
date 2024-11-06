@@ -832,13 +832,17 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
         }
         if (budy === 'v') {
-            const quotedText = m.quoted.text;
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const matches = quotedText.match(regex);
-            if (!matches) return reply("No se encontró un enlace de YouTube.");
-            const caseYtmp32 = require('./cases/ytmp3');
-            await caseYtmp32(matches, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
-        }
+    const quotedText = m.quoted.text;
+    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const matches = quotedText.match(regex);
+    
+    if (!matches) return reply("No se encontró un enlace de YouTube.");
+    
+    const videoLink = matches[0];
+
+    const caseYtmp32 = require('./cases/ytmp3');
+    await caseYtmp32(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+	}
 
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
