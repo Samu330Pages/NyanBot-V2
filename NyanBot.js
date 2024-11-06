@@ -853,7 +853,7 @@ if (m.quoted && m.quoted.text) {
         await caseYtmp3Video(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
     }
 } else {
-    return reply("Por favor, etiqueta un mensaje que contenga un enlace de YouTube.");
+    return
 }
 
 const userGames = db.data.game.soup || [];
