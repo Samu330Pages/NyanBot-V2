@@ -852,8 +852,6 @@ if (m.quoted && m.quoted.text) {
         const caseYtmp3Video = require('./cases/ytvideo');
         await caseYtmp3Video(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
     }
-} else {
-    return
 }
 
 const userGames = db.data.game.soup || [];
