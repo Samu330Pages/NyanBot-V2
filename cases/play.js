@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const yts = require('yt-search');
 
-module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendReplyButton, formatNumber, prefix) {
+module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, sendMessage, formatNumber, prefix) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
     if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`);
 
@@ -13,41 +13,23 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
     }
 
     const video = r.videos[0];
-    const buttons = [{
-            name: "quick_reply",
-            buttonParamsJson: JSON.stringify({
-                display_text: 'Descargar audio 🎙️',
-                id: `${prefix}ytmp3 ${video.url}`
-            }),
-        },
-        {
-            name: "quick_reply",
-            buttonParamsJson: JSON.stringify({
-                display_text: 'Descargar video 🎬',
-                id: `${prefix}ytv ${video.url}`
-            }),
-        },
-        {
-            name: "cta_url",
-            buttonParamsJson: JSON.stringify({
-                display_text: 'Ver en la app ❤️',
-                url: `${video.url}`,
-                merchant_url: `${video.url}`
-            }),
-        },
-        {
-            name: "quick_reply",
-            buttonParamsJson: JSON.stringify({
-                display_text: 'Buscar letra de la canción 📝',
-                id: `${prefix}letra ${text}`
-            }),
-        }
-    ];
 
-    await sendReplyButton(m.chat, buttons, m, {
-        content: `> *YT Play 🍟.*\n\n- *Título:* ${video.title}\n- *Duración:* ${video.timestamp}\n- *Autor:* ${video.author.name}\n- *Vistas:* ${formatNumber(video.views)}\n`,
-        media: await (await fetch(`${video.thumbnail}`)).buffer()
-    });
+    // Preparar el mensaje con la información del video
+    const caption = `> *YT Play 🍟.*\n\n` +
+                    `- *Título:* ${video.title}\n` +
+                    `- *Duración:* ${video.timestamp}\n` +
+                    `- *Autor:* ${video.author.name}\n` +
+                    `- *Vistas:* ${formatNumber(video.views)}\n\n` +
+                    `Instrucciones:\n` +
+                    `Envía "v" para descargar el video.\n` +
+                    `Envía "a" para descargar el audio.\n` +
+                    `Puedes ver el video en la app aquí: ${video.url}`;
+
+    // Enviar el mensaje con la imagen y la información
+    await sendMessage(m.chat, {
+        caption: caption,
+        media: await (await fetch(video.thumbnail)).buffer()
+    }, { quoted: m });
 
     reactionOk(m.chat, m.key, playId);
 };
