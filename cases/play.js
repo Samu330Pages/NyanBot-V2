@@ -19,9 +19,9 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
                     `- *Duración:* ${video.timestamp}\n` +
                     `- *Autor:* ${video.author.name}\n` +
                     `- *Vistas:* ${formatNumber(video.views)}\n\n` +
-                    `Instrucciones:\n` +
+                    `*Instrucciones de descarga:*\n\n` +
                     `Etiqueta con "v" para descargar el video.\n` +
-                    `Etiqueta con "a" para descargar el audio.\n` +
+                    `Etiqueta con "a" para descargar el audio.\n\n` +
                     `${readmore}Link: ${video.url}`;
 
     await nyanBot2.sendMessage(m.chat, {
