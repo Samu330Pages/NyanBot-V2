@@ -831,13 +831,13 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             verifieduser.push(sender)
             fs.writeFileSync('./src/data/role/user.json', JSON.stringify(verifieduser, null, 2))
         }
-        if (budy === 'test2') {
+        if (budy === 'v') {
             const quotedText = m.quoted.text;
             const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
             const matches = quotedText.match(regex);
             if (!matches) return reply("No se encontró un enlace de YouTube.");
-            text = matches[0];
-            isCommand = `yta`
+            const caseYtmp32 = require('./cases/ytmp3');
+            await caseYtmp32(matches, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
         }
 
 const userGames = db.data.game.soup || [];
