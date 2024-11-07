@@ -833,7 +833,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (isSamu) return
 		if (db.data.users[sender].link == 5) {
 			db.data.users[sender].link = 0
-			return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+			await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
 		}
                 await nyanBot2.sendMessage(m.chat,
                     {
@@ -844,8 +844,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                             participant: m.key.participant
                         }
                     })
-                nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n_Advertencia N° *${db.data.users[sender].link},* a la 5ta seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
 		db.data.users[sender].link += 1;
+                nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n\n_Advertencia N° *${db.data.users[sender].link},* a la 5ta seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
             }
         }
 
