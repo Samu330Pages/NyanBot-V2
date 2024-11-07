@@ -3683,45 +3683,32 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
                 break
 
             default:
-                if (isCmd && budy.startsWith('.')) {
-                    if (!command) return
-                    const allCommands = Object.values(categories)
-                        .flat()
-                        .map(cmdObj => cmdObj.command.toLowerCase());
+if (isCmd && budy.startsWith('.')) {
+    if (!command) return;
+    const allCommands = Object.values(categories)
+        .flat()
+        .map(cmdObj => cmdObj.command.toLowerCase());
 
-                    // Verificar si el comando existe
-                    if (!allCommands.includes(command)) {
-                        // Calcular similitudes
-                        const similarities = allCommands.map(availableCommand => {
-                            const similarity = calculateSimilarity(command, availableCommand);
-                            return { availableCommand, similarity };
-                        }).filter(item => item.similarity > 0.5); // Filtra similitudes mayores a 50%
+    if (!allCommands.includes(command)) {
+        const similarities = allCommands.map(availableCommand => {
+            const similarity = calculateSimilarity(command, availableCommand);
+            return { availableCommand, similarity };
+        }).filter(item => item.similarity > 0.5);
 
-                        // Mensaje de respuesta
-                        let response = `❌ *Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!*\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
+        let response = `❌ *Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!*\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
 
-                        // Crear botones para las sugerencias
-                        const buttons = similarities.map(item => ({
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: `✏️ ${item.availableCommand} (Similitud: ${Math.round(item.similarity * 100)}%)`,
-                                id: `.${item.availableCommand} ${text}` // Aquí se pone el comando corregido
-                            }),
-                        }));
+        if (similarities.length > 0) {
+            const suggestions = similarities.map(item => `- *${item.availableCommand}* _(Similitud: ${Math.round(item.similarity * 100)}%)_`).join('\n');
+            response += suggestions;
+            reply(response);
+        } else {
+            return reply(`*El comando "${command}" no existe o está mal escrito.*\n_*Para ver la lista de comandos escribe:*_ ${prefix}menu\n_*Y si deseas una explicación más detallada de cada comando escribe:*_ ${prefix}ayuda`);
+        }
 
-                        // Enviar el mensaje con los botones solo si hay sugerencias
-                        if (buttons.length > 0) {
-                            sendReplyButton(m.chat, buttons, m, {
-                                content: response
-                            });
-                        } else {
-                            // Si no hay sugerencias, enviar un mensaje simple
-                            return reply(`*El comando "${command}" no existe o está mal escrito.*`);
-                        }
-
-                        return; // Asegurarse de que no se continúe con el resto del código
-                    }
-                }
+        return;
+    }
+}
+			
                 if (budy == '🎯') {
                     totalTiro = ["failTiro", "tiro10p", "tiro30p", "tiro50p", "tiro70p", "tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
