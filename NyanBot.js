@@ -931,9 +931,11 @@ if (juegoActivoIndex !== -1) {
 
         switch (isCommand) {
 		case 'ruleta':
+		nyanBot2.sendMessage(m.chat, { react: { text: '🎡', key: m.key } });
 		const { crearRuletaGif } = require("./lib/ruleta.js");
 		const { buffer, resultado, creador } = crearRuletaGif();
-		nyanBot2.sendVideoAsSticker(from, buffer, m, { packname: global.packname, author: global.author });
+		await nyanBot2.sendVideoAsSticker(from, buffer, m, { packname: global.packname, author: global.author });
+		reply(resultado)
 		break
 
             case 'menu': {
