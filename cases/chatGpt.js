@@ -3,7 +3,7 @@ const {
 } = require('bard-api-node')
 const googleTTS = require('google-tts-api')
 
-module.exports = async function(text, m, reply, nyanBot2, sender, sendReplyButton, command, prefix, date, time) {
+module.exports = async function(text, m, reply, nyanBot2, sender, command, prefix, date, time) {
     try {
         let nombre = nyanBot2.getName(sender);
         const bard = new BardAPI();
@@ -62,15 +62,7 @@ darás información lo más detallada posible de esta solicitud: ${text}`;
 
             message = message.replace(/\*\*/g, '*');
 
-            return await sendReplyButton(m.chat, [{
-                name: "cta_copy",
-                buttonParamsJson: JSON.stringify({
-                    display_text: 'Copy response 📌',
-                    copy_code: message
-                }),
-            }], m, {
-                content: message
-            });
+            return await reply(message)
         } else {
             return await reply(`*Imposible obtener metadatos.*`);
         }
