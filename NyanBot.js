@@ -3695,14 +3695,14 @@ if (isCmd && budy.startsWith('.')) {
             return { availableCommand, similarity };
         }).filter(item => item.similarity > 0.5);
 
-        let response = `❌ *Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!*\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n`;
+        let response = `❌ *Al parecer el comando "${command}" no está disponible o quizá lo escribiste mal!*\n\nA continuación te muestro unas sugerencias de comandos parecidos y que probablemente quisiste usar! 😁\n\n`;
 
         if (similarities.length > 0) {
             const suggestions = similarities.map(item => `- *${item.availableCommand}* _(Similitud: ${Math.round(item.similarity * 100)}%)_`).join('\n');
             response += suggestions;
             reply(response);
         } else {
-            return reply(`*El comando "${command}" no existe o está mal escrito.*\n_*Para ver la lista de comandos escribe:*_ ${prefix}menu\n_*Y si deseas una explicación más detallada de cada comando escribe:*_ ${prefix}ayuda`);
+            return reply(`*El comando "${command}" no existe o está mal escrito.*\n_*Para ver la lista de comandos escribe:*_ ${prefix}menu\n\n_*Y si deseas una explicación más detallada de cada comando escribe:*_ ${prefix}ayuda`);
         }
 
         return;
