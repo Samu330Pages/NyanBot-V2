@@ -1245,7 +1245,7 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
                     .catch(error => {
                         reply(error.message);
                     });
-                nyanBot2.sendMessage(m.chat, { image: fs.readFileSync("./hd.jpg"), caption: mess.success }, { quoted: m })
+                nyanBot2.sendMessage(m.chat, { document: fs.readFileSync("./hd.jpg"), mimetype: 'image/jpg', caption: mess.success }, { quoted: m })
                 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
                 fs.unlinkSync('hd.jpg')
             }
