@@ -1036,7 +1036,7 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
                 break
 	    case 'sopa': case 'letras': case 'nuevasopa':
 		const caseSopa = require('./cases/game-soup');
-                await caseSopa(m, reply, nyanBot2, sender, command, readmore);
+                await caseSopa(m, reply, nyanBot2, sender, command, readmore, prefix);
 		break
 			
             case 'logout':
