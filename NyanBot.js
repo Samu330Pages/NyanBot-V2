@@ -432,6 +432,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             if (typeof user !== 'object') global.db.data.users[sender] = {}
             if (user) {
                 if (!('badword' in user)) user.badword = 0
+		if (!('link' in user)) user.link = 0
                 if (!('register' in user)) user.register = false
                 if (!('title' in user)) user.title = ''
                 if (!('serialNumber' in user)) user.serialNumber = randomBytes(16).toString('hex')
@@ -445,6 +446,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 serialNumber: randomBytes(5).toString('hex'),
                 title: `${isPremium ? 'Premium' : 'User'}`,
                 badword: 0,
+		link: 0,
                 nick: nyanBot2.getName(sender),
                 premium: `${isPremium ? 'true' : 'false'}`,
                 limit: limitUser,
@@ -714,13 +716,29 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             db.data.users[senderLimit].totalLimit += amount
         }
         // Grup Only
-        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup) { if (isCommand) { return reply(`No está permitido el uso del bot en privado!!`) } }
-        if (m.isGroup && !isSamu && db.data.chats[from].ban) { if (isCommand) { return } }
+        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup) {
+		if (isCommand) {
+			return reply(`No está permitido el uso del bot en privado!!`)
+		}
+	}
+        if (m.isGroup && !isSamu && db.data.chats[from].ban) {
+		if (isCommand) { return }
+	}
         // Private Only
-        if (!isSamu && db.data.settings[botNumber].onlypv && m.isGroup) { if (isCommand) { return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!") } }
+        if (!isSamu && db.data.settings[botNumber].onlypv && m.isGroup) {
+		if (isCommand) {
+			return reply("¡lo siento, pero el bot está en modo privado, si deseas usarlo, ve al chat privado!")
+		}
+	}
 
-        if (!nyanBot2.public) { if (isSamu && !m.key.fromMe) return }
-        if (db.data.settings[botNumber].online) { if (isCommand) { nyanBot2.sendPresenceUpdate('unavailable', from) } }
+        if (!nyanBot2.public) {
+		if (isSamu && !m.key.fromMe) return
+	}
+        if (db.data.settings[botNumber].online) {
+		if (isCommand) {
+			nyanBot2.sendPresenceUpdate('unavailable', from)
+		}
+	}
         if (db.data.settings[botNumber].autoread) { nyanBot2.readMessages([m.key]) }
         //auto set bio\\
         if (db.data.settings[botNumber].autobio) { nyanBot2.updateProfileStatus(`*${botname} Activo hace ${runtime(process.uptime())}*`).catch(_ => _) }
@@ -813,6 +831,10 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (isAdmins) return
                 if (m.key.fromMe) return
                 if (isSamu) return
+		if (db.data.users[sender].link == 5) {
+			db.data.users[sender].link = 0
+			return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+		}
                 await nyanBot2.sendMessage(m.chat,
                     {
                         delete: {
@@ -822,7 +844,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                             participant: m.key.participant
                         }
                     })
-                nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *ha enviado un link, el cual sé ha eliminado satisfactoriamente, porque en este grupo no está permitido el envió de links de otros grupos!!*`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
+                nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n_Advertencia N° *${db.data.users[sender].link},* a la 5ta seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
+		db.data.users[sender].link += 1;
             }
         }
 
