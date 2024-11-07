@@ -831,7 +831,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (isAdmins) return
                 if (m.key.fromMe) return
                 if (isSamu) return
-		if (db.data.users[sender].link == 5) {
+		if (db.data.users[sender].link == 4) {
 			db.data.users[sender].link = 0
 			await nyanBot2.sendMessage(m.chat,{delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
 			return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
