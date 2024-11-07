@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = async function(m, reply, nyanBot2, sender, command, readmore) {
+module.exports = async function(m, reply, nyanBot2, sender, command, readmore, prefix) {
     function obtenerPalabrasAleatorias(ruta, cantidad) {
         const data = JSON.parse(fs.readFileSync(ruta));
         const palabras = data.palabras;
