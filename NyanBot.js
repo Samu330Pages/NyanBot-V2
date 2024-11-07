@@ -1109,7 +1109,7 @@ TE DESCRIBO PARA QUE SIRVE CADA COMANDO 😁:\n`
 
             case 'bard': case 'ia': case 'ai': case 'chatgpt': case 'nyan': case 'bot':
                 const caseIa = require('./cases/chatGpt');
-                await caseIa(text, m, reply, nyanBot2, sender, sendReplyButton, command, prefix, date, time);
+                await caseIa(text, m, reply, nyanBot2, sender, command, prefix, date, time);
                 break
 			
             case 'test':
