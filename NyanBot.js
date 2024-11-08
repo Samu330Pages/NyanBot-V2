@@ -46,7 +46,7 @@ const pkg2 = require('fluid-spotify.js')
 const { Spotify } = pkg2;
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
-const { createCanvasImage } = require('./lib/canvaImg.js')
+const canvaImg = require('./lib/canvaImg.js')
 const { getOrganicData } = require('./lib/gg.js')
 const { Audd } = require('audd.io')
 const {
@@ -956,7 +956,7 @@ if (juegoActivoIndex !== -1) {
                 }
 
                 // Crear el canvas y la imagen base
-                const { canvasImage } = await createCanvasImage(nickName, userNumber, userPoints, p);
+                const canvasImage = await canvaImg.createCanvasImage(nickName, userNumber, userPoints, p);
 
                 // Configurar el mensaje del menú
                 let menuMessage = `${timeNow + nickName}\n\n> ${registrado}\n\n- *Tus puntos:* ${userPoints}\n- *Puntos usados:* ${db.data.users[sender].totalLimit}\n- *Tu dispositivo:* ${TipoDispositivo}\n`;
