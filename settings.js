@@ -27,7 +27,6 @@ global.premium = ["5219984907794"]
 global.hituet = 0
 
 //bot sett
-global.welcome = false //welcome/left in groups
 global.anticall = true //bot blocks user when called
 global.autoswview = false //auto status/story view
 global.adminevent = false //show promote/demote message
