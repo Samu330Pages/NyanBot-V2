@@ -253,6 +253,29 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                         }
                     }
                 });
+                } else if (anu.action == 'remove') {
+                    let WlcBody = `*Sa ah salido* @${num.split("@")[0]}\n> a las ${time} del ${date}`;
+                    
+                    if (countryInfo) {
+                        WlcBody += `\n\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
+                    }
+
+                    nyanBot2.sendMessage(anu.id, {
+                        text: WlcBody,
+                        contextInfo: {
+                            mentionedJid: [num],
+                            "externalAdReply": {
+                                "showAdAttribution": true,
+                                "containsAutoReply": true,
+                                "title": `${global.botname}`,
+                                "body": `${ownername}`,
+                                "previewType": "PHOTO",
+                                "thumbnailUrl": ``,
+                                "thumbnail": await getBuffer(ppuser),
+                                "sourceUrl": `${wagc}`
+                            }
+                        }
+                    });
                 }
             }
         } catch (err) {
