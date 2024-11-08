@@ -1866,19 +1866,7 @@ break
                         responseMessage += `*› Sello:* ${result.label}\n\n`;
                         responseMessage += `*› Duración:* ${result.timecode}\n\n`;
                         responseMessage += `*› Enlace de la canción:* ${result.song_link}\n\n`;
-                        const buttons = [{
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: 'Buscar en YouTube 🔴',
-                                id: `${prefix}yts ${result.title}`
-                            }),
-                        }]
-
-                        const mediaPath = '';
-
-                        return await sendReplyButton(m.chat, buttons, m, {
-                            content: responseMessage
-                        });
+                        return await reply(responseMessage)
                         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
                     } else {
                         await reply(`Error en el reconocimiento: ${recognitionResult.status}`);
