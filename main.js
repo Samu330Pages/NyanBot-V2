@@ -203,7 +203,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
-                let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
+                //let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -232,7 +232,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     }
 
                     nyanBot2.sendMessage(anu.id, {
-                        image: ppCanvas,
+                        image: ppuser,
                         caption: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
