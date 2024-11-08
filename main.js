@@ -246,7 +246,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
 
                     nyanBot2.sendMessage(anu.id, {
-                        image: await getBuffer(ppCanvas),
+                        image: await getBuffer(ppuser),
                         caption: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
