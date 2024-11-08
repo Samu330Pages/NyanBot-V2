@@ -184,7 +184,7 @@ nyanBot2.ev.on('creds.update', saveCreds)
 //farewell/welcome
 nyanBot2.ev.on('group-participants.update', async (anu) => {
     if (global.DATABASE.data.chats[anu].welcome) {
-        console.log(anu);
+        console.log(anu.id);
         try {
             let metadata = await nyanBot2.groupMetadata(anu.id);
             let participants = anu.participants;
