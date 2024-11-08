@@ -203,6 +203,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
+                let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -241,7 +242,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                                 "body": `xxx`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppuser),
+                                "thumbnail": ppCanvas,
                                 "sourceUrl": `${wagc}`
                             }
                         }
