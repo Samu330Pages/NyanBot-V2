@@ -194,15 +194,10 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 try {
                     ppuser = await nyanBot2.profilePictureUrl(num, 'image');
                 } catch (err) {
-                    ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
-                }
-                
-                try {
-                    ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image');
-                } catch (err) {
-                    ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
+                    ppuser = 'https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png';
                 }
 
+                let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -220,56 +215,43 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 }
 
                 const members = metadata.participants.length;
-                const time = moment.tz('America/Cancun').format('HH:mm:ss');
-                const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
+                const adminCount = metadata.participants.filter(participant => participant.admin).length;
+                const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
 
-                if (anu.action == 'add') {
-                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n_*Bienvenido al grupo*_\n${metadata.subject}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
-                    
-                    if (countryInfo) {
-                        WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
-                    }
+                let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
 
-                    nyanBot2.sendMessage(anu.id, {
-                        text: WlcBody,
-                        contextInfo: {
-                            mentionedJid: [num],
-                            "externalAdReply": {
-                                "showAdAttribution": true,
-                                "containsAutoReply": true,
-                                "title": `${global.botname}`,
-                                "body": `${ownername}`,
-                                "previewType": "PHOTO",
-                                "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppuser),
-                                "sourceUrl": `${wagc}`
-                            }
-                        }
-                    });
-                } else if (anu.action == 'remove') {
-                    let WlcBody = `*Sa ah salido* @${num.split("@")[0]}\n> a las ${time} del ${date}`;
-                    
-                    if (countryInfo) {
-                        WlcBody += `\n\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
-                    }
-
-                    nyanBot2.sendMessage(anu.id, {
-                        text: WlcBody,
-                        contextInfo: {
-                            mentionedJid: [num],
-                            "externalAdReply": {
-                                "showAdAttribution": true,
-                                "containsAutoReply": true,
-                                "title": `${global.botname}`,
-                                "body": `${ownername}`,
-                                "previewType": "PHOTO",
-                                "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppuser),
-                                "sourceUrl": `${wagc}`
-                            }
-                        }
-                    });
+                if (countryInfo) {
+                    WlcBody += `${countryInfo.name} ${countryInfo.emoji}\n`;
                 }
+
+                WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
+                WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitidas' : 'Permitidas'}\n`;
+                WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🚫 Ban: ${global.DATABASE.data.chats[anu.id].ban ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
+                WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
+
+                nyanBot2.sendMessage(anu.id, {
+                    text: WlcBody,
+                    contextInfo: {
+                        mentionedJid: [num],
+                        externalAdReply: {
+                            renderLargerThumbnail: true,
+                            mediaType: 1,
+                            title: `👋🏻 Bienvenido al grupo\n${metadata.subject}`,
+                            body: countryInfo ? `${countryInfo.name} ${countryInfo.emoji}` : '',
+                            thumbnail: ppCanvas,
+                            jpegThumbnail: ppCanvas,
+                            previewType: "NONE",
+                            sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                        }
+                    }
+                });
             }
         } catch (err) {
             console.log(err);
