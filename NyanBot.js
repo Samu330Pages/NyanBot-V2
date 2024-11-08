@@ -947,7 +947,7 @@ await nyanBot2.sendMessage(m.chat, {
                             externalAdReply: {
                                 renderLargerThumbnail: true,
                                 mediaType: 1,
-                                title: 🎃 ${date} 🏰,
+                                title: date,
                                 body: '',
                                 thumbnail: r,
                                 jpegThumbnail: r,
