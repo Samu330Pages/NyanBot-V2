@@ -233,12 +233,10 @@ const categories = {
         { command: 'promote', description: '_*NUM/@tag*_', help: 'Asigna administración a personas en un grupo (solo administradores).' },
         { command: 'demote', description: '_*NUM/@tag*_', help: 'Quita administración a personas en un grupo (solo administradores).' },
         { command: 'link', description: '', help: 'Obtiene el enlace de invitación del grupo.' },
-        { command: 'anti', description: '', help: 'Activa/desactiva la función de AntiGroserias en un grupo (solo administradores).' },
-        { command: 'antilink', description: '', help: 'Activa/desactiva la función de AntiGroupLink en un grupo (solo administradores).' },
-        { command: 'antibot', description: '', help: 'Activa/desactiva la función de AntiBot en un grupo (solo administradores).' },
-        { command: 'unavista', description: '', help: 'Activa/desactiva la función de UnaVista en un grupo (solo administradores).' },
-        { command: 'antiviewonce', description: '', help: 'Alias de unavista.' },
-        { command: 'banchat', description: '', help: 'Ignora comandos en un grupo (solo administradores).' },
+        { command: 'activar', description: '', help: 'Activa configuraciones en un grupo (solo administradores).' },
+        { command: 'desactivar', description: '', help: 'Desactiva configuraciones en un grupo (solo administradores).' },
+	{ command: 'abrir', description: '', help: 'Abre un grupo (solo administradores).' },
+        { command: 'cerrar', description: '', help: 'Cierra un grupo (solo administradores).' },
         { command: 'gpimg', description: '', help: 'Cambia la imagen de perfil del grupo (solo administradores).' }
     ],
     "🛠 Herramientas": [
@@ -457,6 +455,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             let chats = global.db.data.chats[from]
             if (typeof chats !== 'object') global.db.data.chats[from] = {}
             if (chats) {
+		if (!('welcome' in chats)) chats.welcome = true
                 if (!('badword' in chats)) chats.badword = false
                 if (!('antibot' in chats)) chats.antibot = false
                 if (!('antiviewonce' in chats)) chats.antiviewonce = true
@@ -465,6 +464,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('ban' in chats)) chats.ban = false
                 if (!('adminmode' in chats)) chats.adminmode = false
             } else global.db.data.chats[from] = {
+		welcome: true,
                 badword: false,
                 antibot: false,
                 antiviewonce: true,
@@ -3447,6 +3447,7 @@ case 'disable': {
 
     const action = command === 'activar' || command === 'on' || command === 'enable' ? true : false;
     const optionsMap = {
+	bienvenida: 'welcome',
         badword: 'badword',
         antibot: 'antibot',
         unavista: 'antiviewonce',
