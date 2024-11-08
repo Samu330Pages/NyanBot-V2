@@ -938,6 +938,26 @@ if (juegoActivoIndex !== -1) {
 		reply(resultado)
 		break
 
+		case 'w':
+let r = require("./lib/canvaImg").createWelcomeImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60")
+
+await nyanBot2.sendMessage(m.chat, {
+                        text: date,
+                        contextInfo: {
+                            externalAdReply: {
+                                renderLargerThumbnail: true,
+                                mediaType: 1,
+                                title: 🎃 ${date} 🏰,
+                                body: '',
+                                thumbnail: r,
+                                jpegThumbnail: r,
+                                previewType: "NONE",
+                                sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                            }
+                        }
+                    }, { quoted: m })
+			break
+
             case 'menu': {
                 nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
