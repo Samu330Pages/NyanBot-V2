@@ -203,7 +203,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
-                //let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
+                let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -232,20 +232,22 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     }
 
                     nyanBot2.sendMessage(anu.id, {
-                    text: WlcBody,
-                    contextInfo: {
-                        externalAdReply: {
-                            renderLargerThumbnail: true,
-                            mediaType: 1,
-                            title: `👋🏻 Bienvenido al grupo\n${metadata.subject}`,
-                            body: countryInfo ? `${countryInfo.name} ${countryInfo.emoji}` : '',
-                            thumbnail: ppuser,
-                            jpegThumbnail: ppuser,
-                            previewType: "NONE",
-                            sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                        image: ppCanvas,
+                        caption: WlcBody,
+                        contextInfo: {
+                            mentionedJid: [num],
+                            "externalAdReply": {
+                                "showAdAttribution": true,
+                                "containsAutoReply": true,
+                                "title": `${global.botname}`,
+                                "body": `${ownername}`,
+                                "previewType": "PHOTO",
+                                "thumbnailUrl": ``,
+                                "thumbnail": await getBuffer(ppgroup),
+                                "sourceUrl": `${wagc}`
+                            }
                         }
-                    }
-                });
+                    });
                 } else if (anu.action == 'remove') {
                     let WlcBody = `*Sa ah salido* @${num.split("@")[0]}\n> a las ${time} del ${date}`;
                     
