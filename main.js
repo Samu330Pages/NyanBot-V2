@@ -194,7 +194,13 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 try {
                     ppuser = await nyanBot2.profilePictureUrl(num, 'image');
                 } catch (err) {
-                    ppuser = 'https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png';
+                    ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+                }
+                
+                try {
+                    ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image');
+                } catch (err) {
+                    ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
                 let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
@@ -215,32 +221,19 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 }
 
                 const members = metadata.participants.length;
-                //const adminCount = metadata.participants.filter(participant => participant.admin).length;
-                //const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
+                const time = moment.tz('America/Cancun').format('HH:mm:ss');
+                const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
-                let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
+                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
+                    
+                    if (countryInfo) {
+                        WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
+                    }
 
-                if (countryInfo) {
-                    WlcBody += `${countryInfo.name} ${countryInfo.emoji}\n`;
-                }
-
-                /*WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
-                WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitidas' : 'Permitidas'}\n`;
-                WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🚫 Ban: ${global.DATABASE.data.chats[anu.id].ban ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
-                WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;*/
-
-                nyanBot2.sendMessage(anu.id, {
+                    nyanBot2.sendMessage(anu.id, {
                     text: WlcBody,
                     contextInfo: {
-                        mentionedJid: [num],
                         externalAdReply: {
                             renderLargerThumbnail: true,
                             mediaType: 1,
