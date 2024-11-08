@@ -61,7 +61,8 @@ nocache('../main.js', module => console.log(color('[ CHANGE ]', 'green'), color(
 //------------------------------------------------------
 let phoneNumber = "5219984907794"
 let owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
-const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
+const pairingCode = false;
+//const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
@@ -74,7 +75,7 @@ const {  state, saveCreds } =await useMultiFileAuthState('./session')
     const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
     const nyanBot2 = makeWASocket({
         logger: pino({ level: 'silent' }),
-        printQRInTerminal: !pairingCode, // popping up QR in terminal log
+        printQRInTerminal: true, // popping up QR in terminal log
       browser: Browsers.windows('Firefox'), // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
      auth: {
          creds: state.creds,
