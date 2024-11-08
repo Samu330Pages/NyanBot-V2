@@ -238,7 +238,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                                 "showAdAttribution": true,
                                 "containsAutoReply": true,
                                 "title": `${global.botname}`,
-                                "body": `${ownername}`,
+                                "body": `xxx`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
                                 "thumbnail": await getBuffer(ppuser),
