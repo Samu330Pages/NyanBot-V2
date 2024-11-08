@@ -220,6 +220,8 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     if (countryInfo) break;
                 }
 
+                const adminCount = metadata.participants.filter(participant => participant.admin).length;
+                const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
                 const members = metadata.participants.length;
                 const time = moment.tz('America/Cancun').format('HH:mm:ss');
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
@@ -231,8 +233,21 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
+                WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
+                WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitido' : 'Permitido'}\n`;
+                WlcBody += `🤖 Bots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🚫 Chat ban: ${global.DATABASE.data.chats[anu.id].ban ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
+                WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
+
                     nyanBot2.sendMessage(anu.id, {
-                        text: WlcBody,
+                        image: await getBuffer(ppCanvas),
+                        caption: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
                             "externalAdReply": {
@@ -242,7 +257,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                                 "body": `xxx`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppCanvas),
+                                "thumbnail": await getBuffer(ppuser),
                                 "sourceUrl": `${wagc}`
                             }
                         }
