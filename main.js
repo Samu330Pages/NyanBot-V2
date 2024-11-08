@@ -203,7 +203,6 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
-                //let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -225,15 +224,14 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
-                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
+                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n_*Bienvenido al grupo*_\n${metadata.subject}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
                     
                     if (countryInfo) {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
                     nyanBot2.sendMessage(anu.id, {
-                        image: ppuser,
-                        caption: WlcBody,
+                        text: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
                             "externalAdReply": {
@@ -243,7 +241,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                                 "body": `${ownername}`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppgroup),
+                                "thumbnail": await getBuffer(ppuser),
                                 "sourceUrl": `${wagc}`
                             }
                         }
