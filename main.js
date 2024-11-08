@@ -215,9 +215,10 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 }
 
                 const members = metadata.participants.length;
-                const adminCount = metadata.participants.filter(participant => participant.admin).length;
-                const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
+                //const adminCount = metadata.participants.filter(participant => participant.admin).length;
+                //const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
 
+                if (anu.action == 'add') {
                 let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
 
                 if (countryInfo) {
@@ -252,6 +253,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                         }
                     }
                 });
+                }
             }
         } catch (err) {
             console.log(err);
