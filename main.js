@@ -242,7 +242,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                                 "body": `xxx`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
-                                "thumbnail": ppCanvas,
+                                "thumbnail": await getBuffer(ppCanvas),
                                 "sourceUrl": `${wagc}`
                             }
                         }
