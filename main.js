@@ -16,6 +16,9 @@ const axios = require('axios')
 const _ = require('lodash')
 const moment = require('moment-timezone')
 const PhoneNumber = require('awesome-phonenumber')
+const canvaImg = require('./lib/canvaImg.js')
+const more = String.fromCharCode(8206)
+const readmore = more.repeat(4001)
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./lib/samufuncs')
 const { getAggregateVotesInPollMessage, delay, PHONENUMBER_MCC, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto, Browsers} = require("@whiskeysockets/baileys")
@@ -203,7 +206,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                 }
 
-                let ppCanvas = await require('./lib/canvaImg.js').createWelcomeImage(ppuser);
+                let ppCanvas = await canvaImg.createWelcomeImage(ppuser);
                 const phoneNumber = num.replace(/^\+/, '');
                 let countryInfo = null;
 
@@ -227,16 +230,16 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
-                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n_*Bienvenido al grupo*_\n${metadata.subject}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
+                    let WlcBody = `> *Hola* @${num.split("@")[0]\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
                     
                     if (countryInfo) {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
-                WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
+                WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
                 WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitido' : 'Permitido'}\n`;
-                WlcBody += `🤖 Bots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
+                WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
@@ -246,18 +249,18 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
 
                     nyanBot2.sendMessage(anu.id, {
-                        image: await getBuffer(ppuser),
+                        image: ppCanvas,
                         caption: WlcBody,
                         contextInfo: {
                             mentionedJid: [num],
                             "externalAdReply": {
                                 "showAdAttribution": true,
                                 "containsAutoReply": true,
-                                "title": `${global.botname}`,
-                                "body": `xxx`,
+                                "title": `👋🏻 Bienvenido al grupo`,
+                                "body": `${metadata.subject}`,
                                 "previewType": "PHOTO",
                                 "thumbnailUrl": ``,
-                                "thumbnail": await getBuffer(ppuser),
+                                "thumbnail": await getBuffer(ppgroup),
                                 "sourceUrl": `${wagc}`
                             }
                         }
