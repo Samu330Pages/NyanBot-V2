@@ -230,7 +230,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
-                    let WlcBody = `> *Hola* @${num.split("@")[0]\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
+                    let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
                     
                     if (countryInfo) {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
