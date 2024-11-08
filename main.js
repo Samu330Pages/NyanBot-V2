@@ -215,8 +215,8 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 }
 
                 const members = metadata.participants.length;
-                //const adminCount = metadata.participants.filter(participant => participant.admin).length;
-                //const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
+                const adminCount = metadata.participants.filter(participant => participant.admin).length;
+                const ephemeralDuration = metadata.ephemeralDuration ? metadata.ephemeralDuration / 86400 : null;
 
                 if (anu.action == 'add') {
                 let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\n`;
@@ -225,7 +225,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                     WlcBody += `${countryInfo.name} ${countryInfo.emoji}\n`;
                 }
 
-               /* WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
+                WlcBody += `\n*Configuraciones del Grupo:*\n\n`;
                 WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitidas' : 'Permitidas'}\n`;
                 WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
@@ -236,7 +236,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
                 WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
                 WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
-*/
+
                 nyanBot2.sendMessage(anu.id, {
                     text: WlcBody,
                     contextInfo: {
