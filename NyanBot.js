@@ -3127,7 +3127,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                 try {
                     let data = await fg.xnxxSearch(text);
 
-                    const limitedResults = data.result.slice(0, 5);
+                    const limitedResults = data.result.slice(0, 2);
 
                     let contents = [];
 
