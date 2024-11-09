@@ -3536,7 +3536,7 @@ break
                 if (!isSamu) return reply(mess.bot)
                 if (!text) return reply('e.... *y el mensaje a enviar? jeje*')
                 let bcText = `${text}\n\n\n\nDate: ${date} ${time}`
-                for (let i of Object.keys(global.db.data.chats)) {
+                for (let i of Object.keys(global.db.data.users)) {
                     await sleep(1500)
                     if (/image/.test(mime)) {
                         let media = await quoted.download()
