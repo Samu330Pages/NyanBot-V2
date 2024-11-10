@@ -1,3 +1,4 @@
+const fetch = require('node-fetch')
 const pkg = require('sanzy-spotifydl');
 const { downloadTrack, downloadAlbum, downloadPlaylist } = pkg;
 const pkg2 = require('fluid-spotify.js');
