@@ -2029,109 +2029,48 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
             }
                 break
 
+case 'mediafire': case 'mf': {
+    if (!text) return reply("*Por favor, asegúrate de incluir el link de MediaFire después del comando*");
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 50) {
+        return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    }
 
-            case 'mediafire': {
-                if (!text) return reply("*Por favor, asegúrate de incluir el link de MediaFire después del comando*");
-                if (db.data.users[sender].limit < 1) return reply(mess.limit);
-                if (db.data.users[sender].limit < 50) {
-                    return reply(`*Lo siento, pero este comando requiere 50 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
-                }
+    if (!/mediafire\.com/.test(text)) {
+        return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
+    }
 
-                if (!/mediafire\.com/.test(text)) {
-                    return reply("🛑 El enlace proporcionado no es un enlace válido de MediaFire.");
-                }
+    try {
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
 
-                try {
-                    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        let data = await require("./lib/mediafire.js").mediafireDownload(text);
 
-                    let data = await require("./lib/mediafire.js").mediafireDl(text);
-                    const filesizeMB = parseFloat(data.size);
-                    if (filesizeMB > 1000) {
-                        return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
-                    }
+        const filesizeMB = parseFloat(data.size);
+        if (filesizeMB > 1000) {
+            return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
+        }
 
-                    let mimeType;
-                    switch (data.mime.toLowerCase()) {
-                        case 'pdf': mimeType = 'application/pdf'; break;
-                        case 'doc': case 'docx': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
-                        case 'xls': case 'xlsx': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
-                        case 'ppt': case 'pptx': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
-                        case 'zip': mimeType = 'application/zip'; break;
-                        case 'rar': mimeType = 'application/x-rar-compressed'; break;
-                        case '7z': mimeType = 'application/x-7z-compressed'; break;
-                        case 'mp4': mimeType = 'video/mp4'; break;
-                        case 'mp3': mimeType = 'audio/mpeg'; break;
-                        case 'jpg': case 'jpeg': mimeType = 'image/jpeg'; break;
-                        case 'png': mimeType = 'image/png'; break;
-                        case 'gif': mimeType = 'image/gif'; break;
-                        case 'bmp': mimeType = 'image/bmp'; break;
-                        case 'svg': mimeType = 'image/svg+xml'; break;
-                        case 'txt': mimeType = 'text/plain'; break;
-                        case 'html': case 'htm': mimeType = 'text/html'; break;
-                        case 'csv': mimeType = 'text/csv'; break;
-                        case 'apk': mimeType = 'application/vnd.android.package-archive'; break;
-                        case 'exe': mimeType = 'application/vnd.microsoft.portable-executable'; break;
-                        case 'mcp': case 'mcpack': mimeType = 'application/octet-stream'; break;
-                        case 'json': mimeType = 'application/json'; break;
-                        case 'xml': mimeType = 'application/xml'; break;
-                        default: mimeType = 'application/octet-stream'; break;
-                    }
-
-                    if (mimeType === 'application/octet-stream') {
-                        const tempFilePath = path.join(__dirname, data.name);
-                        const zipFilePath = path.join(__dirname, `${data.name}.zip`);
-
-                        const fileBuffer = await fetchBuffer(data.link);
-                        fs.writeFileSync(tempFilePath, fileBuffer);
-
-                        const output = fs.createWriteStream(zipFilePath);
-                        const archive = archiver('zip', { zlib: { level: 9 } });
-
-                        output.on('close', async () => {
-                            await nyanBot2.sendMessage(m.chat, {
-                                document: fs.readFileSync(zipFilePath),
-                                fileName: `${data.name}.zip`,
-                                mimetype: 'application/zip',
-                                caption: `${forma1}MEDIAFIRE DL 🗳️${forma1}\n
-_*No se encontró extensión adecuada al documento, así que se empaquetó en un ZIP para el envío y asegurar tu documento, requerirás una aplicación para descomprimir archivos 🗄️*_\n
-*Título:* ${data.name}
+        await nyanBot2.sendMessage(m.chat, {
+            document: await fetchBuffer(data.link),
+            fileName: `${data.filename}`,
+            mimetype: `${data.mime}`,
+            caption: `
+*Título:* ${data.filename}
 *Tamaño:* ${data.size}
-*Fecha de Publicación:* ${data.date}\n
-> ${botname}`
-                            }, { quoted: m });
+*Fecha de Publicación:* ${data.uploaded}\n\n
+> Download By Samu330.com & Landen`
+        }, { quoted: m });
 
-                            // Eliminar archivos temporales
-                            fs.unlinkSync(tempFilePath);
-                            fs.unlinkSync(zipFilePath);
-                        });
-
-                        // Empaquetar en ZIP
-                        archive.pipe(output);
-                        archive.file(tempFilePath, { name: data.name });
-                        archive.finalize();
-
-                    } else {
-                        await nyanBot2.sendMessage(m.chat, {
-                            document: await fetchBuffer(data.link),
-                            fileName: `${data.name}`,
-                            mimetype: `${mimeType}`,
-                            caption: `
-*Título:* ${data.name}
-*Tamaño:* ${data.size}
-*Fecha de Publicación:* ${data.date}\n
-> ${botname}`
-                        }, { quoted: m });
-                    }
-
-                    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-                    useLimit(sender, 50)
-                } catch (error) {
-                    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-                    console.error('Error al procesar la solicitud:', error);
-                    stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
-                }
-            }
-                break
+        nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+        useLimit(sender, 50);
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
+    }
+}
+break
+            
 
             case 'mascota': {
                 let petExist = await createOrGetPet(sender);
