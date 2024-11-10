@@ -1,4 +1,5 @@
 const fg = require('api-dylux')
+const fetch = require('node-fetch')
 
 module.exports = async function(m, reply, nyanBot2, text, prefix, command, stcReac) {
     const query = text || m.quoted?.text;
