@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 
-module.exports = async function(text, m, reply, nyanBot2, sender, sendReplyButton, prefix) {
+module.exports = async function(text, m, reply, nyanBot2, sender, prefix) {
     const email = text;
     if (global.DATABASE.data.users[sender].register === true) return reply('Tus datos de sesión ya están guardados, no es necesario volver a iniciar sesión. 😊')
     if (!email) {
@@ -49,26 +49,10 @@ _*Ya puedes usar las funciones del bot que requieran registro!*_
                 })
                 reply(replyMessage);
             } else {
-                const buttons = [{
-                    name: "quick_reply",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Registro desde WhatsApp 🧩',
-                        id: `${prefix}reg`
-                    }),
-                }, {
-                    name: "cta_url",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Registro en la página 📝',
-                        url: `https://samu330.com/login`,
-                        merchant_url: `https://samu330.com/login`
-                    }),
-                }];
-                sendReplyButton(m.chat, buttons, m, {
-                    content: `> *El correo ingresado no está registrado!* 🥲
+                reply(`> *El correo ingresado no está registrado!* 🥲
 		    
 Por favor accede a la página para un registro más cómodo, o si gustas puedes registrarte directamente por WhatsApp, solo sigue los pasos y lee cuidadosamente las instrucciones! 😙
-- *Si te registras mediante WhatsApp ganaras 200 puntos!*`
-                });
+- *Si te registras mediante WhatsApp ganaras 200 puntos!*`);
             }
         })
         .catch(error => {
