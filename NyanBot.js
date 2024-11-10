@@ -396,7 +396,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                     "isForwarded": true,
                     forwardedNewsletterMessageInfo: {
                         "newsletterJid": '120363215018837468@newsletter',
-                        "newsletterName": `ᶻ 𝗓 𐰁 ${botname} 🎃`
+                        "newsletterName": `ᶻ 𝗓 𐰁 ${botname} ☃️`
                     }
                 },
                 text: teks
@@ -546,7 +546,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                     ...(media ? await prepareWAMessageMedia({
                         document: fs.readFileSync("./Media/theme/icon.png"),
                         mimetype: "image/png",
-                        fileName: "🎃 Nyan-V2 🏰",
+                        fileName: "☃️ Nyan-V2 🏰",
                         jpegThumbnail: iconBtn
                     }, { upload: nyanBot2.waUploadToServer }) : {})
                 }),
@@ -3456,7 +3456,7 @@ break
                                 "externalAdReply": {
                                     "showAdAttribution": true,
                                     "containsAutoReply": true,
-                                    "title": `🎃 ${botname} 🏰`,
+                                    "title": `☃️ ${botname} 🏰`,
                                     "body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
                                     "previewType": "PHOTO",
                                     "thumbnailUrl": ``,
@@ -3474,7 +3474,7 @@ break
                                 "externalAdReply": {
                                     "showAdAttribution": true,
                                     "containsAutoReply": true,
-                                    "title": `🎃 ${botname} 🏰`,
+                                    "title": `☃️ ${botname} 🏰`,
                                     "body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
                                     "previewType": "PHOTO",
                                     "thumbnailUrl": ``,
@@ -3490,7 +3490,7 @@ break
                                 "externalAdReply": {
                                     "showAdAttribution": true,
                                     "containsAutoReply": true,
-                                    "title": `🎃 ${botname} 🏰`,
+                                    "title": `☃️ ${botname} 🏰`,
                                     "body": '¡Este mensaje ha sido enviado masivamente a cada chat registrado en lista! ⚠️',
                                     "previewType": "PHOTO",
                                     "thumbnailUrl": ``,
@@ -3923,7 +3923,7 @@ ${forma1}╰────▵────╯${forma1}\n\n`;
                                 break;
                         }
                     } else {
-                        msgSlot += '*Suerte la próxima!* 🎃';
+                        msgSlot += '*Suerte la próxima!* ☃️';
                     }
 
                     db.data.users[sender].limit += puntos;
