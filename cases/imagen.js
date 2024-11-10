@@ -46,7 +46,7 @@ module.exports = async function(m, reply, nyanBot2, text, prefix, command, stcRe
             }
         });
         console.error('Error en la búsqueda de imágenes:', error);
-        reply(error)
+        reply(`${error}`)
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 };
