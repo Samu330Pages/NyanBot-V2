@@ -5,6 +5,7 @@ const pkg2 = require('fluid-spotify.js');
 const { Spotify } = pkg2;
 const Archiver = require('archiver');
 const { Readable } = require('stream');
+const forma1 = '`'
 
 module.exports = async function(m, reply, text, nyanBot2) {
     if (!text) return reply(`*Por favor, proporciona un enlace de Spotify válido o el nombre de una canción.*`);
@@ -17,10 +18,11 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 nyanBot2.sendMessage(m.chat, { react: { text: '📂', key: m.key } });
                 const album = await downloadAlbum(isSpotifyUrl[0]);
                 const img = await (await fetch(`${album.metadata.cover}`)).buffer();
-                let spotifyInfo = `*Album:* ${album.metadata.title}\n`;
+                let spotifyInfo = `${forma1}SPOTIFY ALBUM 📃${forma1}\n*Album:* ${album.metadata.title}\n`;
                 spotifyInfo += `*Artistas:* ${album.metadata.artists}\n`;
                 spotifyInfo += `*Fecha de lanzamiento:* ${album.metadata.releaseDate}\n`;
-                spotifyInfo += `*Número de pistas:* ${album.trackList.length}\n\n`;
+                spotifyInfo += `*Número de pistas:* ${album.trackList.length}\n\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios del Album en un archivo ZIP*_ ⚠️\n`;
+                spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
@@ -96,13 +98,13 @@ module.exports = async function(m, reply, text, nyanBot2) {
             } else if (isSpotifyUrl[2] === 'playlist') {
                 nyanBot2.sendMessage(m.chat, { react: { text: '📝', key: m.key } });
                 const infos = new Spotify({ clientID: "7fb26a02133d463da465671222b9f19b", clientSecret: "d4e6f8668f414bb6a668cc5c94079ca1" });
-                await reply(JSON.stringify(infos, null, 2))
                 const playlistId = isSpotifyUrl[0].split('/').pop();
                 const playlistInfoByID = await infos.getPlaylist(playlistId);
                 const tracks = playlistInfoByID.tracks.items;
                 const img = await (await fetch(`${playlistInfoByID.images[0].url}`)).buffer();
-                let spotifyInfo = `*Playlist:* ${playlistInfoByID.name}\n`;
-                spotifyInfo += `*Número de pistas:* ${tracks.length}\n`;
+                let spotifyInfo = `${forma1}SPOTIFY PLAYLIST 📃${forma1}\n*- Playlist:* ${playlistInfoByID.name}\n`;
+                spotifyInfo += `- *Número de pistas:* ${tracks.length}\n\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios de la Playlist en un archivo ZIP*_ ⚠️\n\n`;
+                spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
