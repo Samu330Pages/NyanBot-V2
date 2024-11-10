@@ -205,6 +205,7 @@ const categories = {
         { command: 'ytmp3', description: '_*URL*_', help: 'Alias de yta.' },
         { command: 'ytv', description: '_*URL*_', help: 'Descargar videos de YouTube con link.' },
         { command: 'ytmp4', description: '_*URL*_', help: 'Alias de ytv.' },
+	{ command: 'spotify', description: '_*URL/BUSQUEDA*_', help: 'Descarga música de Spotify, álbum, playlist y realiza búsqueda.' },
         { command: 'tiktok', description: '_*URL*_', help: 'Descarga videos/imágenes junto con el audio de TikTok.' },
         { command: 'tt', description: '_*URL*_', help: 'Alias de tiktok.' },
         { command: 'twiter', description: '', help: 'Descarga videos/imágenes de Twitter (X).' },
@@ -258,6 +259,8 @@ const categories = {
     "⚙ Bot": [
         { command: 'actualizar', description: '', help: 'Actualiza el Bot a la versión más reciente (Solo Bot).' },
         { command: 'update', description: '', help: 'Alias de actualizar.' },
+	{ command: 'priv', description: '', help: 'Permite el uso en chats privados (para cuando el bot esté en modo solo grupos).' },
+	{ command: 'nopriv', description: '', help: 'Prohíbe el uso en chats privados (para cuando el bot esté en modo solo grupos).' },
         { command: 'broadcast', description: '', help: 'Envía mensajes masivos a todos los chats (Solo Bot).' },
         { command: 'limpiar', description: '', help: 'Libera memoria (Solo Bot).' },
         { command: '<=', description: '_*EVAL*_', help: 'Eval con return.' },
@@ -977,7 +980,7 @@ if (juegoActivoIndex !== -1) {
 
             case 'spotify': case 'sp': case 'downloadspotify':
                 const caseSpotify = require('./cases/spotify');
-                await caseSpotify(m, reply, text, nyanBot2);
+                await caseSpotify(m, reply, text, nyanBot2, reSize);
                 break
 
 	    case 'tourl': {
