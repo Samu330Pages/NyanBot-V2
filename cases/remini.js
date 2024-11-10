@@ -1,6 +1,9 @@
 const {
     remini
 } = require('../lib/remini')
+const {
+    resizeImage
+} = require('../lib/converter')
 const fs = require('fs')
 
 module.exports = async function(m, reply, nyanBot2, prefix, command, quoted, mime) {
