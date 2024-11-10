@@ -275,14 +275,6 @@ let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
 //let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
-//media
-const VoiceNoteNyan = JSON.parse(fs.readFileSync('./Media/database/vn.json'))
-const Stickers = JSON.parse(fs.readFileSync('./Media/database/stickers.json'))
-const ImageNyan = JSON.parse(fs.readFileSync('./Media/database/image.json'))
-const VideoNyan = JSON.parse(fs.readFileSync('./Media/database/video.json'))
-const DocNyan = JSON.parse(fs.readFileSync('./Media/database/doc.json'))
-const ZipNyan = JSON.parse(fs.readFileSync('./Media/database/zip.json'))
-const ApkNyan = JSON.parse(fs.readFileSync('./Media/database/apk.json'))
 
 const verifieduser = JSON.parse(fs.readFileSync('./src/data/role/user.json'))
 
@@ -414,7 +406,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		if (!('link' in user)) user.link = 0
                 if (!('register' in user)) user.register = false
                 if (!('title' in user)) user.title = ''
-                if (!('serialNumber' in user)) user.serialNumber = randomBytes(16).toString('hex')
+		if (!('priv' in user)) user.priv = false
+                if (!('serialNumber' in user)) user.serialNumber = randomBytes(5).toString('hex')
                 if (!('nick' in user)) user.nick = nyanBot2.getName(sender)
                 if (!('lastClaim' in user)) user.lastClaim = null
                 if (!isPremium) user.premium = false
@@ -424,6 +417,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 register: false,
                 serialNumber: randomBytes(5).toString('hex'),
                 title: `${isPremium ? 'Premium' : 'User'}`,
+		priv: false,
                 badword: 0,
 		link: 0,
                 nick: nyanBot2.getName(sender),
@@ -698,6 +692,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
         // Grup Only
         if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup) {
+		if (db.data.users[sender].priv) { return }
 		if (isCommand) {
 			return reply(`*No está permitido el uso del bot en privado!!*\n\n*Si desea utilizar el bot únase al grupo oficial 🙃*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1`)
 		}
@@ -767,7 +762,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 
 
         if (db.data.chats[m.chat].antibot) {
-            if (m.sender === '51960134974@s.whatsapp.net') {
+            if (m.sender === '0@s.whatsapp.net') {
                 return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
             }
         }
@@ -3179,6 +3174,16 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
                 }
                 break
 
+	    case 'priv':
+                const casePriv = require('./cases/privado-permiso');
+                await casePriv(m, reply, sender, text, isSamu);
+                break
+
+	    case 'nopriv':
+                const caseNoPriv = require('./cases/privado-denegado');
+                await caseNoPriv(m, reply, sender, text, isSamu);
+                break
+			
             case 'kick': case 'eliminar':
                 if (!m.isGroup) return reply(mess.group)
                 if (!isAdmins) return reply(mess.admin)
