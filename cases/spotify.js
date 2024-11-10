@@ -4,7 +4,7 @@ const { downloadTrack, downloadAlbum } = pkg;
 const pkg2 = require('fluid-spotify.js');
 const { Spotify } = pkg2;
 const Archiver = require('archiver');
-const { Buffer } = require('buffer');
+const { Readable } = require('stream');
 
 module.exports = async function(m, reply, text, nyanBot2) {
     if (!text) return reply(`*Por favor, proporciona un enlace de Spotify válido o el nombre de una canción.*`);
@@ -45,16 +45,21 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 const tracksToDownload = album.trackList.slice(0, 5);
 
                 for (let track of tracksToDownload) {
-                    buffers.push(track.audioBuffer);
+                    const audioBuffer = await track.audioBuffer;
+                    buffers.push({ name: `${track.metadata.name}.mp3`, buffer: audioBuffer });
                 }
 
                 archive.on('error', (err) => {
                     throw err;
                 });
 
-                for (let i = 0; i < tracksToDownload.length; i++) {
-                    archive.append(tracksToDownload[i].audioBuffer, { name: `${tracksToDownload[i].metadata.name}.mp3` });
+                for (let { name, buffer } of buffers) {
+                    const stream = new Readable();
+                    stream.push(buffer);
+                    stream.push(null);
+                    archive.append(stream, { name });
                 }
+
                 archive.finalize();
 
                 await nyanBot2.sendMessage(m.chat, {
@@ -115,16 +120,20 @@ module.exports = async function(m, reply, text, nyanBot2) {
 
                 for (let track of tracksToDownload) {
                     const trackInfo = await downloadTrack(track.track.external_urls.spotify);
-                    buffers.push(trackInfo.audioBuffer);
+                    buffers.push({ name: `${track.track.name}.mp3`, buffer: trackInfo.audioBuffer });
                 }
 
                 archive.on('error', (err) => {
                     throw err;
                 });
 
-                for (let i = 0; i < tracksToDownload.length; i++) {
-                    archive.append(tracksToDownload[i].audioBuffer, { name: `${tracksToDownload[i].track.name}.mp3` });
+                for (let { name, buffer } of buffers) {
+                    const stream = new Readable();
+                    stream.push(buffer);
+                    stream.push(null);
+                    archive.append(stream, { name });
                 }
+
                 archive.finalize();
 
                 await nyanBot2.sendMessage(m.chat, {
@@ -169,6 +178,6 @@ module.exports = async function(m, reply, text, nyanBot2) {
         }
     } catch (error) {
         console.error(error);
-        return reply(`*Ocurrió un error al procesar tu solicitud. Intenta nuevamente.*\n${error}`);
+        return reply(`*Ocurrió un error al procesar tu solicitud. Intenta nuevamente.*${error}`);
     }
 };
