@@ -930,7 +930,7 @@ break
                 break
 		
 		case 'ayuda': case 'help':
-                const caseAyuda = require('./cases/menu');
+                const caseAyuda = require('./cases/ayuda');
                 await caseAyuda(m, reply, sender, prefix, categories);
                 break
 
