@@ -6,8 +6,8 @@ const {
     runtime
 } = require('../lib/samufuncs')
 moment.locale('es');
-const time = moment().tz('America/Cancun').format('HH:mm:ss');
-const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
+const time = moment().tz('America/Panama').format('HH:mm:ss');
+const date = moment().tz('America/Panama').format('DD/MM/YYYY');
 if (time < "23:59:00") {
     var timeNow = `❄️ Buenas noches `
 }
