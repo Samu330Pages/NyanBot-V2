@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const yts = require('yt-search');
+const forma1 = '`';
 
 module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, nyanBot2, formatNumber, prefix, readmore) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
@@ -19,10 +20,11 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
                     `- *Duración:* ${video.timestamp}\n` +
                     `- *Autor:* ${video.author.name}\n` +
                     `- *Vistas:* ${formatNumber(video.views)}\n\n` +
-                    `*Instrucciones de descarga:*\n\n` +
-                    `Etiqueta con "v" para descargar el video.\n` +
-                    `Etiqueta con "a" para descargar el audio.\n\n` +
-                    `${readmore}Link: ${video.url}`;
+                    `*⚠️ Instrucciones de descarga:*\n` +
+                    `_Etiqueta este mensaje con la opción correspondiente al formato que deseas descargar_ 📂.\n\n` +
+                    `Etiqueta con ${forma1}v${forma1} para descargar el video.\n` +
+                    `Etiqueta con ${forma1}a${forma1} para descargar el audio.\n\n` +
+                    `${readmore}Link: ~${video.url}~`;
 
     await nyanBot2.sendMessage(m.chat, {
         image: await (await fetch(video.thumbnail)).buffer(),
