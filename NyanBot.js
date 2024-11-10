@@ -1996,12 +1996,10 @@ _*No se encontró extensión adecuada al documento, así que se empaquetó en un
 > ${botname}`
                             }, { quoted: m });
 
-                            // Eliminar archivos temporales
                             fs.unlinkSync(tempFilePath);
                             fs.unlinkSync(zipFilePath);
                         });
 
-                        // Empaquetar en ZIP
                         archive.pipe(output);
                         archive.file(tempFilePath, { name: data.fileName });
                         archive.finalize();
@@ -2051,7 +2049,7 @@ case 'mediafire': case 'mf': {
         }
 
         await nyanBot2.sendMessage(m.chat, {
-            document: await fetchBuffer(data.link),
+            document: {url: data.link},
             fileName: `${data.filename}`,
             mimetype: `${data.mime}`,
             caption: `
@@ -2066,6 +2064,7 @@ case 'mediafire': case 'mf': {
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
+	reply(`${error}`)
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
 }
