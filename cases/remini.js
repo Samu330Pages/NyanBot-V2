@@ -36,5 +36,4 @@ nyanBot2.sendMessage(m.chat, {
     }
 });
 fs.unlinkSync('hd.jpg')
-}
 };
