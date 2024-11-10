@@ -5,7 +5,7 @@ const {
     createUserWithEmailAndPassword
 } = require('firebase/auth')
 
-module.exports = async function(text, m, reply, nyanBot2, sender, command, sendReplyButton, sendCarousel, prefix, isGroup) {
+module.exports = async function(text, m, reply, nyanBot2, sender, command, sendCarousel, prefix, isGroup) {
     const comilla = '`'
     if (global.DATABASE.data.users[sender].register === true) return reply('*Ya tienes cuenta registrada y as iniciado sesión, no es necesario registrarte!*')
     if (isGroup) {
@@ -106,18 +106,9 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
         })
         .then(data => {
             if (data.IsEmailRegistered) {
-                const buttons = [{
-                    name: "quick_reply",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Iniciar sesión! 🔐',
-                        id: `${prefix}login ${data.Result}`
-                    }),
-                }];
-                sendReplyButton(m.chat, buttons, m, {
-                    content: `*El correo ingresado ya está registrado.*\n\n_Nombre de usuario:_ ${data.User}\n_UID:_ ${data.UID}
+                reply(`*El correo ingresado ya está registrado.*\n\n_Nombre de usuario:_ ${data.User}\n_UID:_ ${data.UID}
 		    
-*Si deseas puedes iniciar sesión con el correo que proporcionaste, solo toca el botón de abajo!*`
-                });
+*Si deseas puedes iniciar sesión con el correo que proporcionaste, solo toca el botón de abajo!*`);
                 nyanBot2.sendMessage(m.chat, {
                     react: {
                         text: '⚠',
@@ -144,20 +135,10 @@ module.exports = async function(text, m, reply, nyanBot2, sender, command, sendR
         .then(data => {
             if (data) {
                 global.DATABASE.data.users[sender].register = true
-                const buttons = [{
-                    name: "cta_url",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: 'Ya puedes iniciar sesión en la página! 🏷',
-                        url: `https://samu330.com/login`,
-                        merchant_url: `https://samu330.com/login`
-                    }),
-                }];
-                sendReplyButton(m.chat, buttons, m, {
-                    content: `Usuario registrado con éxito!\n\n*Email: ${data.Result}*\n*UID: ${data.UID}*
+                reply(`Usuario registrado con éxito!\n\n*Email: ${data.Result}*\n*UID: ${data.UID}*
 		    
 _*Felicidades, has ganado 200 puntos! 🎁*_\n
-_Tu sesión sé ha guardado en la base de datos del bot! 😸_`
-                });
+_Tu sesión sé ha guardado en la base de datos del bot! 😸_`);
                 nyanBot2.sendMessage(m.chat, {
                     react: {
                         text: '💚',
