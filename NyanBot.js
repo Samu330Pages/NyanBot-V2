@@ -2708,6 +2708,7 @@ _*Asi que si estás dispuesto a cargar esa responsabilidad, selecciona el tipo d
 
 
             case 'buscarsticker': {
+		return reply('*EN MANTENIMIENTO*')
                 if (!text) return reply("*Escribe después del comando el tipo de stickers que desees*");
 
                 try {
