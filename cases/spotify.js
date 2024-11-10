@@ -22,7 +22,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 spotifyInfo += `*Artistas:* ${album.metadata.artists}\n`;
                 spotifyInfo += `*Fecha de lanzamiento:* ${album.metadata.releaseDate}\n`;
                 spotifyInfo += `*Número de pistas:* ${album.trackList.length}\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios del Album en un archivo ZIP*_ ⚠️\n`;
-                spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
+                spotifyInfo += `🛑 *¡Porfavor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
@@ -105,7 +105,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 const img = await (await fetch(`${playlistInfoByID.images[0].url}`)).buffer();
                 let spotifyInfo = `${forma1}SPOTIFY PLAYLIST 📃${forma1}\n- *Playlist:* ${playlistInfoByID.name}\n`;
                 spotifyInfo += `- *Número de pistas:* ${tracks.length}\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios de la Playlist en un archivo ZIP*_ ⚠️\n\n`;
-                spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
+                spotifyInfo += `🛑 *¡Porfavor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
