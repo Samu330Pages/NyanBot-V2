@@ -1,6 +1,6 @@
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
 const pkg = require('sanzy-spotifydl');
-const { downloadTrack, downloadAlbum, downloadPlaylist } = pkg;
+const { downloadTrack, downloadAlbum } = pkg;
 const pkg2 = require('fluid-spotify.js');
 const { Spotify } = pkg2;
 const Archiver = require('archiver');
@@ -42,18 +42,19 @@ module.exports = async function(m, reply, text, nyanBot2) {
 
                 const archive = Archiver('zip');
                 const buffers = [];
+                const tracksToDownload = album.trackList.slice(0, 5);
 
-                for (let track of album.trackList) {
+                for (let track of tracksToDownload) {
                     buffers.push(track.audioBuffer);
                 }
-
-                const zipBuffer = Buffer.concat(buffers);
 
                 archive.on('error', (err) => {
                     throw err;
                 });
 
-                archive.append(zipBuffer, { name: `${album.metadata.title}.zip` });
+                for (let i = 0; i < tracksToDownload.length; i++) {
+                    archive.append(tracksToDownload[i].audioBuffer, { name: `${tracksToDownload[i].metadata.name}.mp3` });
+                }
                 archive.finalize();
 
                 await nyanBot2.sendMessage(m.chat, {
@@ -65,7 +66,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
             } else if (isSpotifyUrl[2] === 'track') {
                 nyanBot2.sendMessage(m.chat, { react: { text: '🎶', key: m.key } });
                 const track = await downloadTrack(isSpotifyUrl[1]);
-                const img = await fetchBuffer(track.imageUrl);
+                const img = await (await fetch(track.imageUrl)).buffer();
                 let spotifyInfo = `*Título:* ${track.title}\n`;
                 spotifyInfo += `*Artistas:* ${track.artists}\n`;
                 spotifyInfo += `*Duración:* ${track.duration}\n`;
@@ -110,19 +111,20 @@ module.exports = async function(m, reply, text, nyanBot2) {
 
                 const archive = Archiver('zip');
                 const buffers = [];
+                const tracksToDownload = tracks.slice(0, 5);
 
-                for (let track of tracks) {
+                for (let track of tracksToDownload) {
                     const trackInfo = await downloadTrack(track.track.external_urls.spotify);
                     buffers.push(trackInfo.audioBuffer);
                 }
-
-                const zipBuffer = Buffer.concat(buffers);
 
                 archive.on('error', (err) => {
                     throw err;
                 });
 
-                archive.append(zipBuffer, { name: `${playlistInfoByID.name}.zip` });
+                for (let i = 0; i < tracksToDownload.length; i++) {
+                    archive.append(tracksToDownload[i].audioBuffer, { name: `${tracksToDownload[i].track.name}.mp3` });
+                }
                 archive.finalize();
 
                 await nyanBot2.sendMessage(m.chat, {
