@@ -959,7 +959,7 @@ if (juegoActivoIndex !== -1) {
 
             case 'pins': case 'pinterest': case 'pin': case 'pinsearch':
                 const casePinterest = require('./cases/pinterest');
-                await casePinterest(m, reply, nyanBot2, text, prefix, command, sendCarousel, stcRea);
+                await casePinterest(m, reply, nyanBot2, text, prefix, command, sendCarousel, stcReac);
                 break
 
             case 'img':
