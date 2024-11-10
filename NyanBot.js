@@ -977,7 +977,7 @@ if (juegoActivoIndex !== -1) {
 
             case 'spotify': case 'sp': case 'downloadspotify':
                 const caseSpotify = require('./cases/spotify');
-                await caseSpotify(m, reply, text, nyanBot2e);
+                await caseSpotify(m, reply, text, nyanBot2);
                 break
 
 	    case 'tourl': {
