@@ -970,7 +970,7 @@ if (juegoActivoIndex !== -1) {
                 break
 
             case 'color': case 'recolor':
-                const caseColor = require('./cases/imagen');
+                const caseColor = require('./cases/color');
                 await caseColor(m, reply, nyanBot2, prefix, command, quoted, mime);
                 break
 
