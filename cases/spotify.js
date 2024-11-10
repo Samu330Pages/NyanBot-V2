@@ -21,7 +21,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 let spotifyInfo = `${forma1}SPOTIFY ALBUM 📃${forma1}\n*Album:* ${album.metadata.title}\n`;
                 spotifyInfo += `*Artistas:* ${album.metadata.artists}\n`;
                 spotifyInfo += `*Fecha de lanzamiento:* ${album.metadata.releaseDate}\n`;
-                spotifyInfo += `*Número de pistas:* ${album.trackList.length}\n\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios del Album en un archivo ZIP*_ ⚠️\n`;
+                spotifyInfo += `*Número de pistas:* ${album.trackList.length}\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios del Album en un archivo ZIP*_ ⚠️\n`;
                 spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
@@ -74,6 +74,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 await nyanBot2.sendMessage(m.chat, {
                     document: zipBuffer,
                     fileName: `${album.metadata.title}.zip`,
+                    caption: `*Este archivo contiene 5 audios del Album, descomprime y disfruta* 😊\n\n> Downloads By Samu330.com`,
                     mimetype: 'application/zip'
                 }, { quoted: m });
 
@@ -102,8 +103,8 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 const playlistInfoByID = await infos.getPlaylist(playlistId);
                 const tracks = playlistInfoByID.tracks.items;
                 const img = await (await fetch(`${playlistInfoByID.images[0].url}`)).buffer();
-                let spotifyInfo = `${forma1}SPOTIFY PLAYLIST 📃${forma1}\n*- Playlist:* ${playlistInfoByID.name}\n`;
-                spotifyInfo += `- *Número de pistas:* ${tracks.length}\n\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios de la Playlist en un archivo ZIP*_ ⚠️\n\n`;
+                let spotifyInfo = `${forma1}SPOTIFY PLAYLIST 📃${forma1}\n- *Playlist:* ${playlistInfoByID.name}\n`;
+                spotifyInfo += `- *Número de pistas:* ${tracks.length}\n\n⚠️ _*Por comodidad y eficiencia, se enviarán solamente los primero 5 audios de la Playlist en un archivo ZIP*_ ⚠️\n\n`;
                 spotifyInfo += `🛑 *¡Porfavaor espere a que reciba una respuesta, este proceso puede tardar mucho, no sature al bot! Evite ser penalizado!* 🛑`;
 
                 await nyanBot2.sendMessage(m.chat, {
@@ -156,6 +157,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 await nyanBot2.sendMessage(m.chat, {
                     document: zipBuffer,
                     fileName: `${playlistInfoByID.name}.zip`,
+                    caption: `*Este archivo contiene 5 audios de la Playlist, descomprime y disfruta* 😊\n\n> Downloads By Samu330.com`,
                     mimetype: 'application/zip'
                 }, { quoted: m });
             }
