@@ -137,7 +137,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 archive.finalize();
 
                 await nyanBot2.sendMessage(m.chat, {
-                    document: archive,
+                    document: `${archive}`,
                     fileName: `${playlistInfoByID.name}.zip`,
                     mimetype: 'application/zip'
                 }, { quoted: m });
