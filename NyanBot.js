@@ -976,7 +976,7 @@ if (juegoActivoIndex !== -1) {
 
             case 'remini': case 'hd':
 		const caseRemini = require('./cases/remini');
-                await caseRemini(m, reply, nyanBot2, prefix, command, quoted, mime);
+                await caseRemini(m, reply, nyanBot2, prefix, command, quoted, mime, date);
                 break
 
             case 'spotify': case 'sp': case 'downloadspotify': {
