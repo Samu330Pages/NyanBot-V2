@@ -924,7 +924,7 @@ let r = await canvaImg.createWelcomeImage("https://cdn.pixabay.com/photo/2015/10
 await nyanBot2.sendMessage(m.chat, {image: r}, { quoted: m })
 break
 
-            case 'menu': case 'comandos'
+            case 'menu': case 'comandos':
                 const caseMenu = require('./cases/menu');
                 await caseMenu(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber);
                 break
