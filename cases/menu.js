@@ -1,3 +1,4 @@
+const moment = require('moment-timezone')
 const canvaImg = require('./lib/canvaImg.js')
 const {
     WAVersion,
