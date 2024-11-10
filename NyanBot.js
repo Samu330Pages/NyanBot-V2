@@ -999,92 +999,67 @@ if (juegoActivoIndex !== -1) {
             break
 
             case 'buscar': case 'gg': case 'google': {
-                if (!text) {
-                    return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
-                }
-                let gglId;
-                gglId = reactionLoad(m.chat, m.key);
-                const options = {
-                    page: 0,
-                    safe: false,
-                    parse_ads: false,
-                    additional_params: {
-                        hl: 'es' // Configurar idioma a español
-                    }
-                };
+    if (!text) {
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
+    }
+    let gglId;
+    gglId = reactionLoad(m.chat, m.key);
+    const options = {
+        page: 0,
+        safe: false,
+        parse_ads: false,
+        additional_params: {
+            hl: 'es' // Configurar idioma a español
+        }
+    };
 
-                try {
-                    // Primer intento: búsqueda con la librería de Google
-                    const response = await google.search(`${text}`, options);
+    try {
+        const response = await google.search(`${text}`, options);
 
-                    // Inicializar variable de contenido
-                    let content = '';
+        let content = '';
 
-                    // Intentar obtener datos de la búsqueda de Google
-                    if (response.knowledge_panel.description) {
-                        content += `*📝 Descripción:* ${response.knowledge_panel.description}\n\n`;
-                    }
+        if (response.knowledge_panel.description) {
+            content += `*📝 Descripción:* ${response.knowledge_panel.description}\n\n`;
+        }
 
-                    if (response.knowledge_panel.url) {
-                        content += `*📌 URL:* ${response.knowledge_panel.url}\n\n`;
-                    }
+        if (response.knowledge_panel.url) {
+            content += `*📌 URL:* ${response.knowledge_panel.url}\n\n`;
+        }
 
-                    // Incluir metadatos si existen
-                    if (response.knowledge_panel.metadata.length > 0) {
-                        content += `*📂 Información importante:*\n`;
-                        response.knowledge_panel.metadata.forEach(item => {
-                            content += `- ${item.title}: ${item.value}\n`;
-                        });
-                    }
+        if (response.knowledge_panel.metadata.length > 0) {
+            content += `*📂 Información importante:*\n`;
+            response.knowledge_panel.metadata.forEach(item => {
+                content += `- ${item.title}: ${item.value}\n`;
+            });
+        }
 
-                    // Obtener datos de la nueva función si hay resultados
-                    const organicData = await getOrganicData(text);
-                    if (organicData.length > 0) {
-                        content += `\n*Resultados de búsqueda orgánica:*\n\n`;
-                        organicData.forEach(result => {
-                            content += `\n⬦ *Título:*\n> ${result.title}\n\n⬦ *Snippet:*\n> ${result.snippet}\n\n───✁–––`;
-                        });
-                    } else {
-                        content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
-                    }
+        const organicData = await getOrganicData(text);
+        if (organicData.length > 0) {
+            content += `\n*Resultados de búsqueda orgánica:*\n\n`;
+            organicData.forEach(result => {
+                content += `\n⬦ *Título:*\n> ${result.title}\n\n⬦ *Snippet:*\n> ${result.snippet}\n\n───✁–––`;
+            });
+        } else {
+            content += `\nNo se encontraron resultados en la búsqueda orgánica.\n`;
+        }
 
-                    // Crear botones con preguntas frecuentes
-                    const buttons = response.people_also_ask.map(pregunta => ({
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: `❓ ${pregunta}`,
-                            id: `${prefix}google ${pregunta}` // ID para manejar la respuesta al pulsar el botón
-                        }),
-                    }));
-                    const customButton = {
-                        name: "cta_url",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '🔗 Más información...',
-                            url: `https://www.google.com/search?q=${text}`
-                        }),
-                    };
-                    buttons.push(customButton);
+        if (response.people_also_ask.length > 0) {
+            content += `\n*Preguntas frecuentes:*\n`;
+            response.people_also_ask.forEach(pregunta => {
+                content += `> ❓ ${pregunta}\n`;
+            });
+        }
 
-                    // Enviar el mensaje con los botones solo si hay preguntas frecuentes
-                    if (buttons.length > 0) {
-                        // Enviar el mensaje con los botones
-                        sendReplyButton(m.chat, buttons, m, {
-                            content: content || 'No se encontró información relevante.',
-                            media: fs.readFileSync('./Media/theme/google.jpg')
-                        });
-                        reactionOk(m.chat, m.key, gglId);
-                    } else {
-                        reactionError(m.chat, m.key, gglId);
-                        await reply(`${content || 'No se encontró información relevante.'}`);
-                    }
+        await reply(content || 'No se encontró información relevante.');
+        reactionOk(m.chat, m.key, gglId);
 
-                } catch (error) {
-                    reactionError(m.chat, m.key, gglId);
-                    console.error('Error en la búsqueda de Google:', error);
-                    stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
-                }
-            }
-                break
+    } catch (error) {
+        reactionError(m.chat, m.key, gglId);
+        console.error('Error en la búsqueda de Google:', error);
+        await reply(`_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
+    }
+}
+break
 
             case 'letra':
             case 'lyrics': {
