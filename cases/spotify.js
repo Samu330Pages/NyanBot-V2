@@ -82,11 +82,11 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 nyanBot2.sendMessage(m.chat, { react: { text: '🎶', key: m.key } });
                 const track = await downloadTrack(isSpotifyUrl[1]);
                 const img = await (await fetch(track.imageUrl)).buffer();
-                let spotifyInfo = `*Título:* ${track.title}\n`;
-                spotifyInfo += `*Artistas:* ${track.artists}\n`;
-                spotifyInfo += `*Duración:* ${track.duration}\n`;
-                spotifyInfo += `*Álbum:* ${track.album.name}\n`;
-                spotifyInfo += `*Fecha de lanzamiento:* ${track.album.releasedDate}\n`;
+                let spotifyInfo = `${forma1}SPOTIFY DOWNLOADER 🗃️${forma1}\n- *Título:* ${track.title}\n`;
+                spotifyInfo += `- *Artistas:* ${track.artists}\n`;
+                spotifyInfo += `- *Duración:* ${track.duration}\n`;
+                spotifyInfo += `- *Álbum:* ${track.album.name}\n`;
+                spotifyInfo += `- *Fecha de lanzamiento:* ${track.album.releasedDate}\n\n> Downloaded By Samu330.com`;
 
                 await nyanBot2.sendMessage(m.chat, {
                     document: track.audioBuffer,
@@ -165,11 +165,11 @@ module.exports = async function(m, reply, text, nyanBot2) {
             nyanBot2.sendMessage(m.chat, { react: { text: '⌛', key: m.key } });
             const searchTrack = await downloadTrack(text);
             const img = await (await fetch(`${searchTrack.imageUrl}`)).buffer();
-            let spotifyInfo = `*Título:* ${searchTrack.title}\n`;
-            spotifyInfo += `*Artistas:* ${searchTrack.artists}\n`;
-            spotifyInfo += `*Duración:* ${searchTrack.duration}\n`;
-            spotifyInfo += `*Álbum:* ${searchTrack.album.name}\n`;
-            spotifyInfo += `*Fecha de lanzamiento:* ${searchTrack.album.releasedDate}\n`;
+            let spotifyInfo = `${forma1}SPOTIFY SEARCH 🔎${forma1}\n- *Título:* ${searchTrack.title}\n`;
+            spotifyInfo += `- *Artistas:* ${searchTrack.artists}\n`;
+            spotifyInfo += `- *Duración:* ${searchTrack.duration}\n`;
+            spotifyInfo += `- *Álbum:* ${searchTrack.album.name}\n`;
+            spotifyInfo += `- *Fecha de lanzamiento:* ${searchTrack.album.releasedDate}\n\n> Search By Samu330.com`;
 
             await nyanBot2.sendMessage(m.chat, {
                 text: spotifyInfo.trim(),
