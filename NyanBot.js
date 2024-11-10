@@ -293,9 +293,9 @@ let gameSoup = db.data.game.soup = []
 
 //time
 moment.locale('es');
-const time = moment().tz('America/Cancun').format('HH:mm:ss');
-const date = moment().tz('America/Cancun').format('DD/MM/YYYY');
-const longDate = moment().tz('America/Cancun').format('dddd, D [de] MMMM [del] YYYY');
+const time = moment().tz('America/Panama').format('HH:mm:ss');
+const date = moment().tz('America/Panama').format('DD/MM/YYYY');
+const longDate = moment().tz('America/Panama').format('dddd, D [de] MMMM [del] YYYY');
 
 //function
 const reSize = async (buffer, ukur1, ukur2) => {
