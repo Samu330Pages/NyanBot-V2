@@ -49,12 +49,12 @@ module.exports = async function(m, reply, text, nyanBot2) {
                     buffers.push({ name: `${track.metadata.name}.mp3`, buffer: audioBuffer });
                 }
 
+                const stream = new Readable();
                 archive.on('error', (err) => {
                     throw err;
                 });
 
                 for (let { name, buffer } of buffers) {
-                    const stream = new Readable();
                     stream.push(buffer);
                     stream.push(null);
                     archive.append(stream, { name });
@@ -62,8 +62,15 @@ module.exports = async function(m, reply, text, nyanBot2) {
 
                 archive.finalize();
 
+                const zipBuffer = await new Promise((resolve, reject) => {
+                    const chunks = [];
+                    archive.on('data', (chunk) => chunks.push(chunk));
+                    archive.on('end', () => resolve(Buffer.concat(chunks)));
+                    archive.on('error', reject);
+                });
+
                 await nyanBot2.sendMessage(m.chat, {
-                    document: archive,
+                    document: zipBuffer,
                     fileName: `${album.metadata.title}.zip`,
                     mimetype: 'application/zip'
                 }, { quoted: m });
@@ -89,7 +96,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
             } else if (isSpotifyUrl[2] === 'playlist') {
                 nyanBot2.sendMessage(m.chat, { react: { text: '📝', key: m.key } });
                 const infos = new Spotify({ clientID: "7fb26a02133d463da465671222b9f19b", clientSecret: "d4e6f8668f414bb6a668cc5c94079ca1" });
-                await reply(`${infos}`)
+                await reply(JSON.stringify(infos, null, 2))
                 const playlistId = isSpotifyUrl[0].split('/').pop();
                 const playlistInfoByID = await infos.getPlaylist(playlistId);
                 const tracks = playlistInfoByID.tracks.items;
@@ -137,8 +144,15 @@ module.exports = async function(m, reply, text, nyanBot2) {
 
                 archive.finalize();
 
+                const zipBuffer = await new Promise((resolve, reject) => {
+                    const chunks = [];
+                    archive.on('data', (chunk) => chunks.push(chunk));
+                    archive.on('end', () => resolve(Buffer.concat(chunks)));
+                    archive.on('error', reject);
+                });
+
                 await nyanBot2.sendMessage(m.chat, {
-                    document: `${archive}`,
+                    document: zipBuffer,
                     fileName: `${playlistInfoByID.name}.zip`,
                     mimetype: 'application/zip'
                 }, { quoted: m });
@@ -179,6 +193,6 @@ module.exports = async function(m, reply, text, nyanBot2) {
         }
     } catch (error) {
         console.error(error);
-        return reply(`*Ocurrió un error al procesar tu solicitud. Intenta nuevamente.*${error}`);
+        return reply(`*Ocurrió un error al procesar tu solicitud. Intenta nuevamente.*\n${error}`);
     }
 };
