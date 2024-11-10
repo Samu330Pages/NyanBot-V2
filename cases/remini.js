@@ -6,7 +6,7 @@ const {
 } = require('../lib/converter')
 const fs = require('fs')
 
-module.exports = async function(m, reply, nyanBot2, prefix, command, quoted, mime) {
+module.exports = async function(m, reply, nyanBot2, prefix, command, quoted, mime, date) {
 if (!/image/.test(mime)) return reply(`*por favor envía o etiqueta una imagen junto con el comando:* ${prefix + command}`)
 nyanBot2.sendMessage(m.chat, {
     react: {
