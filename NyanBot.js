@@ -917,7 +917,7 @@ if (juegoActivoIndex !== -1) {
                 await caseMenu(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber);
                 break
 		
-		case 'ayuda': case 'help':
+	   case 'ayuda': case 'help':
                 const caseAyuda = require('./cases/ayuda');
                 await caseAyuda(m, reply, sender, prefix, categories);
                 break
@@ -956,121 +956,10 @@ if (juegoActivoIndex !== -1) {
                 const caseIa = require('./cases/chatGpt');
                 await caseIa(text, m, reply, nyanBot2, sender, command, prefix, date, time);
                 break
-			
-            case 'test':
-                const buttons = [
-                    {
-                        name: "send_location",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Ubicación',
-                            id: ''
-                        }),
-                    }, {
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Reply',
-                            id: ''
-                        }),
-                    }, {
-                        name: "cta_url",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Page',
-                            url: 'https://wa.me/samu330'
-                        }),
-                    },
-                    {
-                        name: "cta_call",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Call',
-                            number: '5219984907794'
-                        }),
-                    }, {
-                        name: "cta_copy",
-                        buttonParamsJson: JSON.stringify({
-                            display_text: 'Copy',
-                            copy_code: '😈۔ᷤSᷤaͣmͫu͜͡‡ℨℨᱵ༉₃ᷜ₃ᷢ₀ݽۚۚ'
-                        }),
-                    }, {
-                        name: 'single_select',
-                        buttonParamsJson: JSON.stringify({
-                            title: 'Select',
-                            sections: [{
-                                title: 'Select 1',
-                                highlight_label: 'test 📂',
-                                rows: [{
-                                    title: 'Test',
-                                    description: 'test 1',
-                                    id: '.menu'
-                                }]
-                            }, {
-                                title: 'Select 2',
-                                highlight_label: '',
-                                rows: [{
-                                    title: 'Test',
-                                    description: 'test 2',
-                                    id: '.test'
-                                }]
-                            }]
-                        })
-                    }]
 
-                const mediaPath = '';
-
-                return await sendReplyButton(m.chat, buttons, m, {
-                    content: 'Selecciona una opción:'
-                });
-                break
-
-            case 'pins': case 'pinterest': case 'pin': case 'pinsearch': {
-                if (!text) {
-                    return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
-                }
-                nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-                stcReac('lupa', '_*Buscando imágenes en Pinterest...*_ 🔎');
-
-                try {
-                    const results = await require("./lib/pin.js").search(text);
-
-                    if (!results || results.length === 0) {
-                        return reply(`*No se encontraron imágenes para el término:* ${text}`);
-                    }
-
-                    const limitedResults = results.slice(0, 10);
-                    let contents = [];
-
-                    limitedResults.forEach((image) => {
-                        contents.push({
-                            header: {
-                                imageMessage: image,
-                                hasMediaAttachment: true,
-                            },
-                            body: {
-                                text: text
-                            },
-                            nativeFlowMessage: {
-                                buttons: [{
-                                    name: "cta_url",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: `Ver imagen 🐢`,
-                                        url: image
-                                    })
-                                }]
-                            },
-                        });
-                    });
-
-                    await sendCarousel(m.chat, {}, {
-                        header: `*Resultados de tu búsqueda de ${text} en Pinterest 📍*\n`,
-                        footer: `Search by Samu330.com`,
-                        cards: contents
-                    });
-
-                    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-                } catch (error) {
-                    console.error('Error en la búsqueda de Pinterest:', error);
-                    stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
-                }
-            }
+            case 'pins': case 'pinterest': case 'pin': case 'pinsearch':
+                const casePinterest = require('./cases/pinterest');
+                await casePinterest(m, reply, nyanBot2, text, prefix, command, sendCarousel, stcRea);
                 break
 
             case 'img':
