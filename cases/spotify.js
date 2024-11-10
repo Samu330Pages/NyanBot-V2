@@ -89,6 +89,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
             } else if (isSpotifyUrl[2] === 'playlist') {
                 nyanBot2.sendMessage(m.chat, { react: { text: '📝', key: m.key } });
                 const infos = new Spotify({ clientID: "7fb26a02133d463da465671222b9f19b", clientSecret: "d4e6f8668f414bb6a668cc5c94079ca1" });
+                await reply(`${infos}`)
                 const playlistId = isSpotifyUrl[0].split('/').pop();
                 const playlistInfoByID = await infos.getPlaylist(playlistId);
                 const tracks = playlistInfoByID.tracks.items;
