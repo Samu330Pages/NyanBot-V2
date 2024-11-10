@@ -7,7 +7,7 @@ const Archiver = require('archiver');
 const { Readable } = require('stream');
 const forma1 = '`'
 
-module.exports = async function(m, reply, text, nyanBot2) {
+module.exports = async function(m, reply, text, nyanBot2, reSize) {
     if (!text) return reply(`*Por favor, proporciona un enlace de Spotify válido o el nombre de una canción.*`);
 
     const isSpotifyUrl = text.match(/^(https:\/\/open\.spotify\.com\/(album|track|playlist)\/[a-zA-Z0-9]+)/i);
@@ -17,6 +17,7 @@ module.exports = async function(m, reply, text, nyanBot2) {
             if (isSpotifyUrl[2] === 'album') {
                 nyanBot2.sendMessage(m.chat, { react: { text: '📂', key: m.key } });
                 const album = await downloadAlbum(isSpotifyUrl[0]);
+                await reply(JSON.stringify(album, null, 2))
                 const img = await (await fetch(`${album.metadata.cover}`)).buffer();
                 let spotifyInfo = `${forma1}SPOTIFY ALBUM 📃${forma1}\n*Album:* ${album.metadata.title}\n`;
                 spotifyInfo += `*Artistas:* ${album.metadata.artists}\n`;
@@ -27,7 +28,6 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
                     contextInfo: {
-                        forwardingScore: 9999999,
                         isForwarded: true,
                         "externalAdReply": {
                             "showAdAttribution": true,
@@ -110,7 +110,6 @@ module.exports = async function(m, reply, text, nyanBot2) {
                 await nyanBot2.sendMessage(m.chat, {
                     text: spotifyInfo.trim(),
                     contextInfo: {
-                        forwardingScore: 9999999,
                         isForwarded: true,
                         "externalAdReply": {
                             "showAdAttribution": true,
@@ -174,7 +173,6 @@ module.exports = async function(m, reply, text, nyanBot2) {
             await nyanBot2.sendMessage(m.chat, {
                 text: spotifyInfo.trim(),
                 contextInfo: {
-                    forwardingScore: 9999999,
                     isForwarded: true,
                     "externalAdReply": {
                         "showAdAttribution": true,
