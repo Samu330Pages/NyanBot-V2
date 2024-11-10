@@ -926,7 +926,7 @@ break
 
             case 'menu':
                 const caseMenu = require('./cases/menu');
-                await caseMenu(m, reply, nyanBot2, sender, categories);
+                await caseMenu(m, reply, nyanBot2, sender, categories, checkPremiumUser);
                 break
 
 		case 'ayuda': case 'help':
