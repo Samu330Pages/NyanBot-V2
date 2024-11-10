@@ -46,7 +46,6 @@ const pkg2 = require('fluid-spotify.js')
 const { Spotify } = pkg2;
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
 const { Rapi } = require('./lib/rapi.js')
-const canvaImg = require('./lib/canvaImg.js')
 const { getOrganicData } = require('./lib/gg.js')
 const { Audd } = require('audd.io')
 const {
@@ -693,7 +692,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         // Grup Only
         if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup && !db.data.users[sender].priv) {
 		if (isCommand) {
-			return reply(`*No está permitido el uso del bot en privado!!*\n\n*Si desea utilizar el bot únase al grupo oficial 🙃*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1`)
+			return reply(`*No está permitido el uso del bot en privado!!*\n\n*Si desea utilizar el bot únase al grupo oficial 🙃*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1\n\n- *Si deseas usar el bot en privado, comunicate con Samu en el grupo para que te de el permiso!*`)
 		}
 	}
         if (m.isGroup && !isSamu && db.data.chats[from].ban) {
@@ -913,11 +912,6 @@ if (juegoActivoIndex !== -1) {
 		reply(resultado)
 		break
 
-case 'w':
-let r = await canvaImg.createWelcomeImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60")
-await nyanBot2.sendMessage(m.chat, {image: r}, { quoted: m })
-break
-
             case 'menu': case 'comandos':
                 const caseMenu = require('./cases/menu');
                 await caseMenu(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber);
@@ -932,17 +926,7 @@ break
                 const caseClaim = require('./cases/claim');
                 await caseClaim(m, reply, sender);
                 break
-
-            case 'lg': {
-                if (text === sender) {
-                    db.data.users[sender].register = false
-                    reply('*Tu sesión sé ha cerrado!*')
-                    nyanBot2.sendMessage(m.chat, { react: { text: '💔', key: m.key } })
-                } else {
-                    return reply('*¡Esta opción no te corresponde!*')
-                }
-            }
-                break
+			
 	    case 'sopa': case 'letras': case 'nuevasopa':
 		const caseSopa = require('./cases/game-soup');
                 await caseSopa(m, reply, nyanBot2, sender, command, readmore, prefix);
@@ -950,17 +934,17 @@ break
 			
             case 'logout':
                 const caseLogout = require('./cases/acount-logout');
-                await caseLogout(text, m, reply, nyanBot2, sender, sendReplyButton, prefix);
+                await caseLogout(text, m, reply, nyanBot2, sender, prefix);
                 break
 			
             case 'login':
                 const caseLogin = require('./cases/acount-login');
-                await caseLogin(text, m, reply, nyanBot2, sender, sendReplyButton, prefix);
+                await caseLogin(text, m, reply, nyanBot2, sender, prefix);
                 break
 			
             case 'reg':
                 const caseRegister = require('./cases/acount-register');
-                await caseRegister(text, m, reply, nyanBot2, sender, command, sendReplyButton, sendCarousel, prefix, isGroup);
+                await caseRegister(text, m, reply, nyanBot2, sender, command, sendCarousel, prefix, isGroup);
                 break
 		
             case 'reset':
@@ -3587,7 +3571,7 @@ if (isCmd && budy.startsWith('.')) {
 }
 			
                 if (budy == '🎯') {
-                    totalTiro = ["failTiro", "tiro10p", "tiro30p", "tiro50p", "tiro70p", "tiroWin"]
+                    let totalTiro = ["failTiro", "tiro10p", "tiro30p", "tiro50p", "tiro70p", "tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
                     let puntos = 0;
                     let msgTiro = 'Puntos Ganados:'
@@ -3644,7 +3628,7 @@ if (isCmd && budy.startsWith('.')) {
                     })
                 }
                 if (budy == '🎳') {
-                    totalBolo = ["boloFail", "bolo10", "bolo20", "bolo60", "bolo80", "boloWin"]
+                    let totalBolo = ["boloFail", "bolo10", "bolo20", "bolo60", "bolo80", "boloWin"]
                     boloStickers = Math.floor(Math.random() * totalBolo.length)
                     let puntos = 0;
                     let msgBolo = 'Puntos Ganados:'
@@ -3701,7 +3685,7 @@ if (isCmd && budy.startsWith('.')) {
                     })
                 }
                 if (budy == '⚽') {
-                    footTiro = ["footFail", "footPoste", "foot50", "foot75", "foot100"]
+                    let footTiro = ["footFail", "footPoste", "foot50", "foot75", "foot100"]
                     footStickers = Math.floor(Math.random() * footTiro.length)
                     let puntos = 0;
                     let msgFoot = 'Puntos Ganados:'
@@ -3756,7 +3740,7 @@ if (isCmd && budy.startsWith('.')) {
                     })
                 }
                 if (budy == '🏀') {
-                    baskTiro = ["baskFail", "baskFail2", "baskFail3", "bask50", "bask100"]
+                    let baskTiro = ["baskFail", "baskFail2", "baskFail3", "bask50", "bask100"]
                     baskStickers = Math.floor(Math.random() * baskTiro.length)
                     let puntos = 0;
                     let msgbask = 'Puntos Ganados:'
@@ -3814,7 +3798,7 @@ if (isCmd && budy.startsWith('.')) {
                     })
                 }
                 if (budy == '🎲') {
-                    dadoTiro = ["dado1", "dado2", "dado3", "dado4", "dado5", "dado6"]
+                    let dadoTiro = ["dado1", "dado2", "dado3", "dado4", "dado5", "dado6"]
                     dadoStickers = Math.floor(Math.random() * dadoTiro.length)
                     let puntos = 0;
                     let msgDado = 'Puntos Ganados:'
