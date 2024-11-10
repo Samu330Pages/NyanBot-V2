@@ -2049,7 +2049,7 @@ case 'mediafire': case 'mf': {
         }
 
         await nyanBot2.sendMessage(m.chat, {
-            document: await (await fetch(`${data.link}`)).buffer(),
+            document: await fetchBuffer(`${data.link}`),
             fileName: `${data.filename}`,
             mimetype: `${data.mime}`,
             caption: `
