@@ -2043,19 +2043,19 @@ case 'mediafire': case 'mf': {
 
         let data = await require("./lib/mediafire.js").mediafireDownload(text);
 
-        const filesizeMB = parseFloat(`${data.size}`);
+        const filesizeMB = parseFloat(`${data.data.size}`);
         if (filesizeMB > 1000) {
             return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
 
         await nyanBot2.sendMessage(m.chat, {
-            document: await fetchBuffer(`${data.link}`),
-            fileName: `${data.filename}`,
-            mimetype: `${data.mime}`,
+            document: await fetchBuffer(`${data.data.link}`),
+            fileName: `${data.data.filename}`,
+            mimetype: `${data.data.mime}`,
             caption: `
-*Título:* ${data.filename}
-*Tamaño:* ${data.size}
-*Fecha de Publicación:* ${data.uploaded}\n\n
+*Título:* ${data.data.filename}
+*Tamaño:* ${data.data.size}
+*Fecha de Publicación:* ${data.data.uploaded}\n\n
 > Download By Samu330.com & Landen`
         }, { quoted: m });
 
