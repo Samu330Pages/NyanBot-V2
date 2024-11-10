@@ -25,7 +25,7 @@ if (time < "11:00:00") {
 if (time < "05:00:00") {
     var timeNow = `🎄 Buenos dias `
 }
-module.exports = async function(m, reply, nyanBot2, sender, categories, checkPremiumUser) {
+module.exports = async function(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber) {
 const TipoDispositivo = m.key.id.length === 20 ? 'iPhone' : m.key.id.length === 32 ? 'Android' : m.key.id.length === 16 ? 'Baileys' : m.key.id.length === 22 ? 'Web Browser' : m.key.id.length === 18 ? 'Desktop' : m.key.id.length > 21 ? 'Android' : 'WhatsApp web';
     nyanBot2.sendMessage(m.chat, {
         react: {
