@@ -1,4 +1,68 @@
-            case 'play3': case 'song': {
+            case 'test':
+                const buttons = [
+                    {
+                        name: "send_location",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Ubicación',
+                            id: ''
+                        }),
+                    }, {
+                        name: "quick_reply",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Reply',
+                            id: ''
+                        }),
+                    }, {
+                        name: "cta_url",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Page',
+                            url: 'https://wa.me/samu330'
+                        }),
+                    },
+                    {
+                        name: "cta_call",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Call',
+                            number: '5219984907794'
+                        }),
+                    }, {
+                        name: "cta_copy",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: 'Copy',
+                            copy_code: '😈۔ᷤSᷤaͣmͫu͜͡‡ℨℨᱵ༉₃ᷜ₃ᷢ₀ݽۚۚ'
+                        }),
+                    }, {
+                        name: 'single_select',
+                        buttonParamsJson: JSON.stringify({
+                            title: 'Select',
+                            sections: [{
+                                title: 'Select 1',
+                                highlight_label: 'test 📂',
+                                rows: [{
+                                    title: 'Test',
+                                    description: 'test 1',
+                                    id: '.menu'
+                                }]
+                            }, {
+                                title: 'Select 2',
+                                highlight_label: '',
+                                rows: [{
+                                    title: 'Test',
+                                    description: 'test 2',
+                                    id: '.test'
+                                }]
+                            }]
+                        })
+                    }]
+
+                const mediaPath = '';
+
+                return await sendReplyButton(m.chat, buttons, m, {
+                    content: 'Selecciona una opción:'
+                });
+                break
+
+case 'play3': case 'song': {
                 if (!text) return reply(`Ejemplo: ${prefix + command} anime whatsapp status`);
             
                 try {
