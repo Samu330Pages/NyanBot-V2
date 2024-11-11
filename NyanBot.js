@@ -2100,7 +2100,6 @@ case 'mediafire': case 'mf': {
 > Download By Samu330.com & Laden`
                 }, { quoted: m });
 
-                // Eliminar archivos temporales
                 fs.unlinkSync(tempFilePath);
                 fs.unlinkSync(zipFilePath);
             });
