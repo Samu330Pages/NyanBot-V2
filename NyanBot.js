@@ -689,7 +689,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             db.data.users[senderLimit].totalLimit += amount
         }
         // Grup Only
-        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup && !db.data.users[sender].priv) {
+        if (!m.isGroup && !isSamu && db.data.settings[botNumber].onlygroup && !db.data.users[sender].priv && command !== 'reg') {
 		if (isCommand) {
 			return reply(`*No está permitido el uso del bot en privado!!*\n\n*Si desea utilizar el bot únase al grupo oficial 🙃*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1\n\n- *Si deseas usar el bot en privado, comunicate con Samu en el grupo para que te de el permiso!*`)
 		}
