@@ -2043,7 +2043,7 @@ case 'mediafire': case 'mf': {
 
         let data = await require("./lib/mediafire.js").mediafireDownload(text);
 
-        const filesizeMB = parseFloat(`${data.data.size}`);
+        const filesizeMB = parseFloat(data.data.size);
         if (filesizeMB > 1000) {
             return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
