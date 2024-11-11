@@ -2048,23 +2048,81 @@ case 'mediafire': case 'mf': {
             return reply("😔 El tamaño del archivo es mayor a 1000 MB y no se puede enviar.");
         }
 
-        await nyanBot2.sendMessage(m.chat, {
-            document: await fetchBuffer(`${data.data.link}`),
-            fileName: `${data.data.filename}`,
-            mimetype: `${data.data.mime}`,
-            caption: `
+        let mimeType = data.data.mime;
+        switch (data.data.extension.toLowerCase()) {
+            case 'pdf': mimeType = 'application/pdf'; break;
+            case 'doc': case 'docx': mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; break;
+            case 'xls': case 'xlsx': mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; break;
+            case 'ppt': case 'pptx': mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; break;
+            case 'zip': mimeType = 'application/zip'; break;
+            case 'rar': mimeType = 'application/x-rar-compressed'; break;
+            case '7z': mimeType = 'application/x-7z-compressed'; break;
+            case 'mp4': mimeType = 'video/mp4'; break;
+            case 'mp3': mimeType = 'audio/mpeg'; break;
+            case 'jpg': case 'jpeg': mimeType = 'image/jpeg'; break;
+            case 'png': mimeType = 'image/png'; break;
+            case 'gif': mimeType = 'image/gif'; break;
+            case 'bmp': mimeType = 'image/bmp'; break;
+            case 'svg': mimeType = 'image/svg+xml'; break;
+            case 'txt': mimeType = 'text/plain'; break;
+            case 'html': case 'htm': mimeType = 'text/html'; break;
+            case 'csv': mimeType = 'text/csv'; break;
+            case 'apk': mimeType = 'application/vnd.android.package-archive'; break;
+            case 'exe': mimeType = 'application/vnd.microsoft.portable-executable'; break;
+            case 'json': mimeType = 'application/json'; break;
+            case 'xml': mimeType = 'application/xml'; break;
+            default: mimeType = 'application/octet-stream'; break;
+        }
+
+        if (mimeType === 'application/octet-stream') {
+            const tempFilePath = path.join(__dirname, data.data.filename);
+            const zipFilePath = path.join(__dirname, `${data.data.filename}.zip`);
+
+            const fileBuffer = await fetchBuffer(data.data.link);
+            fs.writeFileSync(tempFilePath, fileBuffer);
+
+            const output = fs.createWriteStream(zipFilePath);
+            const archive = archiver('zip', { zlib: { level: 9 } });
+
+            archive.pipe(output);
+            archive.file(tempFilePath, { name: data.data.filename });
+            await archive.finalize();
+
+            output.on('close', async () => {
+                await nyanBot2.sendMessage(m.chat, {
+                    document: fs.readFileSync(zipFilePath),
+                    fileName: `${data.data.filename}.zip`,
+                    mimetype: 'application/zip',
+                    caption: `
 *Título:* ${data.data.filename}
 *Tamaño:* ${data.data.size}
 *Fecha de Publicación:* ${data.data.uploaded}\n\n
-> Download By Samu330.com & Landen`
-        }, { quoted: m });
+> Download By Samu330.com & Laden`
+                }, { quoted: m });
+
+                // Eliminar archivos temporales
+                fs.unlinkSync(tempFilePath);
+                fs.unlinkSync(zipFilePath);
+            });
+        } else {
+            await nyanBot2.sendMessage(m.chat, {
+                document: await fetchBuffer(data.data.link),
+                fileName: `${data.data.filename}`,
+                mimetype: `${mimeType}`,
+                caption: `
+*Título:* ${data.data.filename}
+*Tamaño:* ${data.data.size}
+*Fecha de Publicación:* ${data.data.uploaded}\n\n
+> Download By Samu330.com & Laden`
+            }, { quoted: m });
+        }
 
         nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
         useLimit(sender, 50);
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
-	reply(`${error}`)
+        reply(`${error}`);
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
 }
