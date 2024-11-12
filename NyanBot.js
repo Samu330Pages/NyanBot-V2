@@ -918,8 +918,8 @@ break
 
 		case 'get':
 			if (m.quoted.chat == 'status@broadcast') {
-				let nyanMsg = await nyanBot2.serializeM(m.getQuotedObj())
-				nyanMsg.quoted.copyNForward(m.chat, true)
+			let statusMedia = await quoted.download()
+			await nyanBot2.sendMessage(m.chat, {image: statusMedia})
 			} else {
 				return reply('*😦 esto no es un estado 😦*')
 			}
