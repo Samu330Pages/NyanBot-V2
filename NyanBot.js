@@ -909,8 +909,7 @@ if (juegoActivoIndex !== -1) {
 		break
 
 		case 'get':
-			if (m.quoted) return reply('*Responde a un estado con este comando para descargar el estado del contacto! 🕵🏻*')
-			if (m.quoted.chat == 'status@broadcast') {
+			if (m.quoted && m.quoted.chat == 'status@broadcast') {
 			let statusMedia = await quoted.download()
 			if (/image/.test(mime)) {
 			await nyanBot2.sendMessage(m.chat, {image: statusMedia, caption: m.quoted.caption}, {quoted: m})
@@ -922,7 +921,7 @@ if (juegoActivoIndex !== -1) {
 			await reply(m.quoted.text)
 			}
 			} else {
-			return reply('*😦 esto no es un estado 😦*')
+			return reply('*Responde a un estado con este comando para descargar el estado del contacto! 🕵🏻*')
 			}
 			break
 
