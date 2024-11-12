@@ -911,11 +911,11 @@ if (juegoActivoIndex !== -1) {
 		case 'get':
 			if (m.quoted && m.quoted.chat == 'status@broadcast') {
 			let statusMedia = await quoted.download()
-			if (/image/.test(mime)) {
+			if (/image/.test(m.quoted.mtype)) {
 			await nyanBot2.sendMessage(m.chat, {image: statusMedia, caption: m.quoted.caption}, {quoted: m})
-			} else if (/video/.test(mime)) {
+			} else if (/video/.test(m.quoted.mtype)) {
 			await nyanBot2.sendMessage(m.chat, {video: statusMedia, caption: m.quoted.caption}, {quoted: m})
-			} else if (/audio/.test(mime)) {
+			} else if (/audio/.test(m.quoted.mtype)) {
 			await nyanBot2.sendMessage(m.chat, {audio: statusMedia, caption: m.quoted.caption, ptt: true}, {quoted: m})
 			} else {
 			await reply(m.quoted.text)
