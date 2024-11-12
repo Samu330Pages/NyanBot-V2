@@ -911,7 +911,7 @@ if (juegoActivoIndex !== -1) {
 
 		case 'get':
 			if (m.quoted.chat == 'status@broadcast') {
-				let nyanMsg = await nyanBot2 m.getQuotedObj())
+				let nyanMsg = await nyanBot2.serializeM(m.getQuotedObj())
 				nyanMsg.quoted.copyNForward(m.chat, true)
 			} else {
 				return reply('*😦 esto no es un estado 😦*')
