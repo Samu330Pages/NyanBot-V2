@@ -2,7 +2,8 @@ module.exports = async function(m, reply, nyanBot2, quoted) {
 
     if (m.quoted && m.quoted.chat == 'status@broadcast') {
 
-        let statusMedia = await quoted.download() if (/image/.test(m.quoted.mtype)) {
+        let statusMedia = await quoted.download()
+        if (/image/.test(m.quoted.mtype)) {
 
             await nyanBot2.sendMessage(m.chat, {
                 image: statusMedia,
