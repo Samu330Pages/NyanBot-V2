@@ -909,7 +909,7 @@ if (juegoActivoIndex !== -1) {
 
 	    case 'get':
 		const caseGetStatus = require('./cases/getStatus');
-		await caseGetStatus()
+		await caseGetStatus(m, reply, nyanBot2, quoted);
 		break
 
             case 'menu': case 'comandos':
