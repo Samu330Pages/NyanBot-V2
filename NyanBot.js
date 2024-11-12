@@ -788,7 +788,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
         //autosticker
         if (db.data.settings[botNumber].autosticker) {
-            if (m.key.fromMe) return
             if (/image/.test(mime) && !/webp/.test(mime)) {
                 let mediac = await quoted.download()
                 nyanBot2.sendImageAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
