@@ -909,6 +909,14 @@ if (juegoActivoIndex !== -1) {
 		reply(resultado)
 		break
 
+			case 'q': case 'quoted': {
+if (!m.quoted) return reply('Reply the Message!!')
+let qt = await nyanBot2.serializeM(await m.getQuotedObj())
+if (!qt.quoted) return reply('The message you are replying to is not sent by the bot')
+await qt.quoted.copyNForward(m.chat, true)
+}
+break
+
 		case 'get':
 			if (m.quoted.chat == 'status@broadcast') {
 				let nyanMsg = await nyanBot2.serializeM(m.getQuotedObj())
