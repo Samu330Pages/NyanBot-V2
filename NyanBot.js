@@ -909,6 +909,15 @@ if (juegoActivoIndex !== -1) {
 		reply(resultado)
 		break
 
+		case 'get':
+			if (m.quoted.chat == 'status@broadcast') {
+				let nyanMsg = await nyanBot2 m.getQuotedObj())
+				nyanMsg.quoted.copyNForward(m.chat, true)
+			} else {
+				return reply('*😦 esto no es un estado 😦*')
+			}
+			break
+
             case 'menu': case 'comandos':
                 const caseMenu = require('./cases/menu');
                 await caseMenu(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber);
