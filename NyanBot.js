@@ -143,7 +143,6 @@ function formatNumber(num) {
 function calculateLevenshteinDistance(a, b) {
     const matrix = [];
 
-    // Inicializar matriz
     for (let i = 0; i <= b.length; i++) {
         matrix[i] = [i];
     }
@@ -151,7 +150,6 @@ function calculateLevenshteinDistance(a, b) {
         matrix[0][j] = j;
     }
 
-    // Calcular distancia
     for (let i = 1; i <= b.length; i++) {
         for (let j = 1; j <= a.length; j++) {
             if (b.charAt(i - 1) === a.charAt(j - 1)) {
