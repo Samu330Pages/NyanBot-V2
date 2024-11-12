@@ -2332,6 +2332,16 @@
     "slug": "vietnam"
   },
   {
+    "name": "Yemen",
+    "code": "YE",
+    "emoji": "🇾🇪",
+    "image": "https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/flags/4x3/ye.svg",
+    "dialCodes": [
+      "+967"
+    ],
+    "slug": "yemen"
+  },
+  {
     "name": "Wallis & Futuna",
     "code": "WF",
     "emoji": "🇼🇫",
