@@ -762,7 +762,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
         //respond
-        if (db.data.chats[m.chat].badword) {
+        if (db.data.chats[m.chat].badword && !isSamu) {
             let isBadWord = false;
             for (let bak of bad) {
                 if (new RegExp(`\\b${bak.toLowerCase()}\\b`).test(budy.toLowerCase())) {
