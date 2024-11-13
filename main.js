@@ -273,7 +273,7 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
     }
 });
 
-nyanBot2.ev.on('call', async (callDetec) => {
+/*nyanBot2.ev.on('call', async (callDetec) => {
     	if (global.anticall){
     nyanBot2.sendMessage(callDetec.from, {text: callDetec})
     for (let callStatus of callDetec) {
@@ -287,7 +287,7 @@ nyanBot2.ev.on('call', async (callDetec) => {
     }
     }
     }
-    })
+    })*/
         
     //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
