@@ -279,10 +279,10 @@ nyanBot2.ev.on('call', async (callDetec) => {
     for (let callStatus of callDetec) {
     if (callStatus.isGroup == false) {
     if (callStatus.status == "offer") {
-    let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*${callStatus.user.name}* can't receive ${callStatus.isVideo ? `video` : `voice` } call. Sorry @${callStatus.from.split('@')[0]} you will be blocked. If called accidentally please contact the owner to be unblocked !`)
-    nyanBot2.sendContact(callStatus.from, owner, callText)
-    await sleep(8000)
-    await callStatus = "reject";
+    //let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*${callStatus.user.name}* can't receive ${callStatus.isVideo ? `video` : `voice` } call. Sorry @${callStatus.from.split('@')[0]} you will be blocked. If called accidentally please contact the owner to be unblocked !`)
+    nyanBot2.sendMessage(callStatus.from, 'No')
+    await sleep(1000)
+    await callStatus.status = "reject";
     }
     }
     }
