@@ -272,6 +272,23 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
         }
     }
 });
+
+nyanBot2.ev.on('call', async (callDetec) => {
+    	if (global.anticall){
+    console.log(callDetec)
+    for (let callStatus of callDetec) {
+    if (callStatus.isGroup == false) {
+    if (callStatus.status == "offer") {
+    let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*${callStatus.user.name}* can't receive ${callStatus.isVideo ? `video` : `voice` } call. Sorry @${callStatus.from.split('@')[0]} you will be blocked. If called accidentally please contact the owner to be unblocked !`)
+    nyanBot2.sendContact(callStatus.from, owner, callText)
+    await sleep(8000)
+    await callStatus = "reject";
+    }
+    }
+    }
+    }
+    })
+        
     //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
             if (global.antiswview){
