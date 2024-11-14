@@ -1503,7 +1503,7 @@ break
                 reply('> *Esperé un momento, se está procesando su solicitud...*');
 
                 try {
-                    const { result } = await fg.igdl(text);
+                    const { result } = await igdl(text);
 
                     if (result.length > 1) {
                         const numImages = Math.sqrt(result.length);
