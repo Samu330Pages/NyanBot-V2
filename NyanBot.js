@@ -1495,53 +1495,60 @@ break
                 break
 
             case 'insta': case 'ig': case 'instagram': {
-                if (db.data.users[sender].limit < 1) return reply(mess.limit);
-                if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-                if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de qué manera ganar puntos_`);
+    if (args.length < 1 || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
 
-                nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-                reply('> *Esperé un momento, se está procesando su solicitud...*');
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
+    reply('> *Esperé un momento, se está procesando su solicitud...*');
 
-                try {
-                    const { result } = await igdl(text);
+    try {
+        const { result } = await igdl(text);
 
-                    if (result.length > 1) {
-                        const numImages = Math.sqrt(result.length);
-                        await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`)
-                        for (let i = 0; i < numImages; i++) {
-                            if (result[i].url.includes('.jpg') || result[i].url.includes('.png')) {
-                                const imageBuffer = await fetchBuffer(result[i].url);
-                                await nyanBot2.sendMessage(m.chat, {
-                                    image: imageBuffer,
-                                    caption: `*Imagen ${i + 1} de ${numImages}*`
-                                }, { quoted: m });
-                            }
-                        }
-                    } else if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) { // Si es una sola imagen
-                        const imageBuffer = await fetchBuffer(result[0].url);
-                        await nyanBot2.sendMessage(m.chat, {
-                            image: imageBuffer,
-                            caption: `> ${botname} by ${ownername}`
-                        }, { quoted: m });
-                    } else { // Si es un video
-                        const videoBuffer = await fetchBuffer(result[0].url);
-                        await nyanBot2.sendMessage(m.chat, {
-                            video: videoBuffer,
-                            caption: `> ${botname} by ${ownername}`,
-                            fileName: 'instagram_video.mp4',
-                            mimetype: 'video/mp4'
-                        }, { quoted: m });
-                    }
-                } catch (error) {
-                    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-                    console.error('Error al procesar la solicitud:', error);
-                    stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
+        if (result.length > 1) {
+            await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`);
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].url.includes('.jpg') || result[i].url.includes('.png')) {
+                    const imageBuffer = await fetchBuffer(result[i].url);
+                    await nyanBot2.sendMessage(m.chat, {
+                        image: imageBuffer,
+                        caption: `*Imagen ${i + 1} de ${result.length}*`
+                    }, { quoted: m });
+                } else {
+                    const videoBuffer = await fetchBuffer(result[i].url);
+                    await nyanBot2.sendMessage(m.chat, {
+                        video: videoBuffer,
+                        caption: `> ${botname} by ${ownername}`,
+                        fileName: 'instagram_video.mp4',
+                        mimetype: 'video/mp4'
+                    }, { quoted: m });
                 }
-
-                useLimit(sender, 20)
-                nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
             }
-                break
+        } else if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) {
+            const imageBuffer = await fetchBuffer(result[0].url);
+            await nyanBot2.sendMessage(m.chat, {
+                image: imageBuffer,
+                caption: `> ${botname} by ${ownername}`
+            }, { quoted: m });
+        } else {
+            const videoBuffer = await fetchBuffer(result[0].url);
+            await nyanBot2.sendMessage(m.chat, {
+                video: videoBuffer,
+                caption: `> ${botname} by ${ownername}`,
+                fileName: 'instagram_video.mp4',
+                mimetype: 'video/mp4'
+            }, { quoted: m });
+        }
+    } catch (error) {
+        nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        console.error('Error al procesar la solicitud:', error);
+        stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
+    }
+
+    useLimit(sender, 20);
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+}
+break
 
             case 'emojimix': {
                 let [emoji1, emoji2] = text.split`+`
