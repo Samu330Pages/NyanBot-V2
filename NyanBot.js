@@ -1505,22 +1505,40 @@ break
     try {
         const { data } = await igdl(text);
 
+        // Comprobar que hay resultados y que result es un array
         if (!data || !Array.isArray(data) || data.length === 0) {
             return reply("🛑 No se encontraron resultados válidos para esta URL de Instagram.");
         }
 
-        await reply(`_*Sus archivos se están enviando...*_\n> ${botname} by ${ownername}`);
-
-        for (let i = 0; i < data.length; i++) {
-            const { url } = data[i];
-
+        if (data.length > 1) {
+            await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`);
+            for (let i = 0; i < data.length; i++) {
+                const { url } = data[i];
+                if (url.includes('.jpg') || url.includes('.png')) {
+                    const imageBuffer = await fetchBuffer(url);
+                    await nyanBot2.sendMessage(m.chat, {
+                        image: imageBuffer,
+                        caption: `*Imagen ${i + 1} de ${data.length}*`
+                    }, { quoted: m });
+                } else {
+                    const videoBuffer = await fetchBuffer(url);
+                    await nyanBot2.sendMessage(m.chat, {
+                        video: videoBuffer,
+                        caption: `> ${botname} by ${ownername}`,
+                        fileName: 'instagram_video.mp4',
+                        mimetype: 'video/mp4'
+                    }, { quoted: m });
+                }
+            }
+        } else {
+            const { url } = result[0];
             if (url.includes('.jpg') || url.includes('.png')) {
                 const imageBuffer = await fetchBuffer(url);
                 await nyanBot2.sendMessage(m.chat, {
                     image: imageBuffer,
-                    caption: `*Imagen ${i + 1} de ${data.length}*`
+                    caption: `> ${botname} by ${ownername}`
                 }, { quoted: m });
-            } else if (url.includes('.mp4')) {
+            } else {
                 const videoBuffer = await fetchBuffer(url);
                 await nyanBot2.sendMessage(m.chat, {
                     video: videoBuffer,
@@ -1532,6 +1550,7 @@ break
         }
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+	reply(`${error}`);
         console.error('Error al procesar la solicitud:', error);
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
