@@ -1541,6 +1541,7 @@ break
         }
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+	    reply(`${error}`)
         console.error('Error al procesar la solicitud:', error);
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`);
     }
