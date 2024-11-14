@@ -1503,7 +1503,12 @@ break
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
     try {
-        const { result } = await require("ruhend-scraper").igdl(text);
+        const { result } = await igdl(text);
+
+        // Comprobar que hay resultados y que result es un array
+        if (!result || !Array.isArray(result) || result.length === 0) {
+            return reply("🛑 No se encontraron resultados válidos para esta URL de Instagram.");
+        }
 
         if (result.length > 1) {
             await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`);
