@@ -1503,19 +1503,20 @@ break
     reply('> *Esperé un momento, se está procesando su solicitud...*');
 
     try {
-        const { result } = await igdl(text);
+        const { result } = await require("ruhend-scraper").igdl(text);
 
         if (result.length > 1) {
             await reply(`_*Sus imágenes se están enviando...*_\n> ${botname} by ${ownername}`);
             for (let i = 0; i < result.length; i++) {
-                if (result[i].url.includes('.jpg') || result[i].url.includes('.png')) {
-                    const imageBuffer = await fetchBuffer(result[i].url);
+                const { url } = result[i];
+                if (url.includes('.jpg') || url.includes('.png')) {
+                    const imageBuffer = await fetchBuffer(url);
                     await nyanBot2.sendMessage(m.chat, {
                         image: imageBuffer,
                         caption: `*Imagen ${i + 1} de ${result.length}*`
                     }, { quoted: m });
                 } else {
-                    const videoBuffer = await fetchBuffer(result[i].url);
+                    const videoBuffer = await fetchBuffer(url);
                     await nyanBot2.sendMessage(m.chat, {
                         video: videoBuffer,
                         caption: `> ${botname} by ${ownername}`,
@@ -1524,20 +1525,23 @@ break
                     }, { quoted: m });
                 }
             }
-        } else if (result[0].url.includes('.jpg') || result[0].url.includes('.png')) {
-            const imageBuffer = await fetchBuffer(result[0].url);
-            await nyanBot2.sendMessage(m.chat, {
-                image: imageBuffer,
-                caption: `> ${botname} by ${ownername}`
-            }, { quoted: m });
         } else {
-            const videoBuffer = await fetchBuffer(result[0].url);
-            await nyanBot2.sendMessage(m.chat, {
-                video: videoBuffer,
-                caption: `> ${botname} by ${ownername}`,
-                fileName: 'instagram_video.mp4',
-                mimetype: 'video/mp4'
-            }, { quoted: m });
+            const { url } = result[0];
+            if (url.includes('.jpg') || url.includes('.png')) {
+                const imageBuffer = await fetchBuffer(url);
+                await nyanBot2.sendMessage(m.chat, {
+                    image: imageBuffer,
+                    caption: `> ${botname} by ${ownername}`
+                }, { quoted: m });
+            } else {
+                const videoBuffer = await fetchBuffer(url);
+                await nyanBot2.sendMessage(m.chat, {
+                    video: videoBuffer,
+                    caption: `> ${botname} by ${ownername}`,
+                    fileName: 'instagram_video.mp4',
+                    mimetype: 'video/mp4'
+                }, { quoted: m });
+            }
         }
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
