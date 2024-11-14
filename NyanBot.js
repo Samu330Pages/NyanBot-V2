@@ -1531,7 +1531,7 @@ break
                 }
             }
         } else {
-            const { url } = result[0];
+            const { url } = data[0];
             if (url.includes('.jpg') || url.includes('.png')) {
                 const imageBuffer = await fetchBuffer(url);
                 await nyanBot2.sendMessage(m.chat, {
