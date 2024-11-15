@@ -3049,7 +3049,7 @@ case 'disable': {
     if (!isBotAdmins) return reply(mess.adminBot);
     if (!isAdmins) return reply(mess.admin);
 
-    const action = command === 'activar' || command === 'on' || command === 'enable';
+    const action = command === 'activar' || command === 'on' || command === 'enable'; 
     const optionsMap = {
         arabes: 'restrict',
         bienvenida: 'welcome',
@@ -3066,16 +3066,24 @@ case 'disable': {
     const option = text;
     let feedbackMessage = '';
 
-    if (option == 'arabes') {
-        if (!groupMetadata.joinApprovalMode) {
-            return reply(`El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!
-            Para activar la aprobación de miembros sigue estos pasos:\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`);
+    if (option === 'arabes') {
+        if (action) {
+            if (!groupMetadata.joinApprovalMode) {
+                return reply(`*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*
+                _Para activar la aprobación de miembros sigue estos pasos:_\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`);
+            }
+            if (db.data.chats[m.chat].restrict) {
+                return reply('*Esta configuración ya está activa.*');
+            }
+            db.data.chats[m.chat].restrict = true;
+            return reply('*Ajuste actualizado, ahora se le prohibirá el acceso a números considerados "FAKE/ARABES"*');
+        } else {
+            if (!db.data.chats[m.chat].restrict) {
+                return reply('*Esta configuración ya está desactivada.*');
+            }
+            db.data.chats[m.chat].restrict = false;
+            return reply('*Ajuste actualizado, ahora se permitirá el acceso a números considerados "FAKE/ARABES", ya puedes desactivar el modo de aprobación*');
         }
-        if (db.data.chats[m.chat].restrict) {
-            return reply('Esta configuración ya está activa.');
-        }
-        db.data.chats[m.chat].restrict = true;
-        return reply('Ajuste actualizado, ahora se le prohibirá el acceso a números considerados "FAKE/ARABES"');
     }
 
     if (!option) {
@@ -3084,7 +3092,7 @@ case 'disable': {
             if (disabledOptions.length === 0) {
                 feedbackMessage = `*Todas las opciones ya están activadas.*`;
             } else {
-                feedbackMessage = `📍 *Opciones desactivadas que puedes activar:*\n;`
+                feedbackMessage = `📍 *Opciones desactivadas que puedes activar:*\n`;
                 disabledOptions.forEach(opt => {
                     feedbackMessage += `- ${opt}: ${db.data.chats[from][optionsMap[opt]]} _*(desactivada)*_\n`;
                 });
@@ -3110,13 +3118,13 @@ case 'disable': {
 
     if (action) {
         if (db.data.chats[from][optionsMap[option]]) {
-            return reply('Esta configuración ya está activa!');
+            return reply('*Esta configuración ya está activa!*');
         }
         db.data.chats[from][optionsMap[option]] = true;
         feedbackMessage = `📍 La opción *${option}* se ha activado en este chat.`;
     } else {
         if (!db.data.chats[from][optionsMap[option]]) {
-            return reply('Esta configuración ya está desactivada!');
+            return reply('*Esta configuración ya está desactivada!*');
         }
         db.data.chats[from][optionsMap[option]] = false;
         feedbackMessage = `📍 La opción *${option}* se ha desactivado en este chat.`;
