@@ -230,23 +230,36 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
+                    const isArabesEnabled = global.DATABASE.data.chats[anu.id].restrict;
+
+                    const allowsAllMembers = !metadata.joinApprovalMode;
+
+                    const fakeArab = ['507', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+                    const shouldRemove = fakeArab.some(prefix => phoneNumber.startsWith(prefix));
+
+                    if (isArabesEnabled && allowsAllMembers && shouldRemove) {
+                        await nyanBot2.sendMessage(anu.id, {text: `*Se elimino al usuario @${num.split("@")[0]} por usar un número prohibido.*`, contextInfo: {mentionedJid: [num]}});
+                        await nyanBot2.groupParticipantsUpdate(anu.id, [num], 'remove');
+                        return
+                    }
+
                     let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
                     
                     if (countryInfo) {
                         WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
                     }
 
-                WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
-                WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitido' : 'Permitido'}\n`;
-                WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🚫 Chat ban: ${global.DATABASE.data.chats[anu.id].ban ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
-                WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
-                WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
+                    WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
+                    WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitido' : 'Permitido'}\n`;
+                    WlcBody += `🤖 AntiBots: ${global.DATABASE.data.chats[anu.id].antibot ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `👁️ Vista Una Vez: ${global.DATABASE.data.chats[anu.id].antiviewonce ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `🔗 Antilink: ${global.DATABASE.data.chats[anu.id].antilink ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `🔞 Antiadultos: ${global.DATABASE.data.chats[anu.id].antiadult ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `🚫 Chat ban: ${global.DATABASE.data.chats[anu.id].ban ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
+                    WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
+                    WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
 
                     nyanBot2.sendMessage(anu.id, {
                         image: ppCanvas,
