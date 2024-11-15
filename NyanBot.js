@@ -756,7 +756,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 
 
         if (db.data.chats[m.chat].antibot) {
-            if (m.key.id.length === 22 && !isSamu) {
+            if (m.key.id.length === 22 && !isSamu && !isAdmins) {
 		await nyanBot2.sendMessage(m.chat,
                     {
                         delete: {
