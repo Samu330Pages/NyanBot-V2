@@ -230,14 +230,10 @@ nyanBot2.ev.on('group-participants.update', async (anu) => {
                 const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                 if (anu.action == 'add') {
-                    const isArabesEnabled = global.DATABASE.data.chats[anu.id].restrict;
-
-                    const allowsAllMembers = !metadata.joinApprovalMode;
-
                     const fakeArab = ['507', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
                     const shouldRemove = fakeArab.some(prefixArab => num.startsWith(prefixArab));
-
-                    if (isArabesEnabled && allowsAllMembers && shouldRemove) {
+                    
+                    if (global.DATABASE.data.chats[anu.id].restrict == 'true' && metadata.joinApprovalMode == 'false' && shouldRemove) {
                         await nyanBot2.sendMessage(anu.id, {text: `*Se elimino al usuario @${num.split("@")[0]} por usar un número prohibido.*`, contextInfo: {mentionedJid: [num]}});
                         await nyanBot2.groupParticipantsUpdate(anu.id, [num], 'remove');
                         return
