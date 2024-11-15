@@ -521,6 +521,22 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
         };
 
+
+const approveUsers = async () => {
+    if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
+        const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
+        
+        if (rawUsers.length > 0) {
+            for (let i = 0; i < rawUsers.length; i++) {
+                const user = rawUsers[i];
+                await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "approve");
+            }
+        }
+    }
+};
+setInterval(approveUsers, 6000);
+
+	    
         async function sendReplyButton(chatId, buttons, message, options) {
             const { content, media } = options;
 
@@ -826,16 +842,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n\n_Advertencia N° *${db.data.users[sender].link},* Esta es tu única advertencia! si vuelves a enviar un link de WhatsApp seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
             }
         }
-
-	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
-		const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
-		if (rawUsers.length > 0) {
-			for (let i = 0; i < rawUsers.length; i++) {
-				const user = rawUsers[i];
-				await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "approve");
-			}
-		}
-	}
 
         //user db
         if (isCommand && !isUser) {
