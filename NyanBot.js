@@ -792,7 +792,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                             participant: m.key.participant
                         }
                     });
-                nyanBot2.sendMessage(from, { text: `\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo: { mentionedJid: [m.sender] } });
+                nyanBot2.sendMessage(from, { text: `\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *recuerda que no está permitido usar malas palabras!*`, contextInfo: { mentionedJid: [m.sender] } }, {quoted: m});
             }
         }
         //autosticker
