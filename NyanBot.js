@@ -532,7 +532,9 @@ const processUserRequests = async () => {
                 const userNumber = user.split('@')[0];
                 const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
                 
-                if (!shouldReject) {
+                if (shouldReject) {
+                    await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "reject");
+                } else {
                     await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "approve");
                 }
             }
