@@ -361,6 +361,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const groupMetadata = m.isGroup ? await nyanBot2.groupMetadata(m.chat).catch(e => { }) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
         const participants = m.isGroup ? await groupMetadata.participants : ''
+	const participantsApprov = await nyanBot2.groupRequestParticipantsList(m.chat);
         const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
         const isGroupAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
         const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
@@ -827,6 +828,13 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             }
         }
 
+	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMod && participantsApprov && participantsApprov.length > 0) {
+		reply(`Hay ${participants.length} solicitudes de participación.`);
+		participants.forEach(participant => {
+			reply(`Solicitante: ${participant.jid}, Método: ${participant.request_method}, Tiempo: ${participant.request_time}`);
+		});
+	}
+
         //user db
         if (isCommand && !isUser) {
             verifieduser.push(sender)
@@ -913,6 +921,7 @@ if (juegoActivoIndex !== -1) {
         switch (isCommand) {
 		case 'restringir':
 		if (!groupMetadata.joinApprovalMode) return reply('*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*')
+		if (db.data.chats[m.chat].restrict) return reply('*Esta configuración ya está activa.*')
 		db.data.chats[m.chat].restrict = true
 		reply('activado')
 		break
