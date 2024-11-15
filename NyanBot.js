@@ -428,6 +428,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		if (!('welcome' in chats)) chats.welcome = true
                 if (!('badword' in chats)) chats.badword = false
                 if (!('antibot' in chats)) chats.antibot = false
+		if (!('restrict' in chats)) chats.restrict = false
                 if (!('antiviewonce' in chats)) chats.antiviewonce = true
                 if (!('antilink' in chats)) chats.antilinkgc = false
 		if (!('antiadult' in chats)) chats.antiadult = false
@@ -437,6 +438,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		welcome: true,
                 badword: false,
                 antibot: false,
+		restrict: false,
                 antiviewonce: true,
                 antilink: false,
 		antiadult: false,
@@ -909,6 +911,12 @@ if (juegoActivoIndex !== -1) {
 }
 
         switch (isCommand) {
+		case 'restringir':
+		if (!groupMetadata.joinApprovalMode) return reply('*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*')
+		db.data.chats[m.chat].restrict = true
+		reply('activado')
+		break
+			
 		case 'ruleta':
 		nyanBot2.sendMessage(m.chat, { react: { text: '🎡', key: m.key } });
 		const { crearRuletaGif } = require("./lib/ruleta.js");
