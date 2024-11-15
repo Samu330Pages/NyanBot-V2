@@ -828,8 +828,13 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
-		const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid)
-		await nyanBot2.groupRequestParticipantsUpdate(m.chat, [rawUsers], "approve")
+		const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
+		if (rawUsers.length > 0) {
+			for (let i = 0; i < rawUsers.length; i++) {
+				const user = rawUsers[i];
+				await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "approve");
+			}
+		}
 	}
 
         //user db
