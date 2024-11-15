@@ -756,7 +756,17 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 
 
         if (db.data.chats[m.chat].antibot) {
-            if (m.sender === '0@s.whatsapp.net') {
+            if (m.key.id.length === 22 || 25 && !isSamu && !isAdmins) {
+		await nyanBot2.sendMessage(m.chat,
+                    {
+                        delete: {
+                            remoteJid: m.chat,
+                            fromMe: false,
+                            id: m.key.id,
+                            participant: m.key.participant
+                        }
+                    });
+		await reply(`*En este grupo no se permiten otros bots 🙃 y tu ID es considerado BOT/WEB... para prevenir... te eliminaré!*\n\n_*Si solo estas usando WhatsApp web... avisa con tiempo 🥱*_`)
                 return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
             }
         }
