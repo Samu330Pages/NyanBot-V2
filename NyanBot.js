@@ -755,7 +755,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 
-        /*if (db.data.chats[m.chat].antibot) {
+        if (db.data.chats[m.chat].antibot) {
             if (m.key.id.length === 22 && !isSamu && !isAdmins) {
 		await reply(`*En este grupo no se permiten otros bots 🙃 y tu ID es considerado BOT/WEB... para prevenir... te eliminaré!*\n\n_*Si solo estas usando WhatsApp web... avisa con tiempo 🥱*_`)
 		await nyanBot2.sendMessage(m.chat,
@@ -769,7 +769,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                     });
 		return await nyanBot2.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
             }
-        }*/
+        }
 
         //respond
         if (db.data.chats[m.chat].badword && !isSamu) {
@@ -809,7 +809,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 
-       /* if (db.data.chats[m.chat].antilink) {
+        if (db.data.chats[m.chat].antilink) {
             if (budy.match(`whatsapp.com`)) {
                 if (isAdmins) return
                 if (m.key.fromMe) return
@@ -823,7 +823,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		db.data.users[sender].link += 1;
                 nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n\n_Advertencia N° *${db.data.users[sender].link},* Esta es tu única advertencia! si vuelves a enviar un link de WhatsApp seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
             }
-        }*/
+        }
 
         //user db
         if (isCommand && !isUser) {
