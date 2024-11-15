@@ -828,11 +828,9 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             }
         }
 
-	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode && participantsApprov && participantsApprov.length > 0) {
-		reply(`Hay ${participantsApprov.length} solicitudes de participación.`);
-		participantsApprov.forEach(participantApprov => {
-			reply(`Solicitante: ${participantApprov.jid}, Método: ${participantApprov.request_method}, Tiempo: ${participantApprov.request_time}`);
-		});
+	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMod && participantsApprov && participantsApprov.length > 0) {
+		const rawUsers = participantsApprov.map(participant => participant.jid);
+		await nyanBot2.groupRequestParticipantsUpdate(m.chat, rawUsers.join(','), 'approve');
 	}
 
         //user db
