@@ -361,7 +361,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const groupMetadata = m.isGroup ? await nyanBot2.groupMetadata(m.chat).catch(e => { }) : ''
         const groupName = m.isGroup ? groupMetadata.subject : ''
         const participants = m.isGroup ? await groupMetadata.participants : ''
-	const participantsApprov = await nyanBot2.groupRequestParticipantsList(m.chat);
         const groupAdmins = m.isGroup ? await getGroupAdmins(participants) : ''
         const isGroupAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
         const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
@@ -829,8 +828,8 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 	if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMod && participantsApprov && participantsApprov.length > 0) {
-		const rawUsers = participantsApprov.map(participant => participant.jid);
-		await nyanBot2.groupRequestParticipantsUpdate(m.chat, [rawUsers], 'approve');
+		const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid)
+		await nyanBot2.groupRequestParticipantsUpdate(m.chat, check, "approve")
 	}
 
         //user db
