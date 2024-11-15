@@ -809,7 +809,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 
-        if (db.data.chats[m.chat].antilink) {
+       /* if (db.data.chats[m.chat].antilink) {
             if (budy.match(`whatsapp.com`)) {
                 if (isAdmins) return
                 if (m.key.fromMe) return
@@ -823,7 +823,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 		db.data.users[sender].link += 1;
                 nyanBot2.sendMessage(from, { text: `\`\`\`「 Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} *En este grupo no está permitido el envió de links de otros grupos!!*\n\n_Advertencia N° *${db.data.users[sender].link},* Esta es tu única advertencia! si vuelves a enviar un link de WhatsApp seras eliminado!_`, contextInfo: { mentionedJid: [m.sender] } }, { quoted: m })
             }
-        }
+        }*/
 
         //user db
         if (isCommand && !isUser) {
