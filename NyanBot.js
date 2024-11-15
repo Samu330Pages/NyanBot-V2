@@ -521,8 +521,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
         };
 
-const fakeArab = ['507', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
-
+const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
 const processUserRequests = async () => {
     if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
         const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
@@ -938,12 +937,6 @@ if (juegoActivoIndex !== -1) {
 }
 
         switch (isCommand) {
-		case 'restringir':
-		if (!groupMetadata.joinApprovalMode) return reply('*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*')
-		if (db.data.chats[m.chat].restrict) return reply('*Esta configuración ya está activa.*')
-		db.data.chats[m.chat].restrict = true
-		reply('activado')
-		break
 			
 		case 'ruleta':
 		nyanBot2.sendMessage(m.chat, { react: { text: '🎡', key: m.key } });
@@ -3058,6 +3051,7 @@ case 'disable': {
 
     const action = command === 'activar' || command === 'on' || command === 'enable' ? true : false;
     const optionsMap = {
+	arabes: 'restrict',
 	bienvenida: 'welcome',
         badword: 'badword',
         antibot: 'antibot',
@@ -3071,6 +3065,14 @@ case 'disable': {
     const availableOptions = Object.keys(optionsMap);
     const option = text;
     let feedbackMessage = '';
+
+    if (option == 'arabes') {
+	if (!groupMetadata.joinApprovalMode) return reply(`*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*
+ _Para activar la aprobación de miembros sigue estos pasos:_\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`)
+	if (db.data.chats[m.chat].restrict) return reply('*Esta configuración ya está activa.*')
+	db.data.chats[m.chat].restrict = true
+	return reply('*Ajuste actualizado, ahora se le prohibirá el acceso a números considerados "FAKE/ARABES"*')
+    }
 
     if (!option) {
         if (action) {
@@ -3103,9 +3105,11 @@ case 'disable': {
     }
 
     if (action) {
+	if (db.data.chats[from][optionsMap[option]]) return reply('*Esta configuración ya está activa!*')
         db.data.chats[from][optionsMap[option]] = true;
         feedbackMessage = `📍 La opción *${option}* se ha activado en este chat.`;
     } else {
+	if (db.data.chats[from][optionsMap[option]]) return reply('*Esta configuración ya está desactivada!*')
         db.data.chats[from][optionsMap[option]] = false;
         feedbackMessage = `📍 La opción *${option}* se ha desactivado en este chat.`;
     }
