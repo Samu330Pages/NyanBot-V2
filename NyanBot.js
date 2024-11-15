@@ -521,13 +521,14 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
         };
 
+const fakeArab = ['507', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+
 const processUserRequests = async () => {
     if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
         const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
         
         if (rawUsers.length > 0) {
             for (let i = 0; i < rawUsers.length; i++) {
-		const fakeArab = ['507', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
                 const user = rawUsers[i];
                 const userNumber = user.split('@')[0];
                 const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
@@ -537,6 +538,8 @@ const processUserRequests = async () => {
                 } else {
                     await nyanBot2.groupRequestParticipantsUpdate(m.chat, [user], "approve");
                 }
+                
+               await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
     }
