@@ -3070,7 +3070,7 @@ case 'disable': {
         if (action) {
             if (!groupMetadata.joinApprovalMode) {
                 return reply(`*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*
-                _Para activar la aprobación de miembros sigue estos pasos:_\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`);
+_Para activar la aprobación de miembros sigue estos pasos:_\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`);
             }
             if (db.data.chats[m.chat].restrict) {
                 return reply('*Esta configuración ya está activa.*');
