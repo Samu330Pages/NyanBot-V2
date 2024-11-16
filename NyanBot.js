@@ -1789,7 +1789,7 @@ case 'apk':
                         name: "cta_copy",
                         buttonParamsJson: JSON.stringify({
                             display_text: `Descargar ${app.name}`,
-                            copy_code: `${prefix}apkdl ${app.package}`
+                            copy_code: `${prefix}apkdl ${app.file.path}|${app.size}|${app.name}|${app.file.vername}`
                         })
                     }]
                 },
@@ -1810,44 +1810,42 @@ case 'apk':
 case 'apkdl':
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (!text) return reply(`*❌ Por favor ingresa un nombre de paquete junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} com.groundhog.mcpemaster`);
+    
+    if (!text) return reply(`*❌ Por favor ingresa un enlace junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://pool.apk.aptoide.com/...|21335319|Master for Minecraft- Launcher|1.4.25`);
+
+    const args = text.split('|');
+    if (args.length < 4) return reply(`*❌ El formato es incorrecto. Usa: .apkdl link|size|nombre|version*`);
+
+    const [link, size, name, version] = args;
+
+    if (parseInt(size) > 1000000000) {
+        return reply(`*Lo siento pero el archivo pesa más de 1GB (${formatBytes(parseInt(size))}), por tal motivo no es posible el envío! 🙃*`);
+    }
+
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     
-    try {
-        const downloadInfo = await require("./lib/apk-dl").aptoide.download(text);
+    const downloadMessage = `📥 *${name}*\n\n` +
+        `◦  *Tamaño*: ${formatBytes(size)}\n` +
+        `◦  *Versión*: ${version}`;
 
-        if (!downloadInfo) {
-            return reply(`*No se encontró información para el paquete "${text}".*`);
-        }
-	if (downloadInfo.size > 1000000000) {
-		return reply(`*Lo siento pero el archivo pesa mas de 1GB (${formatBytes(downloadInfo.size)}), por tal motivo no es posible el envío! 🙃*`)
-	}
-
-	stcReac('peso', `_*😗 Se esta enviando su aplicación*_\n*${downloadInfo.appname}*`)
-        const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
-            `◦  *Desarrollador*: ${downloadInfo.developer || 'Desconocido'}\n`;
-
-        await nyanBot2.sendMessage(m.chat, {
-            document: {url: `${downloadInfo.link}`},
-	    mimetype: 'application/vnd.android.package-archive',
-	    fileName: `${downloadInfo.appname}.apk`,
-	    caption: downloadMessage,
-            contextInfo: {
-                "externalAdReply": {
-                    "showAdAttribution": true,
-                    "containsAutoReply": true,
-                    "title": `📥 Descarga por Samu330 👑`,
-                    "body": `Download by Samu330.com!`,
-                    "thumbnailUrl": downloadInfo.img || 'https://default-icon-url.com',
-                    "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
-                }
+    await nyanBot2.sendMessage(m.chat, {
+        document: { url: link },
+        mimetype: 'application/vnd.android.package-archive',
+        fileName: `${name}.apk`,
+        caption: downloadMessage,
+        contextInfo: {
+            "externalAdReply": {
+                "showAdAttribution": true,
+                "containsAutoReply": true,
+                "title": `📥 Descarga por Samu330 👑`,
+                "body": `Download by Samu330.com!`,
+                "thumbnailUrl": 'https://default-icon-url.com', // Puedes cambiar esto si tienes una imagen específica
+                "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
             }
-        }, {quoted: m});
-	useLimit(sender, 30);
-    } catch (e) {
-        console.log(e);
-        stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*');
-    }
+        }
+    }, { quoted: m });
+    
+    useLimit(sender, 30);
     break
 
             case 'perfil': {
