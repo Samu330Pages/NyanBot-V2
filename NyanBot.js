@@ -1751,34 +1751,59 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
             }
                 break
 
-            case 'apk':
-                if (db.data.users[sender].limit < 1) return reply(mess.limit);
-                if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-                if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pubg`)
-                try {
-                    let apkInfo = await axios.get(`https://api.dorratz.com/v2/apk-dl?text=${text}`)
-                    if (!apkInfo.data.name) return stcReac('error', `_*No sé encontró resultados para su búsqueda de ${text}*_ 🙃`)
-                    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-                    //let icono = await reSize(apkInfo.data.icon, 200, 200)
-                    await stcReac('peso', `*Esperé porfavor, se esta enviando el APK*\n*${apkInfo.data.name}! 😁*`)
-                    await nyanBot2.sendMessage(m.chat, {
-                        document: { url: `${apkInfo.data.dllink}` },
-                        fileName: `${apkInfo.data.name}.apk`,
-                        mimetype: 'application/vnd.android.package-archive',
-                        caption: `${forma1}DESCARGA COMPLETA 📱${forma1}\n
-*Nombre:* ${apkInfo.data.name}
-*Tamaño:* ${apkInfo.data.size}
-*Paquete:* ${apkInfo.data.package}
-*Última actualización:* ${apkInfo.data.lastUpdate}\n
-> ${botname}`
-                    }, { quoted: m })
-                    useLimit(sender, 30)
-                    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-                } catch (e) {
-                    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-                    stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*')
-                }
-                break
+case 'apk':
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pubg`);
+
+    try {
+        const results = await require("./lib/apk-dl").aptoide.search(text);
+        
+        const limitedResults = results.slice(0, 5);
+        
+        if (limitedResults.length === 0) {
+            return reply(`*No se encontraron resultados para "${text}".*`);
+        }
+
+        let contents = limitedResults.map(app => {
+            let content = `◦  *Nombre*: ${app.name || 'Desconocido'}\n`;
+            content += `◦  *Tamaño*: ${formatBytes(app.size)}\n`;
+            content += `◦  *Paquete*: ${app.package || 'Desconocido'}\n`;
+            content += `◦  *Creador*: ${app.creator || 'Desconocido'}\n`;
+            content += `◦  *Última actualización*: ${app.updated || 'Desconocido'}\n`;
+
+            return {
+                header: {
+                    imageMessage: app.icon || 'https://default-icon-url.com',
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content
+                },
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: "cta_download",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar ${app.name}`,
+                            copy_code: `${prefix}apkdk ${app.package}`
+                        })
+                    }]
+                },
+            };
+        });
+
+        await sendCarousel(m.chat, {}, {
+            header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
+            footer: `Scrapper ApkDl By Samu330.com`,
+            cards: contents
+        });
+
+        useLimit(sender, 30);
+    } catch (e) {
+        console.log(e);
+        stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*');
+    }
+    break
 
             case 'perfil': {
                 const countryData = require('./src/country.json');
