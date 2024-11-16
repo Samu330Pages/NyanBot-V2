@@ -1753,7 +1753,7 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
 
 case 'apk':
     if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pubg`);
-
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     try {
         const results = await require("./lib/apk-dl").aptoide.search(text);
         
@@ -1767,12 +1767,12 @@ case 'apk':
             let content = `◦  *Nombre*: ${app.name || 'Desconocido'}\n`;
             content += `◦  *Tamaño*: ${formatBytes(app.size)}\n`;
             content += `◦  *Paquete*: ${app.package || 'Desconocido'}\n`;
-            content += `◦  *Última actualización*: ${app.updated || 'Desconocido'}\n`;
+            content += `◦  *Última actualización*: ${formatDate(app.updated) || 'Desconocido'}\n`;
             content += `◦  *ID*: ${app.id || 'Desconocido'}\n`;
             content += `◦  *Versión*: ${app.file.vername || 'Desconocido'}\n`;
             content += `◦  *Descargas*: ${formatNumber(app.stats.downloads) || 'Desconocido'}\n`;
             content += `◦  *Clasificación promedio*: ${app.stats.rating.avg || 'Desconocido'}\n`;
-            content += `◦  *Desarrollador*: ${app.developer.name || 'Desconocido'}\n\n`;
+            content += `◦  *INC*: ${app.developer.name || 'Desconocido'}\n`;
 
             return {
                 header: {
@@ -1809,7 +1809,7 @@ case 'apkdl':
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (!text) return reply(`*❌ Por favor ingresa un nombre de paquete junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} com.groundhog.mcpemaster`);
-
+    stcReac('peso', `_*😗 Se esta enviando su aplicación*_\n*${downloadInfo.appname}*`)
     try {
         const downloadInfo = await require("./lib/apk-dl").aptoide.download(text);
 
@@ -1829,13 +1829,13 @@ case 'apkdl':
                 "externalAdReply": {
                     "showAdAttribution": true,
                     "containsAutoReply": true,
-                    "title": `📥 Descarga de ${downloadInfo.appname}`,
-                    "body": `Descargar la aplicación ahora!`,
+                    "title": `📥 Descarga por Samu330 👑`,
+                    "body": `Download by Samu330.com!`,
                     "thumbnailUrl": downloadInfo.img || 'https://default-icon-url.com',
-                    "sourceUrl": 'https://samu330.com'
+                    "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
                 }
             }
-        });
+        }, {quoted: m});
 	useLimit(sender, 30);
     } catch (e) {
         console.log(e);
