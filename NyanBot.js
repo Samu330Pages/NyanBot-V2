@@ -1819,6 +1819,9 @@ case 'apkdl':
         if (!downloadInfo) {
             return reply(`*No se encontró información para el paquete "${text}".*`);
         }
+	if (downloadInfo.size > 1000000000) {
+		return reply(`*Lo siento pero el archivo pesa mas de 1GB (${formatBytes(downloadInfo.size)}), por tal motivo no es posible el envío! 🙃*`)
+	}
 
 	stcReac('peso', `_*😗 Se esta enviando su aplicación*_\n*${downloadInfo.appname}*`)
         const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
