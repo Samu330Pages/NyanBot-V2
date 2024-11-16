@@ -1798,7 +1798,7 @@ case 'apk':
 
         await sendCarousel(m.chat, {}, {
             header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
-            footer: `Scrapper ApkDl By Samu330.com`,
+            footer: `Scraper ApkDl By Samu330.com`,
             cards: contents
         });
     } catch (e) {
