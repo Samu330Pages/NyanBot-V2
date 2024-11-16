@@ -1767,12 +1767,14 @@ case 'apk':
             let content = `◦  *Nombre*: ${app.name || 'Desconocido'}\n`;
             content += `◦  *Tamaño*: ${formatBytes(app.size)}\n`;
             content += `◦  *Paquete*: ${app.package || 'Desconocido'}\n`;
-            content += `◦  *Última actualización*: ${formatDate(app.updated) || 'Desconocido'}\n`;
             content += `◦  *ID*: ${app.id || 'Desconocido'}\n`;
             content += `◦  *Versión*: ${app.file.vername || 'Desconocido'}\n`;
             content += `◦  *Descargas*: ${formatNumber(app.stats.downloads) || 'Desconocido'}\n`;
-            content += `◦  *Clasificación promedio*: ${app.stats.rating.avg || 'Desconocido'}\n`;
+            content += `◦  *Clasificación promedio*: ${app.stats.rating.avg || 'Desconocido'} ⭐\n`;
+	    content += `◦  *Total de votos*: ${formatNumber(app.stats.rating.total) || 'Desconocido'}\n`;
             content += `◦  *INC*: ${app.developer.name || 'Desconocido'}\n`;
+	    content += `◦  *Virus Scaner*: ${app.file.malware.rank || 'Desconocido'} 🐍\n`;
+	    content += `◦  *Última actualización*: ${formatDate(app.updated) || 'Desconocido'}\n`;
 
             return {
                 header: {
