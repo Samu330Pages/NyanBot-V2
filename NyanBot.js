@@ -1752,8 +1752,6 @@ ${result.music_info.album ? `- Álbum: ${result.music_info.album}` : ''}
                 break
 
 case 'apk':
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pubg`);
 
     try {
@@ -1769,8 +1767,12 @@ case 'apk':
             let content = `◦  *Nombre*: ${app.name || 'Desconocido'}\n`;
             content += `◦  *Tamaño*: ${formatBytes(app.size)}\n`;
             content += `◦  *Paquete*: ${app.package || 'Desconocido'}\n`;
-            content += `◦  *Creador*: ${app.creator || 'Desconocido'}\n`;
             content += `◦  *Última actualización*: ${app.updated || 'Desconocido'}\n`;
+            content += `◦  *ID*: ${app.id || 'Desconocido'}\n`;
+            content += `◦  *Versión*: ${app.file.vername || 'Desconocido'}\n`;
+            content += `◦  *Descargas*: ${formatNumber(app.stats.downloads) || 'Desconocido'}\n`;
+            content += `◦  *Clasificación promedio*: ${app.stats.rating.avg || 'Desconocido'}\n`;
+            content += `◦  *Desarrollador*: ${app.developer.name || 'Desconocido'}\n\n`;
 
             return {
                 header: {
@@ -1782,10 +1784,10 @@ case 'apk':
                 },
                 nativeFlowMessage: {
                     buttons: [{
-                        name: "cta_download",
+                        name: "cta_copy",
                         buttonParamsJson: JSON.stringify({
                             display_text: `Descargar ${app.name}`,
-                            copy_code: `${prefix}apkdk ${app.package}`
+                            copy_code: `${prefix}apkdl ${app.package}`
                         })
                     }]
                 },
@@ -1797,8 +1799,44 @@ case 'apk':
             footer: `Scrapper ApkDl By Samu330.com`,
             cards: contents
         });
+    } catch (e) {
+        console.log(e);
+        stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*');
+    }
+    break
 
-        useLimit(sender, 30);
+case 'apkdl':
+    if (db.data.users[sender].limit < 1) return reply(mess.limit);
+    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+    if (!text) return reply(`*❌ Por favor ingresa un nombre de paquete junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} com.groundhog.mcpemaster`);
+
+    try {
+        const downloadInfo = await require("./lib/apk-dl").aptoide.download(text);
+
+        if (!downloadInfo) {
+            return reply(`*No se encontró información para el paquete "${text}".*`);
+        }
+
+        const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
+            `◦  *Desarrollador*: ${downloadInfo.developer || 'Desconocido'}\n`;
+
+        await nyanBot2.sendMessage(m.chat, {
+            document: {url: `${downloadInfo.link}`},
+	    mimetype: 'application/vnd.android.package-archive',
+	    fileName: `${downloadInfo.appname}.apk`,
+	    caption: downloadMessage,
+            contextInfo: {
+                "externalAdReply": {
+                    "showAdAttribution": true,
+                    "containsAutoReply": true,
+                    "title": `📥 Descarga de ${downloadInfo.appname}`,
+                    "body": `Descargar la aplicación ahora!`,
+                    "thumbnailUrl": downloadInfo.img || 'https://default-icon-url.com',
+                    "sourceUrl": 'https://samu330.com'
+                }
+            }
+        });
+	useLimit(sender, 30);
     } catch (e) {
         console.log(e);
         stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*');
