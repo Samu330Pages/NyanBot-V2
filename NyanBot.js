@@ -1809,7 +1809,8 @@ case 'apkdl':
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     if (!text) return reply(`*❌ Por favor ingresa un nombre de paquete junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} com.groundhog.mcpemaster`);
-    stcReac('peso', `_*😗 Se esta enviando su aplicación*_\n*${downloadInfo.appname}*`)
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    
     try {
         const downloadInfo = await require("./lib/apk-dl").aptoide.download(text);
 
@@ -1817,6 +1818,7 @@ case 'apkdl':
             return reply(`*No se encontró información para el paquete "${text}".*`);
         }
 
+	stcReac('peso', `_*😗 Se esta enviando su aplicación*_\n*${downloadInfo.appname}*`)
         const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
             `◦  *Desarrollador*: ${downloadInfo.developer || 'Desconocido'}\n`;
 
