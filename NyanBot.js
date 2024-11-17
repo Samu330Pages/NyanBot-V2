@@ -2654,7 +2654,7 @@ case 'cerrar':
                 }
             break
 
-            case 'gpimg': case 'setppgruop': {
+            case 'gpimg': case 'setppgruop': case 'ppg': {
                 if (!m.isGroup) return reply(mess.group)
                 if (!isAdmins) return reply(mess.admin)
                 if (!isBotAdmins) return reply(mess.adminBot)
@@ -2662,7 +2662,6 @@ case 'cerrar':
                 if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
-                if (text == 'full') {
                     var {
                         img
                     } = await generateProfilePicture(medis)
@@ -2683,13 +2682,6 @@ case 'cerrar':
                     })
                     fs.unlinkSync(medis)
                     reply(mess.done)
-                } else {
-                    var memeg = await nyanBot2.updateProfilePicture(m.chat, {
-                        url: medis
-                    })
-                    fs.unlinkSync(medis)
-                    reply('*Liiiiisto!! 😁*')
-                }
             }
                 break
 
