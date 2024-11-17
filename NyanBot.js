@@ -856,7 +856,7 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
 
     if (lowerBudy === 'audio' || lowerBudy === 'a' || lowerBudy === 'aúdio' || lowerBudy === 'áudio') {
         const caseYtmp32 = require('./cases/ytmp3');
-        await caseYtmp32(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+        await caseYtmp32(videoLink, m, reply, nyanBot2, useLimit, stcReac, sender, prefix);
     }
 
     if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
