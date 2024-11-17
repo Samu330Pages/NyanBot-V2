@@ -856,12 +856,12 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
 
     if (lowerBudy === 'audio' || lowerBudy === 'a' || lowerBudy === 'aúdio' || lowerBudy === 'áudio') {
         const caseYtmp32 = require('./cases/ytmp3');
-        await caseYtmp32(videoLink, m, text, reply, nyanBot2, useLimit, stcReac, sender, prefix);
+        await caseYtmp32(videoLink, m, text, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
     }
 
     if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
         const caseYtmp3Video = require('./cases/ytmp4');
-        await caseYtmp3Video(videoLink, m, reply, nyanBot2, useLimit, stcReac, sender, db, command, prefix);
+        await caseYtmp3Video(videoLink, m, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
     }
 }
 
@@ -1106,7 +1106,7 @@ if (juegoActivoIndex !== -1) {
             case 'ytmp3':
             case 'yta': {
                 const caseYtmp3 = require('./cases/ytmp3');
-                await caseYtmp3(text, m, text, reply, nyanBot2, useLimit, stcReac, sender, prefix);
+                await caseYtmp3(text, m, text, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
             }
                 break
 
