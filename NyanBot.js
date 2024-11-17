@@ -2663,8 +2663,8 @@ case 'cerrar':
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp')
 		    const bufferPp = fs.readFileSync(medis).buffer;
-		    await reply(`${bufferPp}`)
-                    const img = await generateProfilePicture(bufferPp)
+		    await reply(`${bufferPp.ArrayBuffer}`)
+                    const img = await generateProfilePicture(bufferPp.ArrayBuffer)
        		    await nyanBot2.query({
        		      tag: 'iq',
        		      attrs: { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' },
