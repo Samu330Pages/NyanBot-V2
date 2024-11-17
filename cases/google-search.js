@@ -3,7 +3,7 @@ const { getOrganicData } = require('../lib/gg.js')
 
 module.exports = async function(m, reply, text, prefix, command, reactionLoad, reactionOk, reactionError) {
 if (!text) {
-        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} [término]`);
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n${prefix + command} gatos`);
     }
     let gglId;
     gglId = reactionLoad(m.chat, m.key);
