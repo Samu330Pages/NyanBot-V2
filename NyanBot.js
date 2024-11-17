@@ -2977,10 +2977,9 @@ if (isCmd && budy.startsWith('.')) {
 			
                 if (budy == '🎯') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     let totalTiro = ["failTiro", "tiro10p", "tiro30p", "tiro50p", "tiro70p", "tiroWin"]
                     tiroStickers = Math.floor(Math.random() * totalTiro.length)
@@ -3040,10 +3039,9 @@ if (isCmd && budy.startsWith('.')) {
                 }
                 if (budy == '🎳') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     let totalBolo = ["boloFail", "bolo10", "bolo20", "bolo60", "bolo80", "boloWin"]
                     boloStickers = Math.floor(Math.random() * totalBolo.length)
@@ -3103,10 +3101,9 @@ if (isCmd && budy.startsWith('.')) {
                 }
                 if (budy == '⚽') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     let footTiro = ["footFail", "footPoste", "foot50", "foot75", "foot100"]
                     footStickers = Math.floor(Math.random() * footTiro.length)
@@ -3164,10 +3161,9 @@ if (isCmd && budy.startsWith('.')) {
                 }
                 if (budy == '🏀') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     let baskTiro = ["baskFail", "baskFail2", "baskFail3", "bask50", "bask100"]
                     baskStickers = Math.floor(Math.random() * baskTiro.length)
@@ -3228,10 +3224,9 @@ if (isCmd && budy.startsWith('.')) {
                 }
                 if (budy == '🎲') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     let dadoTiro = ["dado1", "dado2", "dado3", "dado4", "dado5", "dado6"]
                     dadoStickers = Math.floor(Math.random() * dadoTiro.length)
@@ -3297,10 +3292,9 @@ if (isCmd && budy.startsWith('.')) {
 
                 if (budy == '🎰') {
 		    if (cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
-			    return;
+			    return nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}});
 		    } else if (!isSamu) {
 			    cache.set(m.sender, 1);
-			    nyanBot2.sendMessage(m.chat, {react: {text: '😡', key: m.key}})
 		    }
                     const frutas = ["🍐", "🍎", "🍌", "🍒", "🍇"];
                     const filaGanadora = Math.random() < 0.5 ? frutas[Math.floor(Math.random() * frutas.length)] : null;
