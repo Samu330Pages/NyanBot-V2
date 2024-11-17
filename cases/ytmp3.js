@@ -2,13 +2,13 @@ const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js');
 const { toAudio } = require('../lib/converter');
 
-async function downloadAudioFromYouTube(link, m, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix) {
+async function downloadAudioFromYouTube(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix) {
     if (!/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(link)) {
-        return nyanBot2.sendMessage(m.chat, `*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix} ${link}`);
+        return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix} ${link}`);
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    nyanBot2.sendMessage(m.chat, `*Esperé un momento, se está procesando su solicitud...* 😙`);
+    reply`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
         let r = await ytdl.sYtdl(link);
