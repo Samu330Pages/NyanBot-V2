@@ -1,4 +1,54 @@
-            case 'test':
+async function sendReplyButton(chatId, buttons, message, options) {
+            const { content, media } = options;
+
+            let iconBtn = fs.readFileSync("./Media/theme/icon.png")
+            const interactiveMessage = proto.Message.InteractiveMessage.create({
+                body: proto.Message.InteractiveMessage.Body.create({
+                    text: content,
+                }),
+                footer: proto.Message.InteractiveMessage.Footer.create({
+                    text: botname,
+                }),
+                header: proto.Message.InteractiveMessage.Header.create({
+                    hasMediaAttachment: media ? true : false,
+                    ...(media ? await prepareWAMessageMedia({
+                        document: fs.readFileSync("./Media/theme/icon.png"),
+                        mimetype: "image/png",
+                        fileName: "☃️ Nyan-V2 🏰",
+                        jpegThumbnail: iconBtn
+                    }, { upload: nyanBot2.waUploadToServer }) : {})
+                }),
+                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                    buttons: buttons,
+                }),
+                contextInfo: {
+                    mentionedJid: [m.sender],
+                    "externalAdReply": {
+                        "showAdAttribution": true,
+                        "containsAutoReply": true,
+                        "title": `💬 Tus puntos: ${db.data.users[sender].limit}`,
+                        "body": `Click here! 👉🏻🟢`,
+                        "previewType": "PHOTO",
+                        "thumbnailUrl": ``,
+                        "thumbnail": media,
+                        "sourceUrl": "https://whatsapp.com/channel/0029VaDVQFVL7UVd71R7bY23"
+                    }
+                }
+            })
+
+            const msgs = generateWAMessageFromContent(chatId, {
+                viewOnceMessage: {
+                    message: {
+                        interactiveMessage: interactiveMessage
+                    }
+                }
+            }, { quoted: m });
+
+            await nyanBot2.relayMessage(chatId, msgs.message, {});
+        }
+
+
+case 'test':
                 const buttons = [
                     {
                         name: "send_location",
