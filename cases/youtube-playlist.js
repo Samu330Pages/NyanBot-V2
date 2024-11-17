@@ -25,9 +25,7 @@ module.exports = async function(text, m, reply, nyanBot2, sendCarousel, stcReac,
         }
         const playlist = playlistResults[0];
         const listId = playlist.listId;
-        const listDetails = await yts({
-            listId
-        });
+        const listDetails = await yts({ listId });
         let contents = [];
         const maxVideosToShow = 10;
         const videoCount = listDetails.size;
