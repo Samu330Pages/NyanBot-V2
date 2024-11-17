@@ -41,7 +41,7 @@ async function downloadAudioFromYouTube(link, m, reply, nyanBot2, useLimit, stcR
     }
 }
 
-module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix) {
+module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sender, prefix) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(global.mess.limit);
     if (global.DATABASE.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${global.DATABASE.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
 
