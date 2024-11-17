@@ -1021,97 +1021,16 @@ if (juegoActivoIndex !== -1) {
                 await caseSpotify(m, reply, text, nyanBot2, reSize);
                 break
 
-	    case 'tourl': {
-                nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
-		let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
-                if (/image/.test(mime)) {
-                    let r = await TelegraPh(media)
-                    reply(util.format(r))
-                } else if (!/image/.test(mime)) {
-                    let r = await UploadFileUgu(media)
-                    reply(util.format(r))
-                }
-                await fs.unlinkSync(media)
-
-            }
-            break
-
             case 'buscar': case 'gg': case 'google':
 		const caseGoogle = require('./cases/google-search');
                 await caseGoogle(m, reply, text, prefix, command, reactionLoad, reactionOk, reactionError);
 		break
 
-            case 'letra':
-            case 'lyrics': {
-                if (!text) return reply(`¡Por favor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix + command} me olvide de vivir*`);
-
-                let letraId;
-                letraId = reactionLoad(m.chat, m.key);
-                stcReac('lupa', '_*Buscando Lyrics*_ ✍🏻')
-                try {
-                    let lyric = await fg.lyrics(text);
-
-                    if (!lyric || !lyric.title || lyric.title === 'undefined' || lyric.lyrics === 'undefined') {
-                        reactionError(m.chat, m.key, letraId);
-                        return reply(`*Lo siento, pero no se encontraron resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`);
-                    }
-
-                    const buttons = [
-                        {
-                            name: "cta_copy",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: 'Copiar 🪄',
-                                copy_code: `${lyric.lyrics}`
-                            }),
-                        }
-                    ];
-
-                    await sendReplyButton(m.chat, buttons, m, {
-                        content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
-_*Título:*_ ${lyric.title}
-_*Artista:*_ ${lyric.artist}\n
-*Letra:*\n
-${lyric.lyrics}\n`,
-                        media: await fetchBuffer(`${lyric.image}`)
-                    });
-
-                    reactionOk(m.chat, m.key, letraId);
-                } catch (error) {
-                    reactionError(m.chat, m.key, letraId);
-                    console.error('Error al procesar la solicitud:', error);
-                    reply(`Ocurrió un error al intentar obtener la letra. Por favor, verifica el nombre de la canción y vuelve a intentarlo.\n${error}`);
-                }
-            }
-                break
-	    case 'ghstalk': case 'githubstalk':{
-if (!text) return reply(`*Ejemplo de uso:* ${prefix+command} Samu330`)
-nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
-let githubstalk = require('./lib/scraper')
-aj = await githubstalk.githubstalk(`${text}`)
-nyanBot2.sendMessage(m.chat, { image: { url : aj.profile_pic }, caption: 
-`> *Github Stalker 🧸*
-
-- Username : ${aj.username}
-- Nickname : ${aj.nickname}
-- Bio : ${aj.bio}
-- Id : ${aj.id}
-- Nodeid : ${aj.nodeId}
-- Url Profile : ${aj.profile_pic}
-- Url Github : ${aj.url}
-- Type : ${aj.type}
-- Admin : ${aj.admin}
-- Company : ${aj.company}
-- Blog : ${aj.blog}
-- Location : ${aj.location}
-- Email : ${aj.email}
-- Public Repo : ${aj.public_repo}
-- Public Gists : ${aj.public_gists}
-- Followers : ${aj.followers}
-- Following : ${aj.following}
-- Created At : ${aj.ceated_at}
-- Updated At : ${aj.updated_at}` }, { quoted: m } )
-}
-break
+            
+	    case 'ghstalk': case 'githubstalk':
+		const caseGitStalk = require('./cases/google-search');
+                await caseGitStalk(m, reply, text, prefix, command, nyanBot2);
+		break
 
             case 'yts': case 'youtubesearch': case 'ytsearch': {
                 if (!text) {
@@ -1522,6 +1441,21 @@ break
             }
                 break
 
+	case 'tourl': {
+                nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
+		let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
+                if (/image/.test(mime)) {
+                    let r = await TelegraPh(media)
+                    reply(util.format(r))
+                } else if (!/image/.test(mime)) {
+                    let r = await UploadFileUgu(media)
+                    reply(util.format(r))
+                }
+                await fs.unlinkSync(media)
+
+            }
+            break
+
             case 'emojimix': {
                 let [emoji1, emoji2] = text.split`+`
                 if (!emoji1) return reply(`*Te falta el otro emoji:* ${prefix + command} 😅+🥹`)
@@ -1609,6 +1543,49 @@ break
                 } catch (error) {
                     console.error('Error en la búsqueda:', error);
                     return reply(`Ocurrió un error al realizar la búsqueda de ${text}. Intenta nuevamente más tarde.\n${error.message}`);
+                }
+            }
+                break
+
+		case 'letra':
+            case 'lyrics': {
+                if (!text) return reply(`¡Por favor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix + command} me olvide de vivir*`);
+
+                let letraId;
+                letraId = reactionLoad(m.chat, m.key);
+                stcReac('lupa', '_*Buscando Lyrics*_ ✍🏻')
+                try {
+                    let lyric = await fg.lyrics(text);
+
+                    if (!lyric || !lyric.title || lyric.title === 'undefined' || lyric.lyrics === 'undefined') {
+                        reactionError(m.chat, m.key, letraId);
+                        return reply(`*Lo siento, pero no se encontraron resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`);
+                    }
+
+                    const buttons = [
+                        {
+                            name: "cta_copy",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: 'Copiar 🪄',
+                                copy_code: `${lyric.lyrics}`
+                            }),
+                        }
+                    ];
+
+                    await sendReplyButton(m.chat, buttons, m, {
+                        content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
+_*Título:*_ ${lyric.title}
+_*Artista:*_ ${lyric.artist}\n
+*Letra:*\n
+${lyric.lyrics}\n`,
+                        media: await fetchBuffer(`${lyric.image}`)
+                    });
+
+                    reactionOk(m.chat, m.key, letraId);
+                } catch (error) {
+                    reactionError(m.chat, m.key, letraId);
+                    console.error('Error al procesar la solicitud:', error);
+                    reply(`Ocurrió un error al intentar obtener la letra. Por favor, verifica el nombre de la canción y vuelve a intentarlo.\n${error}`);
                 }
             }
                 break
