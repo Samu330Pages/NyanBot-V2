@@ -1106,7 +1106,7 @@ if (juegoActivoIndex !== -1) {
             case 'ytmp3':
             case 'yta': {
                 const caseYtmp3 = require('./cases/ytmp3');
-                await caseYtmp3(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix);
+                await caseYtmp3(link, m, reply, nyanBot2, useLimit, stcReac, sender, prefix);
             }
                 break
 
