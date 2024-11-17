@@ -1816,7 +1816,7 @@ case 'apkdl':
     const argApk = text.split('|');
     if (argApk.length < 5) return reply(`*❌ El formato es incorrecto. Usa: .apkdl link|size|nombre|version|imagen*`);
 
-    if (apkSize > 1000000000) {
+    if (argApk[1] > 1000000000) {
         return reply(`*Lo siento pero el archivo pesa más de 1GB (${formatBytes(argApk[1])}), por tal motivo no es posible el envío! 🙃*`);
     }
 
