@@ -2662,7 +2662,7 @@ case 'cerrar':
                 if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
-                if (args[0] == 'full') {
+                if (text == 'full') {
                     var {
                         img
                     } = await generateProfilePicture(medis)
@@ -2678,7 +2678,7 @@ case 'cerrar':
                             attrs: {
                                 type: 'image'
                             },
-                            content: img
+                            content: medis
                         }]
                     })
                     fs.unlinkSync(medis)
