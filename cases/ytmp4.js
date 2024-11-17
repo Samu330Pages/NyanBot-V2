@@ -1,8 +1,15 @@
 const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js');
 const { getBuffer } = require('../lib/samufuncs.js');
+const {
+    formatNumber
+} = require('../lib/samufuncs')
+const forma1 = '`'
 
-async function downloadVideoFromYouTube(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix) {
+module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sender, db, command, prefix) {
+    if (global.DATABASE.data.users[sender].limit < 1) return reply(global.mess.limit);
+    if (global.DATABASE.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${global.DATABASE.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
+
     if (!/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(link)) {
         return reply(`*Es necesario un link válido de YouTube.*\n_*Ejemplo de uso*_\n\n${prefix} ${link}`);
     }
@@ -39,13 +46,6 @@ async function downloadVideoFromYouTube(link, m, reply, nyanBot2, formatNumber, 
         console.error('Error al procesar la solicitud:', error);
         stcReac('error', `_*❌ La descarga ha fallado!*_\n*Intenta de nuevo! 🙂*`);
     }
-}
-
-module.exports = async function(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix) {
-    if (db.data.users[sender].limit < 1) return reply(mess.limit);
-    if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-
-    await downloadVideoFromYouTube(text, m, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix);
 
     useLimit(sender, 30);
 };
