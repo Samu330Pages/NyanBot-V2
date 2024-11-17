@@ -122,7 +122,7 @@ const {
 } = require('./lib/premiumD')
 
 let cache = new(require('node-cache'))({
-    stdTTL: config.cooldown // Cooldown time between action of each user with the bot.
+    stdTTL: 3 // Cooldown time between action of each user with the bot.
 });
 
 const forma1 = '`'
