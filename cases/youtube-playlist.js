@@ -71,7 +71,7 @@ module.exports = async function(text, m, reply, nyanBot2, sendCarousel, stcReac,
             `_Para descargar, solo desliza sobre los resultados y toca el botón para copiar el comando, luego envíalo y listo! 😁_`;
         await sendCarousel(m.chat, {}, {
             header: headerMessage,
-            footer: `${botname}`,
+            footer: `${global.botname}`,
             cards: contents
         });
 
