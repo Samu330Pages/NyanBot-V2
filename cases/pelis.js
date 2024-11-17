@@ -1,7 +1,7 @@
 module.exports = async function(text, m, reply, nyanBot2, sendCarousel, stcReac, command, prefix) {
 
     if (!text) {
-        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} [término]`);
+        return reply(`*Por favor, proporciona un término de búsqueda. Ejemplo:*\n\n${prefix + command} moana`);
     }
     nyanBot2.sendMessage(m.chat, {
         react: {
