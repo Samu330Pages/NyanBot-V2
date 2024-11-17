@@ -608,7 +608,7 @@ setInterval(processUserRequests, 6000);
 
 	if (isCommand && cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
             return;
-        } else if (m.isGroup && isCommand && !isSamu) {
+        } else if (isCommand && !isSamu) {
             cache.set(m.sender, 1);
         }
 
