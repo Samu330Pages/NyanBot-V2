@@ -97,6 +97,7 @@ const {
     getBuffer,
     json,
     delay,
+    reSize,
     format,
     logic,
     generateProfilePicture,
@@ -106,7 +107,9 @@ const {
     fetchBuffer,
     buffergif,
     totalcase,
-    WAVersion
+    WAVersion,
+    calculateLevenshteinDistance,
+    calculateSimilarity
 } = require('./lib/samufuncs')
 //prem owner function
 const {
@@ -122,41 +125,6 @@ const {
 const forma1 = '`'
 
 const dbPath = path.join(__dirname, 'Media', 'database', 'userPoints.json');
-
-function calculateLevenshteinDistance(a, b) {
-    const matrix = [];
-
-    for (let i = 0; i <= b.length; i++) {
-        matrix[i] = [i];
-    }
-    for (let j = 0; j <= a.length; j++) {
-        matrix[0][j] = j;
-    }
-
-    for (let i = 1; i <= b.length; i++) {
-        for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1, // sustitución
-                    Math.min(matrix[i][j - 1] + 1, // inserción
-                        matrix[i - 1][j] + 1) // eliminación
-                );
-            }
-        }
-    }
-
-    return matrix[b.length][a.length];
-}
-
-function calculateSimilarity(str1, str2) {
-    const distance = calculateLevenshteinDistance(str1, str2);
-    const maxLength = Math.max(str1.length, str2.length);
-
-    // Normalizar la similitud
-    return maxLength ? (1 - distance / maxLength) : 1; // Evita división por cero
-}
 
 // Constante de categorías y comandos disponibles
 const categories = {
@@ -278,15 +246,6 @@ const time = moment().tz('America/Panama').format('HH:mm:ss');
 const date = moment().tz('America/Panama').format('DD/MM/YYYY');
 const longDate = moment().tz('America/Panama').format('dddd, D [de] MMMM [del] YYYY');
 
-//function
-const reSize = async (buffer, ukur1, ukur2) => {
-    return new Promise(async (resolve, reject) => {
-        let jimp = require('jimp')
-        var baper = await jimp.read(buffer);
-        var ab = await baper.resize(ukur1, ukur2).getBufferAsync(jimp.MIME_JPEG)
-        resolve(ab)
-    })
-}
 //module
 module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
     try {
@@ -297,6 +256,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             now,
             fromMe
         } = m
+	if (m.type === "senderKeyDistributionMessage") return;
         var body = m.message?.conversation || m.message?.viewOnceMessageV2?.message?.imageMessage?.caption || m.message?.viewOnceMessageV2?.message?.videoMessage?.caption || m.message?.imageMessage?.caption || m.message?.videoMessage?.caption || m.message?.extendedTextMessage?.text || m.message?.viewOnceMessage?.message?.videoMessage?.caption || m.message?.viewOnceMessage?.message?.imageMessage?.caption || m.message?.documentWithCaptionMessage?.message?.documentMessage?.caption || m.message?.buttonsMessage?.imageMessage?.caption || m.message?.buttonsResponseMessage?.selectedButtonId || m.message?.listResponseMessage?.singleSelectReply?.selectedRowId || m.message?.templateButtonReplyMessage?.selectedId || (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson ? JSON.parse(m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson)?.id : null) || m?.text || "";
         var budy = (typeof m.text == 'string' ? m.text : '')
         //prefix 1
@@ -529,56 +489,6 @@ const processUserRequests = async () => {
 };
 
 setInterval(processUserRequests, 6000);
-
-	    
-        async function sendReplyButton(chatId, buttons, message, options) {
-            const { content, media } = options;
-
-            let iconBtn = fs.readFileSync("./Media/theme/icon.png")
-            const interactiveMessage = proto.Message.InteractiveMessage.create({
-                body: proto.Message.InteractiveMessage.Body.create({
-                    text: content,
-                }),
-                footer: proto.Message.InteractiveMessage.Footer.create({
-                    text: botname,
-                }),
-                header: proto.Message.InteractiveMessage.Header.create({
-                    hasMediaAttachment: media ? true : false,
-                    ...(media ? await prepareWAMessageMedia({
-                        document: fs.readFileSync("./Media/theme/icon.png"),
-                        mimetype: "image/png",
-                        fileName: "☃️ Nyan-V2 🏰",
-                        jpegThumbnail: iconBtn
-                    }, { upload: nyanBot2.waUploadToServer }) : {})
-                }),
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                    buttons: buttons,
-                }),
-                contextInfo: {
-                    mentionedJid: [m.sender],
-                    "externalAdReply": {
-                        "showAdAttribution": true,
-                        "containsAutoReply": true,
-                        "title": `💬 Tus puntos: ${db.data.users[sender].limit}`,
-                        "body": `Click here! 👉🏻🟢`,
-                        "previewType": "PHOTO",
-                        "thumbnailUrl": ``,
-                        "thumbnail": media,
-                        "sourceUrl": "https://whatsapp.com/channel/0029VaDVQFVL7UVd71R7bY23"
-                    }
-                }
-            })
-
-            const msgs = generateWAMessageFromContent(chatId, {
-                viewOnceMessage: {
-                    message: {
-                        interactiveMessage: interactiveMessage
-                    }
-                }
-            }, { quoted: m });
-
-            await nyanBot2.relayMessage(chatId, msgs.message, {});
-        }
 
         async function sendCarousel(chatId, nativeFlowMessage, options) {
             const { header, footer, cards } = options;
@@ -1009,7 +919,6 @@ if (juegoActivoIndex !== -1) {
 		const caseGoogle = require('./cases/google-search');
                 await caseGoogle(m, reply, text, prefix, command, reactionLoad, reactionOk, reactionError);
 		break
-
             
 	    case 'ghstalk': case 'githubstalk':
 		const caseGitStalk = require('./cases/stalk-github');
@@ -1051,25 +960,9 @@ if (juegoActivoIndex !== -1) {
                 await casePelisDl(text, m, reply, nyanBot2, command, prefix);
                 break
 
-            case 'cuevana': {
-                if (!text) return reply('_*¿Qué película estás buscando?*_');
-
-                let searchResults = await require("./lib/cuevana.js").cuevana(text);
-
-                let responseText = `${forma1}CUEVANA SEARCH 📼${forma1}\n\n`;
-                responseText += `*Resultados de búsqueda para "${text}":*\n\n`;
-
-                if (searchResults.results.length === 0) {
-                    responseText += `_*No se encontraron resultados para "${text}".*_`;
-                } else {
-                    searchResults.results.forEach((movie, index) => {
-                        responseText += `*${forma1}${index + 1}. ${movie.title}${forma1}*\n\n`;
-                        responseText += `*Enlace:* ${movie.link}\n`;
-                        responseText += `📍--------------\n\n`;
-                    });
-                }
-                await reply(responseText)
-            }
+            case 'cuevana':
+		const caseCuevana = require('./cases/cuevana');
+                await caseCuevana(text, m, reply);
                 break
 
             case 'toaud':
