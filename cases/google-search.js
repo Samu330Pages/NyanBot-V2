@@ -1,5 +1,5 @@
 const google = require('googlethis')
-const { getOrganicData } = require('./lib/gg.js')
+const { getOrganicData } = require('../lib/gg.js')
 
 module.exports = async function(m, reply, text, prefix, command, reactionLoad, reactionOk, reactionError) {
 if (!text) {
