@@ -121,6 +121,10 @@ const {
     deletePremiumUser
 } = require('./lib/premiumD')
 
+let cache = new(require('node-cache'))({
+    stdTTL: config.cooldown // Cooldown time between action of each user with the bot.
+});
+
 const forma1 = '`'
 
 const dbPath = path.join(__dirname, 'Media', 'database', 'userPoints.json');
@@ -601,6 +605,14 @@ setInterval(processUserRequests, 6000);
 
         //
 
+
+	if (command && cache.has(m.sender) && cache.get(m.sender) === 1 && !isSamu) {
+            return;
+        } else if (m.isGroup && command && !isSamu) {
+            cache.set(m.sender, 1);
+        }
+
+	    
         //limit func
         async function useLimit(senderLimit, amount) {
             db.data.users[senderLimit].limit -= amount
