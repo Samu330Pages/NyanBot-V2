@@ -861,7 +861,7 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
 
     if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
         const caseYtmp3Video = require('./cases/ytmp4');
-        await caseYtmp3Video(videoLink, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+        await caseYtmp3Video(videoLink, m, reply, nyanBot2, useLimit, stcReac, sender, db, command, prefix);
     }
 }
 
@@ -1113,7 +1113,7 @@ if (juegoActivoIndex !== -1) {
             case 'ytmp4':
             case 'ytv': {
                 const caseYtmp4 = require('./cases/ytmp4');
-                await caseYtmp4(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix);
+                await caseYtmp4(link, m, reply, nyanBot2, useLimit, stcReac, sender, db, command, prefix);
             }
                 break
 
