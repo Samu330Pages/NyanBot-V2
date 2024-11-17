@@ -108,8 +108,7 @@ const {
     buffergif,
     totalcase,
     WAVersion,
-    calculateSimilarity,
-    calculateLevenshteinDistance
+    calculateSimilarity
 } = require('./lib/samufuncs')
 //prem owner function
 const {
