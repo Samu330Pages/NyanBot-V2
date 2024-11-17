@@ -1789,7 +1789,7 @@ case 'apk':
                         name: "cta_copy",
                         buttonParamsJson: JSON.stringify({
                             display_text: `Descargar ${app.name}`,
-                            copy_code: `${prefix}apkdl ${app.file.path}|${app.size}|${app.name}|${app.file.vername}`
+                            copy_code: `${prefix}apkdl ${app.file.path}|${app.size}|${app.name}|${app.file.vername}|${app.icon}`
                         })
                     }]
                 },
@@ -1811,27 +1811,25 @@ case 'apkdl':
     if (db.data.users[sender].limit < 1) return reply(mess.limit);
     if (db.data.users[sender].limit < 30) return reply(`*Lo siento, pero este comando requiere 30 puntos, y tu cuenta tiene ${db.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
     
-    if (!text) return reply(`*❌ Por favor ingresa un enlace junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://pool.apk.aptoide.com/...|21335319|Master for Minecraft- Launcher|1.4.25`);
+    if (!text) return reply(`*❌ Por favor ingresa un enlace junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://pool.apk.aptoide.com/...|21335319|Master for Minecraft- Launcher|1.4.25|imagen`);
 
-    const args = text.split('|');
-    if (args.length < 4) return reply(`*❌ El formato es incorrecto. Usa: .apkdl link|size|nombre|version*`);
+    const argApk = text.split('|');
+    if (argApk.length < 5) return reply(`*❌ El formato es incorrecto. Usa: .apkdl link|size|nombre|version|imagen*`);
 
-    const [link, size, name, version] = args;
-
-    if (parseInt(size) > 1000000000) {
-        return reply(`*Lo siento pero el archivo pesa más de 1GB (${formatBytes(parseInt(size))}), por tal motivo no es posible el envío! 🙃*`);
+    if (apkSize > 1000000000) {
+        return reply(`*Lo siento pero el archivo pesa más de 1GB (${formatBytes(argApk[1])}), por tal motivo no es posible el envío! 🙃*`);
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    
-    const downloadMessage = `📥 *${name}*\n\n` +
-        `◦  *Tamaño*: ${formatBytes(size)}\n` +
-        `◦  *Versión*: ${version}`;
+    stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*🔻 ${argApk[2]}*`);
+    const downloadMessage = `📥 *${argApk[2]}*\n\n` +
+        `◦  *Tamaño*: ${formatBytes(argApk[1])}\n` +
+        `◦  *Versión*: ${argApk[3]}`;
 
     await nyanBot2.sendMessage(m.chat, {
-        document: { url: link },
+        document: { url: argApk[0] },
         mimetype: 'application/vnd.android.package-archive',
-        fileName: `${name}.apk`,
+        fileName: `${argApk[2]}.apk`,
         caption: downloadMessage,
         contextInfo: {
             "externalAdReply": {
@@ -1839,7 +1837,7 @@ case 'apkdl':
                 "containsAutoReply": true,
                 "title": `📥 Descarga por Samu330 👑`,
                 "body": `Download by Samu330.com!`,
-                "thumbnailUrl": 'https://default-icon-url.com', // Puedes cambiar esto si tienes una imagen específica
+                "thumbnailUrl": argApk[4],
                 "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
             }
         }
