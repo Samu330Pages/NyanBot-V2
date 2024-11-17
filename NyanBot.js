@@ -2662,10 +2662,8 @@ case 'cerrar':
                 if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
-                    var {
-                        img
-                    } = await generateProfilePicture(medis)
-                    const attrs = { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' };
+                    const img = await generateProfilePicture(medis)
+                    const attrs = m.chat.includes('@s.whatsapp.net') ? { to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' } : { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' };
        await nyanBot2.query({
            tag: 'iq',
            attrs: attrs,
