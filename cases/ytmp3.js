@@ -8,7 +8,7 @@ async function downloadAudioFromYouTube(link, m, reply, nyanBot2, formatNumber, 
     }
 
     nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-    reply`*Esperé un momento, se está procesando su solicitud...* 😙`);
+    reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
         let r = await ytdl.sYtdl(link);
