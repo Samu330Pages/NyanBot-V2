@@ -29,8 +29,6 @@ const ms = toMs = require('ms')
 const axios = require('axios')
 const syntax = require('syntax-error')
 const fetch = require('node-fetch')
-const yts = require('yt-search')
-const ytdl = require('./lib/ytdlNew.js')
 const { igdl, fbdl, ttdl } = require('ruhend-scraper')
 const cheerio = require('cheerio')
 const { randomBytes } = require('crypto')
@@ -856,7 +854,7 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
 
     if (lowerBudy === 'audio' || lowerBudy === 'a' || lowerBudy === 'aúdio' || lowerBudy === 'áudio') {
         const caseYtmp32 = require('./cases/ytmp3');
-        await caseYtmp32(videoLink, m, text, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
+        await caseYtmp32(videoLink, m, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
     }
 
     if (lowerBudy === 'video' || lowerBudy === 'v' || lowerBudy === 'vídeo' || lowerBudy === 'vÍdeo') {
@@ -987,9 +985,7 @@ if (juegoActivoIndex !== -1) {
                 await casePinterest(m, reply, nyanBot2, text, prefix, command, sendCarousel, stcReac);
                 break
 
-            case 'img':
-            case 'imagen':
-            case 'imagenes':
+            case 'img': case 'imagen': case 'imagenes':
                 const caseImagen = require('./cases/imagen');
                 await caseImagen(m, reply, nyanBot2, text, prefix, command, stcReac);
                 break
@@ -1025,77 +1021,9 @@ if (juegoActivoIndex !== -1) {
                 await caseYtSearch(m, reply, text, prefix, command, nyanBot2, stcReac, sendCarousel);
                 break
 
-            case 'playlist': case 'youtubeplaylist': case 'ytplaylist': {
-                if (!text || isUrl(text)) {
-                    return reply(`*Por favor, solo proporciona el nombre de la playlist, no incluyas links. Ejemplo:*\n\n${command} _*nombre de la playlist*_`);
-                }
-                nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-                stcReac('lupa', '_*Generando Playlist...*_ 📃')
-                try {
-
-                    const results = await yts(`playlist ${text}`);
-                    const playlistResults = results.all.filter(item => item.type === 'list');
-
-                    if (playlistResults.length === 0) {
-                        return reply(`No se encontraron playlists para: ${text}`);
-                    }
-                    const playlist = playlistResults[0];
-                    const listId = playlist.listId;
-                    const listDetails = await yts({ listId });
-                    let contents = [];
-                    const maxVideosToShow = 10;
-                    const videoCount = listDetails.size;
-
-                    listDetails.videos.slice(0, maxVideosToShow).forEach((video) => {
-                        let content = `◦  *Título*: ${video.title || 'Desconocido'}\n`;
-                        content += `◦  *Autor*: ${video.author.name || 'Desconocido'}\n`;
-                        content += `◦  *Duración*: ${video.duration || 'Desconocido'}`;
-
-                        contents.push({
-                            header: {
-                                imageMessage: video.thumbnail,
-                                hasMediaAttachment: true,
-                            },
-                            body: {
-                                text: content
-                            },
-                            nativeFlowMessage: {
-                                buttons: [{
-                                    name: "cta_copy",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: `Descargar Audio! 🎧`,
-                                        copy_code: `${prefix}yta https://youtube.com/watch?v=${video.videoId}`
-                                    })
-                                }, {
-                                    name: "cta_copy",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: `Descargar Video! 📽️`,
-                                        copy_code: `${prefix}ytv https://youtube.com/watch?v=${video.videoId}`
-                                    })
-                                }]
-                            },
-                        });
-                    });
-
-                    const headerMessage = `Se encontraron ${videoCount} videos en la playlist "*${listDetails.title}*".\n` +
-                        `*Vistas*: ${listDetails.views || 'Desconocido'}\n` +
-                        `*Fecha*: ${listDetails.date || 'Desconocido'}\n` +
-                        `⚠️ *IMPORTANTE!!* ￬￬\n` +
-                        `_Se mostrarán solo los primeros ${maxVideosToShow} videos._\n` +
-                        `_Para descargar, solo desliza sobre los resultados y toca el botón para copiar el comando, luego envíalo y listo! 😁_`;
-                    await sendCarousel(m.chat, {}, {
-                        header: headerMessage,
-                        footer: `${botname}`,
-                        cards: contents
-                    });
-
-                    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-                } catch (error) {
-                    nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-                    console.error('Error en la búsqueda de playlists de YouTube:', error);
-                    stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
-                }
-            }
+            case 'playlist': case 'youtubeplaylist': case 'ytplaylist':
+                const caseYtPlaylist = require('./cases/youtube-playlist');
+                await caseYtPlaylist(text, m, reply, nyanBot2, sendCarousel, stcReac, prefix, command);
                 break
 
             case 'play':
@@ -1103,18 +1031,14 @@ if (juegoActivoIndex !== -1) {
                 await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, nyanBot2, formatNumber, prefix, readmore);
                 break
 
-            case 'ytmp3':
-            case 'yta': {
+            case 'ytmp3': case 'yta'
                 const caseYtmp3 = require('./cases/ytmp3');
-                await caseYtmp3(text, m, text, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
-            }
+                await caseYtmp3(text, m, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
                 break
 
-            case 'ytmp4':
-            case 'ytv': {
+            case 'ytmp4': case 'ytv':
                 const caseYtmp4 = require('./cases/ytmp4');
                 await caseYtmp4(text, m, reply, nyanBot2, useLimit, stcReac, sender, command, prefix);
-            }
                 break
 
             case 'pelis': case 'peliculas': {
