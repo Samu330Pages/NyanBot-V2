@@ -1106,14 +1106,14 @@ if (juegoActivoIndex !== -1) {
             case 'ytmp3':
             case 'yta': {
                 const caseYtmp3 = require('./cases/ytmp3');
-                await caseYtmp3(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+                await caseYtmp3(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix);
             }
                 break
 
             case 'ytmp4':
             case 'ytv': {
                 const caseYtmp4 = require('./cases/ytmp4');
-                await caseYtmp4(text, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, db, command, forma1, prefix);
+                await caseYtmp4(link, m, reply, nyanBot2, formatNumber, useLimit, stcReac, sender, prefix));
             }
                 break
 
