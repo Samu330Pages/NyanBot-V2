@@ -51,7 +51,7 @@ const {
     startPetUpdateInterval,
     sleepPet
 } = require('./src/petsTest')
-const audd = new Audd('1a6ede81448d884743b151a7d079bb04');//21/10/24
+const audd = new Audd('a75003657df885776c027d0a5e17edd6');//21/10/24
 const {
     exec,
     spawn,
