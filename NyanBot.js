@@ -2661,8 +2661,8 @@ case 'cerrar':
                 if (!quoted) return reply(`*Porfavor etiqueta con el comando la imagen que desees establecer para el grupo!*`)
                 if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
-                var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
-                    const img = await generateProfilePicture(medis)
+                var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp')
+                    const img = await generateProfilePicture(fs.readFileSync(medis))
        		    await nyanBot2.query({
        		      tag: 'iq',
        		      attrs: { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' },
