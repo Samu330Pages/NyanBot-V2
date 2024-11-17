@@ -123,7 +123,7 @@ const {  state, saveCreds } =await useMultiFileAuthState('./session')
       }*/
 
       setTimeout(async () => {
-         let code = await nyanBot2.requestPairingCode(phoneNumber)
+         let code = await nyanBot2.requestPairingCode("5219984907794")
          code = code?.match(/.{1,4}/g)?.join("-") || code
          console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
       }, 3000)
