@@ -1028,7 +1028,7 @@ if (juegoActivoIndex !== -1) {
 
             
 	    case 'ghstalk': case 'githubstalk':
-		const caseGitStalk = require('./cases/google-search');
+		const caseGitStalk = require('./cases/stalk-github');
                 await caseGitStalk(m, reply, text, prefix, command, nyanBot2);
 		break
 
