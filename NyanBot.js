@@ -2663,12 +2663,11 @@ case 'cerrar':
                 if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp.jpeg')
                     const img = await generateProfilePicture(medis)
-                    const attrs = m.chat.includes('@s.whatsapp.net') ? { to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' } : { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' };
-       await nyanBot2.query({
-           tag: 'iq',
-           attrs: attrs,
-           content: [{ tag: 'picture', attrs: { type: 'image' }, img }]
-       });
+       		    await nyanBot2.query({
+       		      tag: 'iq',
+       		      attrs: { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' },
+       		      content: [{ tag: 'picture', attrs: { type: 'image' }, img }]
+		    });
                     fs.unlinkSync(medis)
                     reply(mess.done)
             }
