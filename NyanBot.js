@@ -2664,7 +2664,7 @@ case 'cerrar':
                     const img = await generateProfilePicture(medis)
        		    await nyanBot2.query({
        		      tag: 'iq',
-       		      attrs: { target: m.chat, to: '@s.whatsapp.net', type: 'set', xmlns: 'w:profile:picture' },
+       		      attrs: { to: m.chat, type: 'set', xmlns: 'w:profile:picture' },
        		      content: [{ tag: 'picture', attrs: { type: 'image' }, img }]
 		    });
                     fs.unlinkSync(medis)
