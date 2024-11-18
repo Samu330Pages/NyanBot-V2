@@ -337,7 +337,7 @@ const startNyanBot = async () => {
             if (callStatus.isGroup == false) {
             if (callStatus.status == "offer") {
             //let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*${callStatus.user.name}* can't receive ${callStatus.isVideo ? `video` : `voice` } call. Sorry @${callStatus.from.split('@')[0]} you will be blocked. If called accidentally please contact the owner to be unblocked !`)
-            nyanBot2.sendMessage(callStatus.from, {text: 'No'})
+            nyanBot2.sendMessage(callStatus.from, {text: 'No Calls'})
             await sleep(1000)
             await nyanBot2.rejectCall(callStatus.id, callStatus.from)
             }
