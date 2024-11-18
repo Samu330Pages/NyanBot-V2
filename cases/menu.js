@@ -88,6 +88,8 @@ const TipoDispositivo = m.key.id.length === 20 ? 'iPhone' : m.key.id.length === 
                     body: date,
                     thumbnail: canvasImage,
                     jpegThumbnail: canvasImage,
+                    highQualityThumbnail: canvasImage,
+                    originalThumbnailUrl: true,
                     previewType: "NONE",
                     sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
                 }
