@@ -975,20 +975,9 @@ if (juegoActivoIndex !== -1) {
                 await caseCuevana(text, m, reply);
                 break
 
-            case 'toaud':
-            case 'tomp3':
-            case 'toaudio': {
-                if (!/video/.test(mime) && !/audio/.test(mime)) return reply(`*Porfavor asegúrate de solamente etiquetar el video el cual quieres convertir en audio utilizando El comando:*\n\n${prefix + command}`)
-                nyanBot2.sendMessage(m.chat, { react: { text: '🕑', key: m.key } });
-                let media = await nyanBot2.downloadMediaMessage(qmsg)
-                let audio = await toAudio(media, 'mp4')
-                nyanBot2.sendMessage(m.chat, {
-                    audio: audio,
-                    mimetype: 'audio/mpeg'
-                }, {
-                    quoted: m
-                })
-            }
+            case 'toaud': case 'tomp3': case 'toaudio':
+		const caseToAudio = require('./cases/to-audio');
+                await caseToAudio(m, reply, nyanBot2, mime, qmsg, command, prefix);
                 break
 
             case 'music': case 'song': case 'whatmusic': {
