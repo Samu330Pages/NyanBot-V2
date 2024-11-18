@@ -1,6 +1,7 @@
 const {
     Audd
 } = require('audd.io')
+const fs = require('fs')
 const audd = new Audd('a75003657df885776c027d0a5e17edd6'); //21/10/24
 
 module.exports = async function(text, m, reply, nyanBot2, sender, useLimit, mime, quoted, command, prefix) {
