@@ -348,7 +348,7 @@ const startNyanBot = async () => {
                         "body": '',
                         "previewType": "PHOTO",
                         "thumbnailUrl": ``,
-                        "thumbnail": 'https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png',
+                        "thumbnail": await getBuffer('https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png'),
                         "sourceUrl": `https://samu330.com`
                     }
                 }
