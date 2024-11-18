@@ -29,7 +29,6 @@ module.exports = async function(m, text, reply, nyanBot2, args, sender, stcReac,
             video: {
                 url: video
             },
-            fileName: nyanBot2.getName(sender) + '.mp4',
             caption: '> *FaceBook Dl*',
             mimetype: 'video/mp4'
         }, {
