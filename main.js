@@ -332,13 +332,13 @@ const startNyanBot = async () => {
 
         //AntiCalls
         nyanBot2.ev.on('call', async (callDetec) => {
-            	if (global.anticall){
+            	if (global.DATABASE.data.chats[callDetec.id].anticall){
             console.log(callDetec)
             for (let callStatus of callDetec) {
             if (callStatus.isGroup == false) {
             if (callStatus.status == "offer") {
             await nyanBot2.sendMessage(callStatus.from, {
-                text: `*Lo siento @${callStatus.from.split('@')[0]},* las llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
+                text: `*Lo siento @${callStatus.from.split('@')[0]}*\nLas llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
                 contextInfo: {
                     mentionedJid: [callStatus.from],
                     "externalAdReply": {
