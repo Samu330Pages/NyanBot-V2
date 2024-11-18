@@ -4,6 +4,7 @@ const { toAudio } = require('../lib/converter');
 const {
     formatNumber
 } = require('../lib/samufuncs')
+const forma1 = '`'
 
 module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sender, command, prefix) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(global.mess.limit);
