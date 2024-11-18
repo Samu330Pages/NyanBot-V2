@@ -41,13 +41,14 @@ module.exports = async function(m, text, reply, nyanBot2, args, sender, stcReac,
             }
         });
         useLimit(sender, 20)
-    } catch {
+    } catch (e) {
         nyanBot2.sendMessage(m.chat, {
             react: {
                 text: '❌',
                 key: m.key
             }
         });
+        reply(`${e}`)
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 }
