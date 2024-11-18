@@ -652,14 +652,14 @@ setInterval(processUserRequests, 6000);
         if (db.data.settings[botNumber].autorecordtype) {
             if (isCommand) {
                 let presenceMix = ['composing', 'recording']
-                nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+                let nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
                 nyanBot2.sendPresenceUpdate(nyanMix, from)
             }
         }
         if (db.data.settings[botNumber].autorecord) {
             if (isCommand) {
                 let presenceMix = ['recording']
-                nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
+                let nyanMix = presenceMix[Math.floor(presenceMix.length * Math.random())]
                 nyanBot2.sendPresenceUpdate(nyanMix, from)
             }
         }
@@ -2884,7 +2884,7 @@ if (isCmd && budy.startsWith('.')) {
 			    cache.set(m.sender, 1);
 		    }
                     let totalTiro = ["failTiro", "tiro10p", "tiro30p", "tiro50p", "tiro70p", "tiroWin"]
-                    tiroStickers = Math.floor(Math.random() * totalTiro.length)
+                    const tiroStickers = Math.floor(Math.random() * totalTiro.length)
                     let puntos = 0;
                     let msgTiro = 'Puntos Ganados:'
                     switch (totalTiro[tiroStickers]) {
@@ -2946,7 +2946,7 @@ if (isCmd && budy.startsWith('.')) {
 			    cache.set(m.sender, 1);
 		    }
                     let totalBolo = ["boloFail", "bolo10", "bolo20", "bolo60", "bolo80", "boloWin"]
-                    boloStickers = Math.floor(Math.random() * totalBolo.length)
+                    const boloStickers = Math.floor(Math.random() * totalBolo.length)
                     let puntos = 0;
                     let msgBolo = 'Puntos Ganados:'
                     switch (totalBolo[boloStickers]) {
@@ -3008,7 +3008,7 @@ if (isCmd && budy.startsWith('.')) {
 			    cache.set(m.sender, 1);
 		    }
                     let footTiro = ["footFail", "footPoste", "foot50", "foot75", "foot100"]
-                    footStickers = Math.floor(Math.random() * footTiro.length)
+                    const footStickers = Math.floor(Math.random() * footTiro.length)
                     let puntos = 0;
                     let msgFoot = 'Puntos Ganados:'
                     switch (footTiro[footStickers]) {
@@ -3131,7 +3131,7 @@ if (isCmd && budy.startsWith('.')) {
 			    cache.set(m.sender, 1);
 		    }
                     let dadoTiro = ["dado1", "dado2", "dado3", "dado4", "dado5", "dado6"]
-                    dadoStickers = Math.floor(Math.random() * dadoTiro.length)
+                    const dadoStickers = Math.floor(Math.random() * dadoTiro.length)
                     let puntos = 0;
                     let msgDado = 'Puntos Ganados:'
                     switch (dadoTiro[dadoStickers]) {
