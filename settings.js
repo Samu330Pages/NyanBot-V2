@@ -4,11 +4,6 @@ const chalk = require('chalk')
 //session
 global.sessionid ='ur session id'
 
-//owmner v card
-global.ytname = ""
-global.socialm = "GitHub: Samu330"
-global.location = "Mexico, Cancún"
-
 //new
 global.iaKey = 'AIzaSyC3lUJEtKK9S1uTlXQj22BfOzwWhVWgJJg'
 global.botname = '𐊪𐊲𐊣𐊪𐄚𐌖𑄓'
