@@ -981,7 +981,7 @@ if (juegoActivoIndex !== -1) {
                 break
 
             case 'music': case 'song': case 'whatmusic':
-		const caseWhatmusic = require('./cases/caseWhatmusic');
+		const caseWhatmusic = require('./cases/whatmusic');
                 await caseWhatmusic(text, m, reply, nyanBot2, sender, useLimit, mime, quoted, command, prefix);
                 break
 
