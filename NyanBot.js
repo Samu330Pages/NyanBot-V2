@@ -404,6 +404,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('autotype' in setting)) setting.autotype = false
                 if (!('onlygroup' in setting)) setting.onlygroup = false
                 if (!('onlypv' in setting)) setting.onlypv = false
+		if (!('anticall' in setting)) setting.anticall = false
                 if (!('watermark' in setting)) setting.watermark = { packname, author }
                 if (!('about' in setting)) setting.about = { bot: { nick: nyanBot2.getName(botNumber), alias: botname }, owner: { nick: nyanBot2.getName(global.ownernumber + '@s.whatsapp.net'), alias: global.ownernumber } }
             } else global.db.data.settings[botNumber] = {
@@ -413,6 +414,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 autoread: false,
                 onlygroup: false,
                 onlypv: false,
+		anticall: false,
                 autorecordtype: false,
                 autorecord: false,
                 autotype: false,
@@ -2451,6 +2453,11 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
                     return reply(`_*El número ingresado no existe en WhatsApp, por tal motivo no se puede agregar al grupo! Asegurate de escribir bien el número.*_`)
                 }
                 break
+
+	    case 'anticall':
+		const caseAnticall = require('./cases/anticall');
+                await caseAnticall(m, reply, sender, text, isSamu, botNumber);
+		break
 
 	    case 'priv':
                 const casePriv = require('./cases/privado-permiso');
