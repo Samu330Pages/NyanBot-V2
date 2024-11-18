@@ -336,7 +336,7 @@ const startNyanBot = async () => {
             for (let callStatus of callDetec) {
             if (callStatus.isGroup == false) {
             if (callStatus.status == "offer") {
-            let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*Lo siento @${callStatus.from.split('@')[0]},* las llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoCallBlock For ${callStatus.user.name}!`)
+            let callText = await nyanBot2.sendTextWithMentions(callStatus.from, `*Lo siento @${callStatus.from.split('@')[0]},* las llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoCallBlock For ${nyanBot2.user.name}!`)
             await nyanBot2.sendMessage(callStatus.from, {text: callText})
             await nyanBot2.rejectCall(callStatus.id, callStatus.from)
             }
