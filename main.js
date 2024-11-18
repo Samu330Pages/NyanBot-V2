@@ -332,7 +332,7 @@ const startNyanBot = async () => {
 
         //AntiCalls
         nyanBot2.ev.on('call', async (callDetec) => {
-            	if (global.DATABASE.data.chats[callDetec.id].anticall){
+            	if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall){
             console.log(callDetec)
             for (let callStatus of callDetec) {
             if (callStatus.isGroup == false) {
