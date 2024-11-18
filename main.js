@@ -330,6 +330,7 @@ const startNyanBot = async () => {
             }
         });
 
+        //AntiCalls
         nyanBot2.ev.on('call', async (callDetec) => {
             	if (global.anticall){
             console.log(callDetec)
