@@ -7,7 +7,8 @@ const {
     generateWAMessage,
     prepareWAMessageMedia,
     areJidsSameUser,
-    getContentType
+    getContentType,
+    isRealMessage
 } = require('@whiskeysockets/baileys')
 const os = require('os')
 const fs = require('fs')
