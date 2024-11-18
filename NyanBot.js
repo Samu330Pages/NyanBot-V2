@@ -37,8 +37,6 @@ const googleTTS = require('google-tts-api')
 const jsobfus = require('javascript-obfuscator')
 const scp = require('./lib/scraper')
 const { extractMetadata, Sticker } = require('wa-sticker-formatter')
-const { Rapi } = require('./lib/rapi.js')
-
 const {
     createOrGetPet,
     feedPet,
