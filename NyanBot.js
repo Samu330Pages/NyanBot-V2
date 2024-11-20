@@ -845,7 +845,7 @@ if (juegoActivoIndex !== -1) {
 		if (!text) return reply("*Incluye junto al comando la aplicación que deseas buscar! 🙃*")
 		let r = require("./lib/apk-dl");
 		let i = await r.apkcombo.search(text);
-		let s = await createAppListImage(i, text);
+		let s = await require("./lib/canvaImg.js").createAppListImage(i, text);
 		await nyanBot2.sendMessage(from, { image: s, caption: `Para descargar, etiqueta este mensaje eh incluye el número de aplicación que desees y que este en la lista de la imagen! 😦` }, {quoted: m});
 		break
 			
