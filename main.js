@@ -330,6 +330,13 @@ const startNyanBot = async () => {
             }
         });
 
+
+        nyanBot2.ev.on('chats.delete', async test => {
+                onsole.log(test)
+        })
+
+        
+
         //AntiCalls
         nyanBot2.ev.on('call', async (callDetec) => {
             	if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall){
