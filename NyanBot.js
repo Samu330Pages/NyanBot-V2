@@ -2642,8 +2642,9 @@ case 'disable': {
     if (option === 'arabes') {
         if (action) {
             if (!groupMetadata.joinApprovalMode) {
-                return reply(`*El modo de aprobación está desactivado, por lo tanto no es posible activar esta función!*
-_Para activar la aprobación de miembros sigue estos pasos:_\n*Ve a permisos de grupo y activa "Aprobar nuevos miembros"*`);
+		await nyanBot2.groupJoinApprovalMode(from, 'on')
+		db.data.chats[m.chat].restrict = true;
+                return reply(`*[ ✅ Activado ✅ ]*\n*Para un funcionamiento óptimo se activo el modo de aprobación, para evitar números no deseados. Favor de mantener esa configuración activa, en caso de que se desactive, se volverá a activar automáticamente! 🥕*`);
             }
             if (db.data.chats[m.chat].restrict) {
                 return reply('*Esta configuración ya está activa.*');
