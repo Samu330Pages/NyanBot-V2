@@ -331,8 +331,8 @@ const startNyanBot = async () => {
         });
 
 
-        nyanBot2.ev.on('chats.delete', async test => {
-                onsole.log(test)
+        nyanBot2.ev.on('messages.delete', async test => {
+                console.log(test)
         })
 
         
