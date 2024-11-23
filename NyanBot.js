@@ -223,7 +223,7 @@ let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
 //let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 
-//const verifieduser = JSON.parse(fs.readFileSync('./src/data/role/user.json'))
+const verifieduser = JSON.parse(fs.readFileSync('./src/data/role/user.json'))
 
 global.db.data = JSON.parse(fs.readFileSync('./src/database.json'))
 if (global.db.data) global.db.data = {
