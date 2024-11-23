@@ -784,6 +784,16 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
     }
 }
 
+if (gameMath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
+	if (m.key.fromMe) return
+            let kuis = true
+            let userGameMath = gameMath[m.sender.split('@')[0]]
+            if (budy.toLowerCase() == userGameMath) {
+                await reply(`*COOOORRECTO!! 🤓*\n\n_Acertaste a la ecuación!_ 😦🎉`)
+                delete gameMath[m.sender.split('@')[0]]
+            } else reply('*Nop! 😗 intenta de nuevo 😛*')
+}
+	    
 const userGames = db.data.game.soup || [];
 const juegoActivoIndex = userGames.findIndex(game => game.user === sender);
 
