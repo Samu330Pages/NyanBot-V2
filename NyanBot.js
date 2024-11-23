@@ -846,9 +846,9 @@ if (juegoActivoIndex !== -1) {
 		case 'math': {
                 if (gameMath.hasOwnProperty(m.sender.split('@')[0])) reply(`*Tienes ya un juego sin terminar! 🌭*`)
                 let { genMath, modes } = require('./lib/math')
-                if (!text) return reply(`*Modos disponibles*: ${forma1}${Object.keys(modes).join(' | ')}${forma1}\n\n*Para poder jugar debes incluir después del comando el modo de juego que quieres utilizar por ejemplo*: ${forma1}${prefix}math medio${forma1}`)
+                if (!text) return reply(`*Modos disponibles*: ${forma1}${Object.keys(modes).join(`${forma1}\n`)}\n\n*Para poder jugar debes incluir después del comando el modo de juego que quieres utilizar por ejemplo*: ${forma1}${prefix}math medio${forma1}`)
                 let result = await genMath(text.toLowerCase())
-                nyanBot2.sendText(m.chat, `*🕵🏻 Cual es el resultado de:* ${forma1}${result.soal.toLowerCase()}${forma1}?\n\n_*Tiempo disponible*_: ${(result.time / 1000).toFixed(2)} segundos! 🕒`, m).then(() => {
+                nyanBot2.sendText(m.chat, `*🕵🏻 Cual es el resultado de:* ${forma1}${result.math.toLowerCase()}${forma1}?\n\n_*Tiempo disponible*_: ${(result.time / 1000).toFixed(2)} segundos! 🕒`, m).then(() => {
                     gameMath[m.sender.split('@')[0]] = result.answer
                 })
                 await sleep(result.time)
