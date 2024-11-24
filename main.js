@@ -345,7 +345,7 @@ const startNyanBot = async () => {
             }
         })
 
-        nyanBot2.ev.on('message-receipt.update', async (test) => {
+        nyanBot2.ev.on('messages.update', async (test) => {
             console.log(test)
         })
 
