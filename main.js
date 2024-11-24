@@ -331,8 +331,19 @@ const startNyanBot = async () => {
         });
 
 
-        nyanBot2.ev.on('group.join-request', async (test) => {
-                console.log(test)
+        nyanBot2.ev.on('group.join-request', async (requestJoin) => {
+                console.log(requestJoin)
+            let metadata = await nyanBot2.groupMetadata(requestJoin.id)
+            const fakeArab = ['383', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+            if (global.DATABASE.data.chats[requestJoin.id].restrict) {
+                const userNumber = requestJoin.participant.split('@')[0];
+                const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
+                if (shouldReject) {
+                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "reject");
+                } else {
+                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "approve");
+                }
+            }
         })
 
         nyanBot2.ev.on('messages.delete', async (test2) => {
