@@ -396,12 +396,13 @@ const startNyanBot = async () => {
         })
         //admin event
         nyanBot2.ev.on('group-participants.update', async (admEvent) => {
-            if (global.DATABASE.data.settings[admEvent.id].events) {
+            if (global.DATABASE.data.chats[admEvent.id].events) {
                 console.log(admEvent)
                 let ppuser;
                 let ppgroup;
                 try {
                     let participants = admEvent.participants
+                    let admin = admEvent.author
                     for (let num of participants) {
                         try {
                             ppuser = await nyanBot2.profilePictureUrl(num, 'image')
@@ -417,11 +418,11 @@ const startNyanBot = async () => {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
                             const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
                             let userNumber = num
-                            WlcBody = `@${userNumber.split("@")[0]}, Has sido promovido a *ADMINISTRADOR*`
+                            WlcBody = `@${userNumber.split("@")[0]}, Has sido promovido a *ADMINISTRADOR*\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
-                                    mentionedJid: [num],
+                                    mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
                                         "title": ` ${global.botname}`,
@@ -437,11 +438,11 @@ const startNyanBot = async () => {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
                             const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
                             let userNumber = num
-                            WlcBody = `@${userNumber.split("@")[0]}, Has sido degradado de la administración!`
+                            WlcBody = `@${userNumber.split("@")[0]}, Has sido degradado de la administración!\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
-                                    mentionedJid: [num],
+                                    mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
                                         "title": ` ${global.botname}`,
