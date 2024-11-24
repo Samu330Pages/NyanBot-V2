@@ -1029,7 +1029,7 @@ if (juegoActivoIndex !== -1) {
 			
 	    case 'logo': case 'logos':
 		const caseLogos = require('./cases/logos');
-                await caseLogos(text, m, nyanBot2, reply);
+                await caseLogos(text, m, nyanBot2, reply, prefix, command);
 		break
 
             case 'insta': case 'ig': case 'instagram': {
