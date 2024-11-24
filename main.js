@@ -331,8 +331,12 @@ const startNyanBot = async () => {
         });
 
 
-        nyanBot2.ev.on('group-join.request', async (test) => {
+        nyanBot2.ev.on('group.join-request', async (test) => {
                 console.log(test)
+        })
+
+        nyanBot2.ev.on('messages.delete', async (test2) => {
+                console.log(test2)
         })
 
         
