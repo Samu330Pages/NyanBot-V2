@@ -463,7 +463,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             nyanBot2.sendMessage(chatId, { react: { text: '🔴', key: messageKey } });
         };
 
-const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+/*const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
 const processUserRequests = async () => {
     if (db.data.chats[m.chat].restrict && groupMetadata.joinApprovalMode) {
         const rawUsers = (await nyanBot2.groupRequestParticipantsList(m.chat)).map(v => v.jid);
@@ -484,7 +484,7 @@ const processUserRequests = async () => {
             }
         }
     }
-};
+};*/
 
 setInterval(processUserRequests, 6000);
 
