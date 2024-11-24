@@ -394,6 +394,7 @@ const startNyanBot = async () => {
                 }
             }
         })
+        
         //admin event
         nyanBot2.ev.on('group-participants.update', async (admEvent) => {
             if (global.DATABASE.data.chats[admEvent.id].events) {
