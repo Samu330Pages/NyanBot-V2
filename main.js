@@ -334,13 +334,14 @@ const startNyanBot = async () => {
 
         nyanBot2.ev.on("groups.update", async (arabsOn) => {
             console.log(arabsOn)
-            if (global.DATABASE.data.chats[arabsOn.id].restrict) {
-            if (arabsOn.joinApprovalMode == false) {
-                nyanBot2.sendMessage(arabsOn.id, {
+            let res = arabsOn[0]
+            if (res.joinApprovalMode == false) {
+                if (global.DATABASE.data.chats[res.id].restrict) {
+                nyanBot2.sendMessage(res.id, {
                         text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*
 > _*Si deseas deshabilitar el modo de aprobación, primero desactiva la función antiArabes con el comando correspondiente!!!*_ ⚠️`,
                     })
-                await nyanBot2.groupJoinApprovalMode(arabsOn.id, 'on')
+                await nyanBot2.groupJoinApprovalMode(res.id, 'on')
             }
             }
         }
