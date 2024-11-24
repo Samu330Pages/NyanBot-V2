@@ -316,7 +316,6 @@ const startNyanBot = async () => {
             }
         });
 
-
         nyanBot2.ev.on('group.join-request', async (requestJoin) => {
                 console.log(requestJoin)
             let metadata = await nyanBot2.groupMetadata(requestJoin.id)
