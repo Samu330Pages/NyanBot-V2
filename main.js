@@ -333,6 +333,7 @@ const startNyanBot = async () => {
         })
 
         nyanBot2.ev.on("groups.update", async (arabsOn) => {
+            console.log(arabsOn)
             if (global.DATABASE.data.chats[arabsOn.id].restrict) {
             if (arabsOn.joinApprovalMode == false) {
                 nyanBot2.sendMessage(arabsOn.id, {
