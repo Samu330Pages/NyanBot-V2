@@ -11,6 +11,7 @@ const {
 } = require('@whiskeysockets/baileys')
 const os = require('os')
 const fs = require('fs')
+const FormData = require('form-data')
 const fsx = require('fs-extra')
 const path = require('path')
 const sharp = require('sharp')
@@ -438,45 +439,76 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         }
 
 
-async function ephoto(url, texto) {
-let form = new FormData 
-let gT = await axios.get(url, {
-  headers: {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
-  }
-})
-let $ = cheerio.load(gT.data)
-let text = texto
-let token = $("input[name=token]").val()
-let build_server = $("input[name=build_server]").val()
-let build_server_id = $("input[name=build_server_id]").val()
-form.append("text[]", text)
-form.append("token", token)
-form.append("build_server", build_server)
-form.append("build_server_id", build_server_id)
-let res = await axios({
-  url: url,
-  method: "POST",
-  data: form,
-  headers: {
-    Accept: "*/*",
-    "Accept-Language": "en-US,en;q=0.9",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-    cookie: gT.headers["set-cookie"]?.join("; "),
-    ...form.getHeaders()
-  }
-})
-let $$ = cheerio.load(res.data)
-let json = JSON.parse($$("input[name=form_value_input]").val())
-json["text[]"] = json.text
-delete json.text
-let { data } = await axios.post("https://en.ephoto360.com/effect/create-image", new URLSearchParams(json), {
-  headers: {
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-    cookie: gT.headers["set-cookie"].join("; ")
-    }
-})
-return build_server + data.image
+async function ephoto(url, text) {
+   if (/https?:\/\/(ephoto360|photooxy|textpro)\/\.(com|me)/i.test(url)) throw new Error("URL Invalid")
+   try {
+      let a = await axios.get(url, {
+         headers: {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Origin": (new URL(url)).origin,
+            "Referer": url,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188"
+         }
+      })
+      let $ = cheerio.load(a.data)
+      let server = $('#build_server').val()
+      let serverId = $('#build_server_id').val()
+      let token = $('#token').val()
+      let submit = $('#submit').val()
+      let types = [];
+      $('input[name="radio0[radio]"]').each((i, elem) => {
+         types.push($(elem).attr("value"));
+      })
+      let post;
+      if (types.length != 0) {
+         post = {
+            'radio0[radio]': types[Math.floor(Math.random() * types.length)],
+            'submit': submit,
+            'token': token,
+            'build_server': server,
+            'build_server_id': Number(serverId)
+         };
+      }
+      else {
+         post = {
+            'submit': submit,
+            'token': token,
+            'build_server': server,
+            'build_server_id': Number(serverId)
+         }
+      }
+      let form = new FormData()
+      for (let i in post) {
+         form.append(i, post[i])
+      }
+      if (typeof text == "string") text = [text]
+      for (let i of text) form.append("text[]", i)
+      let b = await axios.post(url, form, {
+         headers: {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Origin": (new URL(url)).origin,
+            "Referer": url,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188", 
+            "Cookie": a.headers.get("set-cookie").join("; "),
+            ...form.getHeaders()
+         }
+      })
+      $ = cheerio.load(b.data)
+      let out = ($('#form_value').first().text() || $('#form_value_input').first().text() || $('#form_value').first().val() || $('#form_value_input').first().val())
+      let c = await axios.post((new URL(url)).origin + "/effect/create-image", JSON.parse(out), {
+         headers: {
+            "Accept": "*/*",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Origin": (new URL(url)).origin,
+            "Referer": url,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188",
+            "Cookie": a.headers.get("set-cookie").join("; ")
+         }
+      })
+      return {status: c.data?.success, image: server + (c.data?.fullsize_image || c.data?.image || ""), session: c.data?.session_id}
+   } catch (e) {
+      throw e
+   }
 }
 	    
 	    
