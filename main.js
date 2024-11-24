@@ -461,7 +461,7 @@ const startNyanBot = async () => {
         })
 
         // detect group update
-        nyanBot2.ev.on("groups.update", async (json) => {
+       /* nyanBot2.ev.on("groups.update", async (json) => {
             if (global.groupevent) {
                 try {
                     ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
@@ -522,7 +522,7 @@ const startNyanBot = async () => {
                     })
                 }
             }
-        })
+        })*/
 
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
             //console.log(JSON.stringify(chatUpdate, undefined, 2))
