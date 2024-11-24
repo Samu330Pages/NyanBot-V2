@@ -1,7 +1,7 @@
 const { ephoto } = require('../lib/scraper.js')
 const forma1 = '`'
 
-module.exports = async function(text, m, nyanBot2, reply) {
+module.exports = async function(text, m, nyanBot2, reply, prefix, command) {
 const [efecto, texto] = text.split`+`
 if (!efecto || !texto) return reply(`_*Incluye el tipo de efecto que desees, aquí te muestro la lista de efectos disponibles:*_\n
 - ${forma1}1 = glitchtext${forma1}
