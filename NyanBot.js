@@ -365,6 +365,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             if (typeof chats !== 'object') global.db.data.chats[from] = {}
             if (chats) {
 		if (!('welcome' in chats)) chats.welcome = true
+		if (!('events' in chats)) chats.events = false
                 if (!('badword' in chats)) chats.badword = false
                 if (!('antibot' in chats)) chats.antibot = false
 		if (!('restrict' in chats)) chats.restrict = false
@@ -375,6 +376,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('adminmode' in chats)) chats.adminmode = false
             } else global.db.data.chats[from] = {
 		welcome: true,
+		events: false,
                 badword: false,
                 antibot: false,
 		restrict: false,
@@ -2616,6 +2618,19 @@ case 'cerrar':
             }
                 break
 
+case 'ban': case 'noban':
+if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
+if (command == 'ban') {
+if (db.data.chats[m.chat].ban) return reply('*Este chat ya esta baneado!*')
+db.data.chats[m.chat].restrict = true;
+reply('*Este chat sé ah baneado!*')
+} else if (command == 'noban') {
+if (!db.data.chats[m.chat].ban) return reply('*Este chat no esta baneado!*')
+db.data.chats[m.chat].restrict = false;
+reply('*Se ah habilitado este chat!*')
+}
+break
+
 case 'activar':
 case 'desactivar':
 case 'on':
@@ -2630,12 +2645,12 @@ case 'disable': {
     const optionsMap = {
         arabes: 'restrict',
         bienvenida: 'welcome',
+	eventos: 'events',
         badword: 'badword',
         antibot: 'antibot',
         unavista: 'antiviewonce',
         antilink: 'antilink',
         adult: 'antiadult',
-        ban: 'ban',
         admin: 'adminmode'
     };
 
