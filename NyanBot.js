@@ -962,7 +962,7 @@ if (/royaltext/.test(command)) link = 'https://en.ephoto360.com/royal-text-effec
 if (/freecreate/.test(command)) link = 'https://en.ephoto360.com/free-create-a-3d-hologram-text-effect-441.html'
 if (/galaxystyle/.test(command)) link = 'https://en.ephoto360.com/create-galaxy-style-free-name-logo-438.html'
 if (/lighteffects/.test(command)) link = 'https://en.ephoto360.com/create-light-effects-green-neon-online-429.html'
-let haldwhd = await ephoto(link, q)
+let haldwhd = await ephoto(link, text)
 nyanBot2.sendMessage(m.chat, { image: { url: haldwhd }, caption: text }, { quoted: m })
 }
 break
