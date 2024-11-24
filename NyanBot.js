@@ -486,7 +486,7 @@ const processUserRequests = async () => {
     }
 };*/
 
-setInterval(processUserRequests, 6000);
+//setInterval(processUserRequests, 6000);
 
         async function sendCarousel(chatId, nativeFlowMessage, options) {
             const { header, footer, cards } = options;
