@@ -399,7 +399,6 @@ const startNyanBot = async () => {
             if (global.DATABASE.data.chats[admEvent.id].events) {
                 console.log(admEvent)
                 let ppuser;
-                let ppgroup;
                 try {
                     let participants = admEvent.participants
                     let admin = admEvent.author
@@ -408,11 +407,6 @@ const startNyanBot = async () => {
                             ppuser = await nyanBot2.profilePictureUrl(num, 'image')
                         } catch (err) {
                             ppuser = 'https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png'
-                        }
-                        try {
-                            ppgroup = await nyanBot2.profilePictureUrl(admEvent.id, 'image')
-                        } catch (err) {
-                            ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
                         }
                         if (admEvent.action === 'promote') {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
@@ -429,7 +423,7 @@ const startNyanBot = async () => {
                                         "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": Wlcm,
+                                        "thumbnail": ppuser,
                                         "sourceUrl": ''
                                     }
                                 }
@@ -449,7 +443,7 @@ const startNyanBot = async () => {
                                         "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": Lft,
+                                        "thumbnail": ppuser,
                                         "sourceUrl": ''
                                     }
                                 }
