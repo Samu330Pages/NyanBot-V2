@@ -316,70 +316,74 @@ const startNyanBot = async () => {
             }
         });
 
-        nyanBot2.ev.on('group.join-request', async (requestJoin) => {
-            console.log(requestJoin)
-            let metadata = await nyanBot2.groupMetadata(requestJoin.id)
-            const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
-            if (global.DATABASE.data.chats[requestJoin.id].restrict) {
-                const userNumber = requestJoin.participant.split('@')[0];
-                const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
-                if (shouldReject) {
-                    console.log(`Aprobación denegada a ${requestJoin.participant}`)
-                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "reject");
-                } else {
-                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "approve");
-                }
-            }
-        })
 
-        nyanBot2.ev.on("groups.update", async (arabsOn) => {
-            let res = arabsOn[0]
-            if (res.joinApprovalMode == false) {
-                if (global.DATABASE.data.chats[res.id].restrict) {
-                    nyanBot2.sendMessage(res.id, {
-                        text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*\n
+//join-request antiArabes by Samu330
+////////////////////////////////////
+/*👑*/        nyanBot2.ev.on('group.join-request', async (requestJoin) => {
+/*👑*/            console.log(requestJoin)
+/*👑*/            let metadata = await nyanBot2.groupMetadata(requestJoin.id)
+/*👑*/            const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+/*👑*/            if (global.DATABASE.data.chats[requestJoin.id].restrict) {
+/*👑*/                const userNumber = requestJoin.participant.split('@')[0];
+/*👑*/                const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
+/*👑*/                if (shouldReject) {
+/*👑*/                    console.log(`Aprobación denegada a ${requestJoin.participant}`)
+/*👑*/                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "reject");
+/*👑*/                } else {
+/*👑*/                    await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "approve");
+/*👑*/                }
+/*👑*/            }
+/*👑*/        })
+/*👑*/
+/*👑*/        nyanBot2.ev.on("groups.update", async (arabsOn) => {
+/*👑*/            let res = arabsOn[0]
+/*👑*/            if (res.joinApprovalMode == false) {
+/*👑*/                if (global.DATABASE.data.chats[res.id].restrict) {
+/*👑*/                    nyanBot2.sendMessage(res.id, {
+/*👑*/                        text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*\n
 > _*Si deseas deshabilitar el modo de aprobación, primero desactiva la función antiArabes con el comando correspondiente!!!*_ ⚠️`,
-                    })
-                    await nyanBot2.groupJoinApprovalMode(res.id, 'on')
-                }
-            }
-        })
+/*👑*/                    })
+/*👑*/                    await nyanBot2.groupJoinApprovalMode(res.id, 'on')
+/*👑*/               }
+/*👑*/            }
+/*👑*/        })
+////////////////////////////////////
+
+//AntiCalls reject By Samu330
+////////////////////////////////////
+/*👑*/        nyanBot2.ev.on('call', async (callDetec) => {
+/*👑*/            if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall) {
+/*👑*/                console.log(callDetec)
+/*👑*/                for (let callStatus of callDetec) {
+/*👑*/                    if (callStatus.isGroup == false) {
+/*👑*/                        if (callStatus.status == "offer") {
+/*👑*/                            await nyanBot2.sendMessage(callStatus.from, {
+/*👑*/                                text: `*Lo siento @${callStatus.from.split('@')[0]}*\nLas llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
+/*👑*/                                contextInfo: {
+/*👑*/                                    mentionedJid: [callStatus.from],
+/*👑*/                                    "externalAdReply": {
+/*👑*/                                        "showAdAttribution": true,
+/*👑*/                                        "containsAutoReply": true,
+/*👑*/                                        "title": `🚫 AutoBlockCall`,
+/*👑*/                                        "body": '',
+/*👑*/                                        "previewType": "PHOTO",
+/*👑*/                                        "thumbnailUrl": ``,
+/*👑*/                                        "thumbnail": await getBuffer('https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png'),
+/*👑*/                                        "sourceUrl": `https://samu330.com`
+/*👑*/                                    }
+/*👑*/                                }
+/*👑*/                            })
+/*👑*/                            await nyanBot2.rejectCall(callStatus.id, callStatus.from)
+/*👑*/                        }
+/*👑*/                    }
+/*👑*/                }
+/*👑*/            }
+/*👑*/        })
+////////////////////////////////////
 
         /*nyanBot2.ev.on('messages.delete', async (test) => {
             console.log(test)
         })*/
-
-
-
-        //AntiCalls
-        nyanBot2.ev.on('call', async (callDetec) => {
-            if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall) {
-                console.log(callDetec)
-                for (let callStatus of callDetec) {
-                    if (callStatus.isGroup == false) {
-                        if (callStatus.status == "offer") {
-                            await nyanBot2.sendMessage(callStatus.from, {
-                                text: `*Lo siento @${callStatus.from.split('@')[0]}*\nLas llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
-                                contextInfo: {
-                                    mentionedJid: [callStatus.from],
-                                    "externalAdReply": {
-                                        "showAdAttribution": true,
-                                        "containsAutoReply": true,
-                                        "title": `🚫 AutoBlockCall`,
-                                        "body": '',
-                                        "previewType": "PHOTO",
-                                        "thumbnailUrl": ``,
-                                        "thumbnail": await getBuffer('https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png'),
-                                        "sourceUrl": `https://samu330.com`
-                                    }
-                                }
-                            })
-                            await nyanBot2.rejectCall(callStatus.id, callStatus.from)
-                        }
-                    }
-                }
-            }
-        })
 
         //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
@@ -391,63 +395,61 @@ const startNyanBot = async () => {
             }
         })
         //admin event
-        nyanBot2.ev.on('group-participants.update', async (anu) => {
-            if (global.adminevent) {
-                console.log(anu)
+        nyanBot2.ev.on('group-participants.update', async (admEvent) => {
+            if (global.DATABASE.data.settings[admEvent.id].events) {
+                console.log(admEvent)
                 let ppuser;
                 let ppgroup;
                 try {
-                    let participants = anu.participants
+                    let participants = admEvent.participants
                     for (let num of participants) {
                         try {
                             ppuser = await nyanBot2.profilePictureUrl(num, 'image')
                         } catch (err) {
-                            ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
+                            ppuser = 'https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png'
                         }
                         try {
-                            ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
+                            ppgroup = await nyanBot2.profilePictureUrl(admEvent.id, 'image')
                         } catch (err) {
                             ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
                         }
-                        if (anu.action === 'promote') {
+                        if (admEvent.action === 'promote') {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
                             const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
                             let userNumber = num
                             WlcBody = `@${userNumber.split("@")[0]}, Has sido promovido a *ADMINISTRADOR*`
-                            nyanBot2.sendMessage(anu.id, {
+                            nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
                                     mentionedJid: [num],
                                     "externalAdReply": {
-                                        "showAdAttribution": true,
                                         "containsAutoReply": true,
                                         "title": ` ${global.botname}`,
-                                        "body": `${ownername}`,
+                                        "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
                                         "thumbnail": Wlcm,
-                                        "sourceUrl": `${wagc}`
+                                        "sourceUrl": ''
                                     }
                                 }
                             })
-                        } else if (anu.action === 'demote') {
+                        } else if (admEvent.action === 'demote') {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
                             const date = moment.tz('America/Cancun').format('DD/MM/YYYY')
                             let userNumber = num
                             WlcBody = `@${userNumber.split("@")[0]}, Has sido degradado de la administración!`
-                            nyanBot2.sendMessage(anu.id, {
+                            nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
                                     mentionedJid: [num],
                                     "externalAdReply": {
-                                        "showAdAttribution": true,
                                         "containsAutoReply": true,
                                         "title": ` ${global.botname}`,
-                                        "body": `${ownername}`,
+                                        "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
                                         "thumbnail": Lft,
-                                        "sourceUrl": `${wagc}`
+                                        "sourceUrl": ''
                                     }
                                 }
                             })
