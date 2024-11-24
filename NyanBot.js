@@ -1026,6 +1026,11 @@ if (juegoActivoIndex !== -1) {
 		const caseFacebook = require('./cases/facebook');
                 await caseFacebook(m, text, reply, nyanBot2, args, sender, stcReac, command, useLimit, prefix);
                 break
+			
+	    case 'logo': case 'logos':
+		const caseLogos = require('./cases/logos');
+                await caseLogos(text, m, nyanBot2, reply);
+		break
 
             case 'insta': case 'ig': case 'instagram': {
                 if (db.data.users[sender].limit < 1) return reply(mess.limit);
