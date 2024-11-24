@@ -978,7 +978,7 @@ if (juegoActivoIndex !== -1) {
 
             case 'play':
                 const casePlay = require('./cases/play');
-                await casePlay(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, nyanBot2, formatNumber, prefix, readmore);
+                await casePlay(text, m, reply, isUrl, nyanBot2, formatNumber, prefix, readmore);
                 break
 
             case 'ytmp3': case 'yta':
