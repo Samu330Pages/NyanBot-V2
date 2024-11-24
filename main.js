@@ -416,6 +416,7 @@ const startNyanBot = async () => {
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
+                                    remoteJid: admEvent.id,
                                     mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
@@ -436,6 +437,7 @@ const startNyanBot = async () => {
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
+                                    remoteJid: admEvent.id,
                                     mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
