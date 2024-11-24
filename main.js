@@ -407,7 +407,7 @@ const startNyanBot = async () => {
                         try {
                             ppuser = await nyanBot2.profilePictureUrl(num, 'image')
                         } catch (err) {
-                            ppuser = 'https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png'
+                            ppuser = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60'
                         }
                         if (admEvent.action === 'promote') {
                             const time = moment.tz('America/Cancun').format('HH:mm:ss')
@@ -417,15 +417,15 @@ const startNyanBot = async () => {
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
-                                    //remoteJid: admEvent.id,
+                                    remoteJid: admEvent.id,
                                     mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
-                                        "title": ` ${global.botname}`,
+                                        "title": `${global.botname}`,
                                         "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": ppuser,
+                                        "thumbnail": await getBuffer(ppuser),
                                         "sourceUrl": ''
                                     }
                                 }
@@ -438,15 +438,15 @@ const startNyanBot = async () => {
                             nyanBot2.sendMessage(admEvent.id, {
                                 text: WlcBody,
                                 contextInfo: {
-                                    //remoteJid: admEvent.id,
+                                    remoteJid: admEvent.id,
                                     mentionedJid: [num, admin],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
-                                        "title": ` ${global.botname}`,
+                                        "title": `${global.botname}`,
                                         "body": '',
                                         "previewType": "PHOTO",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": ppuser,
+                                        "thumbnail": await getBuffer(ppuser),
                                         "sourceUrl": ''
                                     }
                                 }
