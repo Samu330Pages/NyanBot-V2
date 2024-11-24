@@ -189,6 +189,7 @@ const categories = {
         { command: 's', description: '_*Opciones: 1, 2, 3 y 4*_', help: 'Alias de sticker.' },
         { command: 'sinfondo', description: '', help: 'Elimina el fondo de una imagen.' },
         { command: 'emojimix', description: '', help: 'Combina emojis.' },
+	{ command: 'logo', description: '_*EFECTO + TEXTO*_', help: 'Genera texto con efectos de imágenes.' },
         { command: 'hd', description: '', help: 'Aumentar calidad a imagenes.' },
         { command: 'remini', description: '', help: 'Alias de hd.' },
         { command: 'recolor', description: '', help: 'Colorea imágenes en B/N o borrosas (personas/paisajes/animales).' },
@@ -218,7 +219,6 @@ const categories = {
     ]
 };
 //data
-let ntnsfw = JSON.parse(fs.readFileSync('./src/data/function/nsfw.json'))
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
 //let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
@@ -263,19 +263,16 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         //prefix 1
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
         const isCmd = body.startsWith(prefix, '')
-        const isCmd2 = body.startsWith(prefix)
         const command = isCmd ? body.replace(/^\s*\.?\s*/, '').split(' ')[0].toLowerCase() : ""
-        const command2 = body.slice(1).trim().split(/ +/).shift().toLowerCase()
         const args = body.trim().split(/ +/).slice(1)
-        const full_args = body.replace(command, '').slice(1).trim()
         const pushname = m.pushName || "No Name"
         const botNumber = await nyanBot2.decodeJid(nyanBot2.user.id)
         const itsMe = m.sender == botNumber ? true : false
         const sender = m.sender
         const text = body.replace(/^\.\s*\S+\s*/, '').trim();
         const from = m.key.remoteJid
-        const fatkuns = (m.quoted || m)
-        const quoted = (fatkuns.mtype == 'buttonsMessage') ? fatkuns[Object.keys(fatkuns)[1]] : (fatkuns.mtype == 'templateMessage') ? fatkuns.hydratedTemplate[Object.keys(fatkuns.hydratedTemplate)[1]] : (fatkuns.mtype == 'product') ? fatkuns[Object.keys(fatkuns)[0]] : m.quoted ? m.quoted : m
+        const mQuoted = (m.quoted || m)
+        const quoted = (mQuoted.mtype == 'buttonsMessage') ? mQuoted[Object.keys(mQuoted)[1]] : (mQuoted.mtype == 'templateMessage') ? mQuoted.hydratedTemplate[Object.keys(mQuoted.hydratedTemplate)[1]] : (mQuoted.mtype == 'product') ? mQuoted[Object.keys(mQuoted)[0]] : m.quoted ? m.quoted : m
         const mime = (quoted.msg || quoted).mimetype || ''
         const qmsg = (quoted.msg || quoted)
         //media
@@ -312,9 +309,6 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
         const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
         const groupOwner = m.isGroup ? groupMetadata.owner : ''
         const isGroupOwner = m.isGroup ? (groupOwner ? groupOwner : groupAdmins).includes(m.sender) : false
-        const AntiNsfw = m.isGroup ? ntnsfw.includes(from) : false
-        //anti media
-        const isAntiMedia = m.mtype
         //user status
         const isUser = verifieduser.includes(sender)
         const isSamu = [botNumber, ...owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
@@ -785,7 +779,7 @@ if (m.quoted && m.quoted.text && /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:
     }
 }
 
-if (gameMath.hasOwnProperty(m.sender.split('@')[0]) && isCmd2) {
+if (gameMath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
 	if (m.key.fromMe) return
             let kuis = true
             let userGameMath = gameMath[m.sender.split('@')[0]]
