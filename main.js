@@ -461,7 +461,7 @@ const startNyanBot = async () => {
 
         // detect group update
         nyanBot2.ev.on("groups.update", async (json) => {
-            if (global.groupevent) {
+            if (global.DATABASE.data.chats[admEvent.id].events) {
                 try {
                     ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
                 } catch (err) {
@@ -469,55 +469,66 @@ const startNyanBot = async () => {
                 }
                 console.log(json)
                 const res = json[0]
+                let admin = res.author
                 if (res.joinApprovalMode == false) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nCualquier persona puede entrar al grupo!!`,
+                        text: `_*Se deshabilitó el modo de aprobación, ahora cualquier persona puede entrar al grupo!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.joinApprovalMode == true) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nPara poder entrar al grupo se requerirá aprobación de los administradores!!`,
+                        text: `_*Se habilitó el modo de aprobación, ahora es necesario que los administradores aprueben el acceso al grupo!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.memberAddMode == false) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora solo los administradores pueden agregar personas al grupo!!`,
+                        text: `_*Se ha cambiado la configuración para agregar miembros al grupo, ahora solo los administradores podrán agregar a más personas!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.memberAddMode == true) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nAhora todos pueden agregar personas al grupo!!`,
+                        text: `_*Se ha cambiado la configuración para agregar miembros al grupo, ahora los miembros tienen la capacidad de agregar a más personas!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.announce == true) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo ha sido cerrado, solo los administradores podrán enviar mensajes!`,
+                        text: `_*El grupo sé ha cerrado, solo los administradores podrán enviar mensajes!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.announce == false) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nEl grupo sé ha abierto, ahora todos podrán enviar mensajes!`,
+                        text: `_*El grupo sé ha abierto, todos pueden enviar mensajes!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.restrict == true) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa información del grupo ha sido restringida para que solo administradores puedan editar!`,
+                        text: `_*La información del grupo ha sido restringida para que solo administradores puedan editar!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (res.restrict == false) {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\nLa configuración de edición de información del grupo ha sido habilitada para que todos la puedan editar!`,
+                        text: `_*La configuración de edición de información del grupo ha sido habilitada para que todos la puedan editar!*_\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else if (!res.desc == '') {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*La descripción del grupo ha cambiado a:*\n\n${res.desc}`,
+                        text: `*La descripción del grupo ha cambiado a:*\n\n${res.desc}\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 } else {
                     await sleep(2000)
                     nyanBot2.sendMessage(res.id, {
-                        text: `> *ACTUALIZACION DE CONFIGURACION DE GRUPO*\n\n*El nombre del grupo ha cambiado a*\n\n*${res.subject}*`,
+                        text: `*El nombre del grupo ha cambiado a*\n\n*${res.subject}*\n\n> _*Acción realizada por @${admin.split("@")[0]}*_`,
+                        contextInfo: { remoteJid: res.id, mentionedJid: [admin], "externalAdReply": { "containsAutoReply": true, "title": `ACTUALIZACION DE CONFIGURACION DE GRUPO ⚙️`, "thumbnail": await getBuffer(ppgroup), "sourceUrl": ''}}
                     })
                 }
             }
