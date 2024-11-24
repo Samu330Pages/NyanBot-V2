@@ -1,6 +1,7 @@
 const {
     fbdl
 } = require('ruhend-scraper')
+const forma1 = '`'
 
 module.exports = async function(m, text, reply, nyanBot2, args, sender, stcReac, command, useLimit, prefix) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(mess.limit);
