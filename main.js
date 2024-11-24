@@ -145,7 +145,7 @@ const startNyanBot = async () => {
                 })),
             },
             markOnlineOnConnect: true, // set false for offline
-            generateHighQualityLinkPreview: true, // make high preview link
+            generateHighQualityLinkPreview: true,
             getMessage: async (key) => {
                 let jid = jidNormalizedUser(key.remoteJid)
                 let msg = await store.loadMessage(jid, key.id)
