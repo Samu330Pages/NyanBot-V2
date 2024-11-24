@@ -461,7 +461,7 @@ const startNyanBot = async () => {
 
         // detect group update
         nyanBot2.ev.on("groups.update", async (json) => {
-            if (global.DATABASE.data.chats[admEvent.id].events) {
+            if (global.DATABASE.data.chats[json.id].events) {
                 try {
                     ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
                 } catch (err) {
