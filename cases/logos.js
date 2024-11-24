@@ -71,5 +71,5 @@ if (/29/.test(efecto)) link = 'https://en.ephoto360.com/create-galaxy-style-free
 if (/30/.test(efecto)) link = 'https://en.ephoto360.com/create-light-effects-green-neon-online-429.html'
 let picEffect = await ephoto(link, texto)
 nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-nyanBot2.sendMessage(m.chat, { image: { url: picEffect }, caption: `texto` }, { quoted: m })
+nyanBot2.sendMessage(m.chat, { image: { url: picEffect } }, { quoted: m })
 }
