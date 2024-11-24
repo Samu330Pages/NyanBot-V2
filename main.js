@@ -324,12 +324,23 @@ const startNyanBot = async () => {
                 const userNumber = requestJoin.participant.split('@')[0];
                 const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
                 if (shouldReject) {
+                    console.log(`Aprobación denegada a ${requestJoin.participant}`)
                     await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "reject");
                 } else {
                     await nyanBot2.groupRequestParticipantsUpdate(requestJoin.id, [requestJoin.participant], "approve");
                 }
             }
         })
+
+        nyanBot2.ev.on("groups.update", async (arabsOn) => {
+            if (arabsOn.joinApprovalMode == false && global.DATABASE.data.chats[arabsOn.id].restrict) {
+                nyanBot2.sendMessage(arabsOn.id, {
+                        text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*
+> _*Si deseas deshabilitar el modo de aprobación, primero desactiva la función antiArabes con el comando correspondiente!!!*_ ⚠️`,
+                    })
+                await nyanBot2.groupJoinApprovalMode(arabsOn.id, 'on')
+            }
+        }
 
         nyanBot2.ev.on('messages.delete', async (test2) => {
                 console.log(test2)
