@@ -2172,17 +2172,16 @@ _Sigue el formato de tiempo para cada caso:_\n
 
                 nyanBot2.sendMessage(m.chat, { react: { text: '🧃', key: m.key } });
 
-                const option = text.trim().split(' ')[0]; // Obtener la opción del texto
+                const option = text.trim().split(' ')[0];
 
                 try {
                     if (quoted) {
-                        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt"); // Descargar y guardar la media etiquetada
-                    } else {
-                        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(m, "samuSt"); // Descargar y guardar la media del mensaje
+                        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(quoted, "samuSt");
+                        mediaPath = await nyanBot2.downloadAndSaveMediaMessage(m, "samuSt");
                     }
                 } catch (err) {
                     console.error('Error al descargar el medio:', err);
-                    return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`); // Enviar el error en el reply
+                    return reply(`No se pudo descargar el medio: ${err.message}. Intenta de nuevo.`);
                 }
 
                 if (!mediaPath) {
@@ -2190,20 +2189,17 @@ _Sigue el formato de tiempo para cada caso:_\n
                 }
 
                 let encmedia;
-                const outputFilePath = 'output.webp'; // Archivo de salida
+                const outputFilePath = 'output.webp';
 
                 try {
                     if (/image/.test(mime)) {
-                        // Procesar imagen con sharp
                         if (option === '1') {
-                            // Opción 1: Estirar la imagen a 512x512
                             await sharp(mediaPath)
                                 .resize(512, 512, {
-                                    fit: sharp.fit.fill // Estirar la imagen para que ocupe el cuadro
+                                    fit: sharp.fit.fill
                                 })
                                 .toFile(outputFilePath);
                         } else if (option === '2') {
-                            // Opción 2: Recortar a circular
                             const image = sharp(mediaPath);
                             const { width, height } = await image.metadata();
                             const size = Math.max(width, height);
@@ -2217,7 +2213,6 @@ _Sigue el formato de tiempo para cada caso:_\n
                                 .composite([{ input: mask, blend: 'dest-in' }])
                                 .toFile(outputFilePath);
                         } else if (option === '3') {
-                            // Opción 3: Recortar a forma de corazón
                             const heartMask = Buffer.from(`
                     <svg width="512" height="512" viewBox="0 0 24 24" fill="none">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="white"/>
@@ -2228,35 +2223,29 @@ _Sigue el formato de tiempo para cada caso:_\n
                                 .composite([{ input: heartMask, blend: 'dest-in' }])
                                 .toFile(outputFilePath);
                         } else if (option === '4') {
-                            // Opción 4: Eliminar el fondo de la imagen
                             const blob = await removeBackground(mediaPath);
                             const buffer = Buffer.from(await blob.arrayBuffer());
                             encmedia = buffer;
                             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
 
-                            // Eliminar el archivo original
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
                             }
                             return;
                         } else {
-                            // Sin opción: enviar la imagen original como sticker
                             encmedia = fs.readFileSync(mediaPath);
                             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
 
-                            // Eliminar el archivo original
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
                             }
                             return;
                         }
 
-                        // Asegurarse de que el archivo de salida exista antes de leerlo
                         if (fs.existsSync(outputFilePath)) {
                             encmedia = fs.readFileSync(outputFilePath);
                             await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
 
-                            // Eliminar el archivo original y el archivo procesado
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
                             }
@@ -2272,7 +2261,6 @@ _Sigue el formato de tiempo para cada caso:_\n
                         let media = await quoted.download()
                         let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
 
-                        // Eliminar el archivo original
                         if (fs.existsSync(mediaPath)) {
                             fs.unlinkSync(mediaPath);
                         }
