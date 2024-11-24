@@ -464,7 +464,7 @@ const startNyanBot = async () => {
             const res = json[0]
             if (global.DATABASE.data.chats[res.id].events) {
                 try {
-                    ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
+                    ppgroup = await nyanBot2.profilePictureUrl(res.id, 'image')
                 } catch (err) {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
                 }
