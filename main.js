@@ -331,7 +331,7 @@ const startNyanBot = async () => {
         });
 
 
-        nyanBot2.ev.on('group.join-reques', async (test) => {
+        nyanBot2.ev.on('group.join-request', async (test) => {
                 console.log(test)
         })
 
