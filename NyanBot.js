@@ -211,6 +211,8 @@ const categories = {
         { command: 'update', description: '', help: 'Alias de actualizar.' },
 	{ command: 'priv', description: '', help: 'Permite el uso en chats privados (para cuando el bot esté en modo solo grupos).' },
 	{ command: 'nopriv', description: '', help: 'Prohíbe el uso en chats privados (para cuando el bot esté en modo solo grupos).' },
+	{ command: 'ban', description: '', help: 'Bloquea el uso del Bot en un chat.' },
+	{ command: 'noban', description: '', help: 'Habilita el uso del Bot en un chat.' },
         { command: 'broadcast', description: '', help: 'Envía mensajes masivos a todos los chats (Solo Bot).' },
         { command: 'limpiar', description: '', help: 'Libera memoria (Solo Bot).' },
         { command: '<=', description: '_*EVAL*_', help: 'Eval con return.' },
@@ -2622,11 +2624,11 @@ case 'ban': case 'noban':
 if (!isSamu) return reply('tu quien eres para decirme que hacer!?🤔')
 if (command == 'ban') {
 if (db.data.chats[m.chat].ban) return reply('*Este chat ya esta baneado!*')
-db.data.chats[m.chat].restrict = true;
+db.data.chats[m.chat].ban = true;
 reply('*Este chat sé ah baneado!*')
 } else if (command == 'noban') {
 if (!db.data.chats[m.chat].ban) return reply('*Este chat no esta baneado!*')
-db.data.chats[m.chat].restrict = false;
+db.data.chats[m.chat].ban = false;
 reply('*Se ah habilitado este chat!*')
 }
 break
