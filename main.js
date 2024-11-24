@@ -135,7 +135,7 @@ const startNyanBot = async () => {
                 level: 'silent'
             }),
             printQRInTerminal: !pairingCode, // popping up QR in terminal log
-            browser: Browsers.windows('Firefox'), // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+            browser: Browsers.windows('Firefox'),
             auth: {
                 creds: state.creds,
                 keys: makeCacheableSignalKeyStore(state.keys, pino({
