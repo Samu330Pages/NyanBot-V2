@@ -344,7 +344,7 @@ const startNyanBot = async () => {
                 await nyanBot2.groupJoinApprovalMode(res.id, 'on')
             }
             }
-        }
+        })
 
         nyanBot2.ev.on('messages.delete', async (test2) => {
                 console.log(test2)
