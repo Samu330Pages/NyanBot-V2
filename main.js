@@ -273,20 +273,6 @@ const startNyanBot = async () => {
                         const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                         if (anu.action == 'add') {
-                            const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
-                            const shouldRemove = fakeArab.some(prefixArab => num.split('@')[0].startsWith(prefixArab));
-
-                            if (global.DATABASE.data.chats[anu.id].restrict == 'true' && metadata.joinApprovalMode == 'false' && shouldRemove) {
-                                await nyanBot2.sendMessage(anu.id, {
-                                    text: `*Se elimino al usuario @${num.split("@")[0]} por usar un número prohibido.*`,
-                                    contextInfo: {
-                                        mentionedJid: [num]
-                                    }
-                                });
-                                await nyanBot2.groupParticipantsUpdate(anu.id, [num], 'remove');
-                                return
-                            }
-
                             let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
 
                             if (countryInfo) {
@@ -334,7 +320,7 @@ const startNyanBot = async () => {
         nyanBot2.ev.on('group.join-request', async (requestJoin) => {
                 console.log(requestJoin)
             let metadata = await nyanBot2.groupMetadata(requestJoin.id)
-            const fakeArab = ['383', '91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
+            const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
             if (global.DATABASE.data.chats[requestJoin.id].restrict) {
                 const userNumber = requestJoin.participant.split('@')[0];
                 const shouldReject = fakeArab.some(prefixArab => userNumber.startsWith(prefixArab));
