@@ -461,14 +461,14 @@ const startNyanBot = async () => {
 
         // detect group update
         nyanBot2.ev.on("groups.update", async (json) => {
-            if (global.DATABASE.data.chats[json.id].events) {
+            const res = json[0]
+            if (global.DATABASE.data.chats[res.id].events) {
                 try {
                     ppgroup = await nyanBot2.profilePictureUrl(anu.id, 'image')
                 } catch (err) {
                     ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60'
                 }
                 console.log(json)
-                const res = json[0]
                 let admin = res.author
                 if (res.joinApprovalMode == false) {
                     await sleep(2000)
