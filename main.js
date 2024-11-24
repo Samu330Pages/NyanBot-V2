@@ -317,7 +317,7 @@ const startNyanBot = async () => {
         });
 
         nyanBot2.ev.on('group.join-request', async (requestJoin) => {
-                console.log(requestJoin)
+            console.log(requestJoin)
             let metadata = await nyanBot2.groupMetadata(requestJoin.id)
             const fakeArab = ['91', '92', '222', '93', '265', '61', '62', '966', '229', '40', '49', '20', '963', '967', '234', '210', '212'];
             if (global.DATABASE.data.chats[requestJoin.id].restrict) {
@@ -333,54 +333,53 @@ const startNyanBot = async () => {
         })
 
         nyanBot2.ev.on("groups.update", async (arabsOn) => {
-            console.log(arabsOn)
             let res = arabsOn[0]
             if (res.joinApprovalMode == false) {
                 if (global.DATABASE.data.chats[res.id].restrict) {
-                nyanBot2.sendMessage(res.id, {
-                        text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*
+                    nyanBot2.sendMessage(res.id, {
+                        text: `*Se desactivó la aprobación de miembros, pero la función para denegar el acceso a números prohibidos está activa, por lo tanto el modo de aprobación se activará de nuevo!!*\n
 > _*Si deseas deshabilitar el modo de aprobación, primero desactiva la función antiArabes con el comando correspondiente!!!*_ ⚠️`,
                     })
-                await nyanBot2.groupJoinApprovalMode(res.id, 'on')
-            }
+                    await nyanBot2.groupJoinApprovalMode(res.id, 'on')
+                }
             }
         })
 
-        nyanBot2.ev.on('messages.delete', async (test2) => {
-                console.log(test2)
+        nyanBot2.ev.on('message-receipt.update', async (test2) => {
+            console.log(test2)
         })
 
-        
+
 
         //AntiCalls
         nyanBot2.ev.on('call', async (callDetec) => {
-            	if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall){
-            console.log(callDetec)
-            for (let callStatus of callDetec) {
-            if (callStatus.isGroup == false) {
-            if (callStatus.status == "offer") {
-            await nyanBot2.sendMessage(callStatus.from, {
-                text: `*Lo siento @${callStatus.from.split('@')[0]}*\nLas llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
-                contextInfo: {
-                    mentionedJid: [callStatus.from],
-                    "externalAdReply": {
-                        "showAdAttribution": true,
-                        "containsAutoReply": true,
-                        "title": `🚫 AutoBlockCall`,
-                        "body": '',
-                        "previewType": "PHOTO",
-                        "thumbnailUrl": ``,
-                        "thumbnail": await getBuffer('https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png'),
-                        "sourceUrl": `https://samu330.com`
+            if (global.DATABASE.data.settings[nyanBot2.decodeJid(nyanBot2.user.id)].anticall) {
+                console.log(callDetec)
+                for (let callStatus of callDetec) {
+                    if (callStatus.isGroup == false) {
+                        if (callStatus.status == "offer") {
+                            await nyanBot2.sendMessage(callStatus.from, {
+                                text: `*Lo siento @${callStatus.from.split('@')[0]}*\nLas llamadas de ${callStatus.isVideo ? `*video*` : `*audio*` } estan bloqueadas 🚫!\n\n> AutoBlockCall For ${nyanBot2.user.name}!`,
+                                contextInfo: {
+                                    mentionedJid: [callStatus.from],
+                                    "externalAdReply": {
+                                        "showAdAttribution": true,
+                                        "containsAutoReply": true,
+                                        "title": `🚫 AutoBlockCall`,
+                                        "body": '',
+                                        "previewType": "PHOTO",
+                                        "thumbnailUrl": ``,
+                                        "thumbnail": await getBuffer('https://freesvg.org/img/taber_No_Cell_Phones_Allowed.png'),
+                                        "sourceUrl": `https://samu330.com`
+                                    }
+                                }
+                            })
+                            await nyanBot2.rejectCall(callStatus.id, callStatus.from)
+                        }
                     }
                 }
-            })
-            await nyanBot2.rejectCall(callStatus.id, callStatus.from)
             }
-            }
-            }
-            }
-            })
+        })
 
         //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
