@@ -2,14 +2,14 @@ const fetch = require('node-fetch');
 const yts = require('yt-search');
 const forma1 = '`';
 
-module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk, reactionError, nyanBot2, formatNumber, prefix, readmore) {
+module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, prefix, readmore) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
     if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`);
 
-    let playId = reactionLoad(m.chat, m.key);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕓', key: m.key } });
     const r = await yts(text);
     if (!r || !r.videos || r.videos.length === 0) {
-        reactionError(m.chat, m.key, playId);
+        nyanBot2.sendMessage(m.chat, { react: { text: '🔴', key: m.key } });
         return reply("No se encontraron videos para esa búsqueda.");
     }
 
@@ -31,5 +31,5 @@ module.exports = async function(text, m, reply, isUrl, reactionLoad, reactionOk,
         caption: caption
     }, { quoted: m });
 
-    reactionOk(m.chat, m.key, playId);
+    nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 };
