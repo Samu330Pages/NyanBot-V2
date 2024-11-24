@@ -930,7 +930,7 @@ if (juegoActivoIndex !== -1) {
 
 case 'lighteffects':{
 
-if (!q) return reply(`Example : ${prefix+command}`) 
+if (!text) return reply(`Example : ${prefix+command}`) 
 let link
 if (/glitchtext/.test(command)) link = 'https://en.ephoto360.com/create-digital-glitch-text-effects-online-767.html'
 if (/writetext/.test(command)) link = 'https://en.ephoto360.com/write-text-on-wet-glass-online-589.html'
