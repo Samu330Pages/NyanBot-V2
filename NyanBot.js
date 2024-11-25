@@ -164,7 +164,8 @@ const categories = {
         { command: 'ig', description: '_*URL*_', help: 'Alias de instagram.' },
         { command: 'mediafire', description: '_*URL*_', help: 'Descarga archivos de Mediafire sin seguridad.' },
         { command: 'gdrive', description: '_*URL*_', help: 'Descarga archivos de Google Drive.' },
-        { command: 'apk', description: '', help: 'Descarga aplicaciones.' }
+        { command: 'apk', description: '', help: 'Descarga aplicaciones de Aptoide.' },
+	{ command: 'apk2', description: '', help: 'Descarga aplicaciones de Apk Combo.' }
     ],
     "🧠 Ia": [
         { command: 'nyan', description: '', help: 'IA con respuesta en audio! (Respuestas cortas).' },
@@ -849,16 +850,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
             document: { url: downloadInfo.link },
             mimetype: 'application/vnd.android.package-archive',
             fileName: `${downloadInfo.appname}.apk`,
-            caption: downloadMessage,
-            contextInfo: {
-                "externalAdReply": {
-                    "containsAutoReply": true,
-                    "title": `📥 Descarga por Samu330 👑`,
-                    "body": `Download by Samu330.com!`,
-                    "thumbnailUrl": downloadInfo.img,
-                    "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
-                }
-            }
+            caption: downloadMessage
         }, { quoted: m });
 	} catch (error) {
 		reply('*Ocurrio un error, porfavor intente con el comando:* apk')
