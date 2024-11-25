@@ -825,6 +825,46 @@ if (juegoActivoIndex !== -1) {
     db.data.game.soup = userGames;
 }
 
+if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`)) {
+    let quotedText = m.quoted.text;
+
+    let linkPattern = /https?:\/\/apkcombo\.com\/[^\s]+/g;
+    let links = quotedText.match(linkPattern);
+
+    let quotedBody = m.quoted.body.trim();
+
+    let index = parseInt(quotedBody) - 1;
+
+    if (links && index >= 0 && index < links.length) {
+        let selectedLink = links[index];
+
+        let downloadInfo = await require("./lib/apk-dl.js").apkcombo.download(selectedLink);
+
+        const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
+            `◦  *Desarrollador*: ${downloadInfo.developer}\n` +
+            `◦  *Versión*: ${downloadInfo.version}\n`;
+
+        await nyanBot2.sendMessage(m.chat, {
+            document: { url: downloadInfo.link },
+            mimetype: 'application/vnd.android.package-archive',
+            fileName: `${downloadInfo.appname}.apk`,
+            caption: downloadMessage,
+            contextInfo: {
+                "externalAdReply": {
+                    "showAdAttribution": true,
+                    "containsAutoReply": true,
+                    "title": `📥 Descarga por Samu330 👑`,
+                    "body": `Download by Samu330.com!`,
+                    "thumbnailUrl": downloadInfo.img || 'https://default-icon-url.com',
+                    "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
+                }
+            }
+        }, { quoted: m });
+    } else {
+        reply(`*❌ Por favor, responde con un número del 1 al 6 para descargar la aplicación.*`);
+    }
+}
+
         switch (isCommand) {
 			
 		case 'math': {
@@ -858,10 +898,10 @@ case 'apk2':
         caption += `❌ *No se encontraron aplicaciones.* ❌`;
     } else {
         limitedApps.forEach(app => {
-            caption += `◦  *${app.name}* - ${app.rating} (${app.downloads})\n`;
+            caption += `◦  *${app.name}* - ${app.rating} (${app.downloads})\n\n`;
         });
 	caption += `⚠️ _INSTRUCCIONES_ ⚠️: *Para descargar una aplicación, solo etiqueta este mensaje con el número correspondiente a la aplicación que deseas.*\n`;
-	caption += `_*Ejemplo:*_ ${forma1}2${forma1}`;
+	caption += `\n_*Ejemplo:*_ ${forma1}2${forma1}`;
         caption += `\n${readmore}🔗 *Links*\n`;
         limitedApps.forEach(app => {
             caption += `${app.link}\n`;
