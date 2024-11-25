@@ -831,9 +831,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
     let linkPattern = /https?:\/\/apkcombo\.com\/[^\s]+/g;
     let links = quotedText.match(linkPattern);
 
-    let quotedBody = m.quoted.body.trim();
-
-    let index = parseInt(quotedBody) - 1;
+    let index = body;
 
     if (links && index >= 0 && index < links.length) {
         let selectedLink = links[index];
