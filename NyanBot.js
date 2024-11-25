@@ -833,16 +833,18 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
     let index = body -1;
 
-    if (index > links.length) return reply(`*No hay ${index} aplicaciones en la lista, asegurate de que el numero no sea mayor a ${links.length}*`)
+    if (index > links.length) return reply(`*No hay ${budy} aplicaciones en la lista, asegurate de que el numero no sea mayor a ${links.length}*`)
     if (links && index >= 0 && index < links.length) {
         let selectedLink = links[index];
 
         let downloadInfo = await require("./lib/apk-dl.js").apkcombo.download(selectedLink);
 
+	await stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*📥 ${downloadInfo.appname}*`);
         const downloadMessage = `📥 *${downloadInfo.appname}*\n\n` +
             `◦  *Desarrollador*: ${downloadInfo.developer}\n` +
             `◦  *Versión*: ${downloadInfo.version}\n`;
 
+	try {
         await nyanBot2.sendMessage(m.chat, {
             document: { url: downloadInfo.link },
             mimetype: 'application/vnd.android.package-archive',
@@ -850,15 +852,17 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
             caption: downloadMessage,
             contextInfo: {
                 "externalAdReply": {
-                    "showAdAttribution": true,
                     "containsAutoReply": true,
                     "title": `📥 Descarga por Samu330 👑`,
                     "body": `Download by Samu330.com!`,
-                    "thumbnailUrl": downloadInfo.img || 'https://default-icon-url.com',
+                    "thumbnailUrl": downloadInfo.img,
                     "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
                 }
             }
         }, { quoted: m });
+	} catch (error) {
+		reply('*Ocurrio un error, porfavor intente con el comando:* apk')
+	}
     }
 }
 
@@ -883,7 +887,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 			
 case 'apk2':
     if (!text) return reply("*Incluye junto al comando la aplicación que deseas buscar! 🙃*");
-    
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     let r = require("./lib/apk-dl");
     let i = await r.apkcombo.search(text);
 
@@ -1385,7 +1389,7 @@ case 'apk':
 
         await sendCarousel(m.chat, {}, {
             header: `🍟 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
-            footer: `Scraper ApkDl By Samu330.com`,
+            footer: `*Si no encuentras tu aplicacion intenta con ${prefix+apk2}*\n\nScraper ApkDl By Samu330.com`,
             cards: contents
         });
     } catch (e) {
