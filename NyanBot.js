@@ -831,8 +831,9 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
     let linkPattern = /https?:\/\/apkcombo\.com\/[^\s]+/g;
     let links = quotedText.match(linkPattern);
 
-    let index = body;
+    let index = body -1;
 
+    if (index > links.length) return reply(`*No hay ${index} aplicaciones en la lista, asegurate de que el numero no sea mayor a ${links.length}*`)
     if (links && index >= 0 && index < links.length) {
         let selectedLink = links[index];
 
