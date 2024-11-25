@@ -860,8 +860,6 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
                 }
             }
         }, { quoted: m });
-    } else {
-        reply(`*❌ Por favor, responde con un número del 1 al 6 para descargar la aplicación.*`);
     }
 }
 
