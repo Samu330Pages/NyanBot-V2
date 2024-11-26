@@ -49,7 +49,6 @@
         "human-readable": "^0.2.1",
         "imgur": "^1.0.2",
         "javascript-obfuscator": "^4.0.0",
-        "jimp": "^0.16.13",
         "jsdom": "^22.1.0",
         "lodash": "^4.17.21",
         "mal-scraper": "^2.11.4",
