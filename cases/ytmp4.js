@@ -20,6 +20,7 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
     try {
         let r = await ytdl.sYtdl(text);
         const durationMinutes = Math.floor(r[0].duration / 60);
+        if (r[0].duration >= 3600) return reply(`*No se puede descargar este video ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
         const video = await getBuffer(`${r[0].url}`);
