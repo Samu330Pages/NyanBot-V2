@@ -223,7 +223,7 @@ const categories = {
 };
 //data
 let bad = JSON.parse(fs.readFileSync('./src/data/function/badword.json'))
-//let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
+let premium = JSON.parse(fs.readFileSync('./src/data/role/premium.json'))
 const owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 
 const verifieduser = JSON.parse(fs.readFileSync('./src/data/role/user.json'))
