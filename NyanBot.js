@@ -1386,6 +1386,7 @@ case 'apk':
         });
     } catch (e) {
         console.log(e);
+	reply(`${e}`)
         stcReac('error', '*Lo siento pero al parecer ha corrido un error! puedes volver a intentarlo 😁*');
     }
     break
