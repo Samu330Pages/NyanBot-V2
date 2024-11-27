@@ -865,8 +865,10 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
                 if (!isAdmins) return reply(mess.admin)
                 if (!isBotAdmins) return reply(mess.adminBot)
                 if (!text) return reply(`*Proporciona la configuración a cambiar después del comando, ejemplo de uso:*\n\n${prefix+command} 1\n\n_*Ajustes disponibles:*_\n
-${forma1}1 = Activar el Modo de aprobación${forma1}
-${forma1}2 = Desactivar el Modo de aprobación${forma1}`)
+${forma1}1 = Activar el Modo de aprobación.${forma1}
+${forma1}2 = Desactivar el Modo de aprobación.${forma1}
+${forma1}3 = Permitir a los miembros agregar a más personas.${forma1}
+${forma1}4 = Solo los administradores podrán agregar a más personas.${forma1}`)
                 
 		if (text == 1) {
 		if (groupMetadata.joinApprovalMode) return reply('*El modo de aprobación ya esta activado, no es necesario volver a activar. 🌭*')
@@ -877,6 +879,14 @@ ${forma1}2 = Desactivar el Modo de aprobación${forma1}`)
 		if (!groupMetadata.joinApprovalMode) return reply('*El modo de aprobación ya esta desactivado, no es necesario volver a desactivar. 🌭*')
 		await nyanBot2.groupJoinApprovalMode(from, "off")
 		reply("_*El modo de aprobación se desactivó con éxito!*_ ⚙️")
+		} else if (text == 3) {
+		if (groupMetadata.memberAddMode) return reply('*Este ajuste ya esta activado, no es necesario volver a activar. 🌭*')
+		await nyanBot2.groupMemberAddMode(from, "on")
+		reply("_*Ajuste actualizado! los miembros de este grupo podrán agregar a mas personas!*_ ⚙️")
+		} else if (text == 4) {
+		if (!groupMetadata.memberAddMode) return reply('*Este ajuste ya esta activado, no es necesario volver a desactivar. 🌭*')
+		await nyanBot2.groupMemberAddMode(from, "off")
+		reply("_*Ajuste actualizado! solo administradores podras agregar a mas personas!*_ ⚙️")
 		} else {
 		return reply("*Ajuste no especificado, asegúrate de solo incluir el número de ajuste a modificar! 🔴*")
 		}
