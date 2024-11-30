@@ -2606,7 +2606,7 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
                         return reply('Unable to scan directory: ' + err);
                     }
                     let filteredArray = await files.filter(item => item.startsWith("pre-key") ||
-                        item.startsWith("sender-key") || item.startsWith("session-") || item.startsWith("app-state")
+                        item.startsWith("sender-key") || item.startsWith("session-")
                     )
                     console.log(filteredArray.length);
                     let teks = `Se detectó ${filteredArray.length} archivos innecesarios!\n\n`
