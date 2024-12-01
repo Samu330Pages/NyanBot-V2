@@ -5,7 +5,7 @@ const {
 module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanBot2, prefix, command) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(mess.limit);
     if (global.DATABASE.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${global.DATABASE.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
-    if (text || !/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
+    if (!/^https?:\/\/(www\.)?instagram\.com\/.+$/.test(text)) return reply(`*Es necesario un link válido de Instagram.*\n_*Ejemplo de uso*_\n\n${prefix + command} https://instagram.com/...`);
 
     nyanBot2.sendMessage(m.chat, {
         react: {
