@@ -1095,35 +1095,9 @@ case 'apk2':
                 await caseInstagram(text, m, reply, sender, stcReac, useLimit, nyanBot2, prefix, command);
                 break
 
-	case 'tourl': {
-                nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
-		let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
-                if (/image/.test(mime)) {
-                    let r = await TelegraPh(media)
-                    reply(util.format(r))
-                } else if (!/image/.test(mime)) {
-                    let r = await UploadFileUgu(media)
-                    reply(util.format(r))
-                }
-                await fs.unlinkSync(media)
-
-            }
-            break
-
-            case 'emojimix': {
-                let [emoji1, emoji2] = text.split`+`
-                if (!emoji1) return reply(`*Te falta el otro emoji:* ${prefix + command} 😅+🥹`)
-                if (!emoji2) return reply(`*Te falta el otro emoji*: ${prefix + command} 😅+🥹`)
-                nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-                let emoji = await fetchJson(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`)
-                for (let res of emoji.results) {
-                    let encmedia = await nyanBot2.sendImageAsSticker(m.chat, res.url, m, {
-                        packname: global.packname,
-                        author: global.author,
-                        categories: res.tags
-                    })
-                }
-            }
+            case 'emojimix':
+		const caseEmojiMix = require('./cases/emojiMix');
+                await caseEmojiMix(text, m, reply, nyanBot2, command, prefix);
                 break
 
             case 'x': case 'twiter': case 'tw':
@@ -2529,6 +2503,21 @@ _*Puedes igual recolectar 100 puntos diarios con el comando:*_ ${prefix}claim`
                 if (!admNum) return reply('*Por favor etiqueta o menciona algún participante o responde al mensaje de la persona que deseas otorgarle admin!*')
                 await nyanBot2.groupParticipantsUpdate(m.chat, [admNum], 'promote')
                 break
+
+			case 'tourl': {
+                nyanBot2.sendMessage(m.chat, { react: { text: '📍', key: m.key } });
+		let media = await nyanBot2.downloadAndSaveMediaMessage(quoted)
+                if (/image/.test(mime)) {
+                    let r = await TelegraPh(media)
+                    reply(util.format(r))
+                } else if (!/image/.test(mime)) {
+                    let r = await UploadFileUgu(media)
+                    reply(util.format(r))
+                }
+                await fs.unlinkSync(media)
+
+            }
+            break
 
             case 'demote':
                 if (!m.isGroup) return reply(mess.group)
