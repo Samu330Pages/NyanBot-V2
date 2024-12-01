@@ -273,7 +273,7 @@ const startNyanBot = async () => {
                         const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                         if (anu.action == 'add') {
-                            let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}\n`;
+                            let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} | ${date}\n`;
 
                             WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
                             WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
@@ -294,8 +294,8 @@ const startNyanBot = async () => {
                                     externalAdReply: {
                                         renderLargerThumbnail: true,
                                         mediaType: 1,
-                                        title: `👋🏻 Bienvenido al grupo`,
-                                        body: `${metadata.subject}`,
+                                        title: `👋🏻 Bienvenido al grupo ${metadata.subject}`,
+                                        body: ``,
                                         thumbnail: await reSize(ppCanvas, 600, 315),
                                         jpegThumbnail: await reSize(ppCanvas, 600, 315),
                                         previewType: "NONE",
