@@ -1,7 +1,7 @@
 const {
   igdl
 } = require('ruhend-scraper');
-
+const forma1 = '`';
 module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanBot2, prefix, command) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(mess.limit);
     if (global.DATABASE.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${global.DATABASE.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
@@ -61,6 +61,7 @@ module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanB
             }
         });
         console.error('Error al procesar la solicitud:', error);
+        reply(`${error}`)
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo porfavor! 🙂*`)
     }
 
