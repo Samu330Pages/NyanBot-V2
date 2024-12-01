@@ -275,10 +275,6 @@ const startNyanBot = async () => {
                         if (anu.action == 'add') {
                             let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
 
-                            if (countryInfo) {
-                                WlcBody += `\n\n_*Tu info:*_\n*País:* ${countryInfo.name} ${countryInfo.emoji}\n*Código:* ${countryInfo.code}`;
-                            }
-
                             WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
                             WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
                             WlcBody += `🚫 Malas Palabras: ${global.DATABASE.data.chats[anu.id].badword ? 'No permitido' : 'Permitido'}\n`;
@@ -292,21 +288,30 @@ const startNyanBot = async () => {
                             WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
 
                             nyanBot2.sendMessage(anu.id, {
-                                image: ppCanvas,
-                                caption: WlcBody,
+                                text: WlcBody,
                                 contextInfo: {
                                     mentionedJid: [num],
                                     "externalAdReply": {
-                                        "showAdAttribution": true,
                                         "containsAutoReply": true,
                                         "title": `👋🏻 Bienvenido al grupo`,
                                         "body": `${metadata.subject}`,
-                                        "previewType": "PHOTO",
+                                        "previewType": "NONE",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": await getBuffer(ppgroup),
+                                        "thumbnail": await getBuffer(ppCanvas),
                                         "sourceUrl": `${wagc}`
                                     }
-                                }
+                                }, quoted: {
+                                    key: {
+                                        remoteJid: anu.id,
+                                        fromMe: false,
+                                        participant: num
+                                    },
+                                    message: {
+                                        imageMessage: {
+                                            thumbnail: await getBuffer(ppgroup),
+                                            caption: `*Hola soy de ${countryInfo.name}*\n_(${countryInfo.code})_ ${countryInfo.emoji}`
+                                        }
+                                    }}
                             });
                         }
                     }
