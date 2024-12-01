@@ -1106,7 +1106,7 @@ case 'apk2':
                 break
 
 	    case 'tt': case 'tiktok':
-		const caseTikok = require('./cases/twiter');
+		const caseTikok = require('./cases/tiktok');
                 await caseTikok(text, m, reply, nyanBot2, sender, useLimit, stcReac, command, prefix);
                 break
 
