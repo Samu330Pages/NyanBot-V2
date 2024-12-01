@@ -1,3 +1,7 @@
+const {
+    fetchJson
+} = require('../lib/samufuncs')
+
 module.exports = async function(text, m, reply, nyanBot2, command, prefix) {
     let [emoji1, emoji2] = text.split`+`
     if (!emoji1) return reply(`*Te falta el otro emoji:* ${prefix + command} 😅+🥹`)
