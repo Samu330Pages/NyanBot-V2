@@ -298,8 +298,8 @@ const startNyanBot = async () => {
                                         "title": `👋🏻 Bienvenido al grupo`,
                                         "body": `${metadata.subject}`,
                                         "previewType": "NONE",
-                                        "thumbnail": `${ppCanvas}`,
-                                        "jpegThumbnail": `${ppCanvas}`,
+                                        "thumbnail": await getBuffer(`${ppCanvas}`),
+                                        "jpegThumbnail": await getBuffer(`${ppCanvas}`),
                                         "sourceUrl": `${wagc}`
                                     }
                                 }}, { quoted: {
