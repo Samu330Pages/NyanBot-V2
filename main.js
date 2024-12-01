@@ -293,6 +293,8 @@ const startNyanBot = async () => {
                                     mentionedJid: [num],
                                     "externalAdReply": {
                                         "containsAutoReply": true,
+                                        "renderLargerThumbnail": true,
+                                        "mediaType": 1,
                                         "title": `👋🏻 Bienvenido al grupo`,
                                         "body": `${metadata.subject}`,
                                         "previewType": "NONE",
@@ -300,7 +302,7 @@ const startNyanBot = async () => {
                                         "thumbnail": await getBuffer(ppCanvas),
                                         "sourceUrl": `${wagc}`
                                     }
-                                }, quoted: {
+                                }}, { quoted: {
                                     key: {
                                         remoteJid: anu.id,
                                         fromMe: false,
