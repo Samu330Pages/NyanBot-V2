@@ -1,6 +1,6 @@
 const {
     formatNumber
-} = = require('../lib/samufuncs')
+} = require('../lib/samufuncs')
 const forma1 = '`'
 
 module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sender, prefix) {
