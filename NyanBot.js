@@ -1110,47 +1110,9 @@ case 'apk2':
                 await caseTiktokSearch(text, m, reply, nyanBot2, sender, sendVidCarousel, command, prefix);
                 break
 
-		case 'letra':
-            case 'lyrics': {
-                if (!text) return reply(`¡Por favor ingresa el nombre de la canción para buscar la letra!\n\nEjemplo:\n\n*${prefix + command} me olvide de vivir*`);
-
-                let letraId;
-                letraId = reactionLoad(m.chat, m.key);
-                stcReac('lupa', '_*Buscando Lyrics*_ ✍🏻')
-                try {
-                    let lyric = await fg.lyrics(text);
-
-                    if (!lyric || !lyric.title || lyric.title === 'undefined' || lyric.lyrics === 'undefined') {
-                        reactionError(m.chat, m.key, letraId);
-                        return reply(`*Lo siento, pero no se encontraron resultados de tu búsqueda! Intenta buscar con un nombre de canción válido.*\n_Intentaste buscar ${text}_`);
-                    }
-
-                    const buttons = [
-                        {
-                            name: "cta_copy",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: 'Copiar 🪄',
-                                copy_code: `${lyric.lyrics}`
-                            }),
-                        }
-                    ];
-
-                    await sendReplyButton(m.chat, buttons, m, {
-                        content: `${forma1}LETRA DE LA CANCION 🍟${forma1}\n
-_*Título:*_ ${lyric.title}
-_*Artista:*_ ${lyric.artist}\n
-*Letra:*\n
-${lyric.lyrics}\n`,
-                        media: await fetchBuffer(`${lyric.image}`)
-                    });
-
-                    reactionOk(m.chat, m.key, letraId);
-                } catch (error) {
-                    reactionError(m.chat, m.key, letraId);
-                    console.error('Error al procesar la solicitud:', error);
-                    reply(`Ocurrió un error al intentar obtener la letra. Por favor, verifica el nombre de la canción y vuelve a intentarlo.\n${error}`);
-                }
-            }
+	    case 'letra': case 'lyrics':
+		const caseLyrics = require('./cases/lyrics');
+                await caseLyrics(text, m, reply, nyanBot2, stcReac, command, prefix);
                 break
 
             // Case para TikTok
