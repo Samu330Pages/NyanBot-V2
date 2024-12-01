@@ -310,7 +310,7 @@ const startNyanBot = async () => {
                                     },
                                     message: {
                                         imageMessage: {
-                                            jpegThumbnail: ppgroup,
+                                            jpegThumbnail: await getBuffer(ppgroup),
                                             caption: `*Hola, soy de ${countryInfo.name}* _(${countryInfo.code})_ ${countryInfo.emoji}`
                                         }
                                     }}
