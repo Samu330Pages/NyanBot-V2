@@ -3,6 +3,7 @@ const {
     formatBytes,
     fetchBuffer
 } = require('../lib/samufuncs')
+const fg = require('api-dylux')
 const forma1 = '`'
 
 module.exports = async function(text, m, reply, nyanBot2, sender, useLimit, stcReac, command, prefix) {
