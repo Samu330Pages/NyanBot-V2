@@ -347,6 +347,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('serialNumber' in user)) user.serialNumber = randomBytes(5).toString('hex')
                 if (!('nick' in user)) user.nick = nyanBot2.getName(sender)
                 if (!('lastClaim' in user)) user.lastClaim = null
+		if (!('rewards' in user)) user.rewards = []
                 if (!isPremium) user.premium = false
                 if (!('totalLimit' in user)) user.totalLimit = 0
                 if (!isNumber(user.limit)) user.limit = limitUser
