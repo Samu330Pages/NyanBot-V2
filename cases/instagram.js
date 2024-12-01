@@ -2,6 +2,10 @@ const {
   igdl
 } = require('ruhend-scraper');
 const forma1 = '`';
+const {
+  fetchBuffer
+} = require('../lib/samufuncs')
+
 module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanBot2, prefix, command) {
     if (global.DATABASE.data.users[sender].limit < 1) return reply(mess.limit);
     if (global.DATABASE.data.users[sender].limit < 20) return reply(`*Lo siento, pero este comando requiere 20 puntos, y tu cuenta tiene ${global.DATABASE.data.users[sender].limit}!*\n_Si deseas ganar más puntos, usa el comando ${forma1}${prefix}puntos${forma1} para ver de que manera ganar puntos_`);
@@ -25,7 +29,7 @@ module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanB
             await reply(`_*Sus imágenes se están enviando...*_`)
             for (let i = 0; i < numImages; i++) {
                 if (data[i].url.includes('.jpg') || data[i].url.includes('.png')) {
-                    const imageBuffer = await (await fetch(data[i].url)).buffer();
+                    const imageBuffer = await fetchBuffer(data[i].url);
                     await nyanBot2.sendMessage(m.chat, {
                         image: imageBuffer,
                         caption: `*Imagen ${i + 1} de ${numImages}*`
@@ -35,7 +39,7 @@ module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanB
                 }
             }
         } else if (data[0].url.includes('.jpg') || data[0].url.includes('.png')) {
-            const imageBuffer = await await (await fetch(data[0].url)).buffer();
+            const imageBuffer = await fetchBuffer(data[0].url);
             await nyanBot2.sendMessage(m.chat, {
                 image: imageBuffer,
                 caption: `> IG-DL 🌭`
@@ -43,7 +47,7 @@ module.exports = async function(text, m, reply, sender, stcReac, useLimit, nyanB
                 quoted: m
             });
         } else {
-            const videoBuffer = await await (await fetch(data[0].url)).buffer();
+            const videoBuffer = await fetchBuffer(data[0].url);
             await nyanBot2.sendMessage(m.chat, {
                 video: videoBuffer,
                 caption: `> IG-DL 🌭`,
