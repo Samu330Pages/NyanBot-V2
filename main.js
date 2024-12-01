@@ -296,8 +296,8 @@ const startNyanBot = async () => {
                                         mediaType: 1,
                                         title: `👋🏻 Bienvenido al grupo`,
                                         body: `${metadata.subject}`,
-                                        thumbnail: await reSize(ppCanvas, 200, auto),
-                                        jpegThumbnail: await reSize(ppCanvas, 200, auto),
+                                        thumbnail: await reSize(ppCanvas, 200, 200),
+                                        jpegThumbnail: await reSize(ppCanvas, 200, 200),
                                         previewType: "NONE",
                                         sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
                                     }
