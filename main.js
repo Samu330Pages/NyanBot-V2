@@ -249,7 +249,7 @@ const startNyanBot = async () => {
                             ppgroup = 'https://i.ibb.co/RBx5SQC/avatar-group-large-v2.png?q=60';
                         }
 
-                        let ppCanvas = await canvaImg.createWelcomeImage(ppuser);
+                        const ppCanvas = await canvaImg.createWelcomeImage(ppuser);
                         const phoneNumber = num.replace(/^\+/, '');
                         let countryInfo = null;
 
@@ -309,7 +309,7 @@ const startNyanBot = async () => {
                                     },
                                     message: {
                                         imageMessage: {
-                                            jpegThumbnail: await getBuffer(ppgroup),
+                                            jpegThumbnail: await getBuffer(`${ppgroup}`),
                                             caption: `*Hola, soy de ${countryInfo.name}* _(${countryInfo.code})_ ${countryInfo.emoji}`
                                         }
                                     }}
