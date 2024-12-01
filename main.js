@@ -273,7 +273,7 @@ const startNyanBot = async () => {
                         const date = moment.tz('America/Cancun').format('DD/MM/YYYY');
 
                         if (anu.action == 'add') {
-                            let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}`;
+                            let WlcBody = `> *Hola* @${num.split("@")[0]}\n\nEres el participante Nº.: ${members}\nHora/Fecha de ingreso : ${time} ${date}\n`;
 
                             WlcBody += `\n*Configuraciones del Grupo 👉🏻* ${readmore}\n\n`;
                             WlcBody += `🔔 Bienvenida: ${global.DATABASE.data.chats[anu.id].welcome ? 'Activa' : 'Desactivada'}\n`;
@@ -298,8 +298,8 @@ const startNyanBot = async () => {
                                         "title": `👋🏻 Bienvenido al grupo`,
                                         "body": `${metadata.subject}`,
                                         "previewType": "NONE",
-                                        "thumbnail": await getBuffer(ppCanvas),
-                                        "jpegThumbnail": await getBuffer(ppCanvas),
+                                        "thumbnail": `${ppCanvas}`,
+                                        "jpegThumbnail": `${ppCanvas}`,
                                         "sourceUrl": `${wagc}`
                                     }
                                 }}, { quoted: {
@@ -310,7 +310,7 @@ const startNyanBot = async () => {
                                     },
                                     message: {
                                         imageMessage: {
-                                            jpegThumbnail: await getBuffer(ppgroup),
+                                            jpegThumbnail: ppgroup,
                                             caption: `*Hola, soy de ${countryInfo.name}* _(${countryInfo.code})_ ${countryInfo.emoji}`
                                         }
                                     }}
