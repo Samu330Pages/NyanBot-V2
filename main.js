@@ -299,7 +299,7 @@ const startNyanBot = async () => {
                                         "body": `${metadata.subject}`,
                                         "previewType": "NONE",
                                         "thumbnailUrl": ``,
-                                        "thumbnail": await getBuffer(ppCanvas),
+                                        "thumbnail": ppCanvas,
                                         "sourceUrl": `${wagc}`
                                     }
                                 }}, { quoted: {
@@ -310,8 +310,8 @@ const startNyanBot = async () => {
                                     },
                                     message: {
                                         imageMessage: {
-                                            thumbnail: await getBuffer(ppgroup),
-                                            caption: `*Hola soy de ${countryInfo.name}*\n_(${countryInfo.code})_ ${countryInfo.emoji}`
+                                            jpegThumbnail: await getBuffer(ppgroup),
+                                            caption: `*Hola, soy de ${countryInfo.name}* _(${countryInfo.code})_ ${countryInfo.emoji}`
                                         }
                                     }}
                             });
