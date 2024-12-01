@@ -864,7 +864,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 case 'rw':
     if (!m.isGroup) return reply(mess.group);
     //if (from !== '120363348063997699@g.us') return reply(`*Lo siento, pero las recompensas solo se pueden reclamar en el grupo oficial! 🥶*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1`);
-    
+    if (!text) return reply('*Asegurate de tener un código de recompensa para poder canjear!*')
     const responseRewards = await axios.get('https://samu330.com/nyan/rewards');
     const html = responseRewards.data;
     const $ = cheerio.load(html);
