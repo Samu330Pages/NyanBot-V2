@@ -291,16 +291,15 @@ const startNyanBot = async () => {
                                 text: WlcBody,
                                 contextInfo: {
                                     mentionedJid: [num],
-                                    "externalAdReply": {
-                                        "containsAutoReply": true,
-                                        "renderLargerThumbnail": true,
-                                        "mediaType": 1,
-                                        "title": `👋🏻 Bienvenido al grupo`,
-                                        "body": `${metadata.subject}`,
-                                        "previewType": "NONE",
-                                        "thumbnail": await getBuffer(`${ppCanvas}`),
-                                        "jpegThumbnail": await getBuffer(`${ppCanvas}`),
-                                        "sourceUrl": `${wagc}`
+                                    externalAdReply: {
+                                        renderLargerThumbnail: true,
+                                        mediaType: 1,
+                                        title: `👋🏻 Bienvenido al grupo`,
+                                        body: `${metadata.subject}`,
+                                        thumbnail: ppCanvas,
+                                        jpegThumbnail: ppCanvas,
+                                        previewType: "NONE",
+                                        sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
                                     }
                                 }}, { quoted: {
                                     key: {
