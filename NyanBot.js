@@ -264,7 +264,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 	if (m.type === "senderKeyDistributionMessage") return;
         var body = m.message?.conversation || m.message?.viewOnceMessageV2?.message?.imageMessage?.caption || m.message?.viewOnceMessageV2?.message?.videoMessage?.caption || m.message?.imageMessage?.caption || m.message?.videoMessage?.caption || m.message?.extendedTextMessage?.text || m.message?.viewOnceMessage?.message?.videoMessage?.caption || m.message?.viewOnceMessage?.message?.imageMessage?.caption || m.message?.documentWithCaptionMessage?.message?.documentMessage?.caption || m.message?.buttonsMessage?.imageMessage?.caption || m.message?.buttonsResponseMessage?.selectedButtonId || m.message?.listResponseMessage?.singleSelectReply?.selectedRowId || m.message?.templateButtonReplyMessage?.selectedId || (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson ? JSON.parse(m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson)?.id : null) || m?.text || "";
         var budy = (typeof m.text == 'string' ? m.text : '')
-        //prefix 1
+	    
         var prefix = ['.', '/'] ? /^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi.test(body) ? body.match(/^[°•π÷×¶∆£¢€¥®™+✓_=|~!?@#$%^&.©^]/gi)[0] : "" : xprefix
         const isCmd = body.startsWith(prefix, '')
         const command = isCmd ? body.replace(/^\s*\.?\s*/, '').split(' ')[0].toLowerCase() : ""
