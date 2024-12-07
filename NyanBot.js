@@ -2498,22 +2498,42 @@ case 'cerrar':
             break
 
             case 'gpimg': case 'setppgruop': case 'ppg': {
-                if (!m.isGroup) return reply(mess.group)
+                if (!m.isGroup) return
                 if (!isAdmins) return reply(mess.admin)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!quoted) return reply(`*Porfavor etiqueta con el comando la imagen que desees establecer para el grupo!*`)
-                if (!/image/.test(mime)) return reply(`*Porfavor etiqueta solo imágenes!*`)
-                if (/webp/.test(mime)) return reply(`*Eh... ese es un sticker ._.*`)
-                var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppgp')
-                    const img = await generateProfilePicture(medis)
-       		    await nyanBot2.query({
-       		      tag: 'iq',
-       		      attrs: { to: m.chat, type: 'set', xmlns: 'w:profile:picture' },
-       		      content: [{ tag: 'picture', attrs: { type: 'image' }, img }]
-		    });
+                if (!isBotAdmins) return
+                if (!quoted) return
+                if (!/image/.test(mime)) return reply(`Send/Reply Image Caption Caption ${prefix + command}`)
+                if (/webp/.test(mime)) return reply(`Send/Reply Image With Caption ${prefix + command}`)
+                var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppbot.jpeg')
+                if (text == 'full') {
+                    var {
+                        img
+                    } = await generateProfilePicture(medis)
+                    await nyanBot2.query({
+                        tag: 'iq',
+                        attrs: {
+                            to: m.chat,
+                            type: 'set',
+                            xmlns: 'w:profile:picture'
+                        },
+                        content: [{
+                            tag: 'picture',
+                            attrs: {
+                                type: 'image'
+                            },
+                            content: img
+                        }]
+                    })
+                    fs.unlinkSync(medis)
+                    reply(mess.done)
+                } else {
+                    var memeg = await nyanBot2.updateProfilePicture(m.chat, {
+                        url: medis
+                    })
                     fs.unlinkSync(medis)
                     reply(mess.done)
             }
+	    }
                 break
 
             case 'listbadword': {
