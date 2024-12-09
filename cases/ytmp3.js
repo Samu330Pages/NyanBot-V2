@@ -43,6 +43,7 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
         console.error('Error al procesar la solicitud:', error);
+        reply(`*Ocurrió un error!! 🙃*\n_Detalles:_ ${error}`)
         stcReac('error', `_*❌ Ha ocurrido un error!*_\n*Intenta de nuevo por favor! 🙂*`);
     }
     
