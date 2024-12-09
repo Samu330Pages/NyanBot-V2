@@ -2786,11 +2786,11 @@ break
                 neww = performance.now()
                 oldd = performance.now()
                 respon = `
-*🍋‍🟩 RUNTIME* : ${runtime(process.uptime())}
+*🔮 RUNTIME* : ${runtime(process.uptime())}
 
-*💻 SERVIDOR*\n
+*💻 SERVIDOR:*\n
 _*RAM:*_ ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
-
+${readmore}
 _*Memoria NodeJS*_\n
 ${Object.keys(used).map((key, _, arr) => `${key.padEnd(Math.max(...arr.map(v => v.length)), ' ')}: ${formatp(used[key])}`).join('\n')}
 
