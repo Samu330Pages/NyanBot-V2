@@ -16,7 +16,6 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
     const video = r.videos[0];
 
     const caption = `> *YT Play 🍟.*\n\n` +
-                    `- *Título:* ${video.title}\n` +
                     `- *Duración:* ${video.timestamp}\n` +
                     `- *Autor:* ${video.author.name}\n` +
                     `- *Vistas:* ${formatNumber(video.views)}\n\n` +
@@ -27,9 +26,16 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
                     `${readmore}Link: ~${video.url}~`;
 
     await nyanBot2.sendMessage(m.chat, {
-        image: await (await fetch(video.thumbnail)).buffer(),
-        caption: caption
-    }, { quoted: m });
+        location: {
+            name: video.title,
+            address: 'Para descargar, menciona el texto de abajo siguiendo las instrucciones!',
+            url: 'https://samu330.com',
+            jpegThumbnail: await (await fetch(video.thumbnail)).buffer()
+        }
+    };
+    await nyanBot2.sendMessage(m.chat, {
+        text: caption
+    });
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 };
