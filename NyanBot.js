@@ -1073,7 +1073,7 @@ case 'apk2':
 
             case 'play':
                 const casePlay = require('./cases/play');
-                await casePlay(text, m, reply, isUrl, nyanBot2, formatNumber, prefix, readmore);
+                await casePlay(text, m, reply, isUrl, nyanBot2, formatNumber, prefix);
                 break
 
             case 'ytmp3': case 'yta':
