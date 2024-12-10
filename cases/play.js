@@ -6,7 +6,7 @@ const {
 } = require('../lib/samufuncs')
     
 
-module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, prefix, readmore) {
+module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, prefix) {
     if (!text) return reply(`Ejemplo: ${prefix}play piel canela`);
     if (isUrl(text)) return reply(`Para descargar audio desde el link de YouTube, utiliza el comando:\n\n${prefix}ytmp3`);
 
@@ -26,7 +26,7 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
                     `*⚠️ Instrucciones de descarga:*\n` +
                     `Menciona con ${forma1}v${forma1} para descargar el video.\n` +
                     `Menciona con ${forma1}a${forma1} para descargar el audio.\n\n` +
-                    `${readmore}Link: ~${video.url}~`;
+                    `~${video.url}~`;
 
     const img = await (await fetch(video.thumbnail)).buffer();
     await nyanBot2.sendMessage(m.chat, {
@@ -34,7 +34,7 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
             name: video.title,
             address: 'Para descargar, menciona el texto de abajo siguiendo las instrucciones!',
             url: 'https://samu330.com',
-            jpegThumbnail: await reSize(img, 200, 200)
+            jpegThumbnail: await reSize(img, 300, 200)
         }
     });
     await nyanBot2.sendMessage(m.chat, {
