@@ -36,7 +36,7 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
             url: 'https://samu330.com',
             jpegThumbnail: await reSize(img, 300, 200)
         }
-    });
+    }, {quoted: m});
     await nyanBot2.sendMessage(m.chat, {
         text: caption
     });
