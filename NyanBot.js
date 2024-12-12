@@ -376,7 +376,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('antibot' in chats)) chats.antibot = false
 		if (!('restrict' in chats)) chats.restrict = false
                 if (!('antiviewonce' in chats)) chats.antiviewonce = true
-                if (!('antilink' in chats)) chats.antilinkgc = false
+                if (!('antilink' in chats)) chats.antilink = false
 		if (!('antiadult' in chats)) chats.antiadult = false
                 if (!('ban' in chats)) chats.ban = false
                 if (!('adminmode' in chats)) chats.adminmode = false
@@ -722,6 +722,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
 
         if (db.data.chats[m.chat].antilink) {
             if (budy.match(`whatsapp.com`)) {
+		if (!isBotAdmins) return;
                 if (isAdmins) return
                 if (m.key.fromMe) return
                 if (isSamu) return
