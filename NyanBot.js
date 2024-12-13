@@ -864,6 +864,24 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
         switch (isCommand) {
 
+
+case 'lot':
+nyanBot2.sendMessage(m.chat, {
+text: `\`MYSTERY BOX\`\n\n_*REACCIONA CON EL EMOJI 🎁 PARA ABRIR ESTA CAJA!!*_\n\n_Disponible solo para una persona!_ ⚠️`,
+contextInfo: {
+"externalAdReply": {
+"containsAutoReply": true,
+"title": "NEW MYSTERY BOX HAS BEEN RELEASED! ✈️",
+"body": "Click aquí 👉🏻 [ ❤️ ]",
+"previewType": "PHOTO",
+"thumbnailUrl": ``,
+"thumbnail": await getBuffer('https://images2.wikia.nocookie.net/__cb20120729235044/thesimssocial/images/a/ae/Tycoon_mystery_box_icon.png'),
+"sourceUrl": `https://whatsapp.com/channel/0029VaDVQFVL7UVd71R7bY23`
+}
+}
+})
+break
+
 case 'rw':
     if (!m.isGroup) return reply(mess.group);
     if (from !== '120363348063997699@g.us') return reply(`*Lo siento, pero las recompensas solo se pueden reclamar en el grupo oficial! 🥶*\nhttps://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1`);
