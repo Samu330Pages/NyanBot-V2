@@ -308,7 +308,7 @@ const startNyanBot = async () => {
                                     },
                                     message: {
                                         imageMessage: {
-                                            jpegThumbnail: await reSize(ppgroup, 500, 500),
+                                            jpegThumbnail: await reSize(ppgroup, 300, 300),
                                             caption: `*Hola, soy de ${countryInfo.name}* _(${countryInfo.code})_ ${countryInfo.emoji}`
                                         }
                                     }}
