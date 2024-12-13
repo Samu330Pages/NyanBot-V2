@@ -388,7 +388,7 @@ const startNyanBot = async () => {
 
         nyanBot2.ev.on('messages.reaction', async (test) => {
             let res = test[0]
-            if (res.reaction.text("🎁")) {
+            if (res.reaction.text === "🎁") {
             nyanBot2.sendMessage(res.key.remoteJid, {text: JSON.stringify(test, undefined, 2)})
             }
         })
