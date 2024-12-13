@@ -387,7 +387,9 @@ const startNyanBot = async () => {
 ////////////////////////////////////
 
         nyanBot2.ev.on('messages.reaction', async (test) => {
-            nyanBot2.sendMessage("5219984907794@s.whatsapp.net", {text: JSON.stringify(test, undefined, 2)})
+            if (test[0].reaction.text("🎁") {
+            nyanBot2.sendMessage(test[0].reaction.key.remoteJid, {text: JSON.stringify(test, undefined, 2)})
+            }
         })
 
         //autostatus view
