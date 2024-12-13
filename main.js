@@ -387,8 +387,9 @@ const startNyanBot = async () => {
 ////////////////////////////////////
 
         nyanBot2.ev.on('messages.reaction', async (test) => {
-            if (test[0].reaction.text("🎁")) {
-            nyanBot2.sendMessage(test[0].reaction.key.remoteJid, {text: JSON.stringify(test, undefined, 2)})
+            let res = test[0]
+            if (res.reaction.text("🎁")) {
+            nyanBot2.sendMessage(res.reaction.key.remoteJid, {text: JSON.stringify(test, undefined, 2)})
             }
         })
 
@@ -468,7 +469,7 @@ const startNyanBot = async () => {
 
         // detect group update
         nyanBot2.ev.on("groups.update", async (json) => {
-            const res = json[0]
+            let res = json[0]
             if (global.DATABASE.data.chats[res.id].events) {
                 try {
                     ppgroup = await nyanBot2.profilePictureUrl(res.id, 'image')
