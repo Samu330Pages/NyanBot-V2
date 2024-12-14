@@ -386,10 +386,28 @@ const startNyanBot = async () => {
 /*👑*/        })
 ////////////////////////////////////
 
-        nyanBot2.ev.on('messages.reaction', async (test) => {
-            let res = test[0]
-            if (res.reaction.text === "🎁") {
-            nyanBot2.sendMessage(res.key.remoteJid, {text: JSON.stringify(test, undefined, 2)})
+        nyanBot2.ev.on('messages.reaction', async (react) => {
+            let res = react[0]
+            let r = ["100", "200", "300", "250", "500", "150"]
+            let t = Math.floor(Math.random() * r.length)
+            let p = r[t]
+            if (res.key.id.startsWith("MysteryBox") && res.reaction.text === "❤️") {
+                if (global.DATABASE.data.game.box.length > 0) {
+                    global.DATABASE.data.users[res.reaction.key.participant].limit += p
+                    nyanBot2.sendMessage(res.key.remoteJid, {
+                        text: `*Felicidades @${res.reaction.key.participant.split('@')[0]}* 🥳\n\n_Fuiste el ganador de esta caja y obtuviste ${p} puntos!_ 🥳🎁`,
+                        contextInfo: {
+                            mentionedJid: [res.reaction.key.participant]
+                        }
+                    })
+                } else {
+                    nyanBot2.sendMessage(res.key.remoteJid, {
+                        text: `*Lo siento @${res.reaction.key.participant.split('@')[0]} pero la caja ya ha sido reclamada por otra persona!*\n_Estate atento a la siguiente! 😛_`,
+                        contextInfo: {
+                            mentionedJid: [res.reaction.key.participant]
+                        }
+                    })
+                }
             }
         })
 
