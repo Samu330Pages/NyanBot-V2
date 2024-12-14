@@ -241,7 +241,7 @@ if (global.db.data) global.db.data = {
     ...(global.db.data || {})
 }
 
-let vote = db.data.others.vote = []
+let box = db.data.game.box = []
 let gameSoup = db.data.game.soup = []
 let gameMath = db.data.game.math = []
 
@@ -866,6 +866,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
 
 case 'lot':
+db.data.game.box[0] = randomBytes(10).toString('base64')
 nyanBot2.sendMessage(m.chat, {
 text: `\`MYSTERY BOX\`\n\n*SE HA DESPLEGADO UNA NUEVA CAJA MISTERIOSA!! 😦🔮*\n_*REACCIONA CON EL EMOJI 🎁 PARA ABRIR ESTA CAJA!!*_\n\n_Disponible solo para una persona, se rápido!_ ⚠️`,
 contextInfo: {
