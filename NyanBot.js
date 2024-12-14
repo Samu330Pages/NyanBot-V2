@@ -867,7 +867,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
 case 'lot':
 db.data.game.box[0] = randomBytes(10).toString('base64')
-nyanBot2.sendMessage(m.chat, {
+nyanBot2.sendMessage("120363348063997699@g.us", {
 text: `\`MYSTERY BOX\`\n\n*SE HA DESPLEGADO UNA NUEVA CAJA MISTERIOSA!! 🔮*\n_*REACCIONA CON EL EMOJI ❤️ PARA ABRIR ESTA CAJA!!*_\n\n_Disponible solo para una persona, se habilitan cajas en tiempos aleatorios, así que estate atento a la próxima!_ ⚠️`,
 contextInfo: {
 "externalAdReply": {
