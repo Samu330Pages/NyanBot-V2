@@ -867,7 +867,7 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
 case 'lot':
 nyanBot2.sendMessage(m.chat, {
-text: `\`MYSTERY BOX\`\n\n_*REACCIONA CON EL EMOJI 🎁 PARA ABRIR ESTA CAJA!!*_\n\n_Disponible solo para una persona!_ ⚠️`,
+text: `\`MYSTERY BOX\`\n\n*SE HA DESPLEGADO UNA NUEVA CAJA MISTERIOSA!! 😦🔮*\n_*REACCIONA CON EL EMOJI 🎁 PARA ABRIR ESTA CAJA!!*_\n\n_Disponible solo para una persona, se rápido!_ ⚠️`,
 contextInfo: {
 "externalAdReply": {
 "containsAutoReply": true,
@@ -879,7 +879,7 @@ contextInfo: {
 "sourceUrl": `https://whatsapp.com/channel/0029VaDVQFVL7UVd71R7bY23`
 }
 }
-})
+}, {messageId: "MysteryBox-" + randomBytes(8).toString('hex')})
 break
 
 case 'rw':
