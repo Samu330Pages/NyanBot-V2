@@ -388,7 +388,7 @@ const startNyanBot = async () => {
 
         nyanBot2.ev.on('messages.reaction', async (react) => {
             let res = react[0]
-            let r = ["100", "200", "300", "250", "500", "150"]
+            let r = [100, 200, 300, 250, 500, 150]
             let t = Math.floor(Math.random() * r.length)
             let p = r[t]
             if (res.key.id.startsWith("MysteryBox") && res.reaction.text === "❤️") {
