@@ -397,13 +397,16 @@ const startNyanBot = async () => {
                     nyanBot2.sendMessage(res.key.remoteJid, {
                         text: `*Felicidades @${res.reaction.key.participant.split('@')[0]}* 🥳\n\n_Fuiste el ganador de esta caja y obtuviste ${p} puntos!_ 🥳🎁`,
                         contextInfo: {
+                            remoteJid: res.key.remoteJid,
                             mentionedJid: [res.reaction.key.participant]
                         }
                     })
+                    global.DATABASE.data.game.box = []
                 } else {
                     nyanBot2.sendMessage(res.key.remoteJid, {
                         text: `*Lo siento @${res.reaction.key.participant.split('@')[0]} pero la caja ya ha sido reclamada por otra persona!*\n_Estate atento a la siguiente! 😛_`,
                         contextInfo: {
+                            remoteJid: res.key.remoteJid,
                             mentionedJid: [res.reaction.key.participant]
                         }
                     })
