@@ -1283,7 +1283,7 @@ case 'modapk':
         }
 
         let contents = limitedResults.map(app => {
-	const shortDescription = app.Description.length > 250 ? app.Description.substring(0, 250) + '...' : app.Description;
+	const shortDescription = app.Description.length > 250 ? app.Description.substring(0, 150) + '...' : app.Description;
 		
             let content = `◦  *Título*: ${app.Title || 'Desconocido'}\n\n`;
             content += `◦  *Descripción*: ${shortDescription || 'Desconocida'}\n`;
