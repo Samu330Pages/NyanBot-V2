@@ -1298,7 +1298,7 @@ case 'modapk':
                     text: content
                 },
 		footer: {
-			"Downloads from Rexdl by Sa፝֟፝֟mu330"
+		    text: "Downloads from Rexdl by Sa፝֟፝֟mu330"
 		},
                 nativeFlowMessage: {
                     buttons: [{
