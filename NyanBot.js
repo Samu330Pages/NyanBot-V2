@@ -1269,6 +1269,61 @@ case 'apkdl':
     useLimit(sender, 30);
     break
 
+
+case 'modapk':
+    if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pou`);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    try {
+        let results = await require("./lib/rexdl.js").rexdl(text, 1);
+        
+        let limitedResults = results.slice(0, 5);
+        
+        if (limitedResults.length === 0) {
+            return reply(`*No se encontraron resultados para "${text}".*`);
+        }
+
+        let contents = limitedResults.map(app => {
+            const shortDescription = app.Description.length > 80 ? app.Description.substring(0, 80) + `${readmore}` : app.Description;
+
+            let content = `◦  *Título*: ${app.Title || 'Desconocido'}\n`;
+            content += `◦  *Descripción*: ${shortDescription || 'Desconocida'}\n`;
+            content += `◦  *Modificaciones*: ${app.Update || 'Desconocida'}\n`;
+
+            return {
+                header: {
+                    imageMessage: app.Icon || 'https://default-icon-url.com',
+                    hasMediaAttachment: true,
+                },
+                body: {
+                    text: content
+                },
+		footer: {
+			"Downloads from Rexdl by Sa፝֟፝֟mu330"
+		},
+                nativeFlowMessage: {
+                    buttons: [{
+                        name: "cta_copy",
+                        buttonParamsJson: JSON.stringify({
+                            display_text: `Descargar ${app.Title}`,
+                            copy_code: `${prefix}modapkdl ${app.DownloadLink}`
+                        })
+                    }]
+                },
+            };
+        });
+
+        await sendCarousel(m.chat, {}, {
+            header: `📥 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
+            footer: `*Si no encuentras tu aplicación intenta con otro término de búsqueda.*\n\nScraper ApkDl By Samu330.com`,
+            cards: contents
+        });
+    } catch (e) {
+        console.log(e);
+        reply(`${e}`)
+        stcReac('error', '*Lo siento, pero al parecer ha ocurrido un error! Puedes volver a intentarlo 😁*');
+    }
+    break
+
             case 'perfil': {
                 const countryData = require('./src/country.json');
                 let target = '';
