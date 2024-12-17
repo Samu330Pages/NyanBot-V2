@@ -1276,15 +1276,17 @@ case 'modapk':
     try {
         let results = await require("./lib/rexdl.js").rexdl(text, 1);
         
-        let limitedResults = results.slice(0, 5);
+        let limitedResults = results.slice(0, 10);
         
         if (limitedResults.length === 0) {
             return reply(`*No se encontraron resultados para "${text}".*`);
         }
 
         let contents = limitedResults.map(app => {
+	const shortDescription = app.Description.length > 250 ? app.Description.substring(0, 250) + '...' : app.Description;
+		
             let content = `◦  *Título*: ${app.Title || 'Desconocido'}\n\n`;
-            content += `◦  *Descripción*: ${app.Description || 'Desconocida'}\n`;
+            content += `◦  *Descripción*: ${shortDescription || 'Desconocida'}\n`;
             content += `◦  *Modificaciones*: ${app.Update || 'Desconocida'}\n`;
 
             return {
