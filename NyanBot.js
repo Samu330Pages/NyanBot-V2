@@ -1283,10 +1283,8 @@ case 'modapk':
         }
 
         let contents = limitedResults.map(app => {
-            const shortDescription = app.Description.length > 80 ? app.Description.substring(0, 80) + `${readmore}` : app.Description;
-
-            let content = `◦  *Título*: ${app.Title || 'Desconocido'}\n`;
-            content += `◦  *Descripción*: ${shortDescription || 'Desconocida'}\n`;
+            let content = `◦  *Título*: ${app.Title || 'Desconocido'}\n\n`;
+            content += `◦  *Descripción*: ${app.Description || 'Desconocida'}\n`;
             content += `◦  *Modificaciones*: ${app.Update || 'Desconocida'}\n`;
 
             return {
@@ -1297,9 +1295,6 @@ case 'modapk':
                 body: {
                     text: content
                 },
-		footer: {
-		    text: "Downloads from Rexdl by Sa፝֟፝֟mu330"
-		},
                 nativeFlowMessage: {
                     buttons: [{
                         name: "cta_copy",
@@ -1314,7 +1309,7 @@ case 'modapk':
 
         await sendCarousel(m.chat, {}, {
             header: `📥 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
-            footer: `*Si no encuentras tu aplicación intenta con otro término de búsqueda.*\n\nScraper ApkDl By Samu330.com`,
+            footer: `*Si no encuentras tu aplicación intenta con otro término de búsqueda.*\n\nDownloads from Rexdl by Sa፝֟፝֟mu330`,
             cards: contents
         });
     } catch (e) {
