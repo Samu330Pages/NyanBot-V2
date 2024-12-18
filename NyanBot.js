@@ -868,6 +868,8 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
         switch (isCommand) {
 
 case 'todos': case 'tagall':
+if (!m.isGroup) return reply(mess.group)
+if (!isAdmins) return reply(mess.admin)
 let TotalUsers = groupMetadata.participants.map(v => v.id);
 let messageTag = (!text) ? `🧀` : text
 return nyanBot2.sendMessage(from, {text: `@${from} ${messageTag}`,
