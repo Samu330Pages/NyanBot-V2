@@ -834,36 +834,54 @@ if (juegoActivoIndex !== -1) {
 }
 
 if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
-        const messageContent = m.quoted.text;
-        const requestedLinkIndex = parseInt(m.text.trim(), 10) - 1;
+    const messageContent = m.quoted.text;
+    const requestedLinkIndex = parseInt(m.text.trim(), 10) - 1;
 
-        if (isNaN(requestedLinkIndex)) {
-            return reply("❌ Por favor, ingresa un número válido.");
-        }
+    if (isNaN(requestedLinkIndex)) {
+        return reply("❌ _*Por favor, ingresa un número válido.*_");
+    }
 
-        const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*)/);
-        const appName = nameMatch ? nameMatch[1] : "Desconocido";
+    const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*)/);
+    const appName = nameMatch ? nameMatch[1] : "Desconocido";
 
-        const downloadLinks = [];
-        const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
-        let match;
-        
-        while ((match = regex.exec(messageContent)) !== null) {
-            downloadLinks.push({ text: match[1], link: match[2] });
-        }
+    const downloadLinks = [];
+    const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
+    let match;
 
-        if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
-            return reply("❌ No se encontró la opción de enlace solicitada.");
-        }
+    while ((match = regex.exec(messageContent)) !== null) {
+        downloadLinks.push({ text: match[1], link: match[2] });
+    }
 
-        const selectedLink = downloadLinks[requestedLinkIndex].link;
+    if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
+        return reply(`❌ _*No se encontró la opción de enlace solicitada.*_\n\n*Asegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}*`);
+    }
 
+    const selectedLink = downloadLinks[requestedLinkIndex].link;
+
+    if (selectedLink.endsWith('.html/')) {
+        return reply("❌ _*Este archivo no se puede enviar, ya que nececitas realizar la búsqueda de dicha aplicación opcional.*_");
+    } else if (selectedLink.endsWith('.com') || selectedLink.endsWith('.com/')) {
+        return reply("❌ _*No se puede acceder a este enlace.*_");
+    } else if (selectedLink.endsWith('.apk')) {
+	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+	stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*🪁 ${argApk[2]}*`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/vnd.android.package-archive',
             fileName: appName || "ApkModDl"
-        });
+        }, {quoted: m});
+    } else if (selectedLink.endsWith('.zip')) {
+	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+	stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*📦 ${argApk[2]}*`);
+        await nyanBot2.sendMessage(from, {
+            document: { url: selectedLink },
+            mimetype: 'application/zip',
+            fileName: appName || "ApkModDl"
+        }, {quoted: m});
+    } else {
+        return reply("❌ Tipo de archivo no reconocido.");
     }
+}
 	    
 if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`)) {
     let quotedText = m.quoted.text;
@@ -1382,6 +1400,7 @@ case 'modapkdl':
             return reply(`*Error al obtener los detalles de descarga: ${result.message}*`);
         }
 
+	let n = 1;
         const additionalInfo = result.additionalInfo;
         let message = `⚙️ *Detalles de la aplicación:*\n\n`;
 	message += `◦  🍄 *Nombre*: ${argApkMod[1]}\n`;
@@ -1391,7 +1410,7 @@ case 'modapkdl':
 
         message += `*Descargas disponibles:*\n`;
         result.downloadLinks.forEach((linkData, index) => {
-            message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
+            message += `╭ *${n++}*\n├ ◦  *${linkData.text}*:\n├ ${linkData.link}\n╰\n\n`;
         });
 
         nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod-` + randomBytes(8).toString('hex')});
