@@ -833,6 +833,38 @@ if (juegoActivoIndex !== -1) {
     db.data.game.soup = userGames;
 }
 
+if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
+        const messageContent = m.quoted.text;
+        const requestedLinkIndex = parseInt(m.text.trim(), 10) - 1;
+
+        if (isNaN(requestedLinkIndex)) {
+            return reply("❌ Por favor, ingresa un número válido.");
+        }
+
+        const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*)/);
+        const appName = nameMatch ? nameMatch[1] : "Desconocido";
+
+        const downloadLinks = [];
+        const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
+        let match;
+        
+        while ((match = regex.exec(messageContent)) !== null) {
+            downloadLinks.push({ text: match[1], link: match[2] });
+        }
+
+        if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
+            return reply("❌ No se encontró la opción de enlace solicitada.");
+        }
+
+        const selectedLink = downloadLinks[requestedLinkIndex].link;
+
+        await nyanBot2.sendMessage(from, {
+            document: { url: selectedLink },
+            mimetype: 'application/vnd.android.package-archive',
+            fileName: appName || "ApkModDl"
+        });
+    }
+	    
 if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`)) {
     let quotedText = m.quoted.text;
 
