@@ -1325,9 +1325,9 @@ case 'modapk':
 case 'modapkdl':
     if (!text) return reply(`*❌ Por favor, proporciona un enlace de descarga junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://rexdlbox.com....`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    let argApk = text.split("|")
+    let argApkMod = text.split("|")
     try {
-        const result = await require("./lib/rexdl.js").getDownloadDetails(argApk[0]);
+        const result = await require("./lib/rexdl.js").getDownloadDetails(argApkMod[0]);
         
         if (result.error) {
             return reply(`*Error al obtener los detalles de descarga: ${result.message}*`);
@@ -1335,7 +1335,7 @@ case 'modapkdl':
 
         const additionalInfo = result.additionalInfo;
         let message = `⚙️ *Detalles de la aplicación:*\n\n`;
-	message += `◦  🍄 *Nombre*: ${argApk[1]}`;
+	message += `◦  🍄 *Nombre*: ${argApkMod[1]}`;
         message += `◦  🪁 *Versión*: ${additionalInfo.version || 'Desconocida'}\n`;
         message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
         message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n`;
@@ -1345,7 +1345,7 @@ case 'modapkdl':
             message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
         });
 
-        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod|${argApk[1]} -` + randomBytes(8).toString('hex')});
+        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod|${argApkMod[1]} -` + randomBytes(8).toString('hex')});
     } catch (e) {
         console.log(e);
         reply(`*Lo siento, ocurrió un error al procesar tu solicitud. Por favor intenta nuevamente.*`);
