@@ -845,34 +845,35 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
     const appName = nameMatch ? nameMatch[1] : "Desconocido";
 
     const downloadLinks = [];
-    const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
+    const regex = /◦\s*\*.*?\*:\s*(https?:\/\/[^\s]+)/g;
     let match;
 
+    // Corrección: Asegúrate de que el regex capture correctamente los enlaces
     while ((match = regex.exec(messageContent)) !== null) {
-        downloadLinks.push({ text: match[1], link: match[2] });
+        downloadLinks.push(match[1]);
     }
 
     if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
         return reply(`❌ _*No se encontró la opción de enlace solicitada.*_\n\n*Asegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}*`);
     }
 
-    const selectedLink = downloadLinks[requestedLinkIndex].link;
+    const selectedLink = downloadLinks[requestedLinkIndex];
 
     if (selectedLink.endsWith('.html/')) {
-        return reply("❌ _*Este archivo no se puede enviar, ya que nececitas realizar la búsqueda de dicha aplicación opcional.*_");
+        return reply("❌ _*Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.*_");
     } else if (selectedLink.endsWith('.com') || selectedLink.endsWith('.com/')) {
         return reply("❌ _*No se puede acceder a este enlace.*_");
     } else if (selectedLink.endsWith('.apk')) {
-	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-	stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*🪁 ${argApk[2]}*`);
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        stcReac('peso', `_*Sé paciente, esto puede tardar! 🙃*_\n*🪁 ${appName}*`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/vnd.android.package-archive',
             fileName: appName || "ApkModDl"
         }, {quoted: m});
     } else if (selectedLink.endsWith('.zip')) {
-	nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-	stcReac('peso', `_*Se paciente, esto puede tardar! 🙃*_\n*📦 ${argApk[2]}*`);
+        nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+        stcReac('peso', `_*Sé paciente, esto puede tardar! 🙃*_\n*📦 ${appName}*`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/zip',
@@ -1406,11 +1407,11 @@ case 'modapkdl':
 	message += `◦  🍄 *Nombre*: ${argApkMod[1]}\n`;
         message += `◦  🪁 *Versión*: ${additionalInfo.version || 'Desconocida'}\n`;
         message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
-        message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n`;
+        message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n\n`;
 
-        message += `*Descargas disponibles:*\n`;
+        message += `*Descargas disponibles:*\n\n`;
         result.downloadLinks.forEach((linkData, index) => {
-            message += `╭ *${n++}*\n├ ◦  *${linkData.text}*:\n├ ${linkData.link}\n╰\n\n`;
+            message += `╭ *${n++}•*\n├ ◦  *${linkData.text}*:\n╰\n${linkData.link}\n\n`;
         });
 
         nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod-` + randomBytes(8).toString('hex')});
