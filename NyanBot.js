@@ -1335,7 +1335,7 @@ case 'modapkdl':
 
         const additionalInfo = result.additionalInfo;
         let message = `⚙️ *Detalles de la aplicación:*\n\n`;
-	message += `◦  🍄 *Nombre*: ${argApkMod[1]}`;
+	message += `◦  🍄 *Nombre*: ${argApkMod[1]}\n`;
         message += `◦  🪁 *Versión*: ${additionalInfo.version || 'Desconocida'}\n`;
         message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
         message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n`;
