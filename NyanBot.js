@@ -838,34 +838,33 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
     const requestedLinkIndex = parseInt(m.text.trim(), 10) - 1;
 
     if (isNaN(requestedLinkIndex)) {
-        return reply("❌ _*Por favor, ingresa un número válido.*_");
+        return reply("❌ Por favor, ingresa un número válido.");
     }
 
     const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*)/);
     const appName = nameMatch ? nameMatch[1] : "Desconocido";
 
     const downloadLinks = [];
-    const regex = /◦\s*\*.*?\*:\s*(https?:\/\/[^\s]+)/g;
+    const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
     let match;
-
-    // Corrección: Asegúrate de que el regex capture correctamente los enlaces
+    
     while ((match = regex.exec(messageContent)) !== null) {
-        downloadLinks.push(match[1]);
+        downloadLinks.push({ text: match[1], link: match[2] });
     }
 
     if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
-        return reply(`❌ _*No se encontró la opción de enlace solicitada.*_\n\n*Asegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}*`);
+        return reply(`❌ No se encontró la opción de enlace solicitada.\n\nAsegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}`);
     }
 
-    const selectedLink = downloadLinks[requestedLinkIndex];
+    const selectedLink = downloadLinks[requestedLinkIndex].link;
 
     if (selectedLink.endsWith('.html/')) {
-        return reply("❌ _*Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.*_");
+        return reply("❌ Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.");
     } else if (selectedLink.endsWith('.com') || selectedLink.endsWith('.com/')) {
-        return reply("❌ _*No se puede acceder a este enlace.*_");
+        return reply("❌ No se puede acceder a este enlace.");
     } else if (selectedLink.endsWith('.apk')) {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-        stcReac('peso', `_*Sé paciente, esto puede tardar! 🙃*_\n*🪁 ${appName}*`);
+        stcReac('peso', `Sé paciente, esto puede tardar! 🙃\n🪁 ${appName}`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/vnd.android.package-archive',
@@ -873,7 +872,7 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
         }, {quoted: m});
     } else if (selectedLink.endsWith('.zip')) {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-        stcReac('peso', `_*Sé paciente, esto puede tardar! 🙃*_\n*📦 ${appName}*`);
+        stcReac('peso', `Sé paciente, esto puede tardar! 🙃\n📦 ${appName}`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/zip',
