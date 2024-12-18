@@ -853,22 +853,22 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
     }
 
     if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
-        return reply(`❌ No se encontró la opción de enlace solicitada.\n\nAsegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}`);
+        return reply(`❌ _*No se encontró la opción de enlace solicitada.*_\n\n_Asegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a *${downloadLinks.length}*_`);
     }
 
     const selectedLink = downloadLinks[requestedLinkIndex];
 
     if (selectedLink.endsWith('.html/')) {
-        return reply("❌ Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.");
+        return reply("❌ _*Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.*_");
     } else if (selectedLink.endsWith('.com') || selectedLink.endsWith('.com/')) {
-        return reply("❌ No se puede acceder a este enlace.");
+        return reply("❌ _*No se puede acceder a este enlace, porfavor asegúrate de que la opción contenga la aplicación ORIGINAL o MODIFICADA.*_");
     } else if (selectedLink.endsWith('.apk')) {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
         stcReac('peso', `Sé paciente, esto puede tardar! 🙃\n🪁 ${appName}`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/vnd.android.package-archive',
-            fileName: appName || "ApkModDl"
+            fileName: `${appName}.apk`
         }, {quoted: m});
     } else if (selectedLink.endsWith('.zip')) {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
@@ -876,7 +876,7 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/zip',
-            fileName: appName || "ApkModDl"
+            fileName: `${appName}.zip`
         }, {quoted: m});
     } else {
         return reply("❌ Tipo de archivo no reconocido.");
