@@ -1303,7 +1303,7 @@ case 'modapk':
                         name: "cta_copy",
                         buttonParamsJson: JSON.stringify({
                             display_text: `Descargar 🪁`,
-                            copy_code: `${prefix}modapkdl ${app.DownloadLink}`
+                            copy_code: `${prefix}modapkdl ${app.DownloadLink}|${app.Title}`
                         })
                     }]
                 },
@@ -1325,27 +1325,27 @@ case 'modapk':
 case 'modapkdl':
     if (!text) return reply(`*❌ Por favor, proporciona un enlace de descarga junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://rexdlbox.com....`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
-    
+    let argApk = text.split("|")
     try {
-        const result = await require("./lib/rexdl.js").getDownloadDetails(text);
+        const result = await require("./lib/rexdl.js").getDownloadDetails(argApk[0]);
         
         if (result.error) {
             return reply(`*Error al obtener los detalles de descarga: ${result.message}*`);
         }
 
         const additionalInfo = result.additionalInfo;
-        let message = `⚙️ *Detalles de la aplicación:*\n`;
+        let message = `⚙️ *Detalles de la aplicación:*\n\n`;
+	message += `◦  🍄 *Nombre*: ${argApk[1]}`
         message += `◦  🪁 *Versión*: ${additionalInfo.version || 'Desconocida'}\n`;
         message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
         message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n`;
-        message += `◦  🔮 *Creador*: ${additionalInfo.creator || 'Desconocido'}\n\n`;
 
         message += `*Descargas disponibles:*\n`;
         result.downloadLinks.forEach((linkData, index) => {
             message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
         });
 
-        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: "ApkMod-" + randomBytes(8).toString('hex')});
+        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod|${argApk[1]} -` + randomBytes(8).toString('hex')});
     } catch (e) {
         console.log(e);
         reply(`*Lo siento, ocurrió un error al procesar tu solicitud. Por favor intenta nuevamente.*`);
