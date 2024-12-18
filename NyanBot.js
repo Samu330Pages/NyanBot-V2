@@ -1345,7 +1345,7 @@ case 'modapkdl':
             message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
         });
 
-        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod|${argApkMod[1]} -` + randomBytes(8).toString('hex')});
+        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod-` + randomBytes(8).toString('hex')});
     } catch (e) {
         console.log(e);
         reply(`*Lo siento, ocurrió un error al procesar tu solicitud. Por favor intenta nuevamente.*`);
