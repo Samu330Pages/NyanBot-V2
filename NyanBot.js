@@ -841,22 +841,22 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
         return reply("❌ Por favor, ingresa un número válido.");
     }
 
-    const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*)/);
+    const nameMatch = messageContent.match(/◦\s*🍄\s*\*Nombre\*:\s*(.*?)\n/);
     const appName = nameMatch ? nameMatch[1] : "Desconocido";
 
     const downloadLinks = [];
-    const regex = /◦\s*\*(.*?)\*:\s*(https?:\/\/[^\s]+)/g;
+    const regex = /https?:\/\/[^\s]+/g;
     let match;
     
     while ((match = regex.exec(messageContent)) !== null) {
-        downloadLinks.push({ text: match[1], link: match[2] });
+        downloadLinks.push(match[0]);
     }
 
     if (requestedLinkIndex < 0 || requestedLinkIndex >= downloadLinks.length) {
         return reply(`❌ No se encontró la opción de enlace solicitada.\n\nAsegúrate de solo enviar el número correspondiente a la aplicación que deseas descargar, la opción no debe ser mayor a ${downloadLinks.length}`);
     }
 
-    const selectedLink = downloadLinks[requestedLinkIndex].link;
+    const selectedLink = downloadLinks[requestedLinkIndex];
 
     if (selectedLink.endsWith('.html/')) {
         return reply("❌ Este archivo no se puede enviar, ya que necesitas realizar la búsqueda de dicha aplicación opcional.");
@@ -882,6 +882,7 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
         return reply("❌ Tipo de archivo no reconocido.");
     }
 }
+
 	    
 if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`)) {
     let quotedText = m.quoted.text;
