@@ -491,7 +491,10 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                         hasMediaAttachment: true,
                     },
                     body: card.body,
-                    nativeFlowMessage: card.nativeFlowMessage
+                    nativeFlowMessage: card.nativeFlowMessage,
+		    footer: {
+			text: "Sa፝֟፝֟mu330"
+		    }
                 });
             }
             const message = generateWAMessageFromContent(chatId, {
@@ -503,7 +506,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                             },
                             carouselMessage: {
                                 cards: carouselCards,
-                                messageVersion: 2
+                                messageVersion: 1
                             },
                             footer: {
                                 text: footer
