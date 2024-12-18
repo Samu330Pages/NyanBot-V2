@@ -503,7 +503,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                             },
                             carouselMessage: {
                                 cards: carouselCards,
-                                messageVersion: 1
+                                messageVersion: 2
                             },
                             footer: {
                                 text: footer
@@ -1299,7 +1299,7 @@ case 'modapk':
                     buttons: [{
                         name: "cta_copy",
                         buttonParamsJson: JSON.stringify({
-                            display_text: `Descargar ${app.Title}`,
+                            display_text: `Descargar 🪁`,
                             copy_code: `${prefix}modapkdl ${app.DownloadLink}`
                         })
                     }]
@@ -1308,7 +1308,7 @@ case 'modapk':
         });
 
         await sendCarousel(m.chat, {}, {
-            header: `📥 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, luego envíalo, y listo! 😁_`,
+            header: `📥 *Resultados de tu búsqueda de ${text}*\n\n⚠️ *IMPORTANTE!!* ￬￬\n> _Para descargar, solo desliza sobre los resultados, toca el botón para copiar el comando, envíalo, y sige las instrucciones! 😁_`,
             footer: `*Si no encuentras tu aplicación intenta con otro término de búsqueda.*\n\nDownloads from Rexdl by Sa፝֟፝֟mu330`,
             cards: contents
         });
@@ -1342,7 +1342,7 @@ case 'modapkdl':
             message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
         });
 
-        reply(message);
+        nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: "ApkMod-" + randomBytes(8).toString('hex')});
     } catch (e) {
         console.log(e);
         reply(`*Lo siento, ocurrió un error al procesar tu solicitud. Por favor intenta nuevamente.*`);
