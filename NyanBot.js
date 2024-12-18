@@ -1319,6 +1319,36 @@ case 'modapk':
     }
     break
 
+case 'modapkdl':
+    if (!text) return reply(`*❌ Por favor, proporciona un enlace de descarga junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} https://rexdlbox.com....`);
+    nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
+    
+    try {
+        const result = await require("./lib/rexdl.js").getDownloadDetails(text);
+        
+        if (result.error) {
+            return reply(`*Error al obtener los detalles de descarga: ${result.message}*`);
+        }
+
+        const additionalInfo = result.additionalInfo;
+        let message = `⚙️ *Detalles de la aplicación:*\n`;
+        message += `◦  🪁 *Versión*: ${additionalInfo.version || 'Desconocida'}\n`;
+        message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
+        message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n`;
+        message += `◦  🔮 *Creador*: ${additionalInfo.creator || 'Desconocido'}\n\n`;
+
+        message += `*Descargas disponibles:*\n`;
+        result.downloadLinks.forEach((linkData, index) => {
+            message += `◦  *${linkData.text}*:\n${linkData.link}\n\n`;
+        });
+
+        reply(message);
+    } catch (e) {
+        console.log(e);
+        reply(`*Lo siento, ocurrió un error al procesar tu solicitud. Por favor intenta nuevamente.*`);
+    }
+    break
+
             case 'perfil': {
                 const countryData = require('./src/country.json');
                 let target = '';
