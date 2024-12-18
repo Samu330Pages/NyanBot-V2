@@ -867,7 +867,22 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
         switch (isCommand) {
 
+case 'todos': case 'tagall':
+let TotalUsers = groupMetadata.participants.map(v => v.id);
+let messageTag = (!text) ? `🧀` : text
+return nyanBot2.sendMessage(from, {text: `@${from} ${messageTag}`,
+contextInfo: {
+remoteJid: from,
+mentionedJid: TotalUsers,
+groupMentions: [{
+'groupJid': from,
+'groupSubject': 'hola 🍄'
+}]
+}
+})
+break
 
+			
 case 'lot':
 db.data.game.box[0] = randomBytes(10).toString('base64')
 nyanBot2.sendMessage("120363348063997699@g.us", {
