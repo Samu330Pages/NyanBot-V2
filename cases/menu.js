@@ -1,3 +1,6 @@
+const {
+    getDevice
+} = require('@whiskeysockets/baileys')
 const moment = require('moment-timezone')
 const canvaImg = require('../lib/canvaImg.js')
 const forma1 = '`'
@@ -27,7 +30,7 @@ if (time < "05:00:00") {
     var timeNow = `🎄 Buenos dias `
 }
 module.exports = async function(m, reply, nyanBot2, sender, categories, checkPremiumUser, botNumber) {
-const TipoDispositivo = m.key.id.length === 20 ? 'iPhone' : m.key.id.length === 32 ? 'Android' : m.key.id.length === 16 ? 'Baileys' : m.key.id.length === 22 ? 'Web Browser' : m.key.id.length === 18 ? 'Desktop' : m.key.id.length > 21 ? 'Android' : 'WhatsApp web';
+const TipoDispositivo = await getDevice(m.key.id);
     nyanBot2.sendMessage(m.chat, {
         react: {
             text: '🧃',
@@ -78,22 +81,19 @@ const TipoDispositivo = m.key.id.length === 20 ? 'iPhone' : m.key.id.length === 
     }
 
     try {
-        nyanBot2.sendMessage(m.chat, {
-            text: menuMessage,
-            contextInfo: {
-                externalAdReply: {
-                    renderLargerThumbnail: true,
-                    mediaType: 1,
-                    title: `☃️ ${time} ❄️`,
-                    body: date,
-                    thumbnail: canvasImage,
-                    previewType: "NONE",
-                    sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
-                }
-            }
-        }, {
-            quoted: m
-        })
+        await nyanBot2.sendMessage(m.chat, {
+                    text: menuMessage,
+                    contextInfo: {
+                        "externalAdReply": {
+                            "renderLargerThumbnail": true,
+                            "mediaType": 1,
+                            "title": `☃️ ${time} ❄️`,
+                            "thumbnail": img,
+                            "mediaUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                            "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
+                        }
+                    }
+                }, { quoted: m });
     } catch (e) {
         return m.reply("*Error*");
     }
