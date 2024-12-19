@@ -923,23 +923,6 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 
         switch (isCommand) {
 
-case 'todos': case 'tagall':
-if (!m.isGroup) return reply(mess.group)
-if (!isAdmins) return reply(mess.admin)
-let TotalUsers = groupMetadata.participants.map(v => v.id);
-let messageTag = (!text) ? `🧀` : text
-return nyanBot2.sendMessage(from, {text: `@${from} ${messageTag}`,
-contextInfo: {
-remoteJid: from,
-mentionedJid: TotalUsers,
-groupMentions: [{
-'groupJid': from,
-'groupSubject': 'hola 🍄'
-}]
-}
-})
-break
-
 			
 case 'lot':
 db.data.game.box[0] = randomBytes(10).toString('base64')
@@ -1072,6 +1055,12 @@ case 'apk2':
 		reply(resultado)
 		break
 
+
+	    case 'todos': case 'tagall':
+		const caseTagAll = require('./cases/tagAll');
+		await caseTagAll(text, m, from, isAdmins, nyanBot2, groupMetadata);
+		break
+			
 	    case 'get':
 		const caseGetStatus = require('./cases/getStatus');
 		await caseGetStatus(m, reply, nyanBot2, quoted);
