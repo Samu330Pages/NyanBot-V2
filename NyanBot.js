@@ -922,38 +922,6 @@ if (m.quoted && m.quoted.text.startsWith(`${forma1}APKCOMBO DL 🕹️${forma1}`
 }
 
         switch (isCommand) {
-
-		case 'grupo':
-		if (!m.isGroup) return reply(mess.group)
-                if (!isAdmins) return reply(mess.admin)
-                if (!isBotAdmins) return reply(mess.adminBot)
-                if (!text) return reply(`*Proporciona la configuración a cambiar después del comando, ejemplo de uso:*\n\n${prefix+command} 1\n\n_*Ajustes disponibles:*_\n
-${forma1}1 = Activar el Modo de aprobación.${forma1}
-${forma1}2 = Desactivar el Modo de aprobación.${forma1}
-${forma1}3 = Permitir a los miembros agregar a más personas.${forma1}
-${forma1}4 = Solo los administradores podrán agregar a más personas.${forma1}`)
-                
-		if (text == 1) {
-		if (groupMetadata.joinApprovalMode) return reply('*El modo de aprobación ya esta activado, no es necesario volver a activar. 🌭*')
-		await nyanBot2.groupJoinApprovalMode(from, "on")
-		reply("_*El modo de aprobación se activó con éxito!*_ ⚙️")
-		} else if (text == 2) {
-		if (db.data.chats[from].restrict) return reply(`Lo siento, pero no se puede desactivar el modo de aprobación, ya que es indispensable para declinar números no deseados, para desactivar esa opción primero desactiva ${forma1}antiarabes${forma1}`)
-		if (!groupMetadata.joinApprovalMode) return reply('*El modo de aprobación ya esta desactivado, no es necesario volver a desactivar. 🌭*')
-		await nyanBot2.groupJoinApprovalMode(from, "off")
-		reply("_*El modo de aprobación se desactivó con éxito!*_ ⚙️")
-		} else if (text == 3) {
-		if (groupMetadata.memberAddMode) return reply('*Este ajuste ya esta activado, no es necesario volver a activar. 🌭*')
-		await nyanBot2.groupMemberAddMode(from, "all_member_add")
-		reply("_*Ajuste actualizado! los miembros de este grupo podrán agregar a mas personas!*_ ⚙️")
-		} else if (text == 4) {
-		if (!groupMetadata.memberAddMode) return reply('*Este ajuste ya esta activado, no es necesario volver a desactivar. 🌭*')
-		await nyanBot2.groupMemberAddMode(from, "admin_add")
-		reply("_*Ajuste actualizado! solo administradores podras agregar a mas personas!*_ ⚙️")
-		} else {
-		return reply("*Ajuste no especificado, asegúrate de solo incluir el número de ajuste a modificar! 🔴*")
-		}
-		break
 			
 		case 'math': {
                 if (gameMath.hasOwnProperty(m.sender.split('@')[0])) reply(`*Tienes ya un juego sin terminar! 🌭*`)
@@ -1010,6 +978,11 @@ case 'apk2':
 
 
 
+	    case 'grupo':
+		const caseSettings = require('./cases/configuraciones-grupo');
+		await caseSettings(text, m, from, reply, nyanBot2, groupMetadata, isAdmins, isBotAdmins, command, prefix);
+		break
+			
 	    case 'rw':
 		const caseRewards = require('./cases/rewards');
 		await caseRewards(text, m, from, reply, sender);
