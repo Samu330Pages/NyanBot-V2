@@ -165,6 +165,7 @@ const categories = {
         { command: 'ig', description: '_*URL*_', help: 'Alias de instagram.' },
         { command: 'mediafire', description: '_*URL*_', help: 'Descarga archivos de Mediafire sin seguridad.' },
         { command: 'gdrive', description: '_*URL*_', help: 'Descarga archivos de Google Drive.' },
+	{ command: 'modapk', description: '', help: 'Descarga aplicaciones modificadas de rexdl.' },
         { command: 'apk', description: '', help: 'Descarga aplicaciones de Aptoide.' },
 	{ command: 'apk2', description: '', help: 'Descarga aplicaciones de Apk Combo.' }
     ],
@@ -868,16 +869,20 @@ if (m.quoted && m.quoted.id.startsWith("ApkMod")) {
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/vnd.android.package-archive',
-            fileName: `${appName}.apk`
+            fileName: `${appName}.apk`,
+	    caption: "🪁 *APK lista para instalar!! Disfruta 🍄*"
         }, {quoted: m});
+	nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } else if (selectedLink.endsWith('.zip')) {
         nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
         stcReac('peso', `Sé paciente, esto puede tardar! 🙃\n📦 ${appName}`);
         await nyanBot2.sendMessage(from, {
             document: { url: selectedLink },
             mimetype: 'application/zip',
-            fileName: `${appName}.zip`
+            fileName: `${appName}.zip`,
+	    caption: "📦 *Este archivo zip contiene lo necesario para poder instalar la aplicación, es probable que necesites ZArchiver para poder instalar aplicaciones con extensión XAPK* 🍄"
         }, {quoted: m});
+	nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
     } else {
         return reply("❌ Tipo de archivo no reconocido.");
     }
@@ -1341,7 +1346,7 @@ case 'apkdl':
     break
 
 
-case 'modapk':
+case 'modapk': case 'apkmod':
     if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pou`);
     nyanBot2.sendMessage(m.chat, { react: { text: '🕒', key: m.key } });
     try {
@@ -1409,9 +1414,10 @@ case 'modapkdl':
         message += `◦  📦 *Tamaño*: ${additionalInfo.size || 'Desconocido'}\n`;
         message += `◦  🪄 *Última actualización*: ${additionalInfo.update || 'Desconocida'}\n\n`;
 
+	message += `⚠️ *INSTRUCCIONES DE DESCARGA!!*\n\n_Responde este mensaje con el número de la aplicación que desees descargar!_`;
         message += `*Descargas disponibles:*\n\n`;
         result.downloadLinks.forEach((linkData, index) => {
-            message += `╭ *${n++}•*\n├ ◦  *${linkData.text}*:\n╰\n${linkData.link}\n\n`;
+            message += `╭ *${n++}•*\n├ ◦  *${linkData.text}*:\n╰───────\n${linkData.link}\n\n`;
         });
 
         nyanBot2.sendMessage(from, {text: message}, {quoted: m, messageId: `ApkMod-` + randomBytes(8).toString('hex')});
