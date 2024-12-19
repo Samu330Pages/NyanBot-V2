@@ -286,19 +286,19 @@ const startNyanBot = async () => {
                             WlcBody += `🛡️ Modo Admin: ${global.DATABASE.data.chats[anu.id].adminmode ? 'Activa' : 'Desactivada'}\n`;
                             WlcBody += `⏳ Duración Efímera: ${ephemeralDuration ? `${ephemeralDuration} días` : 'Desactivada'}\n`;
                             WlcBody += `👥 Administradores: ${adminCount} ${adminCount > 1 ? 'administradores' : 'administrador'}`;
-
+                            
                             nyanBot2.sendMessage(anu.id, {
                                 text: WlcBody,
                                 contextInfo: {
                                     mentionedJid: [num],
-                                    externalAdReply: {
-                                        renderLargerThumbnail: true,
-                                        mediaType: 1,
-                                        title: `👋🏻 Bienvenido al grupo ${metadata.subject}`,
-                                        body: ``,
-                                        thumbnail: await reSize(ppCanvas, 600, 315),
-                                        previewType: "NONE",
-                                        sourceUrl: 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                                    "externalAdReply": {
+                                        "renderLargerThumbnail": true,
+                                        "title": `👋🏻 Bienvenido al grupo ${metadata.subject}`,
+                                        "body": '',
+                                        "mediaType": 1,
+                                        "thumbnail": await reSize(ppCanvas, 600, 315),
+                                        "mediaUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
+                                        "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
                                     }
                                 }}, { quoted: {
                                     key: {
