@@ -26,7 +26,7 @@ ${forma1}4 = Solo los administradores podrán agregar a más personas.${forma1}`
     } else if (text == 4) {
         if (!groupMetadata.memberAddMode) return reply('*Este ajuste ya esta activado, no es necesario volver a desactivar. 🌭*')
         await nyanBot2.groupMemberAddMode(from, "admin_add")
-        reply("_*Ajuste actualizado! solo administradores podras agregar a mas personas!*_ ⚙️")
+        reply("_*Ajuste actualizado! solo administradores podrán agregar a mas personas!*_ ⚙️")
     } else {
         return reply("*Ajuste no especificado, asegúrate de solo incluir el número de ajuste a modificar! 🔴*")
     }
