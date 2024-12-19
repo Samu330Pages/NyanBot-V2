@@ -88,7 +88,7 @@ const TipoDispositivo = await getDevice(m.key.id);
                             "renderLargerThumbnail": true,
                             "mediaType": 1,
                             "title": `☃️ ${time} ❄️`,
-                            "thumbnail": img,
+                            "thumbnail": canvasImage,
                             "mediaUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
                             "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
                         }
