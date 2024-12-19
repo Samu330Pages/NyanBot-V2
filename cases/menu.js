@@ -95,6 +95,6 @@ const TipoDispositivo = await getDevice(m.key.id);
                     }
                 }, { quoted: m });
     } catch (e) {
-        return m.reply("*Error*");
+        return m.reply(`*Error*\n${e}`);
     }
 };
