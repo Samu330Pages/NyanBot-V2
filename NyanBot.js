@@ -2291,7 +2291,31 @@ _Sigue el formato de tiempo para cada caso:_\n
                 })
                 break
 
-            case 'creador': case 'owner': case 'script': case 'code':
+case 'creador': case 'owner':
+nyanBot2.sendMessage(from, {
+  contacts: {
+    contacts: [{
+      displayName: `Sa፝֟፝֟mu330 🍄`,
+      vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sa፝֟፝֟mu330 🍄;;;\nFN:Sa፝֟፝֟mu330 🍄\nORG:NyanBot-V2 Owner\nTITLE: Developer\nTEL;type=CELL;type=VOICE;waid=5219984907794:+521 998 4990 7794\nTEL;type=WORK;type=VOICE:+521 998 4990 794\nEMAIL:samu330ofc@gmail.com\nADR;type=WORK:;;🔮;;;;\nURL:https://www.samu330.com\nNOTE:NyanBot-2.\nBDAY:2003-10-04\nPHOTO;VALUE=URI:https://mystickermania.com/cdn/stickers/cute/mochi-peach-cat-bread-512x512.png\nEND:VCARD`
+    }]
+  },
+ contextInfo: {
+"externalAdReply": {
+"renderLargerThumbnail": true,
+"mediaType": 1,
+"title": `NyanBot-2 © 🪁`,
+"body": '',
+"thumbnail": await fetchBuffer('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhqqOuXUnKjRMnJIP4r_b7v3eXQVw2omtOJV6BliBF3dlBVsX3OCi5fPE&s=10')
+}
+}
+}, {
+  quoted: m
+});
+break
+		
+		
+		
+	case 'script': case 'code':
                 var order = generateWAMessageFromContent(from, proto.Message.fromObject({
                     "orderMessage": {
                         "orderId": "1219264465945127",
