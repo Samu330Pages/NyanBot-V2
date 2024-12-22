@@ -2985,6 +2985,7 @@ if (isCmd && budy.startsWith('.')) {
                             break
                         case 'tiroWin':
                             puntos = 100;
+			    nyanBot2.sendMessage(m.chat, {react: {text: '🎉', key: m.key}});
                             msgTiro = '🎉¡Premio mayor! Puntos:'
                             break
                         default:
@@ -3047,6 +3048,7 @@ if (isCmd && budy.startsWith('.')) {
                             break
                         case 'boloWin':
                             puntos = 100;
+			    nyanBot2.sendMessage(m.chat, {react: {text: '🎉', key: m.key}});
                             msgBolo = '🎉¡Lechusa 🦉! o como era?🤔 Puntos:'
                             break
                         default:
@@ -3107,6 +3109,7 @@ if (isCmd && budy.startsWith('.')) {
                             break
                         case 'foot100':
                             puntos = 100;
+			    nyanBot2.sendMessage(m.chat, {react: {text: '🎉', key: m.key}});
                             msgTiro = '🎉¡Premio mayor! Puntos:'
                             break
                         default:
@@ -3173,6 +3176,7 @@ if (isCmd && budy.startsWith('.')) {
                             break
                         case 'bask100':
                             puntos = 100;
+			    nyanBot2.sendMessage(m.chat, {react: {text: '🎉', key: m.key}});
                             msgbask = '🎉¡Excelente tiro! 🏀 Puntos:'
                             break
                     }
@@ -3319,6 +3323,7 @@ ${forma1}╰────▵────╯${forma1}\n\n`;
                                 break;
                             case "🍌":
                                 puntos = 100;
+				nyanBot2.sendMessage(m.chat, {react: {text: '🎉', key: m.key}});
                                 msgSlot += '🎉 *¡Excelente! Ganaste 100 puntos con 🍌!* 🎉';
                                 break;
                             case "🍒":
