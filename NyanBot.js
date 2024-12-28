@@ -1489,7 +1489,7 @@ case 'modapkdl':
                 }
             }
                 break
-
+		
             case 'clima': {
                 if (!text) return reply('¿Qué ubicación?');
                 let wdata = await axios.get(
@@ -2882,6 +2882,10 @@ break
                 reply(`*Se finalizo el envio de mensajes a* ${Object.keys(global.db.data.users).length} Chats`)
             }
                 break
+
+case 'run': case 'runtime':
+await stcReac('run', `*${runtime(process.uptime())}*`)
+break
 
             case 'ping': case 'botstatus': case 'statusbot': case 'p': {
                 const used = process.memoryUsage()
