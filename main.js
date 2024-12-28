@@ -414,7 +414,7 @@ const startNyanBot = async () => {
             }
         })
 
-        //autostatus view
+        //autostatus view && reaction
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
             if (global.antiswview) {
                 mek = chatUpdate.messages[0]
