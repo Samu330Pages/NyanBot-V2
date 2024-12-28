@@ -419,7 +419,7 @@ const startNyanBot = async () => {
             if (global.antiswview) {
                 mek = chatUpdate.messages[0]
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
-                const botJid nyanBot2.decodeJid(nyanBot2.user.id);
+                const botJid = nyanBot2.decodeJid(nyanBot2.user.id);
                     await nyanBot2.readMessages([mek.key])
                     await nyanBot2.sendMessage(message.key.remoteJid, {
                     'react': {
