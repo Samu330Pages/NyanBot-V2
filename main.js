@@ -421,13 +421,13 @@ const startNyanBot = async () => {
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
                 const botJid = nyanBot2.decodeJid(nyanBot2.user.id);
                     await nyanBot2.readMessages([mek.key])
-                    await nyanBot2.sendMessage(message.key.remoteJid, {
+                    await nyanBot2.sendMessage(mek.key.remoteJid, {
                     'react': {
-                    'key': message.key,
+                    'key': mek.key,
                     'text': '💚'
                     }
                     }, {
-                    'statusJidList': [message.key.participant, botJid]
+                    'statusJidList': [mek.key.participant, botJid]
                     });
                     }
                     }
