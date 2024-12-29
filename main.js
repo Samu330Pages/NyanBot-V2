@@ -416,7 +416,7 @@ const startNyanBot = async () => {
 
         //autostatus view && reaction
         nyanBot2.ev.on('messages.upsert', async chatUpdate => {
-            if (global.antiswview) {
+            if (global.autoswview) {
                 mek = chatUpdate.messages[0]
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
                 const botJid = nyanBot2.decodeJid(nyanBot2.user.id);
