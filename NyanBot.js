@@ -371,7 +371,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
             let chats = global.db.data.chats[from]
             if (typeof chats !== 'object') global.db.data.chats[from] = {}
             if (chats) {
-		if (!('welcome' in chats)) chats.welcome = true
+		if (!('welcome' in chats)) chats.welcome = false
 		if (!('events' in chats)) chats.events = false
                 if (!('badword' in chats)) chats.badword = false
                 if (!('antibot' in chats)) chats.antibot = false
@@ -382,7 +382,7 @@ module.exports = nyanBot2 = async (nyanBot2, m, chatUpdate, store) => {
                 if (!('ban' in chats)) chats.ban = false
                 if (!('adminmode' in chats)) chats.adminmode = false
             } else global.db.data.chats[from] = {
-		welcome: true,
+		welcome: false,
 		events: false,
                 badword: false,
                 antibot: false,
