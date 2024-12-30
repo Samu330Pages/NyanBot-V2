@@ -22,14 +22,32 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
     const caption = `> *YT Play 🍟.*\n\n` +
                     `- *Duración:* ${video.timestamp}\n` +
                     `- *Autor:* ${video.author.name}\n` +
-                    `- *Vistas:* ${formatNumber(video.views)}\n\n` +
+                    `- *Vistas:* ${formatNumber(video.views)}\n\n`;/* +
                     `*⚠️ Instrucciones de descarga:*\n` +
                     `Menciona con ${forma1}v${forma1} para descargar el video.\n` +
                     `Menciona con ${forma1}a${forma1} para descargar el audio.\n\n` +
-                    `~${video.url}~`;
+                    `~${video.url}~`;*/
 
     const img = await (await fetch(video.thumbnail)).buffer();
-    await nyanBot2.sendMessage(m.chat, {
+
+    await nyanBot2.sendMessage(m.chat, { image: img, caption: caption, footer: "Presiona el botón para el tipo de descarga.", buttons: [
+  {
+    buttonId: `${prefix}ytmp3 ${video.url}`, 
+    buttonText: { 
+      displayText: 'AUDIO 🎧' 
+    }
+  }, {
+    buttonId: `${prefix}ytmp4 ${video.url}`, 
+    buttonText: {
+      displayText: 'VIDEO 📽️'
+    },
+  }
+],
+  viewOnce: true,
+  headerType: 6,
+}, { quoted: m })
+    
+    /*await nyanBot2.sendMessage(m.chat, {
         location: {
             name: video.title,
             address: 'Para descargar, menciona el texto de abajo siguiendo las instrucciones!',
@@ -39,7 +57,7 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
     }, {quoted: m});
     await nyanBot2.sendMessage(m.chat, {
         text: caption
-    });
+    });*/
 
     nyanBot2.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 };
