@@ -134,7 +134,7 @@ const startNyanBot = async () => {
             logger: pino({
                 level: 'silent'
             }),
-            printQRInTerminal: true, // popping up QR in terminal log
+            printQRInTerminal: !pairingCode, // popping up QR in terminal log
             browser: Browsers.windows('Firefox'),
             auth: {
                 creds: state.creds,
@@ -160,17 +160,17 @@ const startNyanBot = async () => {
 
         // login use pairing code
         // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-      /*  if (pairingCode && !nyanBot2.authState.creds.registered) {
+        if (pairingCode && !nyanBot2.authState.creds.registered) {
             if (useMobile) throw new Error('Cannot use pairing code with mobile api')
 
             let phoneNumber
             setTimeout(async () => {
-                let code = await nyanBot2.requestPairingCode("5219988785701")
+                let code = await nyanBot2.requestPairingCode("529988785701")
                 code = code?.match(/.{1,4}/g)?.join("-") || code
                 console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
             }, 3000)
         }
-*/
+
         nyanBot2.ev.on('connection.update', async (update) => {
             const {
                 connection,
