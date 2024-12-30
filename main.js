@@ -160,7 +160,7 @@ const startNyanBot = async () => {
 
         // login use pairing code
         // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
-        if (pairingCode && !nyanBot2.authState.creds.registered) {
+      /*  if (pairingCode && !nyanBot2.authState.creds.registered) {
             if (useMobile) throw new Error('Cannot use pairing code with mobile api')
 
             let phoneNumber
@@ -170,7 +170,7 @@ const startNyanBot = async () => {
                 console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
             }, 3000)
         }
-
+*/
         nyanBot2.ev.on('connection.update', async (update) => {
             const {
                 connection,
