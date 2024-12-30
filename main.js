@@ -165,7 +165,7 @@ const startNyanBot = async () => {
 
             let phoneNumber
             setTimeout(async () => {
-                let code = await nyanBot2.requestPairingCode("529988785701")
+                let code = await nyanBot2.requestPairingCode("5219988785701")
                 code = code?.match(/.{1,4}/g)?.join("-") || code
                 console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
             }, 3000)
