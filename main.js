@@ -134,7 +134,7 @@ const startNyanBot = async () => {
             logger: pino({
                 level: 'silent'
             }),
-            printQRInTerminal: !pairingCode, // popping up QR in terminal log
+            printQRInTerminal: true, // popping up QR in terminal log
             browser: Browsers.windows('Firefox'),
             auth: {
                 creds: state.creds,
