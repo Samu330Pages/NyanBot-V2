@@ -108,7 +108,7 @@ require('./main.js')
 nocache('../main.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
 
 //------------------------------------------------------
-let phoneNumber = "5219984907794"
+let phoneNumber = "5219988785701"
 let owner = JSON.parse(fs.readFileSync('./src/data/role/owner.json'))
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
@@ -165,7 +165,7 @@ const startNyanBot = async () => {
 
             let phoneNumber
             setTimeout(async () => {
-                let code = await nyanBot2.requestPairingCode("5219984907794")
+                let code = await nyanBot2.requestPairingCode("5219988785701")
                 code = code?.match(/.{1,4}/g)?.join("-") || code
                 console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
             }, 3000)
