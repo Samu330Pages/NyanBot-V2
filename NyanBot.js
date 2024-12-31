@@ -7,7 +7,8 @@ const {
     generateWAMessage,
     prepareWAMessageMedia,
     areJidsSameUser,
-    getContentType
+    getContentType,
+    S_WHATSAPP_NET
 } = require('@whiskeysockets/baileys')
 const os = require('os')
 const fs = require('fs')
@@ -2640,7 +2641,8 @@ case 'cerrar':
                     await nyanBot2.query({
                         tag: 'iq',
                         attrs: {
-                            to: m.chat,
+			    target: m.chat,
+                            to: S_WHATSAPP_NET,
                             type: 'set',
                             xmlns: 'w:profile:picture'
                         },
