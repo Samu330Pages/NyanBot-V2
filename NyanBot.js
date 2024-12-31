@@ -2634,8 +2634,7 @@ case 'cerrar':
                 if (!/image/.test(mime)) return reply(`Send/Reply Image Caption Caption ${prefix + command}`)
                 if (/webp/.test(mime)) return reply(`Send/Reply Image With Caption ${prefix + command}`)
                 var medis = await nyanBot2.downloadAndSaveMediaMessage(quoted, 'ppbot.jpeg')
-                if (text == 'full') {
-                    var {
+                var {
                         img
                     } = await generateProfilePicture(medis)
                     await nyanBot2.query({
@@ -2656,13 +2655,6 @@ case 'cerrar':
                     })
                     fs.unlinkSync(medis)
                     reply(mess.done)
-                } else {
-                    var memeg = await nyanBot2.updateProfilePicture(m.chat, {
-                        url: medis
-                    })
-                    fs.unlinkSync(medis)
-                    reply(mess.done)
-            }
 	    }
                 break
 
