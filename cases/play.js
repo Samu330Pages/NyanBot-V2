@@ -30,7 +30,12 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
 
     const img = await (await fetch(video.thumbnail)).buffer();
 
-    await nyanBot2.sendMessage(m.chat, { image: img, caption: caption, footer: "Presiona el botón para el tipo de descarga.", buttons: [
+    await nyanBot2.sendMessage(m.chat, { location: {
+            name: "YouTube",
+            address: video.title,
+            url: 'https://samu330.com',
+            jpegThumbnail: await reSize(img, 300, 200)
+    }, caption: caption, footer: "Presiona el botón para el tipo de descarga.", buttons: [
   {
     buttonId: `${prefix}ytmp3 ${video.url}`, 
     buttonText: { 
