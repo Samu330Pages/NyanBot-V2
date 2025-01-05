@@ -102,7 +102,7 @@ jpegThumbnail: await reSize(canvasImage, 300, 200)
 nativeFlowMessage: {
 buttons: [{
 name: 'cta_url',
-buttonParamsJson: '{"display_text":"⚙️","url":"https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"}',
+buttonParamsJson: '{"display_text":"Tap! ⚙️","url":"https://samu330.com"}',
 }],
 messageParamsJson: ''
 },
