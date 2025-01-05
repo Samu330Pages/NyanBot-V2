@@ -1,4 +1,7 @@
 const {
+    reSize
+} = require('../lib/samufuncs')
+const {
     getDevice
 } = require('@whiskeysockets/baileys')
 const moment = require('moment-timezone')
