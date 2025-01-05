@@ -81,19 +81,33 @@ const TipoDispositivo = await getDevice(m.key.id);
     }
 
     try {
-        await nyanBot2.sendMessage(m.chat, {
-                    text: menuMessage,
-                    contextInfo: {
-                        "externalAdReply": {
-                            "renderLargerThumbnail": true,
-                            "mediaType": 1,
-                            "title": `☃️ ${time} ❄️`,
-                            "thumbnail": canvasImage,
-                            "mediaUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1',
-                            "sourceUrl": 'https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1'
-                        }
-                    }
-                }, { quoted: m });
+        await nyanBot2.relayMessage(m.chat, {
+viewOnceMessage: {
+message: {
+interactiveMessage: {
+body: { text: menuMessage },
+footer: { text: date },
+header: {
+hasMediaAttachment: true,
+title: '',
+locationMessage: {
+name: date,
+url: 'https://samu330.com',
+jpegThumbnail: await reSize(canvasImage, 300, 200)
+},
+},
+nativeFlowMessage: {
+buttons: [{
+name: 'cta_url',
+buttonParamsJson: '{"display_text":"⚙️","url":"https://chat.whatsapp.com/GtG0Q6rBVTTGAz8GmfS3e1"}',
+}],
+messageParamsJson: ''
+},
+messageVersion: 1
+}
+}
+}
+}, {})
     } catch (e) {
         return m.reply(`*Error*\n${e}`);
     }
