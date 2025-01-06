@@ -20,6 +20,7 @@ module.exports = async function(text, m, reply, isUrl, nyanBot2, formatNumber, p
     const video = r.videos[0];
 
     const caption = `> *YT Play 🍟.*\n\n` +
+                    `${video.title}\n\n` +
                     `- *Duración:* ${video.timestamp}\n` +
                     `- *Autor:* ${video.author.name}\n` +
                     `- *Vistas:* ${formatNumber(video.views)}\n\n`;/* +
