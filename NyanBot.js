@@ -1174,7 +1174,12 @@ case 'apk2':
                 await caseLyrics(text, m, reply, nyanBot2, stcReac, command, prefix);
                 break
 
-            
+case 'brat':
+if (!text) return reply("*Ingresá tu texto después del comando 😛*")
+const brat = await require("./lib/canvaImg.js").brat({text: text})
+nyanBot2.sendMessage(m.chat, {react: {text: '🥶', key: m.key}});
+await nyanBot2.sendImageAsSticker(m.chat, brat, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' });
+break
 
 case 'apk':
     if (!text) return reply(`*❌ Por favor ingresa una solicitud a buscar junto con el comando*\n_*Ejemplo:*_\n\n${prefix + command} pubg`);
