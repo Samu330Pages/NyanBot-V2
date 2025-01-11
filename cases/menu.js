@@ -84,7 +84,7 @@ const TipoDispositivo = await getDevice(m.key.id);
     }
 
     try {
-        await nyanBot2.relayMessage(m.chat, {
+        const message = generateWAMessageFromContent(m.chat, {
 viewOnceMessage: {
 message: {
 interactiveMessage: {
@@ -101,8 +101,8 @@ jpegThumbnail: await reSize(canvasImage, 300, 200)
 },
 nativeFlowMessage: {
 buttons: [{
-name: 'cta_url',
-buttonParamsJson: '{"display_text":"Tap! ⚙️","url":"https://samu330.com"}',
+name: 'quick_reply',
+buttonParamsJson: '{"display_text":"RUNTIME! 🍟","id":".run"}',
 }],
 messageParamsJson: ''
 },
@@ -110,7 +110,8 @@ messageVersion: 1
 }
 }
 }
-}, {})
+}, {quoted: m})
+await nyanBot2.relayMessage(m.chat, message['message'], {})
     } catch (e) {
         return m.reply(`*Error*\n${e}`);
     }
