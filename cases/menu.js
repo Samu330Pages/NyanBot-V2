@@ -2,6 +2,7 @@ const {
     reSize
 } = require('../lib/samufuncs')
 const {
+    generateWAMessageFromContent,
     getDevice
 } = require('@whiskeysockets/baileys')
 const moment = require('moment-timezone')
