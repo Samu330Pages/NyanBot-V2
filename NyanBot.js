@@ -1176,8 +1176,14 @@ case 'apk2':
 
 case 'brat':
 if (!text) return reply("*Ingresá tu texto después del comando 😛*")
+if (text.length > 25) return reply("*El texto ingresado no debe ser mayor a 25 letras! 🧐")
 const brat = await require("./lib/canvaImg.js").brat({text: text})
 nyanBot2.sendMessage(m.chat, {react: {text: '🥶', key: m.key}});
+await sharp(brat)
+	.resize(512, 512, {
+		fit: sharp.fit.fill
+	})
+	.toFile("brat.webp");
 await nyanBot2.sendImageAsSticker(m.chat, brat, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' });
 break
 
@@ -2239,7 +2245,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                             const blob = await removeBackground(mediaPath);
                             const buffer = Buffer.from(await blob.arrayBuffer());
                             encmedia = buffer;
-                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' });
 
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
@@ -2247,7 +2253,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                             return;
                         } else {
                             encmedia = fs.readFileSync(mediaPath);
-                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' });
 
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
@@ -2257,7 +2263,7 @@ _Sigue el formato de tiempo para cada caso:_\n
 
                         if (fs.existsSync(outputFilePath)) {
                             encmedia = fs.readFileSync(outputFilePath);
-                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: global.packname, author: global.author });
+                            await nyanBot2.sendImageAsSticker(m.chat, encmedia, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' });
 
                             if (fs.existsSync(mediaPath)) {
                                 fs.unlinkSync(mediaPath);
@@ -2272,7 +2278,7 @@ _Sigue el formato de tiempo para cada caso:_\n
                     } else if (/video/.test(mime)) {
                         if ((quoted.msg || quoted).seconds > 11) return reply('*Lo siento pero el vídeo recibido dura más de 10 segundos, solo puedo crear tu Sticker si el vídeo dura menos de 10 segundos! 🙂*')
                         let media = await quoted.download()
-                        let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: global.packname, author: global.author })
+                        let encmedia = await nyanBot2.sendVideoAsSticker(m.chat, media, m, { packname: '🥶 S A M U 3 3 3 0 ©', author: '' })
 
                         if (fs.existsSync(mediaPath)) {
                             fs.unlinkSync(mediaPath);
