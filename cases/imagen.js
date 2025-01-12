@@ -26,10 +26,20 @@ module.exports = async function(m, reply, nyanBot2, text, prefix, command, stcRe
 
             await nyanBot2.sendMessage(m.chat, {
                 image: await (await fetch(imageUrl)).buffer(),
-                caption: `*🍟 Resultado de tu búsqueda:*\n${query}\n`
+                caption: `*🍟 Resultado de tu búsqueda:*\n${query}\n`,
+                footer: "S A M U 3 3 0 🥶.",
+                buttons: [{
+                    buttonId: `${prefix+command} ${text}`,
+                    buttonText: {
+                        displayText: 'NEXT!'
+                    }
+                }],
+                viewOnce: true,
+                headerType: 6,
             }, {
                 quoted: m
             })
+
         };
         await sendRandomImage();
 
