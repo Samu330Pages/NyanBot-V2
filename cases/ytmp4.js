@@ -24,7 +24,7 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
         //const video = await getBuffer(`${r[0].url}`);
-        const caption = `*Descarga completa! 🍟*\n\n*Vistas:* ${v.views)}\n*Duración:* ${v.duration}\n*Fecha de publicación:* ${v.upload}\n*Vistas:* ${v.views}\n\n*Encontrarás el video con el nombre:* ${v.title}`;
+        const caption = `*Descarga completa! 🍟*\n\n*Vistas:* ${v.views}\n*Duración:* ${v.duration}\n*Fecha de publicación:* ${v.upload}\n\n*Encontrarás el video con el nombre:* ${v.title}`;
 
         /*if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
@@ -36,7 +36,7 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
             }, { quoted: m });
         } else {*/
             await nyanBot2.sendMessage(m.chat, {
-                video: {url: v.video},
+                video: {url: `${v.video}`},
                 caption: caption,
                 fileName: `${v.title}.mp4`,
                 mimetype: 'video/mp4'
