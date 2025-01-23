@@ -19,14 +19,14 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const a = await require('ruhend-scraper').ytmp3(link)
+        const a = await require('ruhend-scraper').ytmp4(link)
         
         //const durationMinutes = Math.floor(r[0].duration / 60);
         //if (r[0].duration >= 3600) return reply(`*No se puede descargar este audio ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-        const audioBuffer = await fetchBuffer(a.audio);
-        let audioC = await toAudio(audioBuffer, 'mp4');
+        //const audioBuffer = await fetchBuffer(`${a.audio}`);
+        let audioC = await toAudio(`${a.video}`, 'mp4');
 
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
