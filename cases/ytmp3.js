@@ -18,21 +18,21 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        let r = await ytdl.sYtdl(link);
+        const a = await require('ruhend-scraper').ytmp3(link)
         
-        const durationMinutes = Math.floor(r[0].duration / 60);
-        if (r[0].duration >= 3600) return reply(`*No se puede descargar este audio ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
-        const publishDate = new Date(r[0].publishDate).toLocaleDateString();
+        //const durationMinutes = Math.floor(r[0].duration / 60);
+        //if (r[0].duration >= 3600) return reply(`*No se puede descargar este audio ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
+        //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-        const audioBuffer = await (await fetch(`${r[0].url}`)).buffer();
+        const audioBuffer = await (await fetch(`${a.audio}`)).buffer();
         let audioC = await toAudio(audioBuffer, 'mp4');
 
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${r[0].title}\n- *Canal:* ${r[0].author}\n- *Vistas:* ${formatNumber(r[0].views)}\n- *Duración:* ${durationMinutes}m\n- *Categoría:* ${r[0].category}\n- *Fecha de publicación:* ${publishDate}\n`,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${a.title}\n- *Vistas:* ${a.views)}\n- *Duración:* ${a.duration}m\n- *Autor:* ${a.author}\n- *Fecha de publicación:* ${a.upload}\n`,
             mimetype: "audio/mpeg",
             fileName: `${r[0].title}.mp3`,
-            jpegThumbnail: await (await fetch(`${r[0].thumbnail}`)).buffer()
+            jpegThumbnail: await (await fetch(`${a.thumbnail}`)).buffer()
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
