@@ -26,7 +26,7 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
         const audioBuffer = await fetchBuffer(`${a.audio}`);
-        let audioC = await toAudio(audioBuffer, 'mp4');
+        let audioC = await toAudio(audioBuffer, 'mp3');
 
         await nyanBot2.sendMessage(m.chat, {
             document: audioC,
