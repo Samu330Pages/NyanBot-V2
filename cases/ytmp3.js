@@ -38,7 +38,7 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
         await nyanBot2.sendMessage(m.chat, {
             audio: audioC,
             mimetype: "audio/mpeg",
-            fileName: `${r[0].title}.mp3`
+            fileName: `${a.title}.mp3`
         }, { quoted: m });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
