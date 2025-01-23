@@ -31,7 +31,7 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
             document: audioC,
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${a.title}\n- *Vistas:* ${a.views}\n- *Duración:* ${a.duration}m\n- *Autor:* ${a.author}\n- *Fecha de publicación:* ${a.upload}\n`,
             mimetype: "audio/mpeg",
-            fileName: `${r[0].title}.mp3`,
+            fileName: `${a.title}.mp3`,
             jpegThumbnail: await (await fetch(`${a.thumbnail}`)).buffer()
         }, { quoted: m });
 
