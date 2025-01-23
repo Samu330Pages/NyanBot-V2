@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js');
 const { toAudio } = require('../lib/converter');
 const {
+    fetchBuffer,
     formatNumber
 } = require('../lib/samufuncs')
 const forma1 = '`'
@@ -24,11 +25,11 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
         //if (r[0].duration >= 3600) return reply(`*No se puede descargar este audio ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-        //const audioBuffer = await (await fetch(`${a.audio}`)).buffer();
-        //let audioC = await toAudio(audioBuffer, 'mp4');
+        const audioBuffer = await fetchBuffer(`${a.audio}`);
+        let audioC = await toAudio(audioBuffer, 'mp4');
 
         await nyanBot2.sendMessage(m.chat, {
-            document: {url: `${a.audio}`},
+            document: audioC,
             caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${a.title}\n- *Vistas:* ${a.views}\n- *Duración:* ${a.duration}m\n- *Autor:* ${a.author}\n- *Fecha de publicación:* ${a.upload}\n`,
             mimetype: "audio/mpeg",
             fileName: `${a.title}.mp3`,
@@ -36,7 +37,7 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
         }, { quoted: m });
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: {url: `${a.audio}`},
+            audio: audioC,
             mimetype: "audio/mpeg",
             fileName: `${a.title}.mp3`
         }, { quoted: m });
