@@ -20,13 +20,13 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
 
     try {
         const x = await axios.get(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`)
-        const v = v.data
+        const v = x.data
         //const durationMinutes = Math.floor(r[0].duration / 60);
         //if (r[0].duration >= 10800) return reply(`*No se puede descargar este video ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
         //const video = await getBuffer(`${r[0].url}`);
-        const caption = `*Descarga completa! 🍟*\n\n${v.data.title}`;
+        const caption = `*Descarga completa! 🍟*\n\n*${v.data.title}*`;
 
         /*if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
