@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js');
+const axios = require('axios');
 const { toAudio } = require('../lib/converter');
 const {
     fetchBuffer,
@@ -19,27 +20,28 @@ module.exports = async function(link, m, reply, nyanBot2, useLimit, stcReac, sen
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const a = await require('ruhend-scraper').ytmp3(link)
+        const x = await axios.get(`https://api.siputzx.my.id/api/d/ytmp4?url=${link}`)
+        const a = x.data
         
         //const durationMinutes = Math.floor(r[0].duration / 60);
         //if (r[0].duration >= 3600) return reply(`*No se puede descargar este audio ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
-       // const audioBuffer = await fetchBuffer(`${a.video}`);
-       // let audioC = await toAudio(audioBuffer, 'mp4');
+       const audioBuffer = await fetchBuffer(`${a.data.dl}`);
+       let audioC = await toAudio(audioBuffer, 'mp4');
 
-        await nyanBot2.sendMessage(m.chat, {
-            document: {url: `${a.audio}`},
-            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${a.title}\n- *Vistas:* ${a.views}\n- *Duración:* ${a.duration}m\n- *Autor:* ${a.author}\n- *Fecha de publicación:* ${a.upload}\n`,
+        /*await nyanBot2.sendMessage(m.chat, {
+            document: audioC,
+            caption: `*Descarga este documento para guardar el audio en tu reproductor! 📀*\n\n- *Título:* ${a.data.title}\n`,
             mimetype: "audio/mpeg",
             fileName: `${a.title}.mp3`,
             jpegThumbnail: await (await fetch(`${a.thumbnail}`)).buffer()
-        }, { quoted: m });
+        }, { quoted: m });*/
 
         await nyanBot2.sendMessage(m.chat, {
-            audio: {url: `${a.audio}`},
+            audio: audioC,
             mimetype: "audio/mpeg",
-            fileName: `${a.title}.mp3`
+            fileName: `${a.data.title}.mp3`
         }, { quoted: m });
     } catch (error) {
         nyanBot2.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
