@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const ytdl = require('../lib/ytdlNew.js');
+const axios = require('axios');
 const { getBuffer } = require('../lib/samufuncs.js');
 const {
     formatNumber
@@ -18,13 +19,14 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
     reply(`*Esperé un momento, se está procesando su solicitud...* 😙`);
 
     try {
-        const v = await require('ruhend-scraper').ytmp4(text)
+        const x = await axios.get(`https://api.siputzx.my.id/api/d/ytmp4?url=${text}`)
+        const v = v.data
         //const durationMinutes = Math.floor(r[0].duration / 60);
         //if (r[0].duration >= 10800) return reply(`*No se puede descargar este video ya que supera el límite de duración, este video dura ${durationMinutes} minutos*`);
         //const publishDate = new Date(r[0].publishDate).toLocaleDateString();
 
         //const video = await getBuffer(`${r[0].url}`);
-        const caption = `*Descarga completa! 🍟*\n\n*Vistas:* ${v.views}\n*Duración:* ${v.duration}\n*Fecha de publicación:* ${v.upload}\n\n*Encontrarás el video con el nombre:* ${v.title}`;
+        const caption = `*Descarga completa! 🍟*\n\n${v.data.title}`;
 
         /*if (durationMinutes > 30) {
             await nyanBot2.sendMessage(m.chat, {
@@ -36,9 +38,9 @@ module.exports = async function(text, m, reply, nyanBot2, useLimit, stcReac, sen
             }, { quoted: m });
         } else {*/
             await nyanBot2.sendMessage(m.chat, {
-                video: {url: `${v.video}`},
+                video: {url: `${v.data.dl}`},
                 caption: caption,
-                fileName: `${v.title}.mp4`,
+                fileName: `${v.data.title}.mp4`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
         //}
